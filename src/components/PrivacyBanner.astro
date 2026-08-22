@@ -1,0 +1,32 @@
+---
+import { Shield, Lock, Cpu, CheckCircle } from 'lucide-react';
+---
+
+<div class="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-6 sm:p-8">
+  <div class="absolute -right-8 -bottom-8 h-48 w-48 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+  
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="space-y-2 max-w-2xl">
+      <div class="flex items-center gap-2 text-emerald-400">
+        <Shield class="h-5 w-5" />
+        <span class="text-xs font-semibold uppercase tracking-wider font-mono">100% In-Browser Privacy Guarantee</span>
+      </div>
+      <h3 class="text-lg font-semibold text-white">Your files never touch any external server</h3>
+      <p class="text-xs leading-relaxed text-zinc-400">
+        Unlike other online converters that upload your confidential PDFs, images, and videos to remote cloud servers, 
+        NovaTools executes all transcoding, manipulation, and rendering <strong>strictly in your browser memory</strong> via WebAssembly and HTML5 APIs.
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0 text-xs text-zinc-300 font-mono">
+      <div class="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-2">
+        <Lock class="h-4 w-4 text-emerald-400" />
+        <span>Zero Network Uploads</span>
+      </div>
+      <div class="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-2">
+        <Cpu class="h-4 w-4 text-brand-400" />
+        <span>Hardware Accelerated</span>
+      </div>
+    </div>
+  </div>
+</div>

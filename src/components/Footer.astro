@@ -1,0 +1,86 @@
+---
+import { Shield, Lock, Zap, Heart } from 'lucide-react';
+---
+
+<footer class="mt-20 border-t border-surface-border bg-surface/40">
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
+      {/* Brand & Mission Statement */}
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800">
+            <div class="h-3 w-3 rounded bg-gradient-to-tr from-brand-500 to-emerald-400"></div>
+          </div>
+          <span class="text-base font-semibold text-white">NovaTools</span>
+        </div>
+        <p class="text-xs leading-relaxed text-zinc-400 max-w-sm">
+          Next-generation privacy-first document and media manipulation suite. 
+          All computations, video rendering, and PDF processing run 100% directly inside your browser runtime. 
+          Your files never touch any remote server.
+        </p>
+
+        <div class="flex items-center gap-4 text-xs text-zinc-400">
+          <div class="flex items-center gap-1.5 text-emerald-400">
+            <Shield class="h-4 w-4" />
+            <span>Zero Server Storage</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-brand-400">
+            <Zap class="h-4 w-4" />
+            <span>WASM Acceleration</span>
+          </div>
+        </div>
+      </div>
+
+      {/* PDF Suite */}
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">PDF Suite</h3>
+        <ul class="mt-3 space-y-2 text-xs">
+          <li><a href="/pdf/merge" class="text-zinc-400 hover:text-zinc-200 transition-colors">Merge PDF</a></li>
+          <li><a href="/pdf/split" class="text-zinc-400 hover:text-zinc-200 transition-colors">Split & Extract</a></li>
+          <li><a href="/pdf/rotate" class="text-zinc-400 hover:text-zinc-200 transition-colors">Rotate Pages</a></li>
+          <li><a href="/pdf/protect" class="text-zinc-400 hover:text-zinc-200 transition-colors">Password Protect</a></li>
+          <li><a href="/pdf/redact-flatten" class="text-zinc-400 hover:text-zinc-200 transition-colors">Redact & Flatten</a></li>
+          <li><a href="/pdf/pdf-to-images" class="text-zinc-400 hover:text-zinc-200 transition-colors">PDF to Images</a></li>
+          <li><a href="/pdf/images-to-pdf" class="text-zinc-400 hover:text-zinc-200 transition-colors">Images to PDF</a></li>
+        </ul>
+      </div>
+
+      {/* Media & Images */}
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">Image & Video</h3>
+        <ul class="mt-3 space-y-2 text-xs">
+          <li><a href="/image/converter" class="text-zinc-400 hover:text-zinc-200 transition-colors">Format Converter</a></li>
+          <li><a href="/image/compressor" class="text-zinc-400 hover:text-zinc-200 transition-colors">Smart Compressor</a></li>
+          <li><a href="/image/resizer" class="text-zinc-400 hover:text-zinc-200 transition-colors">Image Resizer</a></li>
+          <li><a href="/image/exif-scrubber" class="text-zinc-400 hover:text-zinc-200 transition-colors">EXIF Scrubber</a></li>
+          <li><a href="/image/svg-optimizer" class="text-zinc-400 hover:text-zinc-200 transition-colors">SVG Cleaner</a></li>
+          <li><a href="/video/compressor" class="text-zinc-400 hover:text-zinc-200 transition-colors">Video Compressor</a></li>
+          <li><a href="/video/trimmer" class="text-zinc-400 hover:text-zinc-200 transition-colors">Video Trimmer</a></li>
+          <li><a href="/video/audio-extractor" class="text-zinc-400 hover:text-zinc-200 transition-colors">Extract Audio</a></li>
+        </ul>
+      </div>
+
+      {/* Legal & Compliance */}
+      <div>
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-300">Company & Legal</h3>
+        <ul class="mt-3 space-y-2 text-xs">
+          <li><a href="/about" class="text-zinc-400 hover:text-zinc-200 transition-colors">About Us</a></li>
+          <li><a href="/privacy" class="text-zinc-400 hover:text-zinc-200 transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-zinc-400 hover:text-zinc-200 transition-colors">Terms of Service</a></li>
+          <li><a href="/contact" class="text-zinc-400 hover:text-zinc-200 transition-colors">Contact Support</a></li>
+          <li><a href="/sitemap.xml" class="text-zinc-400 hover:text-zinc-200 transition-colors">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Bottom copyright bar */}
+    <div class="mt-12 border-t border-surface-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+      <p>© {new Date().getFullYear()} NovaTools Suite. Free, private, and open client-side utility runtime.</p>
+      <div class="flex items-center gap-6">
+        <span class="flex items-center gap-1 font-mono text-[11px] text-zinc-400">
+          Built with Astro 5 & WebAssembly
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
