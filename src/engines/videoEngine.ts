@@ -1,15 +1,102 @@
+export interface ExtractedAudioTrack {
+  id: string;
+  name: string;
+  description: string;
+  blob: Blob;
+  duration: number;
+  sampleRate: number;
+  channels: number;
+}
+
 export class VideoEngine {
   /**
-   * Extract audio stream from a video file into a lossless WAV Blob using Web Audio API
+   * Extract all audio tracks and discrete channels from a video file into WAV Blobs
    */
-  static async extractAudioToWav(videoFile: File | Blob): Promise<Blob> {
+  static async extractAllAudioTracks(videoFile: File | Blob): Promise<ExtractedAudioTrack[]> {
     const arrayBuffer = await videoFile.arrayBuffer();
     const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    
+    let audioBuffer: AudioBuffer;
+    try {
+      audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    } catch (err: any) {
+      await audioCtx.close();
+      throw new Error('No supported audio stream found in this video: ' + err.message);
+    }
 
-    const wavBlob = this.audioBufferToWav(audioBuffer);
+    const numChannels = audioBuffer.numberOfChannels;
+    const sampleRate = audioBuffer.sampleRate;
+    const duration = audioBuffer.duration;
+    const tracks: ExtractedAudioTrack[] = [];
+
+    // 1. Full Master Audio Mix (Stereo or Multi-channel)
+    const masterBlob = this.audioBufferToWav(audioBuffer);
+    tracks.push({
+      id: 'master-mix',
+      name: 'Full Master Audio Mix',
+      description: `Complete mixed audio (${numChannels === 1 ? 'Mono' : numChannels === 2 ? 'Stereo' : numChannels + ' Channels'})`,
+      blob: masterBlob,
+      duration,
+      sampleRate,
+      channels: numChannels,
+    });
+
+    // 2. If video has multiple audio channels (Stereo, Quad, 5.1, 7.1), extract each discrete track / stem
+    if (numChannels >= 2) {
+      const channelLabels: Record<number, string[]> = {
+        2: ['Left Audio Track (Channel 1)', 'Right Audio Track (Channel 2)'],
+        4: ['Front Left (Ch 1)', 'Front Right (Ch 2)', 'Rear Left (Ch 3)', 'Rear Right (Ch 4)'],
+        6: [
+          'Front Left (Ch 1)',
+          'Front Right (Ch 2)',
+          'Center Dialogue (Ch 3)',
+          'Subwoofer / LFE (Ch 4)',
+          'Surround Left (Ch 5)',
+          'Surround Right (Ch 6)',
+        ],
+        8: [
+          'Front Left (Ch 1)',
+          'Front Right (Ch 2)',
+          'Center (Ch 3)',
+          'LFE (Ch 4)',
+          'Side Left (Ch 5)',
+          'Side Right (Ch 6)',
+          'Rear Left (Ch 7)',
+          'Rear Right (Ch 8)',
+        ],
+      };
+
+      const labels = channelLabels[numChannels] || Array.from({ length: numChannels }, (_, i) => `Audio Channel ${i + 1}`);
+
+      for (let ch = 0; ch < numChannels; ch++) {
+        const channelData = audioBuffer.getChannelData(ch);
+        // Create an isolated single-channel AudioBuffer
+        const singleBuffer = audioCtx.createBuffer(1, channelData.length, sampleRate);
+        singleBuffer.copyToChannel(channelData, 0, 0);
+
+        const singleChannelWav = this.audioBufferToWav(singleBuffer);
+        tracks.push({
+          id: `channel-${ch + 1}`,
+          name: labels[ch] || `Audio Track ${ch + 1}`,
+          description: `Isolated discrete channel track (${sampleRate} Hz, 16-bit PCM)`,
+          blob: singleChannelWav,
+          duration,
+          sampleRate,
+          channels: 1,
+        });
+      }
+    }
+
     await audioCtx.close();
-    return wavBlob;
+    return tracks;
+  }
+
+  /**
+   * Extract audio stream from a video file into a lossless WAV Blob
+   */
+  static async extractAudioToWav(videoFile: File | Blob): Promise<Blob> {
+    const tracks = await this.extractAllAudioTracks(videoFile);
+    return tracks[0].blob;
   }
 
   /**
@@ -166,8 +253,18 @@ export class VideoEngine {
         result[i * 2] = ch0[i];
         result[i * 2 + 1] = ch1[i];
       }
-    } else {
+    } else if (numChannels === 1) {
       result = buffer.getChannelData(0);
+    } else {
+      // Multi-channel interleaved
+      const length = buffer.length;
+      result = new Float32Array(length * numChannels);
+      for (let ch = 0; ch < numChannels; ch++) {
+        const data = buffer.getChannelData(ch);
+        for (let i = 0; i < length; i++) {
+          result[i * numChannels + ch] = data[i];
+        }
+      }
     }
 
     const dataByteLength = result.length * (bitDepth / 8);
