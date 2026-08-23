@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import { Header } from '../components/Header';
+import Footer from '../components/Footer.astro';
+import SEOHead from '../components/SEOHead.astro';
+import { CookieConsent } from '../components/CookieConsent';
+
+export interface Props {
+  title: string;
+  description?: string;
+  keywords?: string[];
+  canonicalUrl?: string;
+  faqs?: { question: string; answer: string }[];
+  breadcrumbs?: { name: string; url: string }[];
+}
+
+const {
+  title,
+  description = 'NovaTools is a modern, high-performance, 100% client-side document, image, video, and PDF manipulation suite. Fast, private, and free.',
+  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'wasm', 'private pdf merger', 'online media tools'],
+  canonicalUrl = Astro.url.href,
+  faqs = [],
+  breadcrumbs = [],
+} = Astro.props;
+
+const adSenseClientId = 'ca-pub-6768212179657827';
+---
+
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Primary SEO & Unified Multi-Entity Schema.org Graph */}
+    <SEOHead
+      title={title}
+      description={description}
+      keywords={keywords}
+      canonicalUrl={canonicalUrl}
+      faqs={faqs}
+      breadcrumbs={breadcrumbs}
+    />
+
+    {/* Cross-Origin Isolation for WASM and Multi-threaded Web Workers */}
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+
+    {/* Google AdSense Asynchronous Script Tag */}
+    <script
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClientId}`}
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="bg-background text-zinc-100 selection:bg-brand-500/30 selection:text-brand-100 flex min-h-[100dvh] flex-col">
+    {/* Subtle Background Ambient Mesh */}
+    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+      <div class="absolute -top-[25%] left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-brand-500/10 blur-[140px]" />
+      <div class="absolute top-[40%] -left-[10%] h-[400px] w-[600px] rounded-full bg-emerald-500/5 blur-[160px]" />
+    </div>
+
+    {/* Sticky Frosted Header */}
+    <Header client:load />
+
+    {/* Main Page Content */}
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    {/* Footer */}
+    <Footer />
+
+    {/* GDPR / CCPA Cookie & Ad Preferences Banner */}
+    <CookieConsent client:idle />
+  </body>
+</html>

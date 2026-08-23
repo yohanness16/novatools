@@ -1,0 +1,125 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogType?: string;
+  keywords?: string[];
+  faqs?: { question: string; answer: string }[];
+  breadcrumbs?: { name: string; url: string }[];
+}
+
+const {
+  title,
+  description,
+  canonicalUrl = Astro.url.href,
+  ogType = 'website',
+  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'wasm', 'private pdf merger', 'online media tools'],
+  faqs = [],
+  breadcrumbs = [],
+} = Astro.props;
+
+const siteName = 'NovaTools';
+const siteUrl = 'https://novatools.app';
+const defaultOgImage = `${siteUrl}/favicon.svg`;
+
+// Unified Multi-Entity Schema.org JSON-LD (Google Search Central Compliant)
+const graphNodes: any[] = [
+  {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    url: siteUrl,
+    name: siteName,
+    description: '100% Client-Side Privacy-First Document, Image, Video & PDF Utilities Suite',
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: siteName,
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: defaultOgImage,
+      },
+    },
+  },
+  {
+    '@type': 'WebApplication',
+    '@id': `${canonicalUrl}#webapp`,
+    name: title,
+    url: canonicalUrl,
+    applicationCategory: 'UtilitiesApplication',
+    applicationSubCategory: 'Document and Media Processing',
+    operatingSystem: 'All Modern Web Browsers',
+    browserRequirements: 'Requires JavaScript and WebAssembly support',
+    softwareVersion: '2026.1',
+    offers: {
+      '@type': 'Offer',
+      price: '0.00',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+    },
+    description: description,
+  },
+];
+
+if (faqs.length > 0) {
+  graphNodes.push({
+    '@type': 'FAQPage',
+    '@id': `${canonicalUrl}#faq`,
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  });
+}
+
+if (breadcrumbs.length > 0) {
+  graphNodes.push({
+    '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}#breadcrumbs`,
+    itemListElement: breadcrumbs.map((b, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: b.name,
+      item: b.url.startsWith('http') ? b.url : `${siteUrl}${b.url}`,
+    })),
+  });
+}
+
+const unifiedGraphSchema = {
+  '@context': 'https://schema.org',
+  '@graph': graphNodes,
+};
+---
+
+<!-- Primary Meta Tags -->
+<title>{title.includes(siteName) ? title : `${title} | ${siteName}`}</title>
+<meta name="title" content={title.includes(siteName) ? title : `${title} | ${siteName}`} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords.join(', ')} />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={defaultOgImage} />
+<meta property="og:site_name" content={siteName} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={defaultOgImage} />
+
+<!-- Google AdSense Account Verification -->
+<meta name="google-adsense-account" content="ca-pub-6768212179657827" />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(unifiedGraphSchema)} />
