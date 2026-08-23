@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { VideoEngine, type ExtractedAudioTrack } from '../../engines/videoEngine';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import JSZip from 'jszip';
-import { Upload, Music, CheckCircle, AlertCircle, Loader2, Download, Layers, Play } from 'lucide-react';
+import { Music, CheckCircle, AlertCircle, Loader2, Download, Layers, Globe, Radio } from 'lucide-react';
 
 interface ExtractedTrackWithUrl extends ExtractedAudioTrack {
   audioUrl: string;
@@ -16,11 +16,21 @@ export const AudioExtractorWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Revoke URLs on cleanup
+  useEffect(() => {
+    return () => {
+      tracks.forEach((t) => URL.revokeObjectURL(t.audioUrl));
+    };
+  }, [tracks]);
+
   const handleFile = (selectedFile: File) => {
-    if (!selectedFile.type.startsWith('video/') && !/\.(mp4|webm|mov|mkv|avi|m4v)$/i.test(selectedFile.name)) {
-      setError('Please select a valid video file (MP4, WebM, MOV, MKV).');
+    if (!selectedFile.type.startsWith('video/') && !/\.(mp4|webm|mov|mkv|avi|m4v|ts)$/i.test(selectedFile.name)) {
+      setError('Please select a valid video file (MP4, WebM, MOV, MKV, AVI, TS).');
       return;
     }
+
+    // Revoke old URLs
+    tracks.forEach((t) => URL.revokeObjectURL(t.audioUrl));
 
     setError(null);
     setTracks([]);
@@ -40,7 +50,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
       }));
       setTracks(withUrls);
     } catch (err: any) {
-      setError('Failed to extract audio tracks: ' + err.message);
+      setError('Failed to extract audio tracks: ' + (err?.message || err));
     } finally {
       setIsProcessing(false);
     }
@@ -49,7 +59,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
   const handleDownloadSingleTrack = (track: ExtractedTrackWithUrl) => {
     if (!file) return;
     const baseName = file.name.replace(/\.[^/.]+$/, '');
-    const cleanTrackName = track.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    const cleanTrackName = track.name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
     downloadBlob(track.blob, `${baseName}_${cleanTrackName}.wav`);
   };
 
@@ -69,7 +79,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       downloadBlob(zipBlob, `${baseName}_all_audio_tracks.zip`);
     } catch (err: any) {
-      setError('Failed to create ZIP package: ' + err.message);
+      setError('Failed to create ZIP package: ' + (err?.message || err));
     } finally {
       setIsZipping(false);
     }
@@ -85,7 +95,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
           <input
             ref={fileInputRef}
             type="file"
-            accept="video/*,.mp4,.webm,.mov,.mkv,.avi,.m4v"
+            accept="video/*,.mp4,.webm,.mov,.mkv,.avi,.m4v,.ts"
             className="hidden"
             onChange={(e) => {
               if (e.target.files?.[0]) handleFile(e.target.files[0]);
@@ -99,7 +109,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
             Upload Video to Extract Audio Tracks
           </h3>
           <p className="mt-1 text-xs text-zinc-500 max-w-sm text-center">
-            Extracts full master mix, discrete multi-channel audio tracks, or stems into separate lossless WAV files.
+            Demuxes multi-language dubs, commentary, and original audio streams into separate lossless 16-bit WAV files.
           </p>
         </div>
       ) : (
@@ -113,10 +123,11 @@ export const AudioExtractorWorkspace: React.FC = () => {
             </div>
             <button
               onClick={() => {
+                tracks.forEach((t) => URL.revokeObjectURL(t.audioUrl));
                 setFile(null);
                 setTracks([]);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
             >
               Choose different video
             </button>
@@ -133,12 +144,12 @@ export const AudioExtractorWorkspace: React.FC = () => {
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Demuxing & Decoding All Audio Streams...</span>
+                    <span>Demuxing & Extracting All Audio Streams...</span>
                   </>
                 ) : (
                   <>
                     <Layers className="h-4 w-4" />
-                    <span>Extract All Audio Tracks & Channels</span>
+                    <span>Extract All Audio Tracks & Dubs</span>
                   </>
                 )}
               </button>
@@ -155,10 +166,10 @@ export const AudioExtractorWorkspace: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-zinc-100">
-                      {tracks.length} {tracks.length === 1 ? 'Audio Track' : 'Audio Tracks & Stems'} Extracted
+                      {tracks.length} {tracks.length === 1 ? 'Audio Track' : 'Audio Tracks (including Dubs)'} Extracted
                     </h4>
                     <p className="text-[11px] text-zinc-400 font-mono">
-                      Duration: {formatDuration(tracks[0].duration)} · 16-bit PCM WAV
+                      Duration: {formatDuration(tracks[0].duration)} · Lossless 16-bit PCM WAV
                     </p>
                   </div>
                 </div>
@@ -177,7 +188,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                     ) : (
                       <>
                         <Download className="h-3.5 w-3.5" />
-                        <span>Download All Tracks (ZIP)</span>
+                        <span>Download All ({tracks.length} Tracks ZIP)</span>
                       </>
                     )}
                   </button>
@@ -193,14 +204,28 @@ export const AudioExtractorWorkspace: React.FC = () => {
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-2.5">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-zinc-800 font-mono text-[11px] font-semibold text-zinc-300 border border-zinc-700">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-800 font-mono text-xs font-bold text-zinc-300 border border-zinc-700">
                           {idx + 1}
                         </span>
                         <div>
-                          <h5 className="text-sm font-medium text-zinc-200">
-                            {track.name}
-                          </h5>
-                          <p className="text-[11px] text-zinc-400">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h5 className="text-sm font-semibold text-zinc-100">
+                              {track.name}
+                            </h5>
+                            {track.language && (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 px-2 py-0.5 text-[10px] font-medium text-brand-400 border border-brand-500/20">
+                                <Globe className="h-2.5 w-2.5" />
+                                {track.language}
+                              </span>
+                            )}
+                            {track.codec && (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700">
+                                <Radio className="h-2.5 w-2.5" />
+                                {track.codec}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-zinc-400 mt-0.5">
                             {track.description} · {formatBytes(track.blob.size)}
                           </p>
                         </div>
@@ -208,7 +233,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
 
                       <button
                         onClick={() => handleDownloadSingleTrack(track)}
-                        className="self-start sm:self-auto flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all active:scale-95"
+                        className="self-start sm:self-auto flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all active:scale-95 shrink-0"
                       >
                         <Download className="h-3.5 w-3.5" />
                         <span>Download WAV</span>
@@ -220,7 +245,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                       <audio
                         src={track.audioUrl}
                         controls
-                        className="w-full h-8 brightness-90 contrast-125"
+                        className="w-full h-9 brightness-90 contrast-125"
                       />
                     </div>
                   </div>
