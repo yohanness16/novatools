@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TOOLS, type ToolMeta } from '../lib/toolsData';
-import { Search, X, Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus, Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX } from 'lucide-react';
+import { Search, X, Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus, Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles } from 'lucide-react';
 
 const iconMap: Record<string, React.ElementType> = {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
-  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX
+  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles
 };
 
 interface CommandPaletteProps {

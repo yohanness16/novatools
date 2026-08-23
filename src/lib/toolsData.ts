@@ -435,6 +435,34 @@ export const TOOLS: ToolMeta[] = [
     faqs: [
       { question: 'Why mute a video before posting?', answer: 'Muting avoids copyright strikes from ambient background music and creates cleaner social media clips.' }
     ]
+  },
+  {
+    id: 'subtitle-generator',
+    slug: 'subtitle-generator',
+    name: 'AI Subtitle Generator & Studio',
+    category: 'video',
+    categoryLabel: 'Video & Audio',
+    description: 'Auto-generate timed subtitles from audio & video with synchronized studio editing.',
+    longDescription: 'Transcribe speech from video and audio files into synchronized subtitles. Edit timestamps and cues in an interactive studio and export to .SRT, .VTT, .TXT, or .JSON 100% in your browser.',
+    iconName: 'Subtitles',
+    badge: 'AI Powered',
+    path: '/video/subtitle-generator',
+    keywords: ['generate subtitles from video', 'auto subtitle generator', 'video to srt', 'audio to vtt', 'ai transcription', 'caption generator'],
+    features: [
+      '100% Client-Side AI: Whisper speech-to-text with zero server uploads',
+      'Multi-format export: .SRT, .VTT (WebVTT), .TXT, and .JSON',
+      'Synchronized video player with live subtitle overlay preview',
+      'Interactive cue editor with timestamp nudging and search/replace'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload Video or Audio', desc: 'Select any MP4, WebM, MOV, MKV, MP3, WAV, or M4A file, or import an existing .SRT/.VTT.' },
+      { step: 2, title: 'Transcribe & Generate', desc: 'Select audio spoken language and let the in-browser AI generate timed subtitle cues.' },
+      { step: 3, title: 'Edit & Export', desc: 'Preview with synchronized video playback, adjust cues, and download as .SRT, .VTT, or ZIP.' }
+    ],
+    faqs: [
+      { question: 'Is my media uploaded to any server for transcription?', answer: 'No! The AI model runs entirely inside your browser using WebAssembly and WebGPU. Your media never leaves your device.' },
+      { question: 'What subtitle formats can I export?', answer: 'You can export SubRip (.srt), WebVTT (.vtt), plain text transcript (.txt), or structured JSON.' }
+    ]
   }
 ];
 

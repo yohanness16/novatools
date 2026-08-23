@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { SubtitleGeneratorWorkspace } from '../../components/workspaces/SubtitleGeneratorWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'subtitle-generator')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <SubtitleGeneratorWorkspace client:load />
+</ToolPageLayout>
