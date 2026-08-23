@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { ExifScrubberWorkspace } from '../../components/workspaces/ExifScrubberWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'exif-scrubber')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <ExifScrubberWorkspace client:load />
+</ToolPageLayout>

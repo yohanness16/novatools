@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { ImageConverterWorkspace } from '../../components/workspaces/ImageConverterWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'image-converter')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <ImageConverterWorkspace client:load />
+</ToolPageLayout>

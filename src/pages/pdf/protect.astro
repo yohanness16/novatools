@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfProtectWorkspace } from '../../components/workspaces/PdfProtectWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'protect-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfProtectWorkspace client:load />
+</ToolPageLayout>

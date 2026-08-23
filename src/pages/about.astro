@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Shield, Cpu, Lock, Zap, CheckCircle2, Server, Globe } from 'lucide-react';
+---
+
+<Layout
+  title="About NovaTools - Privacy-First Media Architecture"
+  description="Learn about NovaTools, our mission to eliminate privacy risks in online file conversions, and our WebAssembly client-side runtime."
+>
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
+    {/* Page Header */}
+    <div class="space-y-4 text-center">
+      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-medium text-emerald-400">
+        <Shield class="h-3.5 w-3.5" />
+        <span>Our Engineering Philosophy</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-white">
+        Re-inventing Document & Media Tools for Privacy
+      </h1>
+      <p class="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+        We believe you should never have to upload your confidential financial records, medical PDFs, personal family photos, or proprietary videos to an unknown remote server just to merge or compress them.
+      </p>
+    </div>
+
+    {/* Mission & Problem Statement */}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
+          <Server class="h-5 w-5" />
+        </div>
+        <h3 class="text-base font-semibold text-white">The Cloud Utility Problem</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Traditional online file converters force users to upload their documents to centralized servers. 
+          Even when companies promise deletion, your private data travels across networks, sits on temporary disk storage, and risks exposure to data breaches and insider threats.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <Cpu class="h-5 w-5" />
+        </div>
+        <h3 class="text-base font-semibold text-white">The NovaTools Solution</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          NovaTools executes 100% of its workloads directly inside your browser sandbox. 
+          By utilizing modern <strong>WebAssembly (WASM)</strong>, HTML5 Canvas, and Web Workers, your device’s own CPU and GPU process your files locally at hardware speeds.
+        </p>
+      </div>
+    </div>
+
+    {/* Technical Core Pillars */}
+    <section class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-6">
+      <h2 class="text-xl font-bold text-white">Our Core Engineering Principles</h2>
+
+      <div class="space-y-4">
+        <div class="flex items-start gap-4">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/10 text-brand-400 border border-brand-500/20">
+            <Lock class="h-4 w-4" />
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-zinc-200">Zero Server Transmission</h4>
+            <p class="text-xs text-zinc-400 mt-0.5 leading-relaxed">
+              When you drop a file into NovaTools, it is read into JavaScript TypedArrays (ArrayBuffers) in your local RAM. No API requests containing your file data are ever transmitted.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <Zap class="h-4 w-4" />
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-zinc-200">Zero Queue & Instant Speed</h4>
+            <p class="text-xs text-zinc-400 mt-0.5 leading-relaxed">
+              Cloud tools place you in processing queues with artificial speed limits. NovaTools utilizes multi-threaded client execution to process documents in milliseconds.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <Globe class="h-4 w-4" />
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-zinc-200">Unlimited & Free Access</h4>
+            <p class="text-xs text-zinc-400 mt-0.5 leading-relaxed">
+              Because computations run on the client rather than expensive cloud servers, NovaTools does not charge subscription fees or throttle large file sizes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Contact CTA */}
+    <div class="text-center pt-4">
+      <p class="text-xs text-zinc-400">
+        Have questions, feedback, or enterprise inquiries?{' '}
+        <a href="/contact" class="text-brand-400 hover:underline">Get in touch with our team</a>.
+      </p>
+    </div>
+  </div>
+</Layout>

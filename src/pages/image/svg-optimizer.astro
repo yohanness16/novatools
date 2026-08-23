@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { SvgOptimizerWorkspace } from '../../components/workspaces/SvgOptimizerWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'svg-optimizer')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <SvgOptimizerWorkspace client:load />
+</ToolPageLayout>

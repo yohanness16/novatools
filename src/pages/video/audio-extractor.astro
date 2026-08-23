@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { AudioExtractorWorkspace } from '../../components/workspaces/AudioExtractorWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'audio-extractor')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <AudioExtractorWorkspace client:load />
+</ToolPageLayout>

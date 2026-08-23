@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { VideoCompressorWorkspace } from '../../components/workspaces/VideoCompressorWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'video-compressor')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <VideoCompressorWorkspace client:load />
+</ToolPageLayout>

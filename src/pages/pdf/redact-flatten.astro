@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfRedactWorkspace } from '../../components/workspaces/PdfRedactWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'redact-flatten-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfRedactWorkspace client:load />
+</ToolPageLayout>

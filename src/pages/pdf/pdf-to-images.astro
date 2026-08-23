@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfToImagesWorkspace } from '../../components/workspaces/PdfToImagesWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'pdf-to-images')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfToImagesWorkspace client:load />
+</ToolPageLayout>

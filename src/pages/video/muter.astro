@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { VideoMuterWorkspace } from '../../components/workspaces/VideoMuterWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'video-muter')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <VideoMuterWorkspace client:load />
+</ToolPageLayout>

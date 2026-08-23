@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Mail, MessageSquare, Shield, Send, CheckCircle2 } from 'lucide-react';
+---
+
+<Layout
+  title="Contact Support & Feedback - NovaTools"
+  description="Have questions, suggestions, or need assistance? Contact the NovaTools development team."
+>
+  <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 space-y-10">
+    <div class="space-y-3 text-center">
+      <div class="inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-3.5 py-1 text-xs font-medium text-brand-300">
+        <Mail class="h-3.5 w-3.5" />
+        <span>Get in Touch</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Contact & Support</h1>
+      <p class="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+        Have feedback, discovered a bug with a specific file format, or want to suggest a new client-side tool? We'd love to hear from you.
+      </p>
+    </div>
+
+    <div class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-6">
+      <form class="space-y-4" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden'); this.reset();">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5">Your Name</label>
+            <input
+              type="text"
+              required
+              placeholder="e.g. Alex Morgan"
+              class="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:border-brand-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email Address</label>
+            <input
+              type="email"
+              required
+              placeholder="alex@example.com"
+              class="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:border-brand-500 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Subject / Tool Category</label>
+          <select class="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 focus:border-brand-500 focus:outline-none">
+            <option>General Feedback / Question</option>
+            <option>PDF Suite Issue / Request</option>
+            <option>Image Suite Issue / Request</option>
+            <option>Video & Audio Suite Issue</option>
+            <option>Business / Partnership Inquiry</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1.5">Your Message</label>
+          <textarea
+            rows="5"
+            required
+            placeholder="Describe your question, request, or issue..."
+            class="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3 text-xs text-zinc-100 placeholder-zinc-500 focus:border-brand-500 focus:outline-none resize-none"
+          ></textarea>
+        </div>
+
+        <div id="contact-success" class="hidden flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-300">
+          <CheckCircle2 class="h-4 w-4 shrink-0 text-emerald-400" />
+          <span>Thank you for reaching out! We will review your note shortly.</span>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-[0.98] transition-all"
+        >
+          <Send class="h-3.5 w-3.5" />
+          <span>Send Message</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4 text-center text-xs text-zinc-400">
+      Direct Email Inquiries: <a href="mailto:support@novatools.app" class="text-brand-400 font-mono hover:underline">support@novatools.app</a>
+    </div>
+  </div>
+</Layout>

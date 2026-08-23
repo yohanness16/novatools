@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { VideoTrimmerWorkspace } from '../../components/workspaces/VideoTrimmerWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'video-trimmer')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <VideoTrimmerWorkspace client:load />
+</ToolPageLayout>

@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfMergeWorkspace } from '../../components/workspaces/PdfMergeWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'merge-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfMergeWorkspace client:load />
+</ToolPageLayout>

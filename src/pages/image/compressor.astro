@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { ImageCompressorWorkspace } from '../../components/workspaces/ImageCompressorWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'image-compressor')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <ImageCompressorWorkspace client:load />
+</ToolPageLayout>

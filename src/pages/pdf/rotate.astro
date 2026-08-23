@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfRotateWorkspace } from '../../components/workspaces/PdfRotateWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'rotate-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfRotateWorkspace client:load />
+</ToolPageLayout>

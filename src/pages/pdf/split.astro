@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfSplitWorkspace } from '../../components/workspaces/PdfSplitWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'split-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfSplitWorkspace client:load />
+</ToolPageLayout>
