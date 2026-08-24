@@ -197,6 +197,34 @@ export const TOOLS: ToolMeta[] = [
       { question: 'Can I reorder images before creating the PDF?', answer: 'Yes, simply use the reorder buttons or drag cards into your desired sequence.' }
     ]
   },
+  {
+    id: 'pdf-page-numberer',
+    slug: 'page-numberer',
+    name: 'PDF Page Numberer & Stamper',
+    category: 'pdf',
+    categoryLabel: 'PDF Suite',
+    description: 'Add page numbers, Roman numerals, and header/footer metadata stamps to PDFs.',
+    longDescription: 'Stamp crisp vector page numbers onto PDF documents in your browser. Customize 6-point page alignment, number formatting ("Page 1 of 10", Roman numerals), font size, margins, and skip cover pages with 100% privacy.',
+    iconName: 'FileText',
+    badge: 'Vector Stamp',
+    path: '/pdf/page-numberer',
+    keywords: ['number pdf pages', 'add page numbers to pdf', 'pdf bates numbering', 'pdf header footer', 'paginate pdf online'],
+    features: [
+      '6-Point page alignment (Top/Bottom, Left/Center/Right)',
+      'Templates: "Page 1 of 10", "1 / 10", "Page 1", "- 1 -", Roman numerals',
+      'Skip cover pages option and custom starting index',
+      'Crisp vector typography injected via pdf-lib with zero server uploads'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload PDF Document', desc: 'Select the PDF file you wish to paginate.' },
+      { step: 2, title: 'Choose Alignment & Format', desc: 'Click the alignment grid (e.g. Bottom Center) and pick your preferred numbering template.' },
+      { step: 3, title: 'Stamp & Download', desc: 'Download your newly paginated PDF document with embedded vector page numbers.' }
+    ],
+    faqs: [
+      { question: 'Will adding page numbers affect existing text or layout?', answer: 'No! The numbers are drawn directly as vector overlay layers without modifying existing text flow or image quality.' },
+      { question: 'Can I skip numbering on the first/cover page?', answer: 'Yes, simply set "Skip Cover Pages" to 1 (or any number of introductory pages) to start numbering from subsequent pages.' }
+    ]
+  },
 
   // IMAGE SUITE
   {

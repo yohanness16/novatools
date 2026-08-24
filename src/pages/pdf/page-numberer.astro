@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { PdfNumbererWorkspace } from '../../components/workspaces/PdfNumbererWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'pdf-page-numberer')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <PdfNumbererWorkspace client:load />
+</ToolPageLayout>
