@@ -440,7 +440,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-14 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -452,22 +452,22 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all shadow-lg">
-            <Subtitles className="h-7 w-7" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Subtitles className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-base font-semibold text-zinc-200">
-            Upload Video or Audio to Generate Subtitles
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop video or audio to generate subtitles, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-400 max-w-md text-center">
-            Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files. 100% in-browser AI transcription with zero server uploads.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98] text-center">
+            Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files.
           </p>
-          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800 flex-wrap justify-center">
-            <Sparkles className="h-3.5 w-3.5 text-brand-400" />
+          <div className="mt-3 flex items-center gap-2 text-[10px] font-mono text-[#8B8F98] bg-[#131418] px-2.5 py-1 rounded border border-[#2A2D33]">
+            <Sparkles className="h-3 w-3 text-[#4F8CFF]" />
             <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages Supported</span>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-4 sm:p-6 space-y-6">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
           {/* Header Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-4">
             <div>
@@ -927,18 +927,18 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
       {/* Searchable Language Selection Modal */}
       {isLangPickerOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-zinc-700 bg-zinc-900 p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
+          <div className="w-full max-w-lg rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2.5">
               <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-brand-400" />
-                <h4 className="text-sm font-semibold text-zinc-100">
+                <Globe className="h-4 w-4 text-[#4F8CFF]" />
+                <h4 className="text-xs font-semibold text-[#ECEDEF]">
                   {langPickerMode === 'transcribe' ? 'Select Audio Spoken Language' : 'Select Target Translation Language'}
                 </h4>
               </div>
               <button
                 onClick={() => setIsLangPickerOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+                className="p-1 rounded text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -946,19 +946,19 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#8B8F98]" />
               <input
                 type="text"
                 autoFocus
                 placeholder="Search language name, native script (e.g. አማርኛ, Español), or code (am, es)..."
                 value={langSearchQuery}
                 onChange={(e) => setLangSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-950 pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder:text-zinc-500 focus:border-brand-500 focus:outline-none"
+                className="w-full rounded border border-[#2A2D33] bg-[#0B0C0F] pl-8 pr-3 py-1.5 text-xs text-[#ECEDEF] placeholder:text-[#5B606D] focus:border-[#4F8CFF] focus:outline-none"
               />
             </div>
 
             {/* Region Filter Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-none">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1 text-[11px] scrollbar-none">
               {[
                 { id: 'all', label: 'All (100+)' },
                 { id: 'popular', label: 'Popular' },
@@ -971,10 +971,10 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setLangRegionFilter(tab.id)}
-                  className={`px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${
+                  className={`px-2 py-0.5 rounded font-medium whitespace-nowrap transition-colors ${
                     langRegionFilter === tab.id
-                      ? 'bg-brand-500 text-white'
-                      : 'bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                      ? 'bg-[#4F8CFF] text-white'
+                      : 'bg-[#1B1D22] text-[#8B8F98] hover:text-[#ECEDEF]'
                   }`}
                 >
                   {tab.label}
@@ -983,7 +983,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             </div>
 
             {/* Language Grid */}
-            <div className="max-h-[300px] overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+            <div className="max-h-[280px] overflow-y-auto space-y-0.5 pr-1 custom-scrollbar divide-y divide-[#2A2D33]/40">
               {filteredLanguages.map((lang) => {
                 const isSelected =
                   langPickerMode === 'transcribe'
@@ -1001,28 +1001,28 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       }
                       setIsLangPickerOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-colors ${
+                    className={`w-full flex items-center justify-between p-2 rounded text-left text-xs transition-colors ${
                       isSelected
-                        ? 'bg-brand-500/20 text-brand-300 border border-brand-500/40'
-                        : 'hover:bg-zinc-800/70 text-zinc-200 border border-transparent'
+                        ? 'bg-[#16233F] text-[#4F8CFF] border border-[#4F8CFF]/40'
+                        : 'hover:bg-[#1B1D22] text-[#ECEDEF] border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">{lang.name}</span>
-                      <span className="text-zinc-400 font-normal">({lang.nativeName})</span>
+                      <span className="text-[#8B8F98] font-normal">({lang.nativeName})</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] uppercase text-zinc-500 bg-zinc-800 px-1.5 py-0.5 rounded">
+                      <span className="font-mono text-[10px] uppercase text-[#8B8F98] bg-[#0B0C0F] px-1.5 py-0.5 rounded border border-[#2A2D33]">
                         {lang.code}
                       </span>
-                      {isSelected && <Check className="h-3.5 w-3.5 text-brand-400 shrink-0" />}
+                      {isSelected && <Check className="h-3.5 w-3.5 text-[#4F8CFF] shrink-0" />}
                     </div>
                   </button>
                 );
               })}
 
               {filteredLanguages.length === 0 && (
-                <div className="py-8 text-center text-xs text-zinc-500">
+                <div className="py-6 text-center text-xs text-[#8B8F98] font-mono">
                   No languages found matching "{langSearchQuery}"
                 </div>
               )}
@@ -1033,17 +1033,17 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
       {/* 1-Click AI Translation Modal */}
       {isTranslateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-900 p-5 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
+          <div className="w-full max-w-md rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2.5">
               <div className="flex items-center gap-2">
-                <Languages className="h-4 w-4 text-indigo-400" />
-                <h4 className="text-sm font-semibold text-zinc-100">Translate Subtitles</h4>
+                <Languages className="h-4 w-4 text-[#4F8CFF]" />
+                <h4 className="text-xs font-semibold text-[#ECEDEF]">Translate Subtitles</h4>
               </div>
               {!isTranslating && (
                 <button
                   onClick={() => setIsTranslateModalOpen(false)}
-                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+                  className="p-1 rounded text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
                 >
                   <X className="h-4 w-4" />
                 </button>

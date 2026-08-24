@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, readFileAsArrayBuffer } from '../../lib/utils';
-import { Upload, FileText, RotateCw, RotateCcw, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, FileText, RotateCw, RotateCcw, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 interface PageThumbnail {
   pageNumber: number;
@@ -38,7 +38,6 @@ export const PdfRotateWorkspace: React.FC = () => {
       setPageCount(count);
       setRotations({});
 
-      // Render fast thumbnail previews in background
       setIsLoadingThumbnails(true);
       try {
         const rendered = await PdfEngine.renderAllPagesToImages(buf, 'png', 0.6);
@@ -49,7 +48,7 @@ export const PdfRotateWorkspace: React.FC = () => {
           }))
         );
       } catch {
-        // Fallback gracefully if thumbnail renderer encounters issue
+        // Fallback
       } finally {
         setIsLoadingThumbnails(false);
       }
@@ -96,11 +95,11 @@ export const PdfRotateWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -112,136 +111,147 @@ export const PdfRotateWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-            <RotateCw className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <RotateCw className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-            Upload PDF to Rotate Pages
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop PDF to rotate pages, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Rotate individual pages or entire documents permanently with real visual previews.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Rotate individual pages or entire documents 90°/180°/270°. 100% local WASM.
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
-          {/* Header Controls */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-surface-border pb-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400">
-                <FileText className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-zinc-200">{file.name}</h4>
-                <p className="text-xs text-zinc-400 font-mono">
-                  {pageCount} {pageCount === 1 ? 'Page' : 'Pages'} · {formatBytes(file.size)}
-                  {isLoadingThumbnails && ' · Loading previews...'}
-                </p>
-              </div>
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
+            <div>
+              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                {pageCount} Pages · {formatBytes(file.size)}
+              </p>
             </div>
 
-            {/* Bulk Rotate Buttons */}
+            {/* Global Quick Rotate Controls */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => rotateAll(90)}
-                className="flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 active:scale-95 transition-all"
+                type="button"
+                onClick={() => rotateAll(-90)}
+                className="flex items-center gap-1 rounded bg-[#1B1D22] border border-[#2A2D33] px-2.5 py-1 text-xs font-medium text-[#ECEDEF] hover:border-[#4F8CFF] transition-colors"
               >
-                <RotateCw className="h-3.5 w-3.5" />
-                Rotate All +90°
+                <RotateCcw className="h-3 w-3 text-[#8B8F98]" />
+                <span>Rotate All Left</span>
               </button>
               <button
-                onClick={() => rotateAll(-90)}
-                className="flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 active:scale-95 transition-all"
+                type="button"
+                onClick={() => rotateAll(90)}
+                className="flex items-center gap-1 rounded bg-[#1B1D22] border border-[#2A2D33] px-2.5 py-1 text-xs font-medium text-[#ECEDEF] hover:border-[#4F8CFF] transition-colors"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Rotate All -90°
+                <RotateCw className="h-3 w-3 text-[#8B8F98]" />
+                <span>Rotate All Right</span>
+              </button>
+              <button
+                onClick={() => {
+                  setFile(null);
+                  setBuffer(null);
+                  setThumbnails([]);
+                }}
+                className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors pl-2"
+              >
+                Reset
               </button>
             </div>
           </div>
 
-          {/* Page Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 max-h-[460px] overflow-y-auto p-1">
+          {/* Page Thumbnails Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 max-h-[420px] overflow-y-auto p-1">
             {Array.from({ length: pageCount }).map((_, idx) => {
-              const currentAngle = rotations[idx] || 0;
-              const thumb = thumbnails[idx];
+              const rot = rotations[idx] || 0;
+              const thumb = thumbnails.find((t) => t.pageNumber === idx + 1);
 
               return (
                 <div
                   key={idx}
-                  className="flex flex-col items-center rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 text-center transition-all hover:border-zinc-700"
+                  className="rounded bg-[#1B1D22] border border-[#2A2D33] p-2 space-y-2 flex flex-col justify-between"
                 >
-                  <div className="relative flex h-32 w-full items-center justify-center rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden mb-2">
-                    <div
-                      style={{ transform: `rotate(${currentAngle}deg)` }}
-                      className="flex h-24 w-18 items-center justify-center rounded bg-white shadow-sm transition-transform duration-200 overflow-hidden"
-                    >
-                      {thumb ? (
-                        <img
-                          src={thumb.dataUrl}
-                          alt={`Page ${idx + 1}`}
-                          className="h-full w-full object-contain"
-                        />
-                      ) : (
-                        <FileText className="h-6 w-6 text-zinc-500" />
-                      )}
-                    </div>
-                    {currentAngle !== 0 && (
-                      <span className="absolute top-1 right-1 rounded bg-brand-500 px-1.5 py-0.2 font-mono text-[9px] text-white">
-                        {currentAngle}°
+                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded bg-[#131418] border border-[#2A2D33] flex items-center justify-center p-1">
+                    {thumb ? (
+                      <img
+                        src={thumb.dataUrl}
+                        alt={`Page ${idx + 1}`}
+                        style={{ transform: `rotate(${rot}deg)` }}
+                        className="max-h-full max-w-full object-contain transition-transform duration-150"
+                      />
+                    ) : (
+                      <div
+                        style={{ transform: `rotate(${rot}deg)` }}
+                        className="flex flex-col items-center justify-center text-[#8B8F98] transition-transform duration-150"
+                      >
+                        <FileText className="h-8 w-8 text-[#5B606D]" />
+                        <span className="font-mono text-[10px] mt-1">Page {idx + 1}</span>
+                      </div>
+                    )}
+
+                    {rot > 0 && (
+                      <span className="absolute top-1 right-1 rounded bg-[#16233F] border border-[#4F8CFF]/30 px-1 font-mono text-[9px] font-semibold text-[#4F8CFF]">
+                        {rot}°
                       </span>
                     )}
                   </div>
 
-                  <span className="text-xs font-medium text-zinc-400 mb-2">Page {idx + 1}</span>
-
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => rotatePage(idx, -90)}
-                      title="Rotate 90° Left"
-                      className="rounded p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                    >
-                      <RotateCcw className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      onClick={() => rotatePage(idx, 90)}
-                      title="Rotate 90° Right"
-                      className="rounded p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                    >
-                      <RotateCw className="h-3.5 w-3.5" />
-                    </button>
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-[#2A2D33]/60">
+                    <span className="font-mono text-[10px] text-[#8B8F98]">#{idx + 1}</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => rotatePage(idx, -90)}
+                        className="rounded p-1 text-[#8B8F98] hover:bg-[#131418] hover:text-[#ECEDEF]"
+                        title="Rotate 90° CCW"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => rotatePage(idx, 90)}
+                        className="rounded p-1 text-[#8B8F98] hover:bg-[#131418] hover:text-[#ECEDEF]"
+                        title="Rotate 90° CW"
+                      >
+                        <RotateCw className="h-3 w-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Action and Alerts */}
+          {/* Action Save Button */}
           <div className="pt-2">
             <button
               onClick={handleSave}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
             >
               {isProcessing ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Saving Rotations...</span>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Saving Rotated PDF in Memory...</span>
                 </>
               ) : (
-                <span>Download Rotated PDF</span>
+                <span>Save & Download Rotated PDF</span>
               )}
             </button>
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
           {success && (
-            <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-300">
-              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <span>Rotated PDF downloaded successfully!</span>
+            <div className="flex items-center gap-2 rounded bg-[#122D1F] border border-[#3FBE73]/40 p-3 text-xs text-[#3FBE73]">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              <span>Rotated PDF downloaded successfully.</span>
             </div>
           )}
         </div>

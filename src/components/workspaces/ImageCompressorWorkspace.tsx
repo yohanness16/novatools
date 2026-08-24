@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
-import { Upload, Minimize2, CheckCircle, AlertCircle, Loader2, Download } from 'lucide-react';
+import { Upload, Minimize2, CheckCircle2, AlertCircle, Loader2, Download } from 'lucide-react';
 
 export const ImageCompressorWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -89,11 +89,11 @@ export const ImageCompressorWorkspace: React.FC = () => {
       : 0;
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -105,28 +105,28 @@ export const ImageCompressorWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-            <Minimize2 className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Minimize2 className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-            Upload Image to Compress with Visual Diff
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop image to compress, or <span className="text-[#4F8CFF] underline">browse</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Compare original vs compressed quality side-by-side in real time.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Interactive side-by-side diff slider. 100% in-browser processing.
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
           {/* Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-surface-border pb-4">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-zinc-200">{file.name}</span>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
               {compressedBlob && (
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-mono text-xs font-medium text-emerald-400 border border-emerald-500/20">
+                  <span className="rounded bg-[#122D1F] px-2 py-0.5 font-mono text-[10px] font-medium text-[#3FBE73] border border-[#3FBE73]/30">
                     -{savingsPercent}% Saved
                   </span>
-                  <span className="font-mono text-xs text-zinc-400">
+                  <span className="font-mono text-[10px] text-[#8B8F98]">
                     {formatBytes(file.size)} → {formatBytes(compressedBlob.size)}
                   </span>
                 </div>
@@ -139,7 +139,7 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 setCompressedUrl(null);
                 setCompressedBlob(null);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
               Choose different image
             </button>
@@ -147,11 +147,11 @@ export const ImageCompressorWorkspace: React.FC = () => {
 
           {/* Interactive Split Diff Viewer */}
           {originalUrl && (
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs text-zinc-400 px-1">
-                <span>← Original File</span>
-                <span className="text-brand-400 font-mono text-[11px]">Drag divider to compare</span>
-                <span>Compressed Output →</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center text-[11px] text-[#8B8F98] font-mono px-1">
+                <span>Original ({formatBytes(file.size)})</span>
+                <span className="text-[#4F8CFF]">Drag hairline divider to inspect</span>
+                <span>Compressed ({compressedBlob ? formatBytes(compressedBlob.size) : '...'})</span>
               </div>
 
               <div
@@ -161,7 +161,7 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 onMouseLeave={() => setIsDragging(false)}
                 onMouseMove={handleMouseMove}
                 onTouchMove={handleTouchMove}
-                className="relative h-[320px] sm:h-[400px] w-full select-none overflow-hidden rounded-2xl border border-zinc-800 bg-black/60 cursor-ew-resize"
+                className="relative h-[280px] sm:h-[360px] w-full select-none overflow-hidden rounded border border-[#2A2D33] bg-[#0B0C0F] cursor-ew-resize"
               >
                 {/* Background Image (Compressed) */}
                 {compressedUrl && (
@@ -190,33 +190,25 @@ export const ImageCompressorWorkspace: React.FC = () => {
 
                 {/* Slider Handle Line */}
                 <div
-                  className="absolute top-0 bottom-0 w-0.5 bg-white shadow-glow-lg pointer-events-none"
+                  className="absolute top-0 bottom-0 w-[1px] bg-[#4F8CFF] pointer-events-none z-20"
                   style={{ left: `${sliderPos}%` }}
                 >
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-900 shadow-xl border border-zinc-200">
-                    <span className="text-[10px] font-bold tracking-tighter">⟷</span>
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded bg-[#131418] text-[#ECEDEF] border border-[#2A2D33] shadow-md">
+                    <span className="font-mono text-[9px] text-[#8B8F98]">⟷</span>
                   </div>
                 </div>
-
-                {/* Corner Indicator Labels */}
-                <span className="absolute bottom-3 left-3 rounded-lg bg-black/70 px-2 py-1 font-mono text-[10px] text-zinc-300 backdrop-blur-sm pointer-events-none">
-                  Original: {formatBytes(file.size)}
-                </span>
-                <span className="absolute bottom-3 right-3 rounded-lg bg-emerald-950/80 border border-emerald-500/30 px-2 py-1 font-mono text-[10px] text-emerald-300 backdrop-blur-sm pointer-events-none">
-                  Compressed: {compressedBlob ? formatBytes(compressedBlob.size) : '...'}
-                </span>
               </div>
             </div>
           )}
 
           {/* Sliders and Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
             <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-medium text-zinc-300">
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-[#ECEDEF]">
                   Compression Quality
                 </label>
-                <span className="font-mono text-xs text-brand-400 font-semibold">
+                <span className="font-mono text-xs text-[#4F8CFF] font-semibold">
                   {Math.round(quality * 100)}%
                 </span>
               </div>
@@ -227,23 +219,23 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 step="0.05"
                 value={quality}
                 onChange={(e) => handleQualityChange(parseFloat(e.target.value))}
-                className="w-full accent-brand-500"
+                className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-medium text-zinc-300">
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-[#ECEDEF]">
                   Max Width Limit
                 </label>
-                <span className="font-mono text-xs text-zinc-400">
+                <span className="font-mono text-xs text-[#8B8F98]">
                   {maxWidth}px
                 </span>
               </div>
               <select
                 value={maxWidth}
                 onChange={(e) => handleMaxWidthChange(Number(e.target.value))}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-zinc-100 focus:border-brand-500 focus:outline-none"
+                className="w-full rounded border border-[#2A2D33] bg-[#131418] px-3 py-1.5 text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
               >
                 <option value="3840">4K Ultra (3840px)</option>
                 <option value="1920">Full HD (1920px - Default)</option>
@@ -254,7 +246,7 @@ export const ImageCompressorWorkspace: React.FC = () => {
           </div>
 
           {/* Download Button */}
-          <div className="pt-2">
+          <div>
             <button
               onClick={() => {
                 if (compressedBlob && file) {
@@ -262,16 +254,16 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 }
               }}
               disabled={isProcessing || !compressedBlob}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
             >
               {isProcessing ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Optimizing Pixels...</span>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Optimizing Pixels Locally...</span>
                 </>
               ) : (
                 <>
-                  <Download className="h-4 w-4" />
+                  <Download className="h-3.5 w-3.5" />
                   <span>Download Compressed Image ({compressedBlob ? formatBytes(compressedBlob.size) : ''})</span>
                 </>
               )}
@@ -279,8 +271,8 @@ export const ImageCompressorWorkspace: React.FC = () => {
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}

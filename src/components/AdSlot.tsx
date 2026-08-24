@@ -4,8 +4,8 @@ export type AdSlotType = 'leaderboard' | 'rectangle' | 'large-rectangle' | 'mobi
 
 interface AdSlotProps {
   type?: AdSlotType;
-  adClient?: string; // e.g. "ca-pub-6768212179657827"
-  adSlot?: string;   // e.g. "1234567890"
+  adClient?: string;
+  adSlot?: string;
   className?: string;
   label?: string;
 }
@@ -15,7 +15,7 @@ export const AdSlot: React.FC<AdSlotProps> = ({
   adClient = 'ca-pub-6768212179657827',
   adSlot,
   className = '',
-  label = 'Advertisement'
+  label = 'Sponsored'
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +29,6 @@ export const AdSlot: React.FC<AdSlotProps> = ({
     }
   }, [adClient, adSlot]);
 
-  // Zero-CLS Dimensions based on IAB standard responsive ad slots
   const getDimensions = () => {
     switch (type) {
       case 'leaderboard':
@@ -49,11 +48,11 @@ export const AdSlot: React.FC<AdSlotProps> = ({
 
   return (
     <aside
-      className={`relative mx-auto flex flex-col items-center justify-center overflow-hidden rounded-xl border border-surface-border bg-surface/40 p-2 text-center transition-colors ${getDimensions()} ${className}`}
+      className={`relative mx-auto flex flex-col items-center justify-center overflow-hidden rounded border border-[#2A2D33] bg-[#131418] p-2 text-center ${getDimensions()} ${className}`}
       aria-label="Advertisement"
       role="complementary"
     >
-      <span className="mb-1 text-[10px] font-mono font-medium tracking-widest text-zinc-500 uppercase">
+      <span className="mb-1 text-[9px] font-mono font-medium tracking-widest text-[#5B606D] uppercase">
         {label}
       </span>
 

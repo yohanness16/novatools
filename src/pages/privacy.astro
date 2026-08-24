@@ -1,85 +1,61 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Shield, Lock, Eye, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock, CheckCircle2 } from 'lucide-react';
 ---
 
 <Layout
-  title="Privacy Policy - NovaTools"
+  title="Privacy Ledger & Data Governance - NovaTools"
   description="Comprehensive privacy policy for NovaTools. Learn how your files remain 100% private in local browser memory and how third-party advertising cookies operate."
 >
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 space-y-10">
-    <div class="space-y-3 border-b border-surface-border pb-6">
-      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-medium text-emerald-400">
+  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div class="space-y-2 border-b border-[#2A2D33] pb-5">
+      <div class="inline-flex items-center gap-1.5 rounded border border-[#3FBE73]/30 bg-[#122D1F] px-2.5 py-0.5 text-[11px] font-mono font-medium text-[#3FBE73]">
         <Shield class="h-3.5 w-3.5" />
-        <span>Privacy First Architecture</span>
+        <span>Cryptographic Zero-Knowledge Guarantee</span>
       </div>
-      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">Privacy Policy</h1>
-      <p class="text-xs text-zinc-400 font-mono">Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#ECEDEF]">Privacy Policy & Data Governance</h1>
+      <p class="text-[11px] text-[#8B8F98] font-mono">Ledger Specification · {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
     </div>
 
-    <div class="space-y-8 text-xs sm:text-sm text-zinc-300 leading-relaxed">
+    <div class="space-y-6 text-xs sm:text-sm text-[#8B8F98] leading-relaxed">
       {/* Section 1 */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">1. Core Privacy Commitment: Zero Server Uploads</h2>
+      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
+        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">1. Zero-Upload Architecture</h2>
         <p>
-          At NovaTools (<a href="https://novatools.app" class="text-brand-400 hover:underline">novatools.app</a>), the privacy of our visitors is of paramount importance. 
-          The defining technical feature of NovaTools is that <strong>we do not transmit, collect, process, or store your documents, photos, videos, or files on any remote servers.</strong>
+          At NovaTools (<a href="https://novatools.app" class="text-[#4F8CFF] hover:underline">novatools.app</a>), our fundamental technical premise is that <strong>we do not transmit, collect, process, or store your documents, photos, audio tracks, or videos on any remote servers.</strong>
         </p>
         <p>
-          All operations—including PDF merging, PDF splitting, image format conversion, image compression, video trimming, audio extraction, and EXIF scrubbing—occur <strong>100% locally within your client browser runtime</strong> using WebAssembly, HTML5 Canvas, and Web Workers.
+          All operations—including PDF merging, audio volume amplification, neural subtitle generation, image compression, video trimming, and EXIF scrubbing—execute <strong>100% locally within your client browser runtime</strong> using WebAssembly, WebCodecs, and Web Workers.
         </p>
       </section>
 
       {/* Section 2 */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">2. Information We Do NOT Collect</h2>
-        <ul class="list-disc pl-5 space-y-1.5 text-zinc-400">
-          <li>We do not collect or view the contents of any files processed on this website.</li>
-          <li>We do not record file names, metadata, passwords, or document content.</li>
-          <li>We do not require user accounts, email registration, or credit cards to use standard tools.</li>
+      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
+        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">2. Zero Data Collection Spec</h2>
+        <ul class="list-disc pl-4 space-y-1 text-xs text-[#8B8F98]">
+          <li>Zero collection or retention of document bytes, images, or audio buffers.</li>
+          <li>Zero logging of file names, metadata tags, passwords, or transcription text.</li>
+          <li>Zero requirement for user accounts, credentials, or tracking identifiers to use any tool.</li>
         </ul>
       </section>
 
       {/* Section 3: Google AdSense and Cookies */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">3. Third-Party Advertising and Cookies (Google AdSense)</h2>
+      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
+        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">3. Advertising & Cookies (Google AdSense)</h2>
         <p>
-          To keep NovaTools free and accessible to everyone, we may serve advertisements provided by third-party vendors, such as <strong>Google AdSense</strong>.
+          To maintain free, open-access infrastructure without paywalls, we may serve programmatic advertisements provided by third-party vendors, such as <strong>Google AdSense</strong>.
         </p>
-        <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 space-y-2 text-xs text-zinc-400">
-          <p>
-            • <strong>Third-Party Vendors:</strong> Google, as a third-party vendor, uses cookies to serve ads based on a user's prior visits to this website or other websites.
-          </p>
-          <p>
-            • <strong>DART Cookies:</strong> Google's use of advertising cookies enables it and its partners to serve ads to users based on their visits to our sites and/or other sites on the Internet.
-          </p>
-          <p>
-            • <strong>Opting Out:</strong> Users may opt out of personalized advertising by visiting Google's <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-brand-400 hover:underline">Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" class="text-brand-400 hover:underline">www.aboutads.info</a>.
-          </p>
+        <div class="rounded border border-[#2A2D33] bg-[#0B0C0F] p-3 space-y-1.5 text-xs text-[#8B8F98] font-mono">
+          <p>• Third-Party Vendors: Google uses cookies to serve ads based on prior user visits.</p>
+          <p>• Opting Out: Users may opt out of personalized advertising via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-[#4F8CFF] hover:underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" class="text-[#4F8CFF] hover:underline">aboutads.info</a>.</p>
         </div>
       </section>
 
-      {/* Section 4: Log Files */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">4. Web Server Log Files</h2>
+      {/* Section 4: Contact */}
+      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
+        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">4. Security & Compliance Contact</h2>
         <p>
-          Like most standard website hosting providers, our static hosting platform (e.g. Cloudflare / Vercel) may log standard, anonymous HTTP request headers (such as IP address, browser user-agent, referring page, and date/time stamps) strictly for traffic analytics, DDoS mitigation, and server diagnostics. None of these logs are linked to any personally identifiable documents.
-        </p>
-      </section>
-
-      {/* Section 5: GDPR & CCPA Rights */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">5. GDPR and CCPA Compliance</h2>
-        <p>
-          Under the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA), users have rights regarding their data. Because NovaTools never collects or stores your uploaded files or personal records, your data is inherently protected by zero-collection architecture.
-        </p>
-      </section>
-
-      {/* Section 6: Contact */}
-      <section class="space-y-3">
-        <h2 class="text-base sm:text-lg font-semibold text-white">6. Contact Information</h2>
-        <p>
-          If you have questions regarding this Privacy Policy or our client-side runtime security, please reach out via our <a href="/contact" class="text-brand-400 hover:underline">Contact Page</a> or email us at <code class="text-brand-300 font-mono">privacy@novatools.app</code>.
+          For questions regarding local-first execution compliance or audit inquiries: <code class="text-[#4F8CFF] font-mono">privacy@novatools.app</code> or visit our <a href="/contact" class="text-[#4F8CFF] hover:underline">Contact Desk</a>.
         </p>
       </section>
     </div>

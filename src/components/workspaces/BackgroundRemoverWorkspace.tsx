@@ -5,21 +5,15 @@ import {
   type RemoveBgProgress,
 } from '../../engines/backgroundRemoverEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
-import JSZip from 'jszip';
 import {
   Image as ImageIcon,
   Upload,
   Download,
-  Sparkles,
-  Layers,
   Palette,
   Loader2,
   AlertCircle,
-  Check,
-  Eye,
-  Sliders,
+  CheckCircle2,
   Scissors,
-  ShieldCheck,
 } from 'lucide-react';
 
 const COLOR_SWATCHES = [
@@ -27,9 +21,8 @@ const COLOR_SWATCHES = [
   { id: 'white', label: 'Pure White', value: '#ffffff' },
   { id: 'black', label: 'Dark Studio', value: '#121215' },
   { id: 'gray', label: 'Neutral Gray', value: '#e2e8f0' },
-  { id: 'blue', label: 'Studio Blue', value: '#2563eb' },
-  { id: 'emerald', label: 'Mint Green', value: '#059669' },
-  { id: 'purple', label: 'Deep Purple', value: '#7c3aed' },
+  { id: 'blue', label: 'Studio Blue', value: '#4F8CFF' },
+  { id: 'emerald', label: 'Mint Green', value: '#3FBE73' },
 ];
 
 export const BackgroundRemoverWorkspace: React.FC = () => {
@@ -71,7 +64,6 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
     setOriginalUrl(url);
     setFile(selectedFile);
 
-    // Auto trigger initial removal
     runRemoval(selectedFile, 'transparent', '#ffffff');
   };
 
@@ -123,11 +115,11 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-14 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -139,39 +131,35 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all shadow-lg">
-            <Scissors className="h-7 w-7" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Scissors className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-base font-semibold text-zinc-200">
-            Upload Image to Remove Background
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop image to remove background, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-400 max-w-md text-center">
-            Instantly isolate foreground subjects and export crisp transparent PNGs or custom solid backdrops. 100% in-browser processing.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Isolate subjects and export transparent PNGs in real-time. 100% local WASM.
           </p>
-          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Zero Cloud Uploads · $0 Server Cost · Instant Transparent PNG</span>
-          </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-4 sm:p-6 space-y-6">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-zinc-200">{file.name}</span>
-                <span className="rounded-md bg-zinc-800 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700">
+                <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+                <span className="rounded bg-[#1B1D22] px-2 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
                   {formatBytes(file.size)}
                 </span>
                 {result && (
-                  <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                    <Check className="h-3 w-3" />
-                    Background Removed ({result.originalWidth}×{result.originalHeight})
+                  <span className="rounded bg-[#122D1F] px-2 py-0.5 text-[10px] font-mono text-[#3FBE73] border border-[#3FBE73]/30 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Isolated ({result.originalWidth}×{result.originalHeight})
                   </span>
                 )}
               </div>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                {result ? 'Drag the slider to inspect before/after diff' : 'Processing image...'}
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                {result ? 'Drag divider to inspect before/after difference' : 'Extracting foreground in memory...'}
               </p>
             </div>
 
@@ -182,7 +170,7 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
                 setOriginalUrl(null);
                 setResult(null);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200 self-start sm:self-auto transition-colors"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
               Choose different image
             </button>
@@ -194,7 +182,7 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
             onMouseMove={handleMouseMove}
             onMouseUp={() => setIsDraggingSplit(false)}
             onMouseLeave={() => setIsDraggingSplit(false)}
-            className="relative w-full aspect-video sm:aspect-[16/10] max-h-[460px] rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 select-none flex items-center justify-center cursor-ew-resize"
+            className="relative w-full aspect-video sm:aspect-[16/10] max-h-[400px] rounded overflow-hidden bg-[#0B0C0F] border border-[#2A2D33] select-none flex items-center justify-center cursor-ew-resize"
           >
             {/* Checkerboard Pattern for Transparency */}
             <div
@@ -202,8 +190,8 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               style={{
                 backgroundImage:
                   'linear-gradient(45deg, #18181b 25%, transparent 25%), linear-gradient(-45deg, #18181b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #18181b 75%), linear-gradient(-45deg, transparent 75%, #18181b 75%)',
-                backgroundSize: '20px 20px',
-                backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px',
+                backgroundSize: '16px 16px',
+                backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px',
               }}
             />
 
@@ -236,43 +224,40 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
 
             {/* Splitter Divider Handle */}
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-brand-500 shadow-glow-lg z-20 pointer-events-none"
+              className="absolute top-0 bottom-0 w-[1px] bg-[#4F8CFF] z-20 pointer-events-none"
               style={{ left: `${splitPos}%` }}
             >
               <div
                 onMouseDown={() => setIsDraggingSplit(true)}
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-900 shadow-xl border border-zinc-200 pointer-events-auto cursor-ew-resize hover:scale-110 active:scale-95 transition-transform"
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded bg-[#131418] text-[#ECEDEF] border border-[#2A2D33] shadow-md pointer-events-auto cursor-ew-resize"
               >
-                <div className="flex gap-0.5">
-                  <div className="h-3 w-0.5 bg-zinc-600 rounded" />
-                  <div className="h-3 w-0.5 bg-zinc-600 rounded" />
-                </div>
+                <span className="font-mono text-[9px] text-[#8B8F98]">⟷</span>
               </div>
             </div>
 
             {/* Badge Labels */}
-            <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-mono text-zinc-300 pointer-events-none border border-white/10 z-10">
+            <div className="absolute top-2.5 left-2.5 bg-[#131418]/90 border border-[#2A2D33] px-2 py-0.5 rounded font-mono text-[10px] text-[#8B8F98] pointer-events-none z-10">
               Original
             </div>
-            <div className="absolute top-3 right-3 bg-brand-500/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-mono text-white font-semibold pointer-events-none shadow-glow-sm z-10">
-              No Background
+            <div className="absolute top-2.5 right-2.5 bg-[#16233F]/90 border border-[#4F8CFF]/30 px-2 py-0.5 rounded font-mono text-[10px] text-[#4F8CFF] pointer-events-none z-10 font-semibold">
+              Background Removed
             </div>
           </div>
 
           {/* Background Replacement Bar */}
-          <div className="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800/80 space-y-3">
+          <div className="bg-[#1B1D22] p-3 rounded border border-[#2A2D33] space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <label className="text-xs font-medium text-zinc-300 flex items-center gap-1.5">
-                <Palette className="h-3.5 w-3.5 text-brand-400" />
-                Background Backdrop Style
+              <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5">
+                <Palette className="h-3.5 w-3.5 text-[#4F8CFF]" />
+                Background Replacement Backdrop
               </label>
 
-              <span className="text-[11px] font-mono text-zinc-400">
-                Mode: {bgType === 'transparent' ? 'Transparent PNG' : bgType === 'color' ? customColor : 'Blurred Scene'}
+              <span className="text-[10px] font-mono text-[#8B8F98]">
+                Mode: {bgType === 'transparent' ? 'Transparent PNG' : customColor}
               </span>
             </div>
 
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 flex-wrap">
               {COLOR_SWATCHES.map((swatch) => {
                 const isSelected = bgType === (swatch.id === 'transparent' ? 'transparent' : 'color') && (swatch.id === 'transparent' || customColor === swatch.value);
 
@@ -286,14 +271,14 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
                         handleColorChange('color', swatch.value);
                       }
                     }}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded border text-xs font-medium transition-colors ${
                       isSelected
-                        ? 'border-brand-500 bg-brand-500/10 text-brand-300 shadow-glow-sm'
-                        : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                        ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                        : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
                     }`}
                   >
                     <span
-                      className="h-4 w-4 rounded-full border border-white/20 shrink-0"
+                      className="h-3.5 w-3.5 rounded-full border border-white/20 shrink-0"
                       style={
                         swatch.isChecker
                           ? {
@@ -310,50 +295,44 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               })}
 
               {/* Custom Hex Color Picker */}
-              <div className="flex items-center gap-1.5 pl-2 border-l border-zinc-800">
+              <div className="flex items-center gap-1.5 pl-2 border-l border-[#2A2D33]">
                 <input
                   type="color"
                   value={customColor}
                   onChange={(e) => handleColorChange('color', e.target.value)}
-                  className="h-7 w-7 rounded-lg border border-zinc-700 bg-transparent cursor-pointer"
+                  className="h-6 w-6 rounded border border-[#2A2D33] bg-transparent cursor-pointer"
                   title="Pick custom color"
                 />
-                <span className="text-xs text-zinc-400 font-mono">{customColor}</span>
+                <span className="text-[10px] text-[#8B8F98] font-mono">{customColor}</span>
               </div>
             </div>
           </div>
 
           {/* Action Footer */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-            <div className="text-xs text-zinc-400">
-              {result && (
-                <span>Format: Lossless High-Resolution PNG with Full Alpha Channel</span>
-              )}
-            </div>
-
+          <div>
             <button
               onClick={handleDownload}
               disabled={!result || isProcessing}
-              className="flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-2.5 px-5 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
             >
-              <Download className="h-4 w-4" />
-              <span>Download HD Image (.PNG)</span>
+              <Download className="h-3.5 w-3.5" />
+              <span>Download Cutout PNG</span>
             </button>
           </div>
 
           {/* Progress Box */}
           {isProcessing && progressInfo && (
-            <div className="rounded-xl border border-brand-500/30 bg-brand-500/10 p-4 space-y-2">
+            <div className="rounded bg-[#16233F] border border-[#4F8CFF]/30 p-3 space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-zinc-200 flex items-center gap-2">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-400" />
+                <span className="text-[#ECEDEF] flex items-center gap-2">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4F8CFF]" />
                   {progressInfo.message}
                 </span>
-                <span className="font-mono text-brand-400 font-bold">{progressInfo.progress}%</span>
+                <span className="font-mono text-[#4F8CFF] font-bold">{progressInfo.progress}%</span>
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-1 w-full overflow-hidden rounded bg-[#131418]">
                 <div
-                  className="h-full bg-brand-500 transition-all duration-300 rounded-full"
+                  className="h-full bg-[#4F8CFF] transition-all duration-300 rounded"
                   style={{ width: `${progressInfo.progress}%` }}
                 />
               </div>
@@ -361,8 +340,8 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
-import { Upload, Maximize2, Lock, Unlock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, Maximize2, Lock, Unlock, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 export const ImageResizerWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -89,11 +89,11 @@ export const ImageResizerWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -105,23 +105,23 @@ export const ImageResizerWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-            <Maximize2 className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Maximize2 className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-            Upload Image to Resize
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop image to resize, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Scale dimensions with aspect ratio lock or custom social media presets.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Pixel-perfect bicubic resampling with aspect ratio lock. 100% local WASM.
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-surface-border pb-4">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
             <div>
-              <span className="text-sm font-medium text-zinc-200">{file.name}</span>
-              <p className="text-xs text-zinc-400 font-mono mt-0.5">
-                Original Dimensions: {origWidth} × {origHeight} px · {formatBytes(file.size)}
+              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                Original Resolution: {origWidth} × {origHeight} px · {formatBytes(file.size)}
               </p>
             </div>
             <button
@@ -129,120 +129,103 @@ export const ImageResizerWorkspace: React.FC = () => {
                 setFile(null);
                 setPreviewUrl(null);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
-              Change image
+              Choose different image
             </button>
           </div>
 
-          {/* Dimension Inputs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Width (pixels)
-              </label>
-              <input
-                type="number"
-                value={width}
-                onChange={(e) => handleWidthChange(parseInt(e.target.value, 10) || 0)}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-zinc-100 font-mono focus:border-brand-500 focus:outline-none"
-              />
+          {/* Quick Presets & Scale Percentage */}
+          <div className="space-y-2 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#2A2D33] pb-2">
+              <span className="text-xs font-medium text-[#ECEDEF]">Quick Scaling</span>
+              <div className="flex items-center gap-1.5">
+                {[25, 50, 75, 100, 200].map((pct) => (
+                  <button
+                    key={pct}
+                    type="button"
+                    onClick={() => applyScalePercent(pct)}
+                    className="rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2 py-0.5 font-mono text-[10px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+                  >
+                    {pct}%
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Height (pixels)
-              </label>
-              <input
-                type="number"
-                value={height}
-                onChange={(e) => handleHeightChange(parseInt(e.target.value, 10) || 0)}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-zinc-100 font-mono focus:border-brand-500 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Aspect Ratio Lock & Presets */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-y border-surface-border py-3">
-            <button
-              type="button"
-              onClick={() => setLockRatio(!lockRatio)}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium border transition-colors ${
-                lockRatio
-                  ? 'border-brand-500/30 bg-brand-500/10 text-brand-400'
-                  : 'border-zinc-800 bg-zinc-900 text-zinc-400'
-              }`}
-            >
-              {lockRatio ? <Lock className="h-3.5 w-3.5" /> : <Unlock className="h-3.5 w-3.5" />}
-              <span>Lock Aspect Ratio</span>
-            </button>
-
-            {/* Quick Percentage Presets */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-zinc-500">Scale:</span>
-              {[25, 50, 75, 150, 200].map((pct) => (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <span className="text-[10px] text-[#8B8F98] font-mono mr-1">Social Presets:</span>
+              {[
+                { label: 'Instagram Post (1080×1080)', w: 1080, h: 1080 },
+                { label: 'Instagram Story (1080×1920)', w: 1080, h: 1920 },
+                { label: 'YouTube Thumb (1280×720)', w: 1280, h: 720 },
+                { label: 'Twitter Header (1500×500)', w: 1500, h: 500 },
+              ].map((p) => (
                 <button
-                  key={pct}
+                  key={p.label}
                   type="button"
-                  onClick={() => applyScalePercent(pct)}
-                  className="rounded-lg bg-zinc-800 px-2 py-1 font-mono text-[11px] text-zinc-300 hover:bg-zinc-700"
+                  onClick={() => applyPreset(p.w, p.h)}
+                  className="rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2 py-0.5 text-[10px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
                 >
-                  {pct}%
+                  {p.label.split(' (')[0]}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Social Presets */}
-          <div className="space-y-2">
-            <span className="text-xs font-medium text-zinc-400">Social Media Presets:</span>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {/* Dimension Controls */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 items-end">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-[#ECEDEF] block">
+                Target Width (px)
+              </label>
+              <input
+                type="number"
+                value={width || ''}
+                onChange={(e) => handleWidthChange(parseInt(e.target.value) || 0)}
+                className="w-full rounded border border-[#2A2D33] bg-[#131418] px-3 py-1.5 font-mono text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-[#ECEDEF] block">
+                Target Height (px)
+              </label>
+              <input
+                type="number"
+                value={height || ''}
+                onChange={(e) => handleHeightChange(parseInt(e.target.value) || 0)}
+                className="w-full rounded border border-[#2A2D33] bg-[#131418] px-3 py-1.5 font-mono text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
+              />
+            </div>
+
+            <div>
               <button
                 type="button"
-                onClick={() => applyPreset(1080, 1080)}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-2 text-left hover:border-zinc-700"
+                onClick={() => setLockRatio(!lockRatio)}
+                className={`w-full flex items-center justify-center gap-1.5 rounded border py-1.5 px-3 text-xs font-medium transition-colors ${
+                  lockRatio
+                    ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                    : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                }`}
               >
-                <div className="text-xs font-medium text-zinc-200">Square Post</div>
-                <div className="text-[10px] text-zinc-500 font-mono">1080 × 1080</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset(1080, 1920)}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-2 text-left hover:border-zinc-700"
-              >
-                <div className="text-xs font-medium text-zinc-200">Story / Reel</div>
-                <div className="text-[10px] text-zinc-500 font-mono">1080 × 1920</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset(1280, 720)}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-2 text-left hover:border-zinc-700"
-              >
-                <div className="text-xs font-medium text-zinc-200">YouTube Thumb</div>
-                <div className="text-[10px] text-zinc-500 font-mono">1280 × 720</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset(1500, 500)}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-2 text-left hover:border-zinc-700"
-              >
-                <div className="text-xs font-medium text-zinc-200">Twitter Banner</div>
-                <div className="text-[10px] text-zinc-500 font-mono">1500 × 500</div>
+                {lockRatio ? <Lock className="h-3.5 w-3.5" /> : <Unlock className="h-3.5 w-3.5" />}
+                <span>{lockRatio ? 'Ratio Locked' : 'Ratio Free'}</span>
               </button>
             </div>
           </div>
 
           {/* Action */}
-          <div className="pt-2">
+          <div>
             <button
               onClick={handleResize}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
+              disabled={isProcessing || width <= 0 || height <= 0}
+              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
             >
               {isProcessing ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Resizing Image...</span>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Resampling Pixels...</span>
                 </>
               ) : (
                 <span>Resize & Download ({width} × {height} px)</span>
@@ -251,15 +234,15 @@ export const ImageResizerWorkspace: React.FC = () => {
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
           {success && (
-            <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-300">
-              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <span>Resized image downloaded successfully!</span>
+            <div className="flex items-center gap-2 rounded bg-[#122D1F] border border-[#3FBE73]/40 p-3 text-xs text-[#3FBE73]">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              <span>Resized image downloaded successfully.</span>
             </div>
           )}
         </div>

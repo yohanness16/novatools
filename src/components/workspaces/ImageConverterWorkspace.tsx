@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
 import JSZip from 'jszip';
-import { Upload, Repeat, Archive, CheckCircle, AlertCircle, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Upload, Repeat, Archive, CheckCircle2, AlertCircle, Loader2, Image as ImageIcon, Download } from 'lucide-react';
 
 interface ConvertedFileItem {
   id: string;
@@ -71,7 +71,6 @@ export const ImageConverterWorkspace: React.FC = () => {
 
       setResults(convertedItems);
 
-      // If single file, trigger direct download
       if (convertedItems.length === 1 && convertedItems[0].newBlob) {
         const ext = getExtension(targetFormat);
         const outName = `${files[0].name.replace(/\.[^/.]+$/, '')}.${ext}`;
@@ -101,37 +100,37 @@ export const ImageConverterWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
-      <div
-        onClick={() => fileInputRef.current?.click()}
-        className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files) handleFiles(e.target.files);
-            e.target.value = '';
-          }}
-        />
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-          <Repeat className="h-6 w-6" />
+    <div className="w-full space-y-4">
+      {files.length === 0 ? (
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files) handleFiles(e.target.files);
+              e.target.value = '';
+            }}
+          />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Repeat className="h-5 w-5" />
+          </div>
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop images to convert formats, or <span className="text-[#4F8CFF] underline">browse files</span>
+          </h3>
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Batch convert between WebP, PNG, JPG, AVIF, and BMP formats. 100% local WASM.
+          </p>
         </div>
-        <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-          Upload Images to Convert Format
-        </h3>
-        <p className="mt-1 text-xs text-zinc-500">
-          Convert to WebP, PNG, JPEG, AVIF, BMP, or ICO in your browser.
-        </p>
-      </div>
-
-      {files.length > 0 && (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-surface-border pb-4">
-            <span className="text-sm font-medium text-zinc-200">
+      ) : (
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
+            <span className="text-xs font-medium text-[#ECEDEF]">
               {files.length} {files.length === 1 ? 'Image Selected' : 'Images Selected'}
             </span>
             <button
@@ -139,109 +138,120 @@ export const ImageConverterWorkspace: React.FC = () => {
                 setFiles([]);
                 setResults([]);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
-              Clear Selection
+              Choose different files
             </button>
           </div>
 
-          {/* Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Target Format
+          {/* Format and Quality Controls */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-[#ECEDEF] block">
+                Target Output Format
               </label>
-              <select
-                value={targetFormat}
-                onChange={(e) => setTargetFormat(e.target.value as any)}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 focus:border-brand-500 focus:outline-none"
-              >
-                <option value="image/webp">WebP (Modern & Lightweight)</option>
-                <option value="image/png">PNG (Lossless Transparency)</option>
-                <option value="image/jpeg">JPEG / JPG (Standard Photo)</option>
-                <option value="image/avif">AVIF (Ultra High Efficiency)</option>
-                <option value="image/bmp">BMP (Bitmap)</option>
-                <option value="image/x-icon">ICO (Favicon)</option>
-              </select>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { label: 'WebP', val: 'image/webp' },
+                  { label: 'PNG', val: 'image/png' },
+                  { label: 'JPEG', val: 'image/jpeg' },
+                  { label: 'AVIF', val: 'image/avif' },
+                  { label: 'BMP', val: 'image/bmp' },
+                  { label: 'ICO', val: 'image/x-icon' },
+                ].map((fmt) => (
+                  <button
+                    key={fmt.val}
+                    type="button"
+                    onClick={() => setTargetFormat(fmt.val as any)}
+                    className={`rounded border py-1 text-xs font-medium transition-colors ${
+                      targetFormat === fmt.val
+                        ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                        : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                    }`}
+                  >
+                    {fmt.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {targetFormat !== 'image/png' && (
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-medium text-zinc-300">
-                    Quality Preset
-                  </label>
-                  <span className="font-mono text-xs text-brand-400">
-                    {Math.round(quality * 100)}%
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="0.2"
-                  max="1.0"
-                  step="0.05"
-                  value={quality}
-                  onChange={(e) => setQuality(parseFloat(e.target.value))}
-                  className="w-full accent-brand-500"
-                />
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-medium text-[#ECEDEF]">
+                  Output Quality
+                </label>
+                <span className="font-mono text-xs text-[#4F8CFF]">
+                  {Math.round(quality * 100)}%
+                </span>
               </div>
-            )}
+              <input
+                type="range"
+                min="0.1"
+                max="1.0"
+                step="0.05"
+                value={quality}
+                onChange={(e) => setQuality(parseFloat(e.target.value))}
+                className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer mt-2"
+              />
+              <span className="text-[10px] text-[#5B606D] block font-mono">
+                Higher quality preserves fidelity with larger filesize.
+              </span>
+            </div>
           </div>
 
-          <div className="pt-2">
-            <button
-              onClick={handleConvert}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Converting in Memory...</span>
-                </>
-              ) : (
-                <span>Convert {files.length} {files.length === 1 ? 'Image' : 'Images'}</span>
-              )}
-            </button>
-          </div>
+          {/* Action */}
+          {results.length === 0 && (
+            <div>
+              <button
+                onClick={handleConvert}
+                disabled={isProcessing}
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Converting Images in Memory...</span>
+                  </>
+                ) : (
+                  <>
+                    <Repeat className="h-3.5 w-3.5" />
+                    <span>Convert {files.length} Images to {getExtension(targetFormat).toUpperCase()}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
-          {/* Results List */}
+          {/* Results Gallery */}
           {results.length > 0 && (
-            <div className="space-y-3 pt-4 border-t border-surface-border">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle className="h-4 w-4" />
-                  Conversion Completed
+            <div className="space-y-3 pt-1">
+              <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2">
+                <span className="text-xs font-medium text-[#ECEDEF]">
+                  Converted Files ({results.length})
                 </span>
                 {results.length > 1 && (
                   <button
                     onClick={handleDownloadZip}
-                    className="flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700"
+                    className="flex items-center gap-1.5 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] px-3 py-1.5 text-xs font-semibold text-white transition-colors"
                   >
-                    <Archive className="h-3.5 w-3.5" />
-                    Download All as ZIP
+                    <Download className="h-3 w-3" />
+                    <span>Download All (ZIP)</span>
                   </button>
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {results.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 text-xs"
+                    className="flex items-center justify-between rounded bg-[#1B1D22] border border-[#2A2D33] p-2.5"
                   >
-                    <div className="flex items-center gap-3 truncate">
-                      {item.dataUrl && (
-                        <img
-                          src={item.dataUrl}
-                          alt="preview"
-                          className="h-9 w-9 rounded object-cover border border-zinc-800"
-                        />
-                      )}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <ImageIcon className="h-4 w-4 shrink-0 text-[#8B8F98]" />
                       <div className="truncate">
-                        <p className="truncate font-medium text-zinc-200">{item.originalName}</p>
-                        <p className="text-zinc-500 font-mono text-[11px]">
-                          {formatBytes(item.originalSize)} → <span className="text-emerald-400">{formatBytes(item.newSize || 0)}</span>
+                        <span className="text-xs font-medium text-[#ECEDEF]">{item.originalName}</span>
+                        <p className="text-[10px] text-[#8B8F98] font-mono">
+                          {formatBytes(item.originalSize)} → {item.newSize ? formatBytes(item.newSize) : '...'}
                         </p>
                       </div>
                     </div>
@@ -250,11 +260,13 @@ export const ImageConverterWorkspace: React.FC = () => {
                       <button
                         onClick={() => {
                           const ext = getExtension(targetFormat);
-                          downloadBlob(item.newBlob!, `${item.originalName.replace(/\.[^/.]+$/, '')}.${ext}`);
+                          const outName = `${item.originalName.replace(/\.[^/.]+$/, '')}.${ext}`;
+                          downloadBlob(item.newBlob!, outName);
                         }}
-                        className="rounded-lg bg-zinc-800 px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700"
+                        className="flex items-center gap-1 rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2.5 py-1 text-xs text-[#ECEDEF] transition-colors"
                       >
-                        Download
+                        <Download className="h-3 w-3 text-[#8B8F98]" />
+                        <span>Save</span>
                       </button>
                     )}
                   </div>
@@ -264,8 +276,8 @@ export const ImageConverterWorkspace: React.FC = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}

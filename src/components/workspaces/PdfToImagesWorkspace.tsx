@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadBlob, readFileAsArrayBuffer } from '../../lib/utils';
 import JSZip from 'jszip';
-import { Upload, FileImage, Archive, CheckCircle, AlertCircle, Loader2, Download } from 'lucide-react';
+import { Upload, FileImage, Archive, CheckCircle2, AlertCircle, Loader2, Download } from 'lucide-react';
 
 interface RenderedPage {
   pageNumber: number;
@@ -65,12 +65,10 @@ export const PdfToImagesWorkspace: React.FC = () => {
       setRenderedPages(pages);
       setSuccess(true);
 
-      // If single page, directly download the image
       if (pages.length === 1) {
         const outName = `${file.name.replace('.pdf', '')}_page_1.${format === 'png' ? 'png' : 'jpg'}`;
         downloadBlob(pages[0].blob, outName);
       } else {
-        // Multi-page automatic zip compilation
         const zip = new JSZip();
         const ext = format === 'png' ? 'png' : 'jpg';
         pages.forEach((p) => {
@@ -104,11 +102,11 @@ export const PdfToImagesWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -120,29 +118,24 @@ export const PdfToImagesWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-            <FileImage className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <FileImage className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-            Upload PDF to Convert Pages into High-Res Images
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop PDF to convert to images, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Rasterize all text, graphics, and pages into crisp PNG or JPEG images directly on your device.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Render high-DPI vector pages into crisp PNG or JPEG images. 100% local WASM.
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-surface-border pb-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400">
-                <FileImage className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-zinc-200">{file.name}</h4>
-                <p className="text-xs text-zinc-400 font-mono">
-                  {pageCount} {pageCount === 1 ? 'Page' : 'Pages'} · {formatBytes(file.size)}
-                </p>
-              </div>
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
+            <div>
+              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                {pageCount} Pages · {formatBytes(file.size)}
+              </p>
             </div>
             <button
               onClick={() => {
@@ -150,121 +143,147 @@ export const PdfToImagesWorkspace: React.FC = () => {
                 setBuffer(null);
                 setRenderedPages([]);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
               Choose different file
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Output Format
+          {/* Configuration Controls */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-[#ECEDEF] block">
+                Target Image Format
               </label>
-              <select
-                value={format}
-                onChange={(e) => setFormat(e.target.value as any)}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 focus:border-brand-500 focus:outline-none"
-              >
-                <option value="png">PNG (Lossless Vector Quality)</option>
-                <option value="jpeg">JPEG (Compressed Photo)</option>
-              </select>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormat('png')}
+                  className={`rounded border py-1.5 text-xs font-medium transition-colors ${
+                    format === 'png'
+                      ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                      : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                  }`}
+                >
+                  PNG (Lossless)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormat('jpeg')}
+                  className={`rounded border py-1.5 text-xs font-medium transition-colors ${
+                    format === 'jpeg'
+                      ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                      : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                  }`}
+                >
+                  JPEG (Compact)
+                </button>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Resolution Scale (DPI)
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-[#ECEDEF] block">
+                DPI Resolution Scale
               </label>
-              <select
-                value={scale}
-                onChange={(e) => setScale(Number(e.target.value))}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-zinc-100 focus:border-brand-500 focus:outline-none"
-              >
-                <option value="1">1x Standard (72 DPI)</option>
-                <option value="2">2x High-DPI (150 DPI - Recommended)</option>
-                <option value="3">3x Ultra-HD (300 DPI - Razor Sharp)</option>
-              </select>
+              <div className="grid grid-cols-3 gap-2">
+                {[1, 2, 3].map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setScale(s)}
+                    className={`rounded border py-1.5 text-xs font-medium transition-colors ${
+                      scale === s
+                        ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
+                        : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                    }`}
+                  >
+                    {s}x {s === 2 ? '(HD)' : s === 3 ? '(Ultra)' : '(Standard)'}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           {isProcessing && (
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs text-zinc-400 font-mono">
-                <span>Rasterizing Pages in Browser Memory...</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs text-[#8B8F98] font-mono">
+                <span>Rasterizing PDF Pages in Memory...</span>
                 <span>{progress}%</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-1.5 w-full overflow-hidden rounded bg-[#1B1D22]">
                 <div
-                  className="h-full bg-brand-500 transition-all duration-150"
+                  className="h-full bg-[#4F8CFF] transition-all duration-150 rounded"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
           )}
 
-          <div className="pt-2">
-            <button
-              onClick={handleRender}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Converting Pages ({progress}%)...</span>
-                </>
-              ) : (
-                <>
-                  <Archive className="h-4 w-4" />
-                  <span>Render & Download {pageCount} {pageCount === 1 ? 'Page' : 'Pages'}</span>
-                </>
-              )}
-            </button>
-          </div>
+          {/* Action Button */}
+          {renderedPages.length === 0 && (
+            <div>
+              <button
+                onClick={handleRender}
+                disabled={isProcessing}
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Rasterizing Pages ({progress}%)...</span>
+                  </>
+                ) : (
+                  <>
+                    <FileImage className="h-3.5 w-3.5" />
+                    <span>Convert {pageCount} Pages to {format.toUpperCase()}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
-          {/* Rendered Pages Thumbnail Gallery */}
+          {/* Rendered Pages Gallery */}
           {renderedPages.length > 0 && (
-            <div className="space-y-4 pt-4 border-t border-surface-border">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle className="h-4 w-4" />
-                  Rendered Page Previews ({renderedPages.length})
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2">
+                <span className="text-xs font-medium text-[#ECEDEF]">
+                  Rendered Page Images ({renderedPages.length})
                 </span>
                 {renderedPages.length > 1 && (
                   <button
                     onClick={downloadAllZip}
-                    className="flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700"
+                    className="flex items-center gap-1.5 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] px-3 py-1.5 text-xs font-semibold text-white transition-colors"
                   >
-                    <Archive className="h-3.5 w-3.5" />
-                    Download All as ZIP
+                    <Download className="h-3 w-3" />
+                    <span>Download All (ZIP)</span>
                   </button>
                 )}
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-[480px] overflow-y-auto p-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[380px] overflow-y-auto p-1">
                 {renderedPages.map((page) => (
                   <div
                     key={page.pageNumber}
-                    className="group relative flex flex-col rounded-xl border border-zinc-800 bg-zinc-900 p-2 transition-all hover:border-zinc-700"
+                    className="rounded bg-[#1B1D22] border border-[#2A2D33] p-2 space-y-2 flex flex-col justify-between"
                   >
-                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-black/40 mb-2 border border-zinc-800">
+                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded bg-[#131418] border border-[#2A2D33] flex items-center justify-center p-1">
                       <img
                         src={page.dataUrl}
                         alt={`Page ${page.pageNumber}`}
-                        className="h-full w-full object-contain"
+                        className="max-h-full max-w-full object-contain"
                       />
-                      <span className="absolute bottom-1 left-1 rounded bg-black/80 px-1.5 py-0.5 font-mono text-[10px] text-zinc-200">
-                        Page {page.pageNumber}
-                      </span>
                     </div>
 
-                    <button
-                      onClick={() => downloadSinglePage(page)}
-                      className="flex items-center justify-center gap-1 rounded-lg bg-zinc-800 py-1.5 text-xs text-zinc-300 hover:bg-zinc-700 hover:text-white"
-                    >
-                      <Download className="h-3 w-3" />
-                      <span>Download Image</span>
-                    </button>
+                    <div className="flex items-center justify-between text-xs pt-1 border-t border-[#2A2D33]/60">
+                      <span className="font-mono text-[10px] text-[#8B8F98]">Page {page.pageNumber}</span>
+                      <button
+                        onClick={() => downloadSinglePage(page)}
+                        className="flex items-center gap-1 rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2 py-0.5 font-mono text-[10px] text-[#ECEDEF] transition-colors"
+                      >
+                        <Download className="h-3 w-3" />
+                        <span>Save</span>
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -272,15 +291,9 @@ export const PdfToImagesWorkspace: React.FC = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
-            </div>
-          )}
-          {success && renderedPages.length > 0 && (
-            <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-300">
-              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <span>PDF pages rendered and downloaded successfully!</span>
             </div>
           )}
         </div>

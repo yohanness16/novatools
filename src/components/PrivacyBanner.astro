@@ -1,31 +1,29 @@
 ---
-import { Shield, Lock, Cpu, CheckCircle } from 'lucide-react';
+import { Shield, Lock, Cpu } from 'lucide-react';
 ---
 
-<div class="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-6 sm:p-8">
-  <div class="absolute -right-8 -bottom-8 h-48 w-48 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none"></div>
-  
+<div class="relative overflow-hidden rounded border border-[#2A2D33] bg-[#131418] p-5 sm:p-6">
   <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-    <div class="space-y-2 max-w-2xl">
-      <div class="flex items-center gap-2 text-emerald-400">
-        <Shield class="h-5 w-5" />
-        <span class="text-xs font-semibold uppercase tracking-wider font-mono">100% In-Browser Privacy Guarantee</span>
+    <div class="space-y-1.5 max-w-2xl">
+      <div class="flex items-center gap-2 text-[#3FBE73]">
+        <Shield class="h-4 w-4" />
+        <span class="text-[11px] font-semibold uppercase tracking-wider font-mono">Zero Network Privacy Architecture</span>
       </div>
-      <h3 class="text-lg font-semibold text-white">Your files never touch any external server</h3>
-      <p class="text-xs leading-relaxed text-zinc-400">
-        Unlike other online converters that upload your confidential PDFs, images, and videos to remote cloud servers, 
-        NovaTools executes all transcoding, manipulation, and rendering <strong>strictly in your browser memory</strong> via WebAssembly and HTML5 APIs.
+      <h3 class="text-sm font-semibold text-[#ECEDEF]">Your confidential documents & media never leave your device</h3>
+      <p class="text-xs leading-relaxed text-[#8B8F98]">
+        Unlike legacy converters that upload files to cloud servers, 
+        NovaTools processes transcoding, OCR speech recognition, audio normalisation, and vector rendering <strong>100% in client WebAssembly memory</strong>.
       </p>
     </div>
 
-    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0 text-xs text-zinc-300 font-mono">
-      <div class="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-2">
-        <Lock class="h-4 w-4 text-emerald-400" />
-        <span>Zero Network Uploads</span>
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0 text-xs text-[#8B8F98] font-mono">
+      <div class="flex items-center gap-1.5 rounded border border-[#2A2D33] bg-[#1B1D22] px-3 py-1.5 text-[#ECEDEF]">
+        <Lock class="h-3.5 w-3.5 text-[#3FBE73]" />
+        <span>Zero Network I/O</span>
       </div>
-      <div class="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-2">
-        <Cpu class="h-4 w-4 text-brand-400" />
-        <span>Hardware Accelerated</span>
+      <div class="flex items-center gap-1.5 rounded border border-[#2A2D33] bg-[#1B1D22] px-3 py-1.5 text-[#ECEDEF]">
+        <Cpu class="h-3.5 w-3.5 text-[#4F8CFF]" />
+        <span>Hardware WASM</span>
       </div>
     </div>
   </div>

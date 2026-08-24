@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { AdSlot } from './AdSlot';
-import PrivacyBanner from './PrivacyBanner.astro';
+import { ConsoleRail } from './ConsoleRail';
 import { type ToolMeta, TOOLS } from '../lib/toolsData';
-import { ChevronRight, CheckCircle2, HelpCircle, Layers, ArrowRight } from 'lucide-react';
+import { ChevronRight, ShieldCheck, HelpCircle, Layers, ArrowRight, Terminal } from 'lucide-react';
 
 interface Props {
   tool: ToolMeta;
@@ -15,135 +15,108 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
 ---
 
 <Layout
-  title={`${tool.name} - Free 100% Client-Side Tool`}
+  title={`${tool.name} - 100% Client-Side Tool`}
   description={tool.longDescription}
   keywords={tool.keywords}
   faqs={tool.faqs}
 >
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
-    {/* Breadcrumbs Navigation */}
-    <nav class="flex items-center gap-2 text-xs text-zinc-500 font-mono" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-zinc-300 transition-colors">Home</a>
-      <ChevronRight class="h-3 w-3" />
-      <span class="text-zinc-400 capitalize">{tool.categoryLabel}</span>
-      <ChevronRight class="h-3 w-3" />
-      <span class="text-zinc-200">{tool.name}</span>
-    </nav>
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+      {/* Left Navigation Rail */}
+      <ConsoleRail client:load currentToolId={tool.id} currentCategory={tool.category} />
 
-    {/* Top Leaderboard Ad Slot (CLS-Proof) */}
-    <div class="w-full flex justify-center">
-      <AdSlot client:idle type="leaderboard" />
-    </div>
+      {/* Main Workbench Area */}
+      <div class="flex-1 w-full space-y-6">
+        {/* Breadcrumb & Console Header */}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-4">
+          <div class="space-y-1">
+            <nav class="flex items-center gap-1.5 text-xs text-[#8B8F98] font-mono" aria-label="Breadcrumb">
+              <a href="/" class="hover:text-[#ECEDEF] transition-colors">Console</a>
+              <span class="text-[#5B606D]">/</span>
+              <span class="text-[#8B8F98] capitalize">{tool.categoryLabel}</span>
+              <span class="text-[#5B606D]">/</span>
+              <span class="text-[#ECEDEF] font-medium">{tool.name}</span>
+            </nav>
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#ECEDEF]">
+              {tool.name}
+            </h1>
+          </div>
 
-    {/* Tool Header */}
-    <div class="space-y-3">
-      <div class="flex items-center gap-2.5">
-        <span class="rounded-lg bg-brand-500/10 px-2.5 py-1 font-mono text-xs font-medium text-brand-400 border border-brand-500/20">
-          {tool.categoryLabel}
-        </span>
-        {tool.badge && (
-          <span class="rounded-lg bg-emerald-500/10 px-2.5 py-1 font-mono text-xs font-medium text-emerald-400 border border-emerald-500/20">
-            {tool.badge}
-          </span>
+          {/* Privacy Ledger Strip (Signature Element) */}
+          <div class="privacy-ledger-strip shrink-0 self-start sm:self-auto">
+            <span class="h-1.5 w-1.5 rounded-full bg-[#3FBE73]" />
+            <span>0 bytes uploaded</span>
+            <span class="text-[#5B606D]">·</span>
+            <span class="text-[#ECEDEF]">WASM Local Engine</span>
+          </div>
+        </div>
+
+        {/* Work Surface (The Workspace IS the Hero) */}
+        <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-6 shadow-sm">
+          <slot />
+        </section>
+
+        {/* Technical Specification & How-To */}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          {/* How-To Steps */}
+          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
+              <Layers class="h-3.5 w-3.5 text-[#4F8CFF]" />
+              <span>Execution Steps</span>
+            </div>
+
+            <div class="space-y-2">
+              {tool.howToSteps.map((step) => (
+                <div class="flex items-start gap-2.5 rounded bg-[#1B1D22] p-2.5 border border-[#2A2D33]">
+                  <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#131418] font-mono text-[10px] font-bold text-[#4F8CFF] border border-[#2A2D33]">
+                    {step.step}
+                  </span>
+                  <div class="space-y-0.5 text-xs">
+                    <h3 class="font-medium text-[#ECEDEF]">{step.title}</h3>
+                    <p class="text-[11px] text-[#8B8F98] leading-relaxed">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Feature Highlights */}
+          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
+              <Terminal class="h-3.5 w-3.5 text-[#4F8CFF]" />
+              <span>Engine Features</span>
+            </div>
+
+            <ul class="space-y-2 text-xs text-[#8B8F98]">
+              {tool.features.map((feat) => (
+                <li class="flex items-start gap-2 rounded bg-[#1B1D22] p-2.5 border border-[#2A2D33]">
+                  <ShieldCheck class="h-4 w-4 shrink-0 text-[#3FBE73] mt-0.5" />
+                  <span class="text-xs text-[#ECEDEF]">{feat}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        {/* FAQs */}
+        {tool.faqs && tool.faqs.length > 0 && (
+          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
+              <HelpCircle class="h-3.5 w-3.5 text-[#4F8CFF]" />
+              <span>Technical FAQs</span>
+            </div>
+
+            <div class="space-y-2">
+              {tool.faqs.map((faq) => (
+                <div class="rounded bg-[#1B1D22] p-3 border border-[#2A2D33] space-y-1">
+                  <h4 class="text-xs font-medium text-[#ECEDEF]">{faq.question}</h4>
+                  <p class="text-[11px] text-[#8B8F98] leading-relaxed">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
       </div>
-      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-        {tool.name}
-      </h1>
-      <p class="text-sm sm:text-base text-zinc-400 max-w-3xl leading-relaxed">
-        {tool.longDescription}
-      </p>
     </div>
-
-    {/* Interactive Workspace Container */}
-    <section class="gradient-border-interactive p-1 sm:p-2">
-      <div class="rounded-[calc(1rem-1px)] bg-surface p-4 sm:p-8">
-        <slot />
-      </div>
-    </section>
-
-    {/* Mid-Page Ad Slot + Privacy Banner */}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-      <div class="lg:col-span-2">
-        <PrivacyBanner />
-      </div>
-      <div class="lg:col-span-1 flex justify-center">
-        <AdSlot client:idle type="rectangle" />
-      </div>
-    </div>
-
-    {/* High-Value Educational Content: How-To Steps */}
-    <section class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-6">
-      <div class="flex items-center gap-2 text-zinc-200">
-        <Layers class="h-5 w-5 text-brand-400" />
-        <h2 class="text-lg font-semibold">How to use {tool.name}</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {tool.howToSteps.map((step) => (
-          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-5 space-y-2 relative">
-            <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500/20 text-brand-400 font-mono text-xs font-bold">
-              {step.step}
-            </div>
-            <h3 class="text-sm font-medium text-zinc-200">{step.title}</h3>
-            <p class="text-xs text-zinc-400 leading-relaxed">{step.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {/* Features Breakdown */}
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-4">
-        <h2 class="text-base font-semibold text-zinc-200">Key Feature Highlights</h2>
-        <ul class="space-y-3 text-xs text-zinc-400">
-          {tool.features.map((feat) => (
-            <li class="flex items-start gap-2.5">
-              <CheckCircle2 class="h-4 w-4 shrink-0 text-emerald-400 mt-0.5" />
-              <span class="leading-relaxed">{feat}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Frequently Asked Questions */}
-      <div class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-8 space-y-4">
-        <div class="flex items-center gap-2 text-zinc-200">
-          <HelpCircle class="h-5 w-5 text-brand-400" />
-          <h2 class="text-base font-semibold">Frequently Asked Questions</h2>
-        </div>
-        <div class="space-y-4">
-          {tool.faqs.map((faq) => (
-            <div class="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4 space-y-1.5">
-              <h3 class="text-xs font-semibold text-zinc-200">{faq.question}</h3>
-              <p class="text-xs text-zinc-400 leading-relaxed">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* Related Tools */}
-    {relatedTools.length > 0 && (
-      <section class="space-y-4 pt-4 border-t border-surface-border">
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">
-          More from {tool.categoryLabel}
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {relatedTools.map((rel) => (
-            <a
-              href={rel.path}
-              class="glass-card flex items-center justify-between rounded-xl p-4 transition-all"
-            >
-              <div>
-                <h3 class="text-xs font-semibold text-zinc-200">{rel.name}</h3>
-                <p class="text-[11px] text-zinc-500 truncate max-w-[200px] mt-0.5">{rel.description}</p>
-              </div>
-              <ArrowRight class="h-4 w-4 text-zinc-500 shrink-0" />
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
   </div>
 </Layout>

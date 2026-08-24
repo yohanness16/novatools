@@ -1,324 +1,185 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { TOOLS, CATEGORIES } from '../lib/toolsData';
-import { AdSlot } from '../components/AdSlot';
-import PrivacyBanner from '../components/PrivacyBanner.astro';
 import {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
-  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles,
-  Shield, Zap, ArrowRight, Search, CheckCircle, Cpu, HardDrive
+  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Volume2, Subtitles,
+  Shield, Cpu, HardDrive, Terminal, Search, ArrowRight, FileText, Image as ImageIcon, Video
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
-  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles
+  Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Volume2, Subtitles,
+  FileText
+};
+
+const categoryIcons: Record<string, any> = {
+  all: Terminal,
+  pdf: FileText,
+  image: ImageIcon,
+  video: Video,
+  svg: Code,
 };
 ---
 
 <Layout
-  title="NovaTools - 100% Client-Side Document & Media Suite"
-  description="Instant, privacy-first PDF, image, video, and vector manipulation in your browser. Zero server uploads, powered by WebAssembly."
+  title="NovaTools Console - 100% Client-Side Media & PDF Suite"
+  description="High-performance, privacy-first PDF, image, video, and vector tools running locally in WebAssembly. Zero server uploads."
 >
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-16">
-    {/* Top Header Ad Placement (CLS-Proof) */}
-    <div class="w-full flex justify-center">
-      <AdSlot client:idle type="leaderboard" />
-    </div>
-
-    {/* Hero Section */}
-    <section class="relative pt-6 pb-4">
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
-        <div class="space-y-6 max-w-3xl">
-          <div class="inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-3.5 py-1 text-xs font-medium text-brand-300">
-            <Zap class="h-3.5 w-3.5 text-brand-400" />
-            <span>High-Performance WebAssembly & Client-Side Engine</span>
-          </div>
-
-          <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-            Private Media & PDF Utilities. <br />
-            <span class="bg-gradient-to-r from-brand-400 via-indigo-200 to-emerald-400 bg-clip-text text-transparent">
-              Zero Server Uploads.
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    {/* Console Header & Telemetry Strip */}
+    <div class="rounded-lg border border-[#2A2D33] bg-[#131418] p-5 sm:p-7 space-y-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#2A2D33] pb-5">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-[#3FBE73]" />
+            <span class="font-mono text-[11px] uppercase tracking-wider text-[#8B8F98]">
+              Local Engine Online
             </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#ECEDEF]">
+            NovaTools Service Catalog
           </h1>
-
-          <p class="text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl">
-            Merge PDFs, compress images with real-time visual diffs, trim videos, and scrub private EXIF data. All computations execute locally in your browser memory.
-          </p>
-
-          <div class="flex flex-wrap items-center gap-4 pt-2">
-            <a
-              href="#suite-explorer"
-              class="flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-95 transition-all"
-            >
-              <span>Explore All 16 Utilities</span>
-              <ArrowRight class="h-4 w-4" />
-            </a>
-
-            <a
-              href="/about"
-              class="flex items-center gap-2 rounded-xl border border-surface-border bg-surface px-5 py-3 text-sm font-medium text-zinc-300 hover:bg-zinc-800 transition-colors"
-            >
-              <Shield class="h-4 w-4 text-emerald-400" />
-              <span>How Privacy Works</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Feature Highlights Bento Metric Box */}
-        <div class="w-full lg:w-96 rounded-2xl border border-surface-border bg-surface/80 p-6 space-y-4 shadow-xl">
-          <div class="flex items-center justify-between border-b border-surface-border pb-3">
-            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Architecture</span>
-            <span class="rounded bg-emerald-500/10 px-2 py-0.5 font-mono text-[11px] text-emerald-400 border border-emerald-500/20">
-              Live & Active
-            </span>
-          </div>
-
-          <div class="space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-zinc-400 flex items-center gap-2">
-                <HardDrive class="h-3.5 w-3.5 text-brand-400" />
-                Network Transmission:
-              </span>
-              <span class="font-mono text-emerald-400 font-semibold">0.00 KB (Zero Upload)</span>
-            </div>
-
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-zinc-400 flex items-center gap-2">
-                <Cpu class="h-3.5 w-3.5 text-brand-400" />
-                Computation Engine:
-              </span>
-              <span class="font-mono text-zinc-200">Local Browser WASM</span>
-            </div>
-
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-zinc-400 flex items-center gap-2">
-                <Zap class="h-3.5 w-3.5 text-brand-400" />
-                File Size Limit:
-              </span>
-              <span class="font-mono text-zinc-200">Unlimited (Device RAM)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {/* Privacy Guarantee Section */}
-    <PrivacyBanner />
-
-    {/* Suite Explorer Grid */}
-    <section id="suite-explorer" class="space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-surface-border pb-4">
-        <div>
-          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Utility Suites</h2>
-          <p class="text-xs sm:text-sm text-zinc-400 mt-1">
-            Choose from our specialized suites for document, photo, video, and vector transformations.
+          <p class="text-xs sm:text-sm text-[#8B8F98] max-w-2xl">
+            21 document, image, audio, and video utility engines running 100% client-side in your browser. Zero cloud uploads, zero data retention, zero quotas.
           </p>
         </div>
 
-        {/* Category count badges */}
-        <div class="flex flex-wrap gap-2">
-          {CATEGORIES.map((cat) => (
+        {/* Telemetry Stat Chips */}
+        <div class="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-[#8B8F98] bg-[#1B1D22] px-3 py-1.5 rounded border border-[#2A2D33]">
+            <HardDrive className="h-3.5 w-3.5 text-[#4F8CFF]" />
+            <span>Uploads: <strong class="text-[#3FBE73]">0 Bytes</strong></span>
+          </div>
+          <div className="flex items-center gap-2 font-mono text-[11px] text-[#8B8F98] bg-[#1B1D22] px-3 py-1.5 rounded border border-[#2A2D33]">
+            <Cpu className="h-3.5 w-3.5 text-[#4F8CFF]" />
+            <span>Runtime: <strong class="text-[#ECEDEF]">WebAssembly</strong></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Suite Filter Bar */}
+      <div class="flex flex-wrap items-center gap-2">
+        {CATEGORIES.map((cat) => {
+          const CatIcon = categoryIcons[cat.id] || Terminal;
+          return (
             <a
-              href={cat.id === 'all' ? '#suite-explorer' : `#${cat.id}-suite`}
-              class="rounded-lg border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:border-brand-500/40 hover:text-white transition-colors"
+              href={cat.id === 'all' ? '/' : `/#${cat.id}-suite`}
+              class={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium border transition-colors ${
+                cat.id === 'all'
+                  ? 'bg-[#16233F] text-[#4F8CFF] border-[#4F8CFF]/40'
+                  : 'bg-[#1B1D22] text-[#8B8F98] border-[#2A2D33] hover:text-[#ECEDEF] hover:border-[#4F8CFF]/30'
+              }`}
             >
-              {cat.label} ({cat.count})
+              <CatIcon class="h-3.5 w-3.5" />
+              <span>{cat.label}</span>
+              <span class="font-mono text-[10px] text-[#5B606D]">({cat.count})</span>
             </a>
-          ))}
-        </div>
+          );
+        })}
       </div>
-
-      {/* PDF Suite Group */}
-      <div id="pdf-suite" class="space-y-4">
-        <div class="flex items-center gap-2 text-zinc-200">
-          <span class="h-2 w-2 rounded-full bg-brand-500"></span>
-          <h3 class="text-lg font-semibold tracking-tight">PDF Suite</h3>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {TOOLS.filter(t => t.category === 'pdf').map((tool) => {
-            const Icon = iconMap[tool.iconName] || Layers;
-            return (
-              <a
-                href={tool.path}
-                class="glass-card group flex flex-col justify-between rounded-2xl p-5"
-              >
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:text-brand-400 group-hover:border-brand-500/40 transition-colors">
-                      <Icon class="h-5 w-5" />
-                    </div>
-                    {tool.badge && (
-                      <span class="rounded-md bg-brand-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-brand-400 border border-brand-500/20">
-                        {tool.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <h4 class="text-sm font-semibold text-zinc-100 group-hover:text-brand-300 transition-colors">
-                      {tool.name}
-                    </h4>
-                    <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-                      {tool.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex items-center gap-1 text-xs font-medium text-brand-400 group-hover:translate-x-0.5 transition-transform">
-                  <span>Open Tool</span>
-                  <ArrowRight class="h-3.5 w-3.5" />
-                </div>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Mid-Content Ad Placement */}
-      <div class="py-4 flex justify-center">
-        <AdSlot client:idle type="leaderboard" />
-      </div>
-
-      {/* Image Suite Group */}
-      <div id="image-suite" class="space-y-4">
-        <div class="flex items-center gap-2 text-zinc-200">
-          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-          <h3 class="text-lg font-semibold tracking-tight">Image & Vector Suite</h3>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {TOOLS.filter(t => t.category === 'image' || t.category === 'svg').map((tool) => {
-            const Icon = iconMap[tool.iconName] || Repeat;
-            return (
-              <a
-                href={tool.path}
-                class="glass-card group flex flex-col justify-between rounded-2xl p-5"
-              >
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:text-emerald-400 group-hover:border-emerald-500/40 transition-colors">
-                      <Icon class="h-5 w-5" />
-                    </div>
-                    {tool.badge && (
-                      <span class="rounded-md bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
-                        {tool.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <h4 class="text-sm font-semibold text-zinc-100 group-hover:text-emerald-300 transition-colors">
-                      {tool.name}
-                    </h4>
-                    <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-                      {tool.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex items-center gap-1 text-xs font-medium text-emerald-400 group-hover:translate-x-0.5 transition-transform">
-                  <span>Open Tool</span>
-                  <ArrowRight class="h-3.5 w-3.5" />
-                </div>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Video & Audio Suite Group */}
-      <div id="video-suite" class="space-y-4">
-        <div class="flex items-center gap-2 text-zinc-200">
-          <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-          <h3 class="text-lg font-semibold tracking-tight">Video & Audio Suite</h3>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {TOOLS.filter(t => t.category === 'video').map((tool) => {
-            const Icon = iconMap[tool.iconName] || Film;
-            return (
-              <a
-                href={tool.path}
-                class="glass-card group flex flex-col justify-between rounded-2xl p-5"
-              >
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:text-indigo-400 group-hover:border-indigo-500/40 transition-colors">
-                      <Icon class="h-5 w-5" />
-                    </div>
-                    {tool.badge && (
-                      <span class="rounded-md bg-indigo-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-indigo-400 border border-indigo-500/20">
-                        {tool.badge}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <h4 class="text-sm font-semibold text-zinc-100 group-hover:text-indigo-300 transition-colors">
-                      {tool.name}
-                    </h4>
-                    <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-                      {tool.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex items-center gap-1 text-xs font-medium text-indigo-400 group-hover:translate-x-0.5 transition-transform">
-                  <span>Open Tool</span>
-                  <ArrowRight class="h-3.5 w-3.5" />
-                </div>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-
-    {/* Educational Comparison Matrix (AdSense Content Standard) */}
-    <section class="rounded-2xl border border-surface-border bg-surface p-6 sm:p-10 space-y-8">
-      <div class="text-center max-w-2xl mx-auto space-y-2">
-        <h2 class="text-2xl font-bold tracking-tight text-white">Why Local In-Browser Processing Wins</h2>
-        <p class="text-xs sm:text-sm text-zinc-400">
-          Comparing traditional cloud utility portals against NovaTools client-side WebAssembly architecture.
-        </p>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="border-b border-surface-border text-zinc-400 font-mono">
-              <th class="py-3 px-4">Feature Metric</th>
-              <th class="py-3 px-4 text-emerald-400">NovaTools (Client-Side)</th>
-              <th class="py-3 px-4 text-zinc-500">Traditional Cloud Utilities</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-zinc-800/60 text-zinc-300">
-            <tr>
-              <td class="py-3.5 px-4 font-medium text-white">Data Privacy</td>
-              <td class="py-3.5 px-4 text-emerald-400 font-medium">100% Private (0 bytes uploaded)</td>
-              <td class="py-3.5 px-4 text-zinc-500">Uploaded to third-party servers</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-medium text-white">Processing Speed</td>
-              <td class="py-3.5 px-4 text-emerald-400 font-medium">Instant (Zero network latency)</td>
-              <td class="py-3.5 px-4 text-zinc-500">Slow (Upload + Queue + Download)</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-medium text-white">File Size Limits</td>
-              <td class="py-3.5 px-4 text-emerald-400 font-medium">Unlimited (Bounded by local RAM)</td>
-              <td class="py-3.5 px-4 text-zinc-500">Paywalled (e.g. max 50MB)</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-medium text-white">Confidentiality Compliance</td>
-              <td class="py-3.5 px-4 text-emerald-400 font-medium">GDPR / HIPAA compliant by default</td>
-              <td class="py-3.5 px-4 text-zinc-500">Requires Enterprise DPA agreements</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    {/* Bottom Ad Placement */}
-    <div class="py-2 flex justify-center">
-      <AdSlot client:idle type="rectangle" />
     </div>
+
+    {/* Tool Suite Sections */}
+    {CATEGORIES.filter(c => c.id !== 'all').map((cat) => {
+      const suiteTools = TOOLS.filter(t => t.category === cat.id);
+      const CatIcon = categoryIcons[cat.id] || Terminal;
+
+      return (
+        <section id={`${cat.id}-suite`} class="space-y-4 pt-2">
+          {/* Section Header */}
+          <div class="flex items-center justify-between border-b border-[#2A2D33] pb-2.5">
+            <div class="flex items-center gap-2">
+              <div class="flex h-6 w-6 items-center justify-center rounded bg-[#1B1D22] border border-[#2A2D33] text-[#4F8CFF]">
+                <CatIcon class="h-3.5 w-3.5" />
+              </div>
+              <h2 class="text-sm font-semibold uppercase tracking-wider text-[#ECEDEF]">
+                {cat.label}
+              </h2>
+              <span class="font-mono text-xs text-[#5B606D]">
+                ({suiteTools.length} utilities)
+              </span>
+            </div>
+
+            <span class="font-mono text-[11px] text-[#8B8F98]">100% Local WASM</span>
+          </div>
+
+          {/* Tools Grid */}
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            {suiteTools.map((tool) => {
+              const Icon = iconMap[tool.iconName] || FileText;
+
+              return (
+                <a
+                  href={tool.path}
+                  class="group flex flex-col justify-between rounded-lg border border-[#2A2D33] bg-[#131418] p-4 transition-all hover:border-[#4F8CFF] hover:bg-[#16171D]"
+                >
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <div class="flex h-8 w-8 items-center justify-center rounded bg-[#1B1D22] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+                        <Icon class="h-4 w-4" />
+                      </div>
+
+                      {tool.badge && (
+                        <span class="font-mono text-[10px] font-medium text-[#4F8CFF] bg-[#16233F] px-2 py-0.5 rounded border border-[#4F8CFF]/20">
+                          {tool.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    <div class="space-y-1">
+                      <h3 class="text-sm font-semibold text-[#ECEDEF] group-hover:text-[#4F8CFF] transition-colors">
+                        {tool.name}
+                      </h3>
+                      <p class="text-xs text-[#8B8F98] line-clamp-2 leading-relaxed">
+                        {tool.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between pt-4 mt-2 border-t border-[#2A2D33]/60 font-mono text-[10px] text-[#5B606D]">
+                    <span>Local WASM</span>
+                    <span class="flex items-center gap-1 text-[#8B8F98] group-hover:text-[#4F8CFF] transition-colors">
+                      Open Tool <ArrowRight class="h-3 w-3" />
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    {/* Architecture & Security Ledger */}
+    <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-6 space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#2A2D33] pb-3 text-xs font-semibold uppercase tracking-wider text-[#ECEDEF]">
+        <Terminal class="h-4 w-4 text-[#4F8CFF]" />
+        <span>Technical Architecture & Privacy Ledger</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="rounded bg-[#1B1D22] p-4 border border-[#2A2D33] space-y-1.5">
+          <div class="font-semibold text-[#ECEDEF]">Zero Server Uploads</div>
+          <p class="text-[#8B8F98] leading-relaxed">
+            All file decoding, image compression, video frame extraction, and PDF manipulation execute in memory using WebAssembly and HTML5 Canvas.
+          </p>
+        </div>
+
+        <div class="rounded bg-[#1B1D22] p-4 border border-[#2A2D33] space-y-1.5">
+          <div class="font-semibold text-[#ECEDEF]">Client-Side AI Inference</div>
+          <p class="text-[#8B8F98] leading-relaxed">
+            Whisper speech-to-text and background removal run locally via ONNX WebAssembly runtimes with $0 cloud infrastructure costs.
+          </p>
+        </div>
+
+        <div class="rounded bg-[#1B1D22] p-4 border border-[#2A2D33] space-y-1.5">
+          <div class="font-semibold text-[#ECEDEF]">No File Size Limits</div>
+          <p class="text-[#8B8F98] leading-relaxed">
+            Files are not bounded by slow internet upload speeds or cloud storage quotas; throughput is bound strictly by your local CPU and RAM.
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </Layout>

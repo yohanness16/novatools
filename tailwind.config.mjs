@@ -5,49 +5,47 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#09090b',
+        canvas: '#0B0C0F',
         surface: {
-          DEFAULT: '#121215',
-          glass: 'rgba(24, 24, 27, 0.65)',
-          elevated: '#18181c',
-          card: '#131316',
-          border: '#27272a',
-          hover: '#1e1e24',
+          DEFAULT: '#131418',
+          sunken: '#1B1D22',
+          elevated: '#1A1C22',
+          border: '#2A2D33',
+          hairline: '#2A2D33',
         },
-        brand: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          glow: 'rgba(99, 102, 241, 0.25)',
+        primary: '#ECEDEF',
+        secondary: '#8B8F98',
+        muted: '#5B606D',
+        accent: {
+          DEFAULT: '#4F8CFF',
+          hover: '#3B79F0',
+          subtle: '#16233F',
+          muted: '#1E2D4F',
         },
-        emerald: {
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-        }
+        status: {
+          success: '#3FBE73',
+          'success-subtle': '#122D1F',
+          warning: '#E0A93E',
+          'warning-subtle': '#332612',
+          danger: '#F0564B',
+          'danger-subtle': '#331614',
+        },
       },
       fontFamily: {
         sans: ['Geist', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['Geist Mono', 'JetBrains Mono', 'Menlo', 'monospace'],
+        mono: ['Geist Mono', 'JetBrains Mono', 'IBM Plex Mono', 'monospace'],
+      },
+      borderRadius: {
+        DEFAULT: '6px',
+        sm: '4px',
+        md: '6px',
+        lg: '8px',
+        xl: '10px',
       },
       boxShadow: {
-        'glow-sm': '0 0 16px -4px rgba(99, 102, 241, 0.25)',
-        'glow-lg': '0 0 32px -6px rgba(99, 102, 241, 0.35)',
-        'glass-edge': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.08)',
-        'subtle-lift': '0 4px 20px -2px rgba(0, 0, 0, 0.5)',
+        hairline: '0 0 0 1px #2A2D33',
+        dropdown: '0 4px 16px 0 rgba(0, 0, 0, 0.6)',
       },
-      animation: {
-        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'fade-in': 'fadeIn 0.2s ease-out forwards',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(4px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-      }
     },
   },
   plugins: [],

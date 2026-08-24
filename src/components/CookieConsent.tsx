@@ -27,31 +27,31 @@ export const CookieConsent: React.FC = () => {
   return (
     <aside
       aria-label="Cookie and Privacy Preferences"
-      className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 rounded-2xl border border-surface-border bg-surface/95 backdrop-blur-xl p-5 shadow-2xl space-y-3"
+      className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 rounded border border-[#2A2D33] bg-[#131418] p-4 shadow-2xl space-y-2.5"
     >
-      <div className="flex items-center gap-2.5">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-          <ShieldCheck className="h-4 w-4" />
+      <div className="flex items-center gap-2">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#122D1F] border border-[#3FBE73]/30 text-[#3FBE73]">
+          <ShieldCheck className="h-3.5 w-3.5" />
         </div>
-        <h4 className="text-sm font-semibold text-zinc-100">
-          Privacy & Ad Preferences
+        <h4 className="text-xs font-semibold text-[#ECEDEF]">
+          Privacy & Runtime Preferences
         </h4>
       </div>
 
-      <p className="text-xs text-zinc-400 leading-relaxed">
-        We use cookies and third-party advertising partners (such as Google AdSense) to keep NovaTools free and support 100% client-side privacy tooling.
+      <p className="text-[11px] text-[#8B8F98] leading-relaxed">
+        NovaTools processes 100% of files in client-side memory. We use cookies and third-party advertising partners (such as Google AdSense) to support open infrastructure.
       </p>
 
-      <div className="flex items-center gap-2 pt-1">
+      <div className="flex items-center gap-2 pt-0.5">
         <button
           onClick={handleAccept}
-          className="flex-1 py-2 px-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs rounded-xl transition-all active:scale-95"
+          className="flex-1 py-1.5 px-3 bg-[#4F8CFF] hover:bg-[#3B79F0] text-white font-semibold text-xs rounded transition-colors"
         >
           Accept All
         </button>
         <button
           onClick={handleDecline}
-          className="py-2 px-3.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium text-xs rounded-xl transition-all border border-zinc-700"
+          className="py-1.5 px-3 bg-[#1B1D22] hover:bg-[#22242B] text-[#8B8F98] hover:text-[#ECEDEF] font-medium text-xs rounded transition-colors border border-[#2A2D33]"
         >
           Essential Only
         </button>

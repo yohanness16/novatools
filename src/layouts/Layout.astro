@@ -16,7 +16,7 @@ export interface Props {
 
 const {
   title,
-  description = 'NovaTools is a modern, high-performance, 100% client-side document, image, video, and PDF manipulation suite. Fast, private, and free.',
+  description = 'NovaTools is a high-performance, 100% client-side document, image, video, and PDF manipulation suite. Fast, private, and local.',
   keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'wasm', 'private pdf merger', 'online media tools'],
   canonicalUrl = Astro.url.href,
   faqs = [],
@@ -27,7 +27,7 @@ const adSenseClientId = 'ca-pub-6768212179657827';
 ---
 
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="dark scroll-smooth bg-[#0B0C0F]">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,17 +55,11 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="bg-background text-zinc-100 selection:bg-brand-500/30 selection:text-brand-100 flex min-h-[100dvh] flex-col">
-    {/* Subtle Background Ambient Mesh */}
-    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-      <div class="absolute -top-[25%] left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-brand-500/10 blur-[140px]" />
-      <div class="absolute top-[40%] -left-[10%] h-[400px] w-[600px] rounded-full bg-emerald-500/5 blur-[160px]" />
-    </div>
-
-    {/* Sticky Frosted Header */}
+  <body class="bg-[#0B0C0F] text-[#ECEDEF] selection:bg-[#4F8CFF]/25 selection:text-[#ECEDEF] flex min-h-[100dvh] flex-col font-sans antialiased">
+    {/* Console Top Bar Header */}
     <Header client:load />
 
-    {/* Main Page Content */}
+    {/* Main Content */}
     <main class="flex-1">
       <slot />
     </main>
@@ -73,7 +67,7 @@ const adSenseClientId = 'ca-pub-6768212179657827';
     {/* Footer */}
     <Footer />
 
-    {/* GDPR / CCPA Cookie & Ad Preferences Banner */}
+    {/* Cookie / Preferences */}
     <CookieConsent client:idle />
   </body>
 </html>

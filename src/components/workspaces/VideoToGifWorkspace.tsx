@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   GifEngine,
-  type GifResult,
   type GifProgress,
+  type GifResult,
 } from '../../engines/gifEngine';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import {
@@ -12,30 +12,26 @@ import {
   Pause,
   Download,
   Sparkles,
-  Sliders,
-  RotateCcw,
-  Loader2,
-  AlertCircle,
-  Check,
+  Layers,
   Clock,
   Zap,
-  Repeat,
-  Layers,
-  ShieldCheck,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
 } from 'lucide-react';
 
 const FPS_OPTIONS = [
-  { value: 10, label: '10 FPS', desc: 'Small file size, compact' },
-  { value: 15, label: '15 FPS', desc: 'Recommended balance' },
+  { value: 10, label: '10 FPS', desc: 'Compact file size' },
+  { value: 15, label: '15 FPS', desc: 'Standard web balance' },
   { value: 20, label: '20 FPS', desc: 'Smooth motion' },
-  { value: 24, label: '24 FPS', desc: 'Cinematic' },
-  { value: 30, label: '30 FPS', desc: 'Ultra smooth 60Hz' },
+  { value: 24, label: '24 FPS', desc: 'Cinematic rate' },
+  { value: 30, label: '30 FPS', desc: 'Maximum fluidity' },
 ];
 
 const RESOLUTION_OPTIONS = [
-  { value: 320, label: '320px', desc: 'Discord / Email' },
-  { value: 480, label: '480px', desc: 'Standard Web' },
-  { value: 640, label: '640px', desc: 'Crisp HD' },
+  { value: 320, label: '320px', desc: 'Compact sticker' },
+  { value: 480, label: '480px', desc: 'Standard web' },
+  { value: 640, label: '640px', desc: 'High definition' },
   { value: 0, label: 'Original', desc: 'Source resolution' },
 ];
 
@@ -43,14 +39,14 @@ export const VideoToGifWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [duration, setDuration] = useState<number>(0);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-
-  // Settings
   const [startTime, setStartTime] = useState<number>(0);
-  const [endTime, setEndTime] = useState<number>(0);
+  const [endTime, setEndTime] = useState<number>(3);
   const [fps, setFps] = useState<number>(15);
   const [targetWidth, setTargetWidth] = useState<number>(480);
+
+  // Player state
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
   // Processing state
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -61,39 +57,40 @@ export const VideoToGifWorkspace: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (videoUrl) URL.revokeObjectURL(videoUrl);
-      if (gifResult?.dataUrl) URL.revokeObjectURL(gifResult.dataUrl);
-    };
-  }, [videoUrl, gifResult]);
+  const handleFile = (selectedFile: File) => {
+    const isVideo =
+      selectedFile.type.startsWith('video/') ||
+      /\.(mp4|webm|mov|mkv|avi|m4v)$/i.test(selectedFile.name);
 
-  const handleFile = async (selectedFile: File) => {
-    setError(null);
-    setGifResult(null);
-
-    const isVid = selectedFile.type.startsWith('video/') || /\.(mp4|webm|mov|mkv|avi|m4v)$/i.test(selectedFile.name);
-    if (!isVid) {
-      setError('Please select a valid video file (MP4, WebM, MOV).');
+    if (!isVideo) {
+      setError('Please select a valid video file (MP4, WebM, MOV, MKV).');
       return;
     }
 
     if (videoUrl) URL.revokeObjectURL(videoUrl);
+
+    setError(null);
+    setGifResult(null);
+    setFile(selectedFile);
+    setIsPlaying(false);
+    setCurrentTime(0);
+
     const url = URL.createObjectURL(selectedFile);
     setVideoUrl(url);
-    setFile(selectedFile);
   };
 
-  const handleLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const dur = e.currentTarget.duration || 1;
-    setDuration(dur);
-    setStartTime(0);
-    // Cap default GIF duration to max 8 seconds for optimal performance
-    setEndTime(Math.min(dur, 8));
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      const dur = videoRef.current.duration || 5;
+      setDuration(dur);
+      setStartTime(0);
+      setEndTime(Math.min(dur, 4));
+    }
   };
 
   const handleConvert = async () => {
     if (!file) return;
+
     setIsProcessing(true);
     setError(null);
     setProgressInfo({
@@ -152,11 +149,11 @@ export const VideoToGifWorkspace: React.FC = () => {
   const estimatedFrames = Math.max(1, Math.round(clipDuration * fps));
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-14 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -168,38 +165,34 @@ export const VideoToGifWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all shadow-lg">
-            <Film className="h-7 w-7" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Film className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-base font-semibold text-zinc-200">
-            Upload Video to Create Animated GIF
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop video to convert to animated GIF, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-400 max-w-md text-center">
-            Trim video clips and export high-framerate animated GIFs with custom resolution scaling and zero server uploads.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Color quantization & LZW byte stream encoder. 100% local WASM.
           </p>
-          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-            <span>100% Client-Side Canvas & LZW Encoding · Zero Cloud Limits</span>
-          </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-4 sm:p-6 space-y-6">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
           {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-zinc-200">{file.name}</span>
-                <span className="rounded-md bg-zinc-800 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700">
+                <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+                <span className="rounded bg-[#1B1D22] px-2 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
                   {formatBytes(file.size)}
                 </span>
                 {gifResult && (
-                  <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                    <Check className="h-3 w-3" />
+                  <span className="rounded bg-[#122D1F] px-2 py-0.5 text-[10px] font-mono text-[#3FBE73] border border-[#3FBE73]/30 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
                     GIF Created ({gifResult.width}×{gifResult.height} · {formatBytes(gifResult.fileSize)})
                   </span>
                 )}
               </div>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
                 {gifResult ? 'GIF rendered · Ready to inspect & download' : 'Select trim range and frame rate settings'}
               </p>
             </div>
@@ -211,17 +204,17 @@ export const VideoToGifWorkspace: React.FC = () => {
                 setVideoUrl(null);
                 setGifResult(null);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200 self-start sm:self-auto transition-colors"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
               Choose different video
             </button>
           </div>
 
           {/* Video Preview & Timeline Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
             {/* Video Player (6 cols) */}
-            <div className="lg:col-span-6 space-y-3">
-              <div className="relative rounded-2xl overflow-hidden bg-black border border-zinc-800 aspect-video flex items-center justify-center">
+            <div className="lg:col-span-6 space-y-2">
+              <div className="relative rounded overflow-hidden bg-[#0B0C0F] border border-[#2A2D33] aspect-video flex items-center justify-center">
                 {videoUrl && (
                   <video
                     ref={videoRef}
@@ -236,46 +229,46 @@ export const VideoToGifWorkspace: React.FC = () => {
               </div>
 
               {/* Playback Controls & Timestamp */}
-              <div className="flex items-center justify-between bg-zinc-900/80 p-3 rounded-xl border border-zinc-800">
+              <div className="flex items-center justify-between bg-[#1B1D22] p-2.5 rounded border border-[#2A2D33]">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={togglePlay}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-white hover:bg-brand-600 active:scale-95 transition-all"
+                    className="flex h-7 w-7 items-center justify-center rounded bg-[#4F8CFF] text-white hover:bg-[#3B79F0] transition-colors"
                   >
-                    {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+                    {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 ml-0.5" />}
                   </button>
-                  <span className="font-mono text-xs text-zinc-300">
+                  <span className="font-mono text-xs text-[#ECEDEF]">
                     {formatDuration(currentTime)} / {formatDuration(duration)}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 font-mono text-[11px] text-zinc-400">
+                <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#8B8F98]">
                   <span>Clip:</span>
-                  <span className="font-semibold text-brand-400">{clipDuration}s</span>
+                  <span className="font-semibold text-[#4F8CFF]">{clipDuration}s</span>
                   <span>({estimatedFrames} frames)</span>
                 </div>
               </div>
             </div>
 
             {/* Trimming & Settings Panel (6 cols) */}
-            <div className="lg:col-span-6 space-y-4">
+            <div className="lg:col-span-6 space-y-3">
               {/* Range Trimming Sliders */}
-              <div className="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800 space-y-3">
-                <label className="text-xs font-medium text-zinc-300 flex items-center justify-between">
+              <div className="bg-[#1B1D22] p-3 rounded border border-[#2A2D33] space-y-2.5">
+                <label className="text-xs font-medium text-[#ECEDEF] flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-brand-400" />
-                    Trim Video Range
+                    <Clock className="h-3.5 w-3.5 text-[#4F8CFF]" />
+                    Trim Video Timeline
                   </span>
-                  <span className="font-mono text-[11px] text-brand-400 font-semibold">
+                  <span className="font-mono text-[10px] text-[#4F8CFF] font-semibold">
                     {formatDuration(startTime)} → {formatDuration(endTime)}
                   </span>
                 </label>
 
                 {/* Start Time Slider */}
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] text-zinc-400">
-                    <span>Start Timestamp</span>
-                    <span className="font-mono">{formatDuration(startTime)}</span>
+                <div className="space-y-0.5">
+                  <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
+                    <span>Start Position</span>
+                    <span>{formatDuration(startTime)}</span>
                   </div>
                   <input
                     type="range"
@@ -288,15 +281,15 @@ export const VideoToGifWorkspace: React.FC = () => {
                       setStartTime(val);
                       handleSeek(val);
                     }}
-                    className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-brand-500"
+                    className="w-full h-1.5 bg-[#131418] rounded appearance-none cursor-pointer accent-[#4F8CFF]"
                   />
                 </div>
 
                 {/* End Time Slider */}
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] text-zinc-400">
-                    <span>End Timestamp</span>
-                    <span className="font-mono">{formatDuration(endTime)}</span>
+                <div className="space-y-0.5">
+                  <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
+                    <span>End Position</span>
+                    <span>{formatDuration(endTime)}</span>
                   </div>
                   <input
                     type="range"
@@ -309,23 +302,23 @@ export const VideoToGifWorkspace: React.FC = () => {
                       setEndTime(val);
                       handleSeek(val);
                     }}
-                    className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-brand-500"
+                    className="w-full h-1.5 bg-[#131418] rounded appearance-none cursor-pointer accent-[#4F8CFF]"
                   />
                 </div>
               </div>
 
               {/* Framerate & Resolution Controls */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {/* FPS Selection */}
-                <div className="bg-zinc-900/60 p-3.5 rounded-xl border border-zinc-800 space-y-2">
-                  <label className="text-xs font-medium text-zinc-300 flex items-center gap-1.5">
-                    <Zap className="h-3.5 w-3.5 text-brand-400" />
+                <div className="bg-[#1B1D22] p-2.5 rounded border border-[#2A2D33] space-y-1.5">
+                  <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5">
+                    <Zap className="h-3.5 w-3.5 text-[#4F8CFF]" />
                     Frame Rate (FPS)
                   </label>
                   <select
                     value={fps}
                     onChange={(e) => setFps(parseInt(e.target.value, 10))}
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs text-zinc-200 focus:border-brand-500 focus:outline-none"
+                    className="w-full rounded border border-[#2A2D33] bg-[#131418] px-2.5 py-1.5 text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
                   >
                     {FPS_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -336,15 +329,15 @@ export const VideoToGifWorkspace: React.FC = () => {
                 </div>
 
                 {/* Resolution Scaling */}
-                <div className="bg-zinc-900/60 p-3.5 rounded-xl border border-zinc-800 space-y-2">
-                  <label className="text-xs font-medium text-zinc-300 flex items-center gap-1.5">
-                    <Layers className="h-3.5 w-3.5 text-brand-400" />
+                <div className="bg-[#1B1D22] p-2.5 rounded border border-[#2A2D33] space-y-1.5">
+                  <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5">
+                    <Layers className="h-3.5 w-3.5 text-[#4F8CFF]" />
                     Width Scaling
                   </label>
                   <select
                     value={targetWidth}
                     onChange={(e) => setTargetWidth(parseInt(e.target.value, 10))}
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs text-zinc-200 focus:border-brand-500 focus:outline-none"
+                    className="w-full rounded border border-[#2A2D33] bg-[#131418] px-2.5 py-1.5 text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
                   >
                     {RESOLUTION_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -359,16 +352,16 @@ export const VideoToGifWorkspace: React.FC = () => {
               <button
                 onClick={handleConvert}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 px-4 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-[0.98] transition-all disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
                     <span>Rendering Animated GIF...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="h-4 w-4" />
+                    <Sparkles className="h-3.5 w-3.5" />
                     <span>Convert to GIF ({estimatedFrames} frames)</span>
                   </>
                 )}
@@ -378,17 +371,17 @@ export const VideoToGifWorkspace: React.FC = () => {
 
           {/* Progress Box */}
           {isProcessing && progressInfo && (
-            <div className="rounded-xl border border-brand-500/30 bg-brand-500/10 p-4 space-y-2">
+            <div className="rounded bg-[#16233F] border border-[#4F8CFF]/30 p-3 space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-zinc-200 flex items-center gap-2">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-400" />
+                <span className="text-[#ECEDEF] flex items-center gap-2">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4F8CFF]" />
                   {progressInfo.message}
                 </span>
-                <span className="font-mono text-brand-400 font-bold">{progressInfo.progress}%</span>
+                <span className="font-mono text-[#4F8CFF] font-bold">{progressInfo.progress}%</span>
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-1 w-full overflow-hidden rounded bg-[#131418]">
                 <div
-                  className="h-full bg-brand-500 transition-all duration-300 rounded-full"
+                  className="h-full bg-[#4F8CFF] transition-all duration-300 rounded"
                   style={{ width: `${progressInfo.progress}%` }}
                 />
               </div>
@@ -397,65 +390,65 @@ export const VideoToGifWorkspace: React.FC = () => {
 
           {/* Output GIF Inspector */}
           {gifResult && (
-            <div className="rounded-2xl border border-emerald-500/30 bg-zinc-900/90 p-5 space-y-4 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+            <div className="rounded border border-[#3FBE73]/30 bg-[#122D1F] p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#2A2D33] pb-2">
                 <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <h4 className="text-xs font-bold text-zinc-100 uppercase tracking-wider">
+                  <div className="h-2 w-2 rounded-full bg-[#3FBE73]" />
+                  <h4 className="text-xs font-bold text-[#ECEDEF] uppercase tracking-wider font-mono">
                     Animated GIF Output
                   </h4>
                 </div>
 
                 <button
                   onClick={handleDownload}
-                  className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-semibold text-white shadow-glow-sm active:scale-95 transition-all self-start sm:self-auto"
+                  className="flex items-center gap-1.5 rounded bg-[#3FBE73] hover:bg-[#349e5f] px-3.5 py-1.5 text-xs font-semibold text-black transition-colors"
                 >
-                  <Download className="h-4 w-4" />
+                  <Download className="h-3.5 w-3.5" />
                   <span>Download GIF ({formatBytes(gifResult.fileSize)})</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 {/* GIF Image Preview (7 cols) */}
-                <div className="md:col-span-7 flex items-center justify-center p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                <div className="md:col-span-7 flex items-center justify-center p-2 bg-[#0B0C0F] rounded border border-[#2A2D33]">
                   <img
                     src={gifResult.dataUrl}
                     alt="Rendered Animated GIF"
-                    className="max-h-[300px] w-auto object-contain rounded-lg shadow-lg"
+                    className="max-h-[260px] w-auto object-contain rounded"
                   />
                 </div>
 
                 {/* Metadata Details (5 cols) */}
-                <div className="md:col-span-5 space-y-2.5 text-xs">
-                  <div className="flex justify-between py-1.5 border-b border-zinc-800 text-zinc-400">
+                <div className="md:col-span-5 space-y-1.5 text-xs font-mono">
+                  <div className="flex justify-between py-1 border-b border-[#2A2D33] text-[#8B8F98]">
                     <span>Dimensions</span>
-                    <span className="font-mono font-semibold text-zinc-200">
+                    <span className="text-[#ECEDEF]">
                       {gifResult.width} × {gifResult.height} px
                     </span>
                   </div>
 
-                  <div className="flex justify-between py-1.5 border-b border-zinc-800 text-zinc-400">
+                  <div className="flex justify-between py-1 border-b border-[#2A2D33] text-[#8B8F98]">
                     <span>Frame Count</span>
-                    <span className="font-mono font-semibold text-zinc-200">
+                    <span className="text-[#ECEDEF]">
                       {gifResult.frameCount} frames
                     </span>
                   </div>
 
-                  <div className="flex justify-between py-1.5 border-b border-zinc-800 text-zinc-400">
+                  <div className="flex justify-between py-1 border-b border-[#2A2D33] text-[#8B8F98]">
                     <span>Frame Rate</span>
-                    <span className="font-mono font-semibold text-zinc-200">{fps} FPS</span>
+                    <span className="text-[#ECEDEF]">{fps} FPS</span>
                   </div>
 
-                  <div className="flex justify-between py-1.5 border-b border-zinc-800 text-zinc-400">
+                  <div className="flex justify-between py-1 border-b border-[#2A2D33] text-[#8B8F98]">
                     <span>Clip Duration</span>
-                    <span className="font-mono font-semibold text-zinc-200">
+                    <span className="text-[#ECEDEF]">
                       {gifResult.duration.toFixed(1)}s
                     </span>
                   </div>
 
-                  <div className="flex justify-between py-1.5 text-zinc-400">
+                  <div className="flex justify-between py-1 text-[#8B8F98]">
                     <span>Output File Size</span>
-                    <span className="font-mono font-bold text-emerald-400">
+                    <span className="font-bold text-[#3FBE73]">
                       {formatBytes(gifResult.fileSize)}
                     </span>
                   </div>
@@ -465,8 +458,8 @@ export const VideoToGifWorkspace: React.FC = () => {
           )}
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}

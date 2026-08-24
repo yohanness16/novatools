@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { VideoEngine } from '../../engines/videoEngine';
 import { formatBytes, downloadBlob, formatDuration } from '../../lib/utils';
-import { Upload, Scissors, VolumeX, Volume2, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, Scissors, VolumeX, Volume2, CheckCircle2, AlertCircle, Loader2, Play, Download } from 'lucide-react';
 
 export const VideoTrimmerWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -82,11 +82,11 @@ export const VideoTrimmerWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-surface-border bg-surface/60 p-8 sm:p-12 hover:border-zinc-700 hover:bg-surface transition-all"
+          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
         >
           <input
             ref={fileInputRef}
@@ -98,22 +98,22 @@ export const VideoTrimmerWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 group-hover:scale-105 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-all">
-            <Scissors className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+            <Scissors className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
-            Upload Video to Trim & Cut
+          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
+            Drop video to trim, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Set custom start and end timestamps with live visual scrubbing.
+          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+            Millisecond timestamp timeline cutter. 100% in-browser processing.
           </p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-surface-border bg-surface p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-surface-border pb-4">
+        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
             <div>
-              <span className="text-sm font-medium text-zinc-200">{file.name}</span>
-              <p className="text-xs text-zinc-400 font-mono mt-0.5">
+              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
                 Total Length: {formatDuration(duration)} · {formatBytes(file.size)}
               </p>
             </div>
@@ -123,7 +123,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
                 setVideoUrl(null);
                 setTrimmedBlob(null);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200"
+              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
               Choose different video
             </button>
@@ -131,7 +131,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
 
           {/* Video Preview */}
           {videoUrl && (
-            <div className="relative aspect-video max-h-72 w-full overflow-hidden rounded-xl bg-black">
+            <div className="relative aspect-video max-h-72 w-full overflow-hidden rounded border border-[#2A2D33] bg-[#0B0C0F]">
               <video
                 ref={videoRef}
                 src={videoUrl}
@@ -143,16 +143,16 @@ export const VideoTrimmerWorkspace: React.FC = () => {
           )}
 
           {/* Trim Timeline Controls */}
-          <div className="space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
-            <div className="flex justify-between items-center text-xs">
-              <span className="font-mono text-brand-400">Start: {formatDuration(startTime)}</span>
-              <span className="text-zinc-500 font-mono">Clip Length: {formatDuration(Math.max(0, endTime - startTime))}</span>
-              <span className="font-mono text-emerald-400">End: {formatDuration(endTime)}</span>
+          <div className="space-y-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
+            <div className="flex justify-between items-center text-xs font-mono">
+              <span className="text-[#4F8CFF]">Start: {formatDuration(startTime)}</span>
+              <span className="text-[#8B8F98]">Clip Length: {formatDuration(Math.max(0, endTime - startTime))}</span>
+              <span className="text-[#3FBE73]">End: {formatDuration(endTime)}</span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div>
-                <label className="text-[11px] text-zinc-400 block mb-1">Start Marker (Seconds)</label>
+                <label className="text-[10px] text-[#8B8F98] font-mono block mb-1">Start Trim Marker</label>
                 <input
                   type="range"
                   min="0"
@@ -160,12 +160,12 @@ export const VideoTrimmerWorkspace: React.FC = () => {
                   step="0.1"
                   value={startTime}
                   onChange={(e) => handleStartTimeChange(parseFloat(e.target.value))}
-                  className="w-full accent-brand-500"
+                  className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] text-zinc-400 block mb-1">End Marker (Seconds)</label>
+                <label className="text-[10px] text-[#8B8F98] font-mono block mb-1">End Trim Marker</label>
                 <input
                   type="range"
                   min="0"
@@ -173,21 +173,21 @@ export const VideoTrimmerWorkspace: React.FC = () => {
                   step="0.1"
                   value={endTime}
                   onChange={(e) => handleEndTimeChange(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500"
+                  className="w-full accent-[#3FBE73] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
                 />
               </div>
             </div>
 
             {/* Mute toggle */}
-            <div className="pt-2 border-t border-zinc-800">
-              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+            <div className="pt-2 border-t border-[#2A2D33]">
+              <label className="flex items-center gap-2 text-xs text-[#ECEDEF] cursor-pointer">
                 <input
                   type="checkbox"
                   checked={muteAudio}
                   onChange={(e) => setMuteAudio(e.target.checked)}
-                  className="rounded border-zinc-700 bg-zinc-900 text-brand-500 focus:ring-brand-500"
+                  className="rounded border-[#2A2D33] bg-[#131418] text-[#4F8CFF] focus:ring-0"
                 />
-                {muteAudio ? <VolumeX className="h-3.5 w-3.5 text-red-400" /> : <Volume2 className="h-3.5 w-3.5 text-zinc-400" />}
+                {muteAudio ? <VolumeX className="h-3.5 w-3.5 text-[#F0564B]" /> : <Volume2 className="h-3.5 w-3.5 text-[#8B8F98]" />}
                 <span>Mute audio track in exported clip</span>
               </label>
             </div>
@@ -195,14 +195,14 @@ export const VideoTrimmerWorkspace: React.FC = () => {
 
           {/* Processing Progress */}
           {isProcessing && (
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs text-zinc-400 font-mono">
-                <span>Trimming Video Segment...</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs text-[#8B8F98] font-mono">
+                <span>Rendering Video Segment in WASM...</span>
                 <span>{progress}%</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-1.5 w-full overflow-hidden rounded bg-[#1B1D22]">
                 <div
-                  className="h-full bg-brand-500 transition-all duration-150"
+                  className="h-full bg-[#4F8CFF] transition-all duration-150 rounded"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -210,21 +210,21 @@ export const VideoTrimmerWorkspace: React.FC = () => {
           )}
 
           {/* Action Button */}
-          <div className="pt-2">
+          <div>
             {!trimmedBlob ? (
               <button
                 onClick={handleTrim}
                 disabled={isProcessing || endTime <= startTime}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-brand-600 active:scale-[0.98] disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Rendering Trimmed Clip ({progress}%)...</span>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Rendering Segment ({progress}%)...</span>
                   </>
                 ) : (
                   <>
-                    <Scissors className="h-4 w-4" />
+                    <Scissors className="h-3.5 w-3.5" />
                     <span>Export Trimmed Segment ({formatDuration(endTime - startTime)})</span>
                   </>
                 )}
@@ -235,24 +235,18 @@ export const VideoTrimmerWorkspace: React.FC = () => {
                   const ext = trimmedBlob.type.includes('mp4') ? 'mp4' : 'webm';
                   downloadBlob(trimmedBlob, `trimmed_${file.name.replace(/\.[^/.]+$/, '')}.${ext}`);
                 }}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all hover:bg-emerald-600 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#122D1F] hover:bg-[#163827] border border-[#3FBE73]/40 py-2.5 px-4 text-xs font-semibold text-[#3FBE73] transition-colors"
               >
-                <CheckCircle className="h-4 w-4" />
+                <Download className="h-3.5 w-3.5" />
                 <span>Download Trimmed Clip ({formatBytes(trimmedBlob.size)})</span>
               </button>
             )}
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
-            </div>
-          )}
-          {trimmedBlob && (
-            <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-300">
-              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <span>Segment exported successfully!</span>
             </div>
           )}
         </div>
