@@ -463,6 +463,34 @@ export const TOOLS: ToolMeta[] = [
       { question: 'Is my media uploaded to any server for transcription?', answer: 'No! The AI model runs entirely inside your browser using WebAssembly and WebGPU. Your media never leaves your device.' },
       { question: 'What subtitle formats can I export?', answer: 'You can export SubRip (.srt), WebVTT (.vtt), plain text transcript (.txt), or structured JSON.' }
     ]
+  },
+  {
+    id: 'audio-booster',
+    slug: 'audio-booster',
+    name: 'Audio Volume Booster & Normalizer',
+    category: 'video',
+    categoryLabel: 'Video & Audio',
+    description: 'Amplify quiet audio and video volume up to 300% (+12 dB) with anti-clipping limiter.',
+    longDescription: 'Boost low-volume audio and video recordings in your browser. Features precision gain amplification (+0 to +12 dB), automatic soft-knee dynamics limiter to eliminate distortion, and EBU peak normalization.',
+    iconName: 'Volume2',
+    badge: 'Pro Audio',
+    path: '/video/audio-booster',
+    keywords: ['volume booster', 'audio booster', 'amplify mp3', 'boost audio online', 'audio normalizer', 'increase sound volume'],
+    features: [
+      'Gain amplification from 100% to 300% (+0 dB to +12 dB)',
+      'Anti-clipping brickwall dynamics limiter prevents distortion',
+      'Presets: Speech Boost, Podcast Normalizer, Max Loudness, Bass Warmth',
+      'Live A/B comparison player and lossless 16-bit WAV export'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload Media', desc: 'Select any audio (MP3, WAV, M4A, AAC) or video (MP4, WebM) file.' },
+      { step: 2, title: 'Adjust Volume Gain', desc: 'Move the volume multiplier slider or select an audio preset.' },
+      { step: 3, title: 'Boost & Download', desc: 'Preview with live A/B comparison and download your crystal-clear boosted audio.' }
+    ],
+    faqs: [
+      { question: 'Will boosting volume cause audio distortion or crackling?', answer: 'No! The built-in dynamics limiter automatically suppresses harsh signal clipping so your boosted audio remains smooth and distortion-free.' },
+      { question: 'Can I boost audio from video files?', answer: 'Yes, upload any MP4, WebM, or MOV video and the tool extracts and amplifies the soundtrack directly.' }
+    ]
   }
 ];
 

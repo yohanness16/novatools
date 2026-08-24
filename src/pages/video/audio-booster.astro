@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { AudioBoosterWorkspace } from '../../components/workspaces/AudioBoosterWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'audio-booster')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <AudioBoosterWorkspace client:load />
+</ToolPageLayout>
