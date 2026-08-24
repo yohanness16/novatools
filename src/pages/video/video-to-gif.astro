@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { VideoToGifWorkspace } from '../../components/workspaces/VideoToGifWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'video-to-gif')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <VideoToGifWorkspace client:load />
+</ToolPageLayout>

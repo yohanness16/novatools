@@ -519,6 +519,34 @@ export const TOOLS: ToolMeta[] = [
       { question: 'Will boosting volume cause audio distortion or crackling?', answer: 'No! The built-in dynamics limiter automatically suppresses harsh signal clipping so your boosted audio remains smooth and distortion-free.' },
       { question: 'Can I boost audio from video files?', answer: 'Yes, upload any MP4, WebM, or MOV video and the tool extracts and amplifies the soundtrack directly.' }
     ]
+  },
+  {
+    id: 'video-to-gif',
+    slug: 'video-to-gif',
+    name: 'Video to GIF Maker & Optimizer',
+    category: 'video',
+    categoryLabel: 'Video & Audio',
+    description: 'Convert video clips into high-framerate animated GIFs with custom scaling and trimming.',
+    longDescription: 'Turn video clips (MP4, WebM, MOV) into animated GIFs directly in your browser. Trim exact clip intervals, tune frame rates from 10 to 30 FPS, and adjust width resolution with zero server uploads.',
+    iconName: 'Film',
+    badge: 'Creator Tool',
+    path: '/video/video-to-gif',
+    keywords: ['video to gif', 'mp4 to gif', 'make animated gif', 'gif converter', 'trim video to gif', 'gif maker online'],
+    features: [
+      'Interactive range trimmer with real-time video playback',
+      'Selectable frame rate (10, 15, 20, 24, 30 FPS)',
+      'Resolution scaling presets (320px, 480px, 640px, or Source)',
+      'High-performance client-side Canvas & LZW quantization'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Select Video', desc: 'Choose any MP4, WebM, or MOV video clip.' },
+      { step: 2, title: 'Set Trim & FPS', desc: 'Drag the start/end timestamps and choose your target frame rate.' },
+      { step: 3, title: 'Export GIF', desc: 'Preview animated loop and download your optimized GIF.' }
+    ],
+    faqs: [
+      { question: 'How can I reduce the output GIF file size?', answer: 'Lower the frame rate to 10-15 FPS or choose a smaller width preset like 320px or 480px to create ultra-compact GIF files.' },
+      { question: 'Does this tool upload my video to a remote server?', answer: 'No! All frame extraction, palette quantization, and LZW byte stream encoding happen entirely in local browser memory.' }
+    ]
   }
 ];
 
