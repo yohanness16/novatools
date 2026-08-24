@@ -20,7 +20,8 @@ export interface TranscriptionProgress {
 }
 
 export interface TranscriptionOptions {
-  language?: string; // 'auto', 'en', 'es', 'fr', 'de', 'ja', etc.
+  language?: string; // 'auto', 'am', 'es', 'fr', 'de', 'ja', etc.
+  task?: 'transcribe' | 'translate'; // 'transcribe' (same language) or 'translate' (translate to English)
   model?: 'whisper-tiny' | 'whisper-base' | 'webspeech';
   maxCharsPerCue?: number;
 }
@@ -285,14 +286,15 @@ export class SubtitleEngine {
       throw new Error('No audio content found in this file.');
     }
 
+    const task = options.task || 'transcribe';
     const language = options.language && options.language !== 'auto' ? options.language : undefined;
-    const isEnglishOnly = language === 'en';
+    const isEnglishOnly = language === 'en' && task === 'transcribe';
     const chosenModel = isEnglishOnly ? 'Xenova/whisper-tiny.en' : 'Xenova/whisper-tiny';
 
     onProgress?.({
       status: 'loading',
       progress: 15,
-      message: 'Initializing AI transcription model...',
+      message: `Initializing multilingual AI model (${task === 'translate' ? 'Translate to English' : language ? language.toUpperCase() : 'Auto-Detect'})...`,
     });
 
     try {
@@ -307,12 +309,12 @@ export class SubtitleEngine {
       onProgress?.({
         status: 'transcribing',
         progress: 55,
-        message: 'Transcribing speech and extracting timestamps...',
+        message: task === 'translate' ? 'Translating & generating English subtitles...' : 'Transcribing speech & extracting timestamps...',
       });
 
       const output = await transcriber(pcm, {
         language: language,
-        task: 'transcribe',
+        task: task,
         chunk_length_s: 30,
         stride_length_s: 5,
         return_timestamps: true,
@@ -370,7 +372,8 @@ export class SubtitleEngine {
         // Fallback: Segment by silence boundaries and map words
         const segments = this.segmentAudioBySilence(pcm);
         const fullText = output.text.trim();
-        const sentences = fullText.split(/(?<=[.?!])\s+/).filter(Boolean);
+        // Support Latin (. ? !) and Ethiopic/Amharic (።) sentence terminators
+        const sentences = fullText.split(/(?<=[.?!።\n])\s+/).filter(Boolean);
 
         if (sentences.length <= segments.length) {
           for (let i = 0; i < sentences.length; i++) {
