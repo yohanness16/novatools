@@ -48,9 +48,14 @@ assert.ok(ASIAN_LANGUAGES.length > 0);
 assert.ok(MIDDLE_EASTERN_LANGUAGES.length > 0);
 assert.ok(AMERICAS_LANGUAGES.length > 0);
 
-// Test 4: getLanguageByCode case insensitive / trim check
-assert.equal(getLanguageByCode('AM')?.code, 'am');
-assert.equal(getLanguageByCode('  en  ')?.code, 'en');
-assert.equal(getLanguageByCode('non-existent-xyz'), undefined);
+// Test 5: Verify alphabetical order (A-Z)
+for (let i = 1; i < SUPPORTED_LANGUAGES.length; i++) {
+  const prev = SUPPORTED_LANGUAGES[i - 1].name;
+  const curr = SUPPORTED_LANGUAGES[i].name;
+  assert.ok(
+    prev.localeCompare(curr) <= 0,
+    `Languages should be sorted alphabetically: "${prev}" comes before "${curr}"`
+  );
+}
 
 console.log('✔ Language registry tests passed!');

@@ -463,7 +463,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           </p>
           <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800 flex-wrap justify-center">
             <Sparkles className="h-3.5 w-3.5 text-brand-400" />
-            <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages (Amharic, Tigrinya, Arabic, Spanish, etc.)</span>
+            <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages Supported</span>
           </div>
         </div>
       ) : (
@@ -962,7 +962,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               {[
                 { id: 'all', label: 'All (100+)' },
                 { id: 'popular', label: 'Popular' },
-                { id: 'african', label: 'African (Amharic, etc.)' },
+                { id: 'african', label: 'African' },
                 { id: 'european', label: 'European' },
                 { id: 'asian', label: 'Asian' },
                 { id: 'middle-eastern', label: 'Middle Eastern' },
