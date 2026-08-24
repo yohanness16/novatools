@@ -11,6 +11,18 @@ import {
   parseVtt,
   formatTimeVtt,
 } from '../../engines/subtitleEngine';
+import {
+  TranslationEngine,
+  type TranslationProgress,
+} from '../../engines/translationEngine';
+import {
+  SUPPORTED_LANGUAGES,
+  type LanguageOption,
+  getLanguageByCode,
+  searchLanguages,
+  POPULAR_LANGUAGES,
+  AFRICAN_LANGUAGES,
+} from '../../lib/languages';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import JSZip from 'jszip';
 import {
@@ -31,43 +43,50 @@ import {
   FileText,
   Clock,
   Globe,
-  Settings2,
+  Languages,
   Volume2,
   Eye,
+  ChevronDown,
+  X,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 
-const SUPPORTED_LANGUAGES = [
-  { code: 'auto', label: 'Auto-Detect Language' },
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Spanish (Español)' },
-  { code: 'fr', label: 'French (Français)' },
-  { code: 'de', label: 'German (Deutsch)' },
-  { code: 'ja', label: 'Japanese (日本語)' },
-  { code: 'zh', label: 'Chinese (中文)' },
-  { code: 'pt', label: 'Portuguese (Português)' },
-  { code: 'it', label: 'Italian (Italiano)' },
-  { code: 'ru', label: 'Russian (Русский)' },
-  { code: 'ar', label: 'Arabic (العربية)' },
-  { code: 'hi', label: 'Hindi (हिन्दी)' },
-  { code: 'ko', label: 'Korean (한국어)' },
-  { code: 'tr', label: 'Turkish (Türkçe)' },
-  { code: 'nl', label: 'Dutch (Nederlands)' },
-  { code: 'pl', label: 'Polish (Polski)' },
-  { code: 'id', label: 'Indonesian (Bahasa)' },
-  { code: 'vi', label: 'Vietnamese (Tiếng Việt)' },
-];
+interface SubtitleTrackData {
+  code: string;
+  name: string;
+  nativeName: string;
+  cues: SubtitleCue[];
+}
 
 export const SubtitleGeneratorWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [isVideo, setIsVideo] = useState(true);
 
-  const [language, setLanguage] = useState<string>('auto');
+  // Audio Speech Recognition Settings
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('auto');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progressInfo, setProgressInfo] = useState<TranscriptionProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [cues, setCues] = useState<SubtitleCue[]>([]);
+  // Multilingual Subtitle Tracks
+  const [tracks, setTracks] = useState<Record<string, SubtitleTrackData>>({});
+  const [activeTrackLang, setActiveTrackLang] = useState<string>('original');
+
+  // Translation Modal & Progress State
+  const [isTranslateModalOpen, setIsTranslateModalOpen] = useState(false);
+  const [targetTranslateLang, setTargetTranslateLang] = useState<string>('am'); // Default Amharic
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translationProgress, setTranslationProgress] = useState<TranslationProgress | null>(null);
+
+  // Searchable Language Picker Modal/Popover State
+  const [isLangPickerOpen, setIsLangPickerOpen] = useState(false);
+  const [langPickerMode, setLangPickerMode] = useState<'transcribe' | 'translate'>('transcribe');
+  const [langSearchQuery, setLangSearchQuery] = useState('');
+  const [langRegionFilter, setLangRegionFilter] = useState<string>('all');
+
+  // Player & Editor State
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -86,9 +105,15 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
     };
   }, [mediaUrl]);
 
+  // Current active cues from the selected track
+  const currentCues: SubtitleCue[] = useMemo(() => {
+    return tracks[activeTrackLang]?.cues || [];
+  }, [tracks, activeTrackLang]);
+
   const handleFile = async (selectedFile: File) => {
     setError(null);
-    setCues([]);
+    setTracks({});
+    setActiveTrackLang('original');
 
     // Check if user uploaded a subtitle file directly
     if (selectedFile.name.endsWith('.srt') || selectedFile.name.endsWith('.vtt')) {
@@ -99,7 +124,15 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           setError('No subtitle cues found in this file.');
           return;
         }
-        setCues(parsed);
+        setTracks({
+          original: {
+            code: 'original',
+            name: 'Original Subtitles',
+            nativeName: 'Original',
+            cues: parsed,
+          },
+        });
+        setActiveTrackLang('original');
         setFile(selectedFile);
         setIsVideo(false);
         return;
@@ -138,14 +171,27 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
       const generated = await SubtitleEngine.generateSubtitles(
         file,
         {
-          language,
+          language: selectedLanguage,
           maxCharsPerCue: 75,
         },
         (progress) => {
           setProgressInfo(progress);
         }
       );
-      setCues(generated);
+
+      const langMeta = getLanguageByCode(selectedLanguage);
+      const trackCode = selectedLanguage === 'auto' ? 'original' : selectedLanguage;
+      const trackName = langMeta ? `${langMeta.name} (${langMeta.nativeName})` : 'Original Speech';
+
+      setTracks({
+        [trackCode]: {
+          code: trackCode,
+          name: trackName,
+          nativeName: langMeta?.nativeName || 'Original',
+          cues: generated,
+        },
+      });
+      setActiveTrackLang(trackCode);
     } catch (err: any) {
       setError('Transcription failed: ' + (err?.message || err));
     } finally {
@@ -153,15 +199,56 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
     }
   };
 
+  const handleTranslateSubtitles = async () => {
+    if (currentCues.length === 0 || !targetTranslateLang) return;
+    setIsTranslating(true);
+    setError(null);
+
+    const targetLangMeta = getLanguageByCode(targetTranslateLang);
+    const targetName = targetLangMeta ? `${targetLangMeta.name} (${targetLangMeta.nativeName})` : targetTranslateLang;
+
+    try {
+      const sourceCode = activeTrackLang === 'original' ? 'auto' : activeTrackLang;
+      const translated = await TranslationEngine.translateSubtitleCues(
+        currentCues,
+        targetTranslateLang,
+        sourceCode,
+        (progress) => {
+          setTranslationProgress(progress);
+        }
+      );
+
+      // Save as new track
+      setTracks((prev) => ({
+        ...prev,
+        [targetTranslateLang]: {
+          code: targetTranslateLang,
+          name: targetName,
+          nativeName: targetLangMeta?.nativeName || targetTranslateLang,
+          cues: translated,
+        },
+      }));
+
+      // Switch to new track
+      setActiveTrackLang(targetTranslateLang);
+      setIsTranslateModalOpen(false);
+    } catch (err: any) {
+      setError('Translation failed: ' + (err?.message || err));
+    } finally {
+      setIsTranslating(false);
+      setTranslationProgress(null);
+    }
+  };
+
   const activeCue = useMemo(() => {
-    return cues.find((c) => currentTime >= c.start && currentTime <= c.end);
-  }, [cues, currentTime]);
+    return currentCues.find((c) => currentTime >= c.start && currentTime <= c.end);
+  }, [currentCues, currentTime]);
 
   const filteredCues = useMemo(() => {
-    if (!searchQuery.trim()) return cues;
+    if (!searchQuery.trim()) return currentCues;
     const q = searchQuery.toLowerCase();
-    return cues.filter((c) => c.text.toLowerCase().includes(q));
-  }, [cues, searchQuery]);
+    return currentCues.filter((c) => c.text.toLowerCase().includes(q));
+  }, [currentCues, searchQuery]);
 
   const handleTimeUpdate = () => {
     if (mediaRef.current) {
@@ -191,22 +278,40 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
   };
 
   const updateCueText = (id: string, text: string) => {
-    setCues((prev) => prev.map((c) => (c.id === id ? { ...c, text } : c)));
+    setTracks((prev) => {
+      const currentTrack = prev[activeTrackLang];
+      if (!currentTrack) return prev;
+      return {
+        ...prev,
+        [activeTrackLang]: {
+          ...currentTrack,
+          cues: currentTrack.cues.map((c) => (c.id === id ? { ...c, text } : c)),
+        },
+      };
+    });
   };
 
   const updateCueTimes = (id: string, deltaStart: number, deltaEnd: number) => {
-    setCues((prev) =>
-      prev.map((c) => {
-        if (c.id !== id) return c;
-        const newStart = Math.max(0, Number((c.start + deltaStart).toFixed(2)));
-        const newEnd = Math.max(newStart + 0.1, Number((c.end + deltaEnd).toFixed(2)));
-        return { ...c, start: newStart, end: newEnd };
-      })
-    );
+    setTracks((prev) => {
+      const currentTrack = prev[activeTrackLang];
+      if (!currentTrack) return prev;
+      return {
+        ...prev,
+        [activeTrackLang]: {
+          ...currentTrack,
+          cues: currentTrack.cues.map((c) => {
+            if (c.id !== id) return c;
+            const newStart = Math.max(0, Number((c.start + deltaStart).toFixed(2)));
+            const newEnd = Math.max(newStart + 0.1, Number((c.end + deltaEnd).toFixed(2)));
+            return { ...c, start: newStart, end: newEnd };
+          }),
+        },
+      };
+    });
   };
 
   const addCue = (afterIndex: number) => {
-    const prevCue = cues[afterIndex];
+    const prevCue = currentCues[afterIndex];
     const newStart = prevCue ? Number((prevCue.end + 0.1).toFixed(2)) : 0;
     const newEnd = Number((newStart + 2.5).toFixed(2));
     const newCue: SubtitleCue = {
@@ -216,18 +321,40 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
       text: 'New subtitle cue...',
     };
 
-    const nextCues = [...cues];
+    const nextCues = [...currentCues];
     nextCues.splice(afterIndex + 1, 0, newCue);
-    setCues(nextCues);
+
+    setTracks((prev) => {
+      const currentTrack = prev[activeTrackLang];
+      if (!currentTrack) return prev;
+      return {
+        ...prev,
+        [activeTrackLang]: {
+          ...currentTrack,
+          cues: nextCues,
+        },
+      };
+    });
   };
 
   const deleteCue = (id: string) => {
-    setCues((prev) => prev.filter((c) => c.id !== id));
+    setTracks((prev) => {
+      const currentTrack = prev[activeTrackLang];
+      if (!currentTrack) return prev;
+      return {
+        ...prev,
+        [activeTrackLang]: {
+          ...currentTrack,
+          cues: currentTrack.cues.filter((c) => c.id !== id),
+        },
+      };
+    });
   };
 
   const handleDownload = (format: 'srt' | 'vtt' | 'txt' | 'json') => {
-    if (!file || cues.length === 0) return;
+    if (!file || currentCues.length === 0) return;
     const baseName = file.name.replace(/\.[^/.]+$/, '');
+    const langSuffix = activeTrackLang !== 'original' ? `_${activeTrackLang}` : '';
 
     let content = '';
     let mimeType = 'text/plain';
@@ -235,50 +362,78 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
     switch (format) {
       case 'srt':
-        content = cuesToSrt(cues);
+        content = cuesToSrt(currentCues);
         mimeType = 'application/x-subrip';
         break;
       case 'vtt':
-        content = cuesToVtt(cues);
+        content = cuesToVtt(currentCues);
         mimeType = 'text/vtt';
         break;
       case 'txt':
-        content = cuesToTxt(cues, false);
+        content = cuesToTxt(currentCues, false);
         break;
       case 'json':
-        content = cuesToJson(cues);
+        content = cuesToJson(currentCues);
         mimeType = 'application/json';
         break;
     }
 
     const blob = new Blob([content], { type: mimeType });
-    downloadBlob(blob, `${baseName}.${ext}`);
+    downloadBlob(blob, `${baseName}${langSuffix}.${ext}`);
   };
 
   const handleDownloadZip = async () => {
-    if (!file || cues.length === 0) return;
+    if (!file || Object.keys(tracks).length === 0) return;
     const baseName = file.name.replace(/\.[^/.]+$/, '');
     const zip = new JSZip();
 
-    zip.file(`${baseName}.srt`, cuesToSrt(cues));
-    zip.file(`${baseName}.vtt`, cuesToVtt(cues));
-    zip.file(`${baseName}.txt`, cuesToTxt(cues, false));
-    zip.file(`${baseName}.json`, cuesToJson(cues));
+    // Include all language tracks in ZIP
+    Object.entries(tracks).forEach(([langCode, track]) => {
+      const folderName = langCode === 'original' ? 'original' : `${langCode}_${track.name.replace(/\s+/g, '_')}`;
+      const folder = zip.folder(folderName) || zip;
+      folder.file(`${baseName}_${langCode}.srt`, cuesToSrt(track.cues));
+      folder.file(`${baseName}_${langCode}.vtt`, cuesToVtt(track.cues));
+      folder.file(`${baseName}_${langCode}.txt`, cuesToTxt(track.cues, false));
+      folder.file(`${baseName}_${langCode}.json`, cuesToJson(track.cues));
+    });
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    downloadBlob(zipBlob, `${baseName}_all_subtitles.zip`);
+    downloadBlob(zipBlob, `${baseName}_multilingual_subtitles.zip`);
   };
 
   const handleCopyClipboard = async (format: 'srt' | 'vtt' | 'txt') => {
     let text = '';
-    if (format === 'srt') text = cuesToSrt(cues);
-    else if (format === 'vtt') text = cuesToVtt(cues);
-    else text = cuesToTxt(cues, false);
+    if (format === 'srt') text = cuesToSrt(currentCues);
+    else if (format === 'vtt') text = cuesToVtt(currentCues);
+    else text = cuesToTxt(currentCues, false);
 
     await navigator.clipboard.writeText(text);
     setCopiedFormat(format);
     setTimeout(() => setCopiedFormat(null), 2000);
   };
+
+  // Filtered languages for modal selector
+  const filteredLanguages = useMemo(() => {
+    let list = SUPPORTED_LANGUAGES;
+    if (langRegionFilter === 'popular') list = POPULAR_LANGUAGES;
+    else if (langRegionFilter === 'african') list = AFRICAN_LANGUAGES;
+    else if (langRegionFilter !== 'all') {
+      list = SUPPORTED_LANGUAGES.filter((l) => l.region === langRegionFilter);
+    }
+
+    if (!langSearchQuery.trim()) return list;
+    const q = langSearchQuery.trim().toLowerCase();
+    return list.filter(
+      (l) =>
+        l.code.toLowerCase().includes(q) ||
+        l.name.toLowerCase().includes(q) ||
+        l.nativeName.toLowerCase().includes(q)
+    );
+  }, [langSearchQuery, langRegionFilter]);
+
+  const selectedLangOption = getLanguageByCode(selectedLanguage);
+  const targetTranslateLangOption = getLanguageByCode(targetTranslateLang);
+  const trackEntries = Object.entries(tracks);
 
   return (
     <div className="w-full space-y-6">
@@ -306,9 +461,9 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           <p className="mt-1 text-xs text-zinc-400 max-w-md text-center">
             Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files. 100% in-browser AI transcription with zero server uploads.
           </p>
-          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800">
+          <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-800 flex-wrap justify-center">
             <Sparkles className="h-3.5 w-3.5 text-brand-400" />
-            <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages</span>
+            <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages (Amharic, Tigrinya, Arabic, Spanish, etc.)</span>
           </div>
         </div>
       ) : (
@@ -316,15 +471,21 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           {/* Header Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-4">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-semibold text-zinc-200">{file.name}</span>
                 <span className="rounded-md bg-zinc-800 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700">
                   {formatBytes(file.size)}
                 </span>
+                {trackEntries.length > 0 && (
+                  <span className="rounded-md bg-brand-500/10 px-2 py-0.5 text-[10px] font-medium text-brand-400 border border-brand-500/30 flex items-center gap-1">
+                    <Languages className="h-3 w-3" />
+                    {trackEntries.length} {trackEntries.length === 1 ? 'Language Track' : 'Language Tracks'}
+                  </span>
+                )}
               </div>
               <p className="text-xs text-zinc-400 mt-0.5">
-                {cues.length > 0
-                  ? `${cues.length} Subtitle Cues Generated`
+                {currentCues.length > 0
+                  ? `${currentCues.length} Subtitle Cues in Active Track`
                   : 'Ready to generate AI subtitles'}
               </p>
             </div>
@@ -334,7 +495,8 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                 if (mediaUrl) URL.revokeObjectURL(mediaUrl);
                 setFile(null);
                 setMediaUrl(null);
-                setCues([]);
+                setTracks({});
+                setActiveTrackLang('original');
               }}
               className="text-xs text-zinc-400 hover:text-zinc-200 self-start sm:self-auto transition-colors"
             >
@@ -343,26 +505,40 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           </div>
 
           {/* Initial Controls / Transcribe Button */}
-          {cues.length === 0 && (
+          {trackEntries.length === 0 && (
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-medium text-zinc-300 flex items-center gap-1.5 mb-1.5">
-                    <Globe className="h-3.5 w-3.5 text-brand-400" />
-                    Audio Spoken Language
+                  <label className="text-xs font-medium text-zinc-300 flex items-center justify-between mb-1.5">
+                    <span className="flex items-center gap-1.5">
+                      <Globe className="h-3.5 w-3.5 text-brand-400" />
+                      Spoken Audio Language
+                    </span>
+                    <span className="text-[10px] text-brand-400 font-mono">100+ Languages</span>
                   </label>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
+                  
+                  {/* Language Selector Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLangPickerMode('transcribe');
+                      setLangSearchQuery('');
+                      setLangRegionFilter('all');
+                      setIsLangPickerOpen(true);
+                    }}
                     disabled={isProcessing}
-                    className="w-full rounded-xl border border-surface-border bg-zinc-900/90 px-3 py-2.5 text-xs text-zinc-200 focus:border-brand-500 focus:outline-none transition-colors"
+                    className="w-full flex items-center justify-between rounded-xl border border-surface-border bg-zinc-900/90 px-3.5 py-2.5 text-xs text-zinc-200 hover:border-zinc-700 focus:border-brand-500 focus:outline-none transition-colors"
                   >
-                    {SUPPORTED_LANGUAGES.map((lang) => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.label}
-                      </option>
-                    ))}
-                  </select>
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="font-semibold text-zinc-100">
+                        {selectedLanguage === 'auto' ? 'Auto-Detect Language' : selectedLangOption?.name || selectedLanguage}
+                      </span>
+                      {selectedLangOption?.nativeName && selectedLanguage !== 'auto' && (
+                        <span className="text-zinc-400 font-normal">({selectedLangOption.nativeName})</span>
+                      )}
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-zinc-400 shrink-0 ml-2" />
+                  </button>
                 </div>
 
                 <div className="flex flex-col justify-end">
@@ -408,8 +584,49 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           )}
 
           {/* Subtitle Studio Layout */}
-          {cues.length > 0 && (
+          {trackEntries.length > 0 && (
             <div className="space-y-6">
+              {/* Studio Top Control Strip: Track Switcher & Translate Action */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-zinc-900/90 p-3 rounded-xl border border-zinc-800/90">
+                {/* Track Selector Tabs */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium mr-1">
+                    <Layers className="h-3.5 w-3.5 text-brand-400" />
+                    Language Track:
+                  </span>
+                  {trackEntries.map(([langCode, track]) => {
+                    const isSelected = activeTrackLang === langCode;
+                    return (
+                      <button
+                        key={langCode}
+                        onClick={() => setActiveTrackLang(langCode)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                          isSelected
+                            ? 'bg-brand-500 text-white shadow-glow-sm'
+                            : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white border border-zinc-700'
+                        }`}
+                      >
+                        <span>{track.name}</span>
+                        {isSelected && <Check className="h-3 w-3" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Translate Subtitles Trigger Button */}
+                <button
+                  onClick={() => {
+                    // Smart default target: if active is Amharic, default to English; otherwise Amharic
+                    setTargetTranslateLang(activeTrackLang === 'am' ? 'en' : 'am');
+                    setIsTranslateModalOpen(true);
+                  }}
+                  className="flex items-center gap-2 rounded-lg bg-indigo-600/20 border border-indigo-500/40 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-600/30 hover:border-indigo-500 transition-all self-start md:self-auto shrink-0"
+                >
+                  <Languages className="h-3.5 w-3.5 text-indigo-400" />
+                  <span>Translate Subtitles (1-Click AI)</span>
+                </button>
+              </div>
+
               {/* Studio Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Media Player Column (5 Cols) */}
@@ -508,7 +725,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     </div>
 
                     <button
-                      onClick={() => addCue(cues.length - 1)}
+                      onClick={() => addCue(currentCues.length - 1)}
                       className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all active:scale-95 shrink-0"
                     >
                       <Plus className="h-3.5 w-3.5 text-brand-400" />
@@ -609,7 +826,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                             value={cue.text}
                             rows={2}
                             onChange={(e) => updateCueText(cue.id, e.target.value)}
-                            className="w-full resize-none rounded-lg border border-zinc-800/80 bg-zinc-950/60 p-2 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-brand-500 focus:outline-none leading-relaxed transition-colors"
+                            className="w-full resize-none rounded-lg border border-zinc-800/80 bg-zinc-950/60 p-2 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-brand-500 focus:outline-none leading-relaxed transition-colors font-sans"
                           />
                         </div>
                       );
@@ -628,7 +845,9 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               <div className="rounded-xl border border-surface-border bg-zinc-900/60 p-4 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <h5 className="text-xs font-semibold text-zinc-200">Export Subtitles</h5>
+                    <h5 className="text-xs font-semibold text-zinc-200">
+                      Export Subtitles ({tracks[activeTrackLang]?.name || 'Current Track'})
+                    </h5>
                     <p className="text-[11px] text-zinc-400">Download formatted subtitle files or copy text</p>
                   </div>
 
@@ -662,7 +881,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-95 transition-all"
                     >
                       <Download className="h-3.5 w-3.5" />
-                      <span>Download All (ZIP)</span>
+                      <span>Download All Tracks (ZIP)</span>
                     </button>
                   </div>
                 </div>
@@ -703,6 +922,220 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               <span>{error}</span>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Searchable Language Selection Modal */}
+      {isLangPickerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-lg rounded-2xl border border-zinc-700 bg-zinc-900 p-5 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-brand-400" />
+                <h4 className="text-sm font-semibold text-zinc-100">
+                  {langPickerMode === 'transcribe' ? 'Select Audio Spoken Language' : 'Select Target Translation Language'}
+                </h4>
+              </div>
+              <button
+                onClick={() => setIsLangPickerOpen(false)}
+                className="p-1 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search language name, native script (e.g. አማርኛ, Español), or code (am, es)..."
+                value={langSearchQuery}
+                onChange={(e) => setLangSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-zinc-700 bg-zinc-950 pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder:text-zinc-500 focus:border-brand-500 focus:outline-none"
+              />
+            </div>
+
+            {/* Region Filter Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-none">
+              {[
+                { id: 'all', label: 'All (100+)' },
+                { id: 'popular', label: 'Popular' },
+                { id: 'african', label: 'African (Amharic, etc.)' },
+                { id: 'european', label: 'European' },
+                { id: 'asian', label: 'Asian' },
+                { id: 'middle-eastern', label: 'Middle Eastern' },
+                { id: 'americas', label: 'Americas' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setLangRegionFilter(tab.id)}
+                  className={`px-2.5 py-1 rounded-lg font-medium whitespace-nowrap transition-colors ${
+                    langRegionFilter === tab.id
+                      ? 'bg-brand-500 text-white'
+                      : 'bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Language Grid */}
+            <div className="max-h-[300px] overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+              {filteredLanguages.map((lang) => {
+                const isSelected =
+                  langPickerMode === 'transcribe'
+                    ? selectedLanguage === lang.code
+                    : targetTranslateLang === lang.code;
+
+                return (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      if (langPickerMode === 'transcribe') {
+                        setSelectedLanguage(lang.code);
+                      } else {
+                        setTargetTranslateLang(lang.code);
+                      }
+                      setIsLangPickerOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-colors ${
+                      isSelected
+                        ? 'bg-brand-500/20 text-brand-300 border border-brand-500/40'
+                        : 'hover:bg-zinc-800/70 text-zinc-200 border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">{lang.name}</span>
+                      <span className="text-zinc-400 font-normal">({lang.nativeName})</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[10px] uppercase text-zinc-500 bg-zinc-800 px-1.5 py-0.5 rounded">
+                        {lang.code}
+                      </span>
+                      {isSelected && <Check className="h-3.5 w-3.5 text-brand-400 shrink-0" />}
+                    </div>
+                  </button>
+                );
+              })}
+
+              {filteredLanguages.length === 0 && (
+                <div className="py-8 text-center text-xs text-zinc-500">
+                  No languages found matching "{langSearchQuery}"
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 1-Click AI Translation Modal */}
+      {isTranslateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-900 p-5 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Languages className="h-4 w-4 text-indigo-400" />
+                <h4 className="text-sm font-semibold text-zinc-100">Translate Subtitles</h4>
+              </div>
+              {!isTranslating && (
+                <button
+                  onClick={() => setIsTranslateModalOpen(false)}
+                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Translate all <span className="font-semibold text-white">{currentCues.length}</span> subtitle cues from{' '}
+                <span className="text-brand-400 font-medium">
+                  {tracks[activeTrackLang]?.name || 'Current Track'}
+                </span>{' '}
+                while preserving exact millisecond timestamps.
+              </p>
+
+              {/* Target Language Selection */}
+              <div>
+                <label className="text-xs font-medium text-zinc-300 block mb-1.5">
+                  Target Language
+                </label>
+                <button
+                  type="button"
+                  disabled={isTranslating}
+                  onClick={() => {
+                    setLangPickerMode('translate');
+                    setLangSearchQuery('');
+                    setLangRegionFilter('all');
+                    setIsLangPickerOpen(true);
+                  }}
+                  className="w-full flex items-center justify-between rounded-xl border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-xs text-zinc-100 hover:border-zinc-600 transition-colors"
+                >
+                  <div className="flex items-center gap-2 truncate">
+                    <span className="font-semibold">{targetTranslateLangOption?.name || targetTranslateLang}</span>
+                    <span className="text-zinc-400">({targetTranslateLangOption?.nativeName || targetTranslateLang})</span>
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-zinc-400 shrink-0" />
+                </button>
+              </div>
+
+              {/* Translation Progress */}
+              {isTranslating && translationProgress && (
+                <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-3.5 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-medium text-indigo-200 flex items-center gap-2">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-400" />
+                      Translating cues ({translationProgress.currentCue}/{translationProgress.totalCues})...
+                    </span>
+                    <span className="font-mono text-indigo-400 font-bold">
+                      {translationProgress.progress}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+                    <div
+                      className="h-full bg-indigo-500 transition-all duration-300 rounded-full"
+                      style={{ width: `${translationProgress.progress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-zinc-800">
+                <button
+                  type="button"
+                  disabled={isTranslating}
+                  onClick={() => setIsTranslateModalOpen(false)}
+                  className="px-3 py-2 rounded-xl text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isTranslating || !targetTranslateLang}
+                  onClick={handleTranslateSubtitles}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-glow-sm transition-all disabled:opacity-50"
+                >
+                  {isTranslating ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Translating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-3.5 w-3.5" />
+                      <span>Start Translation</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
