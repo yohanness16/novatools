@@ -200,6 +200,34 @@ export const TOOLS: ToolMeta[] = [
 
   // IMAGE SUITE
   {
+    id: 'background-remover',
+    slug: 'background-remover',
+    name: 'AI Background Remover',
+    category: 'image',
+    categoryLabel: 'Image Suite',
+    description: 'Erase image backgrounds with 1 click and export crisp transparent PNGs.',
+    longDescription: 'Isolate people, products, animals, and graphics from photos in your browser. Replace backgrounds with pure transparency, studio colors, or artistic blur with zero server uploads.',
+    iconName: 'Scissors',
+    badge: 'AI Powered',
+    path: '/image/background-remover',
+    keywords: ['remove background', 'background remover', 'transparent png maker', 'cut out image', 'remove bg online', 'photo cutout'],
+    features: [
+      '1-Click automated background removal in the browser',
+      'Interactive side-by-side visual diff slider',
+      'Replace background with transparent alpha, solid studio colors, or blur',
+      'Lossless HD PNG export with zero cloud uploads'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload Image', desc: 'Select any PNG, JPEG, WebP, or AVIF photo.' },
+      { step: 2, title: 'Inspect & Customize', desc: 'Drag the split-screen slider to inspect the cutout and choose a backdrop color.' },
+      { step: 3, title: 'Download HD PNG', desc: 'Save your isolated subject as a transparent PNG or high-res graphic.' }
+    ],
+    faqs: [
+      { question: 'Is my photo uploaded to an external server?', answer: 'No! All segmentation and alpha mask compositing execute 100% inside your browser using HTML5 Canvas.' },
+      { question: 'What image types work best?', answer: 'Photos with clear subjects (people, ecommerce products, vehicles, animals, logos) produce razor-sharp edges.' }
+    ]
+  },
+  {
     id: 'image-converter',
     slug: 'converter',
     name: 'Image Converter',

@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { BackgroundRemoverWorkspace } from '../../components/workspaces/BackgroundRemoverWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'background-remover')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <BackgroundRemoverWorkspace client:load />
+</ToolPageLayout>
