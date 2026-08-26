@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { LyricsVideoWorkspace } from '../../components/workspaces/LyricsVideoWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'lyrics-video-generator')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <LyricsVideoWorkspace client:load />
+</ToolPageLayout>

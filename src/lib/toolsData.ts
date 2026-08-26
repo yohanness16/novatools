@@ -575,6 +575,37 @@ export const TOOLS: ToolMeta[] = [
       { question: 'How can I reduce the output GIF file size?', answer: 'Lower the frame rate to 10-15 FPS or choose a smaller width preset like 320px or 480px to create ultra-compact GIF files.' },
       { question: 'Does this tool upload my video to a remote server?', answer: 'No! All frame extraction, palette quantization, and LZW byte stream encoding happen entirely in local browser memory.' }
     ]
+  },
+  {
+    id: 'lyrics-video-generator',
+    slug: 'lyrics-video-generator',
+    name: 'Animated Lyrics Video Generator',
+    category: 'video',
+    categoryLabel: 'Video & Audio',
+    description: 'Create synchronized animated lyrics videos with custom backgrounds, karaoke transitions, and musical note effects.',
+    longDescription: 'Turn music tracks into animated lyric videos directly in your browser. Upload custom video/image backgrounds or pick procedural animated presets, adjust lyric placement (top, center, bottom), style typography and glow colors, add floating classical musical note icons, and download the finished video with zero server uploads.',
+    iconName: 'Music',
+    badge: 'Creator Studio',
+    path: '/video/lyrics-video-generator',
+    keywords: ['lyrics video maker', 'animated lyrics generator', 'karaoke video maker', 'music video with lyrics', 'lyrics video creator', 'lrc to video'],
+    features: [
+      '100% Client-Side Video Rendering: Zero uploads, instant browser export',
+      'AI Speech & Lyrics Recognition with timestamp synchronization',
+      'Flexible Lyric Placement: Top, Center / Middle, or Bottom',
+      'Transitions: Karaoke Word Fill, Kinetic Pop, Cinematic Fade, Typewriter, Neon Flash, Wave Float',
+      'Classical Musical Note Accents (♪ ♫ ♩ ♬ 𝄞) and particle effects',
+      'Custom Video/Image backgrounds & 6 procedural animated visualizers',
+      'Export ready-to-share MP4/WebM videos in 16:9, 9:16 Shorts/TikTok, or 1:1'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Load Music & Lyrics', desc: 'Upload your audio track and auto-detect lyrics or paste timestamped lines.' },
+      { step: 2, title: 'Choose Background & Style', desc: 'Select a custom image/video or procedural background, and customize font, color, and placement.' },
+      { step: 3, title: 'Animate & Download', desc: 'Preview with real-time synchronized playback and export your finished lyrics video.' }
+    ],
+    faqs: [
+      { question: 'Can I export in vertical format for TikTok, Reels, or YouTube Shorts?', answer: 'Yes! You can choose 9:16 Vertical, 16:9 Landscape, or 1:1 Square canvas format before rendering.' },
+      { question: 'Are my audio and video files uploaded to any external server?', answer: 'No! All audio decoding, canvas animation, and video compilation execute 100% locally inside your browser memory.' }
+    ]
   }
 ];
 
