@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { HeroSection } from '../components/HeroSection';
 import AboutSection from '../components/AboutSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
 import { TOOLS, CATEGORIES } from '../lib/toolsData';
 import {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
@@ -33,6 +34,9 @@ const categoryIcons: Record<string, any> = {
 
   {/* Alternating Zig-Zag About Us Section */}
   <AboutSection />
+
+  {/* Interactive Bento Grid Services Section */}
+  <ServicesSection />
 
   <div id="catalog" class="w-full px-4 sm:px-6 lg:px-10 pb-16 space-y-12">
     {/* Tool Suite Sections */}
