@@ -28,52 +28,54 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
       {/* Main Workbench Area */}
       <div class="flex-1 w-full space-y-6">
         {/* Breadcrumb & Console Header */}
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-[#2A2D33] pb-4">
           <div class="space-y-1">
-            <nav class="flex items-center gap-1.5 text-xs text-[#8B8F98] font-mono" aria-label="Breadcrumb">
-              <a href="/" class="hover:text-[#ECEDEF] transition-colors">Console</a>
-              <span class="text-[#5B606D]">/</span>
-              <span class="text-[#8B8F98] capitalize">{tool.categoryLabel}</span>
-              <span class="text-[#5B606D]">/</span>
-              <span class="text-[#ECEDEF] font-medium">{tool.name}</span>
+            <nav class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-[#8B8F98] font-mono" aria-label="Breadcrumb">
+              <a href="/" class="hover:text-slate-900 dark:hover:text-[#ECEDEF] transition-colors">Console</a>
+              <span class="text-slate-400 dark:text-[#5B606D]">/</span>
+              <a href={`/${tool.category}`} class="text-slate-600 dark:text-[#8B8F98] hover:text-sky-600 dark:hover:text-[#38BDF8] capitalize transition-colors">
+                {tool.categoryLabel}
+              </a>
+              <span class="text-slate-400 dark:text-[#5B606D]">/</span>
+              <span class="text-slate-900 dark:text-[#ECEDEF] font-medium">{tool.name}</span>
             </nav>
-            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#ECEDEF]">
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-[#ECEDEF]">
               {tool.name}
             </h1>
           </div>
 
           {/* Privacy Ledger Strip (Signature Element) */}
-          <div class="privacy-ledger-strip shrink-0 self-start sm:self-auto">
-            <span class="h-1.5 w-1.5 rounded-full bg-[#3FBE73]" />
+          <div class="privacy-ledger-strip shrink-0 self-start sm:self-auto border border-slate-200 dark:border-[#1E293B] bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8]">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-[#3FBE73]" />
             <span>0 bytes uploaded</span>
-            <span class="text-[#5B606D]">·</span>
-            <span class="text-[#ECEDEF]">WASM Local Engine</span>
+            <span class="text-slate-400 dark:text-[#5B606D]">·</span>
+            <span class="text-slate-900 dark:text-[#ECEDEF]">WASM Local Engine</span>
           </div>
         </div>
 
         {/* Work Surface (The Workspace IS the Hero) */}
-        <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-6 shadow-sm">
+        <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-6 shadow-sm">
           <slot />
         </section>
 
         {/* Technical Specification & How-To */}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           {/* How-To Steps */}
-          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
-            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
-              <Layers class="h-3.5 w-3.5 text-[#4F8CFF]" />
+          <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
+              <Layers class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
               <span>Execution Steps</span>
             </div>
 
             <div class="space-y-2">
               {tool.howToSteps.map((step) => (
-                <div class="flex items-start gap-2.5 rounded bg-[#1B1D22] p-2.5 border border-[#2A2D33]">
-                  <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#131418] font-mono text-[10px] font-bold text-[#4F8CFF] border border-[#2A2D33]">
+                <div class="flex items-start gap-2.5 rounded-lg bg-slate-50 dark:bg-[#1B1D22] p-2.5 border border-slate-200 dark:border-[#2A2D33]">
+                  <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-white dark:bg-[#131418] font-mono text-[10px] font-bold text-sky-600 dark:text-[#4F8CFF] border border-slate-200 dark:border-[#2A2D33]">
                     {step.step}
                   </span>
                   <div class="space-y-0.5 text-xs">
-                    <h3 class="font-medium text-[#ECEDEF]">{step.title}</h3>
-                    <p class="text-[11px] text-[#8B8F98] leading-relaxed">{step.desc}</p>
+                    <h3 class="font-bold text-slate-900 dark:text-[#ECEDEF]">{step.title}</h3>
+                    <p class="text-[11px] text-slate-600 dark:text-[#8B8F98] leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
               ))}
@@ -81,17 +83,17 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
           </section>
 
           {/* Feature Highlights */}
-          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
-            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
-              <Terminal class="h-3.5 w-3.5 text-[#4F8CFF]" />
+          <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
+              <Terminal class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
               <span>Engine Features</span>
             </div>
 
-            <ul class="space-y-2 text-xs text-[#8B8F98]">
+            <ul class="space-y-2 text-xs text-slate-700 dark:text-[#8B8F98]">
               {tool.features.map((feat) => (
-                <li class="flex items-start gap-2 rounded bg-[#1B1D22] p-2.5 border border-[#2A2D33]">
-                  <ShieldCheck class="h-4 w-4 shrink-0 text-[#3FBE73] mt-0.5" />
-                  <span class="text-xs text-[#ECEDEF]">{feat}</span>
+                <li class="flex items-start gap-2 rounded-lg bg-slate-50 dark:bg-[#1B1D22] p-2.5 border border-slate-200 dark:border-[#2A2D33]">
+                  <ShieldCheck class="h-4 w-4 shrink-0 text-emerald-600 dark:text-[#3FBE73] mt-0.5" />
+                  <span class="text-xs font-medium text-slate-800 dark:text-[#ECEDEF]">{feat}</span>
                 </li>
               ))}
             </ul>
@@ -100,17 +102,17 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
 
         {/* FAQs */}
         {tool.faqs && tool.faqs.length > 0 && (
-          <section class="rounded-lg border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3">
-            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B8F98]">
-              <HelpCircle class="h-3.5 w-3.5 text-[#4F8CFF]" />
+          <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
+              <HelpCircle class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
               <span>Technical FAQs</span>
             </div>
 
             <div class="space-y-2">
               {tool.faqs.map((faq) => (
-                <div class="rounded bg-[#1B1D22] p-3 border border-[#2A2D33] space-y-1">
-                  <h4 class="text-xs font-medium text-[#ECEDEF]">{faq.question}</h4>
-                  <p class="text-[11px] text-[#8B8F98] leading-relaxed">{faq.answer}</p>
+                <div class="rounded-lg bg-slate-50 dark:bg-[#1B1D22] p-3 border border-slate-200 dark:border-[#2A2D33] space-y-1">
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-[#ECEDEF]">{faq.question}</h4>
+                  <p class="text-[11px] text-slate-600 dark:text-[#8B8F98] leading-relaxed">{faq.answer}</p>
                 </div>
               ))}
             </div>

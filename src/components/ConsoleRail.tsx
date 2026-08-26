@@ -78,10 +78,10 @@ export const ConsoleRail: React.FC<ConsoleRailProps> = ({ currentToolId, current
 
   return (
     <aside className="w-full lg:w-56 shrink-0 space-y-4">
-      <div className="rounded border border-[#2A2D33] bg-[#131418] p-2 space-y-1">
-        <div className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#5B606D] font-semibold border-b border-[#2A2D33] mb-1 flex items-center justify-between">
+      <div className="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-2 space-y-1 shadow-sm">
+        <div className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-wider text-slate-500 dark:text-[#5B606D] font-semibold border-b border-slate-200 dark:border-[#2A2D33] mb-1 flex items-center justify-between">
           <span>Tool Suites (21)</span>
-          <span className="text-[#3FBE73]">Local</span>
+          <span className="text-emerald-600 dark:text-[#3FBE73]">Local</span>
         </div>
 
         {SUITES.map((suite) => {
@@ -94,24 +94,24 @@ export const ConsoleRail: React.FC<ConsoleRailProps> = ({ currentToolId, current
               <button
                 type="button"
                 onClick={() => toggleSuite(suite.id)}
-                className="w-full flex items-center justify-between px-2 py-1.5 rounded text-xs font-medium text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs font-semibold text-slate-800 dark:text-[#ECEDEF] hover:bg-slate-100 dark:hover:bg-[#1B1D22] transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <SuiteIcon className="h-3.5 w-3.5 text-[#8B8F98]" />
+                  <SuiteIcon className="h-3.5 w-3.5 text-slate-500 dark:text-[#8B8F98]" />
                   <span>{suite.label}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="font-mono text-[10px] text-[#5B606D]">{suiteTools.length}</span>
+                  <span className="font-mono text-[10px] text-slate-400 dark:text-[#5B606D]">{suiteTools.length}</span>
                   {isOpen ? (
-                    <ChevronDown className="h-3 w-3 text-[#5B606D]" />
+                    <ChevronDown className="h-3 w-3 text-slate-400 dark:text-[#5B606D]" />
                   ) : (
-                    <ChevronRight className="h-3 w-3 text-[#5B606D]" />
+                    <ChevronRight className="h-3 w-3 text-slate-400 dark:text-[#5B606D]" />
                   )}
                 </div>
               </button>
 
               {isOpen && (
-                <div className="pl-3 pr-1 py-0.5 space-y-0.5 border-l border-[#2A2D33] ml-3.5">
+                <div className="pl-3 pr-1 py-0.5 space-y-0.5 border-l border-slate-200 dark:border-[#2A2D33] ml-3.5">
                   {suiteTools.map((tool) => {
                     const ToolIcon = ICON_MAP[tool.iconName] || FileText;
                     const isActive = tool.id === currentToolId;
@@ -120,13 +120,13 @@ export const ConsoleRail: React.FC<ConsoleRailProps> = ({ currentToolId, current
                       <a
                         key={tool.id}
                         href={tool.path}
-                        className={`flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors ${
+                        className={`flex items-center gap-2 px-2 py-1 rounded-md text-xs transition-colors ${
                           isActive
-                            ? 'bg-[#16233F] text-[#4F8CFF] font-medium border border-[#4F8CFF]/30'
-                            : 'text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22]'
+                            ? 'bg-sky-50 dark:bg-[#16233F] text-sky-600 dark:text-[#4F8CFF] font-semibold border border-sky-300 dark:border-[#4F8CFF]/30'
+                            : 'text-slate-600 dark:text-[#8B8F98] hover:text-slate-900 dark:hover:text-[#ECEDEF] hover:bg-slate-100 dark:hover:bg-[#1B1D22]'
                         }`}
                       >
-                        <ToolIcon className={`h-3 w-3 ${isActive ? 'text-[#4F8CFF]' : 'text-[#8B8F98]'}`} />
+                        <ToolIcon className={`h-3 w-3 ${isActive ? 'text-sky-600 dark:text-[#4F8CFF]' : 'text-slate-400 dark:text-[#8B8F98]'}`} />
                         <span className="truncate">{tool.name}</span>
                       </a>
                     );
@@ -139,19 +139,19 @@ export const ConsoleRail: React.FC<ConsoleRailProps> = ({ currentToolId, current
       </div>
 
       {/* System Telemetry Box */}
-      <div className="hidden lg:block rounded border border-[#2A2D33] bg-[#131418] p-3 font-mono text-[11px] space-y-1.5 text-[#8B8F98]">
-        <div className="text-[10px] uppercase text-[#5B606D] font-semibold">Engine Telemetry</div>
+      <div className="hidden lg:block rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-3 font-mono text-[11px] space-y-1.5 text-slate-600 dark:text-[#8B8F98] shadow-sm">
+        <div className="text-[10px] uppercase text-slate-400 dark:text-[#5B606D] font-semibold">Engine Telemetry</div>
         <div className="flex justify-between">
           <span>Execution:</span>
-          <span className="text-[#ECEDEF]">Browser WASM</span>
+          <span className="text-slate-900 dark:text-[#ECEDEF] font-semibold">Browser WASM</span>
         </div>
         <div className="flex justify-between">
           <span>Uploads:</span>
-          <span className="text-[#3FBE73]">0 Bytes</span>
+          <span className="text-emerald-600 dark:text-[#3FBE73] font-semibold">0 Bytes</span>
         </div>
         <div className="flex justify-between">
           <span>Storage:</span>
-          <span className="text-[#ECEDEF]">Local RAM</span>
+          <span className="text-slate-900 dark:text-[#ECEDEF] font-semibold">Local RAM</span>
         </div>
       </div>
     </aside>

@@ -24,8 +24,8 @@
     --bg-sunken: #F1F5F9;
     --border-hairline: rgba(0, 0, 0, 0.08);
     --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-muted: #64748B;
+    --text-secondary: #334155;
+    --text-muted: #475569;
     --accent: #0284C7;
     --accent-subtle: #E0F2FE;
     --success: #059669;
@@ -143,7 +143,7 @@
   }
 
   html.light .console-input {
-    background-color: #F1F5F9;
+    background-color: #FFFFFF;
     border-color: #CBD5E1;
     color: #0F172A;
   }
@@ -196,7 +196,7 @@
   }
 
   html.light .privacy-ledger-strip {
-    color: #475569;
+    color: #334155;
     background-color: #F1F5F9;
     border-color: #E2E8F0;
   }
@@ -216,6 +216,152 @@
       linear-gradient(45deg, transparent 75%, #E2E8F0 75%),
       linear-gradient(-45deg, transparent 75%, #E2E8F0 75%);
   }
+}
+
+/* ==========================================================================
+   Comprehensive Light Theme Overrides for All Tool Workspaces & Controls
+   ========================================================================== */
+
+html.light .bg-\[\#131418\] {
+  background-color: #FFFFFF !important;
+}
+html.light .bg-\[\#1B1D22\] {
+  background-color: #F8FAFC !important;
+}
+html.light .bg-\[\#151820\] {
+  background-color: #F1F5F9 !important;
+}
+html.light .bg-\[\#16233F\] {
+  background-color: #E0F2FE !important;
+}
+html.light .bg-\[\#0B0C0F\] {
+  background-color: #F8FAFC !important;
+}
+html.light .bg-\[\#0A0F1D\] {
+  background-color: #FFFFFF !important;
+}
+html.light .bg-\[\#0D1426\] {
+  background-color: #F1F5F9 !important;
+}
+html.light .bg-\[\#050811\] {
+  background-color: #F8FAFC !important;
+}
+html.light .bg-\[\#081528\] {
+  background-color: #E0F2FE !important;
+}
+html.light .bg-\[\#0C2340\] {
+  background-color: #E0F2FE !important;
+}
+html.light .bg-\[\#1E293B\] {
+  background-color: #E2E8F0 !important;
+}
+html.light .bg-\[\#331614\] {
+  background-color: #FEE2E2 !important;
+}
+html.light .bg-\[\#122D1F\] {
+  background-color: #DCFCE7 !important;
+}
+html.light .bg-slate-900,
+html.light .bg-slate-950 {
+  background-color: #F1F5F9 !important;
+}
+
+/* Light Mode Borders */
+html.light .border-\[\#2A2D33\],
+html.light .border-\[\#1E293B\],
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/5,
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.07\] {
+  border-color: #CBD5E1 !important;
+}
+html.light .border-\[\#F0564B\]\/40 {
+  border-color: #FCA5A5 !important;
+}
+html.light .border-\[\#3FBE73\]\/40 {
+  border-color: #86EFAC !important;
+}
+html.light .border-\[\#4F8CFF\]\/40,
+html.light .border-\[\#4F8CFF\]\/30,
+html.light .border-\[\#38BDF8\]\/30,
+html.light .border-\[\#38BDF8\]\/40 {
+  border-color: #BAE6FD !important;
+}
+
+/* High-Contrast Dark Text in Light Mode */
+html.light .text-\[\#ECEDEF\],
+html.light .text-\[\#F1F5F9\],
+html.light .text-slate-100,
+html.light .text-slate-200 {
+  color: #0F172A !important;
+}
+html.light .text-\[\#8B8F98\],
+html.light .text-\[\#94A3B8\],
+html.light .text-slate-300,
+html.light .text-slate-400 {
+  color: #334155 !important;
+}
+html.light .text-\[\#5B606D\],
+html.light .text-\[\#64748B\],
+html.light .text-slate-500 {
+  color: #475569 !important;
+}
+html.light .text-\[\#4F8CFF\],
+html.light .text-\[\#38BDF8\] {
+  color: #0284C7 !important;
+}
+html.light .text-\[\#3FBE73\],
+html.light .text-\[\#34D399\] {
+  color: #059669 !important;
+}
+html.light .text-\[\#F0564B\],
+html.light .text-\[\#F87171\] {
+  color: #DC2626 !important;
+}
+
+/* Hover States in Light Mode */
+html.light .hover\:bg-\[\#1B1D22\]:hover {
+  background-color: #F1F5F9 !important;
+}
+html.light .hover\:bg-\[\#131418\]:hover {
+  background-color: #E2E8F0 !important;
+}
+html.light .hover\:bg-\[\#151820\]:hover {
+  background-color: #F0F9FF !important;
+}
+html.light .hover\:bg-\[\#0D1426\]:hover {
+  background-color: #F1F5F9 !important;
+}
+html.light .hover\:text-\[\#ECEDEF\]:hover {
+  color: #0F172A !important;
+}
+html.light .hover\:text-\[\#F1F5F9\]:hover {
+  color: #0F172A !important;
+}
+
+/* Form Controls in Light Mode */
+html.light input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]),
+html.light select,
+html.light textarea {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+}
+html.light input:focus,
+html.light select:focus,
+html.light textarea:focus {
+  border-color: #0284C7 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+html.light select option {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
 }
 
 @keyframes lightning-shimmer {
