@@ -31,40 +31,6 @@ const categoryIcons: Record<string, any> = {
   <HeroSection client:load />
 
   <div id="catalog" class="w-full px-4 sm:px-6 lg:px-10 pb-16 space-y-12">
-    {/* Suite Filter Bar */}
-    <div class="rounded-xl border border-white/10 bg-[#0A0F1D]/80 backdrop-blur-md p-4 sm:p-5 shadow-xl">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="text-base sm:text-lg font-bold text-white tracking-tight">
-            Tool Directory
-          </h2>
-          <p class="text-xs text-[#94A3B8]">
-            Browse all 21+ private media and document tools ready for instant use.
-          </p>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-2">
-          {CATEGORIES.map((cat) => {
-            const CatIcon = categoryIcons[cat.id] || FileText;
-            return (
-              <a
-                href={cat.id === 'all' ? '#catalog' : `/#${cat.id}-suite`}
-                class={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                  cat.id === 'all'
-                    ? 'bg-[#0C2340] text-[#38BDF8] border-[#38BDF8]/40 shadow-sm'
-                    : 'bg-[#0D1426] text-[#94A3B8] border-white/10 hover:text-white hover:border-[#38BDF8]/40'
-                }`}
-              >
-                <CatIcon class="h-3.5 w-3.5" />
-                <span>{cat.label}</span>
-                <span class="font-mono text-[10px] text-[#64748B]">({cat.count})</span>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-
     {/* Tool Suite Sections */}
     {CATEGORIES.filter(c => c.id !== 'all').map((cat) => {
       const suiteTools = TOOLS.filter(t => t.category === cat.id);
