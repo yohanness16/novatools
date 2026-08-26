@@ -4,28 +4,33 @@
 
 @layer base {
   :root {
-    --bg-canvas: #0B0C0F;
-    --bg-surface: #131418;
-    --bg-sunken: #1B1D22;
-    --border-hairline: #2A2D33;
-    --text-primary: #ECEDEF;
-    --text-secondary: #8B8F98;
-    --text-muted: #5B606D;
-    --accent: #4F8CFF;
-    --accent-subtle: #16233F;
-    --success: #3FBE73;
-    --warning: #E0A93E;
-    --danger: #F0564B;
+    --bg-canvas: #050811;
+    --bg-surface: #0A0F1D;
+    --bg-sunken: #0D1426;
+    --border-hairline: #1E293B;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --accent: #38BDF8;
+    --accent-subtle: #0C2340;
+    --success: #34D399;
+    --warning: #FBBF24;
+    --danger: #F87171;
   }
 
   html {
-    background-color: #0B0C0F;
-    color: #ECEDEF;
+    background-color: #050811;
+    color: #F1F5F9;
   }
 
   body {
-    background-color: #0B0C0F;
-    color: #ECEDEF;
+    background-color: #050811;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(30, 64, 175, 0.22), transparent 70%),
+      radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.07), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgba(99, 102, 241, 0.08), transparent 35%);
+    background-attachment: fixed;
+    color: #F1F5F9;
     font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     min-height: 100dvh;
     overflow-x: hidden;
@@ -35,74 +40,76 @@
 
   /* Console-grade minimal scrollbars */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0B0C0F;
+    background: #050811;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2A2D33;
+    background: #1E293B;
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #3E424B;
+    background: #334155;
   }
 }
 
 @layer components {
   .console-panel {
-    background-color: #131418;
-    border: 1px solid #2A2D33;
-    border-radius: 6px;
+    background-color: #0A0F1D;
+    border: 1px solid #1E293B;
+    border-radius: 8px;
   }
 
   .console-card {
-    background-color: #131418;
-    border: 1px solid #2A2D33;
-    border-radius: 6px;
-    transition: border-color 0.12s ease-out, background-color 0.12s ease-out;
+    background-color: #0A0F1D;
+    border: 1px solid #1E293B;
+    border-radius: 8px;
+    transition: border-color 0.15s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
 
   .console-card:hover {
-    border-color: #4F8CFF;
-    background-color: #17181E;
+    border-color: #38BDF8;
+    background-color: #0F172A;
+    box-shadow: 0 0 20px -5px rgba(56, 189, 248, 0.15);
   }
 
   .console-input {
-    background-color: #1B1D22;
-    border: 1px solid #2A2D33;
-    border-radius: 4px;
-    color: #ECEDEF;
+    background-color: #0D1426;
+    border: 1px solid #1E293B;
+    border-radius: 6px;
+    color: #F1F5F9;
     font-size: 13px;
-    transition: border-color 0.12s ease-out;
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
 
   .console-input:focus {
-    border-color: #4F8CFF;
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     outline: none;
   }
 
   .console-dropzone {
-    background-color: #1B1D22;
-    border: 1px dashed #2A2D33;
-    border-radius: 6px;
-    transition: border-color 0.12s ease-out, background-color 0.12s ease-out;
+    background-color: #0D1426;
+    border: 1px dashed #1E293B;
+    border-radius: 8px;
+    transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
   }
 
   .console-dropzone:hover {
-    border-color: #4F8CFF;
-    background-color: #151820;
+    border-color: #38BDF8;
+    background-color: #0E1A33;
   }
 
   .privacy-ledger-strip {
     font-family: 'Geist Mono', 'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: -0.01em;
-    color: #8B8F98;
-    background-color: #1B1D22;
-    border: 1px solid #2A2D33;
-    border-radius: 4px;
+    color: #94A3B8;
+    background-color: #0D1426;
+    border: 1px solid #1E293B;
+    border-radius: 6px;
     padding: 4px 10px;
     display: inline-flex;
     align-items: center;

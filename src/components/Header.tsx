@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CommandPalette } from './CommandPalette';
-import { Search, Shield, Menu, X, FileText, Image as ImageIcon, Video, Code, Terminal, Cpu } from 'lucide-react';
+import { Search, Menu, X, FileText, Image as ImageIcon, Video, Code, Cpu } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
@@ -19,81 +19,85 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-[#2A2D33] bg-[#131418]">
-        <div className="mx-auto flex h-13 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-2.5">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-6">
-            <a href="/" className="flex items-center gap-2.5 text-left group">
-              <div className="flex h-7 w-7 items-center justify-center rounded bg-[#1B1D22] border border-[#2A2D33] text-[#4F8CFF]">
-                <Cpu className="h-4 w-4" />
+      <header className="sticky top-0 z-40 w-full border-b border-[#1E293B]/70 bg-[#050811]/85 backdrop-blur-xl transition-all">
+        <div className="w-full flex h-16 items-center justify-between px-4 sm:px-6 lg:px-10 gap-4">
+          {/* Logo & Brand (Left) */}
+          <div className="flex items-center shrink-0">
+            <a href="/" className="flex items-center gap-3 text-left group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-indigo-500/20 border border-cyan-500/30 text-[#38BDF8] shadow-[0_0_15px_rgba(56,189,248,0.2)] group-hover:border-[#38BDF8] group-hover:shadow-[0_0_22px_rgba(56,189,248,0.35)] transition-all">
+                <Cpu className="h-5 w-5" />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold tracking-tight text-[#ECEDEF]">NovaTools</span>
-                <span className="font-mono text-[10px] text-[#8B8F98] bg-[#1B1D22] px-1.5 py-0.5 rounded border border-[#2A2D33]">
-                  WASM v2.0
+              <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-[#38BDF8] transition-colors">
+                NovaTools
+              </span>
+            </a>
+          </div>
+
+          {/* Quick Search Bar (Center) */}
+          <div className="flex-1 max-w-lg hidden md:flex items-center justify-center mx-4">
+            <button
+              onClick={() => setIsPaletteOpen(true)}
+              className="w-full flex items-center justify-between gap-3 rounded-lg bg-[#0A0F1D]/80 hover:bg-[#0D1426] border border-[#1E293B] hover:border-[#38BDF8]/60 px-3.5 py-2 text-xs text-[#94A3B8] transition-all shadow-inner group cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5">
+                <Search className="h-4 w-4 text-[#64748B] group-hover:text-[#38BDF8] transition-colors" />
+                <span className="text-xs text-[#94A3B8] group-hover:text-[#F1F5F9] transition-colors">
+                  Search tools, actions & formats...
                 </span>
               </div>
-            </a>
+              <kbd className="inline-flex items-center rounded bg-[#050811] px-2 py-0.5 font-mono text-[10px] text-[#64748B] border border-[#1E293B] group-hover:border-[#38BDF8]/40 group-hover:text-[#38BDF8] transition-colors">
+                ⌘K
+              </kbd>
+            </button>
+          </div>
 
+          {/* Navigation Sections & Mobile Actions (Right) */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1 pl-4 border-l border-[#2A2D33]">
+            <nav className="hidden lg:flex items-center gap-1.5 sm:gap-2">
               <a
                 href="/#pdf-suite"
-                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
               >
-                <FileText className="h-3.5 w-3.5" />
-                PDF
+                <FileText className="h-4 w-4 text-[#38BDF8]/80" />
+                <span>PDF</span>
               </a>
               <a
                 href="/#image-suite"
-                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
               >
-                <ImageIcon className="h-3.5 w-3.5" />
-                Image
+                <ImageIcon className="h-4 w-4 text-[#38BDF8]/80" />
+                <span>Image</span>
               </a>
               <a
                 href="/#video-suite"
-                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
               >
-                <Video className="h-3.5 w-3.5" />
-                Video & Audio
+                <Video className="h-4 w-4 text-[#38BDF8]/80" />
+                <span>Video & Audio</span>
               </a>
               <a
                 href="/#svg-suite"
-                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
               >
-                <Code className="h-3.5 w-3.5" />
-                SVG
+                <Code className="h-4 w-4 text-[#38BDF8]/80" />
+                <span>SVG</span>
               </a>
             </nav>
-          </div>
 
-          {/* Right Action Area */}
-          <div className="flex items-center gap-3">
-            {/* Privacy Ledger Strip */}
-            <div className="hidden lg:flex items-center gap-2 font-mono text-[11px] text-[#8B8F98] bg-[#1B1D22] px-2.5 py-1 rounded border border-[#2A2D33]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#3FBE73]" />
-              <span>0 bytes uploaded</span>
-              <span className="text-[#5B606D]">·</span>
-              <span className="text-[#ECEDEF]">100% Local WASM</span>
-            </div>
-
-            {/* Quick Search Button */}
+            {/* Mobile Search Button */}
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="flex items-center gap-2 rounded bg-[#1B1D22] border border-[#2A2D33] px-3 py-1 text-xs text-[#8B8F98] hover:border-[#4F8CFF] hover:text-[#ECEDEF] transition-colors"
+              className="md:hidden rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426] hover:text-white border border-[#1E293B] transition-colors"
+              aria-label="Search"
             >
-              <Search className="h-3.5 w-3.5 text-[#8B8F98]" />
-              <span className="hidden sm:inline">Search console...</span>
-              <kbd className="hidden sm:inline-flex items-center rounded bg-[#131418] px-1.5 py-0.5 font-mono text-[10px] text-[#8B8F98] border border-[#2A2D33]">
-                ⌘K
-              </kbd>
+              <Search className="h-4 w-4" />
             </button>
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded p-1.5 text-[#8B8F98] hover:bg-[#1B1D22] hover:text-[#ECEDEF] md:hidden border border-[#2A2D33]"
+              className="rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426] hover:text-white lg:hidden border border-[#1E293B] transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -103,45 +107,40 @@ export const Header: React.FC = () => {
 
         {/* Mobile Navigation Drawer */}
         {isMobileMenuOpen && (
-          <div className="border-t border-[#2A2D33] bg-[#131418] px-4 py-3 md:hidden space-y-2">
-            <div className="grid grid-cols-2 gap-2">
+          <div className="border-t border-[#1E293B] bg-[#050811]/95 backdrop-blur-xl px-4 py-4 lg:hidden space-y-3">
+            <div className="grid grid-cols-2 gap-2.5">
               <a
                 href="/#pdf-suite"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded bg-[#1B1D22] p-2 text-xs font-medium text-[#ECEDEF] border border-[#2A2D33]"
+                className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
-                <FileText className="h-3.5 w-3.5 text-[#8B8F98]" />
+                <FileText className="h-4 w-4 text-[#38BDF8]" />
                 PDF Suite
               </a>
               <a
                 href="/#image-suite"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded bg-[#1B1D22] p-2 text-xs font-medium text-[#ECEDEF] border border-[#2A2D33]"
+                className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
-                <ImageIcon className="h-3.5 w-3.5 text-[#8B8F98]" />
+                <ImageIcon className="h-4 w-4 text-[#38BDF8]" />
                 Image Suite
               </a>
               <a
                 href="/#video-suite"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded bg-[#1B1D22] p-2 text-xs font-medium text-[#ECEDEF] border border-[#2A2D33]"
+                className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
-                <Video className="h-3.5 w-3.5 text-[#8B8F98]" />
+                <Video className="h-4 w-4 text-[#38BDF8]" />
                 Video & Audio
               </a>
               <a
                 href="/#svg-suite"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded bg-[#1B1D22] p-2 text-xs font-medium text-[#ECEDEF] border border-[#2A2D33]"
+                className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
-                <Code className="h-3.5 w-3.5 text-[#8B8F98]" />
+                <Code className="h-4 w-4 text-[#38BDF8]" />
                 SVG Suite
               </a>
-            </div>
-
-            <div className="flex items-center justify-between pt-2 border-t border-[#2A2D33] font-mono text-[11px] text-[#8B8F98]">
-              <span>Privacy Ledger</span>
-              <span className="text-[#3FBE73]">100% Client-Side Active</span>
             </div>
           </div>
         )}

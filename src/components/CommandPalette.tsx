@@ -75,10 +75,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl overflow-hidden rounded border border-[#2A2D33] bg-[#131418] shadow-2xl animate-fade-in">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-[#1E293B] bg-[#0A0F1D]/95 backdrop-blur-2xl shadow-2xl shadow-cyan-950/30 animate-fade-in">
         {/* Search Input Bar */}
-        <div className="flex items-center border-b border-[#2A2D33] px-3.5 py-3">
-          <Search className="h-4 w-4 text-[#8B8F98] mr-2.5 shrink-0" />
+        <div className="flex items-center border-b border-[#1E293B] px-4 py-3.5 bg-[#0D1426]/50">
+          <Search className="h-4 w-4 text-[#38BDF8] mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -88,29 +88,29 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setSelectedIndex(0);
             }}
             placeholder="Search tools, formats, or actions (e.g. compress, merge, subtitles)..."
-            className="w-full bg-transparent font-mono text-xs text-[#ECEDEF] placeholder-[#5B606D] focus:outline-none"
+            className="w-full bg-transparent font-sans text-sm text-[#F1F5F9] placeholder-[#64748B] focus:outline-none"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="rounded p-1 text-[#8B8F98] hover:text-[#ECEDEF]"
+              className="rounded p-1 text-[#94A3B8] hover:text-[#F1F5F9]"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-4 w-4" />
             </button>
           )}
-          <kbd className="ml-2 hidden sm:inline-flex items-center gap-1 rounded bg-[#1B1D22] px-1.5 py-0.5 font-mono text-[10px] text-[#8B8F98] border border-[#2A2D33]">
+          <kbd className="ml-2 hidden sm:inline-flex items-center gap-1 rounded bg-[#050811] px-2 py-0.5 font-mono text-[10px] text-[#94A3B8] border border-[#1E293B]">
             ESC
           </kbd>
         </div>
 
         {/* Results List */}
-        <div className="max-h-[55vh] overflow-y-auto p-1.5">
+        <div className="max-h-[55vh] overflow-y-auto p-2">
           {filteredTools.length === 0 ? (
-            <div className="py-10 text-center font-mono text-xs text-[#5B606D]">
+            <div className="py-10 text-center font-mono text-xs text-[#64748B]">
               No matching tools found for "{query}".
             </div>
           ) : (
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {filteredTools.map((tool, index) => {
                 const IconComponent = iconMap[tool.iconName] || Layers;
                 const isSelected = index === selectedIndex;
@@ -121,40 +121,40 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     href={tool.path}
                     onClick={onClose}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`flex items-center justify-between rounded px-3 py-2 transition-colors ${
+                    className={`flex items-center justify-between rounded-lg px-3 py-2.5 transition-all ${
                       isSelected
-                        ? 'bg-[#16233F] text-[#4F8CFF]'
-                        : 'text-[#ECEDEF] hover:bg-[#1B1D22]'
+                        ? 'bg-[#0C2340] border border-[#38BDF8]/40 text-[#38BDF8]'
+                        : 'text-[#F1F5F9] hover:bg-[#0D1426] border border-transparent'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded border ${
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors ${
                           isSelected
-                            ? 'border-[#4F8CFF]/40 bg-[#131418] text-[#4F8CFF]'
-                            : 'border-[#2A2D33] bg-[#1B1D22] text-[#8B8F98]'
+                            ? 'border-[#38BDF8]/50 bg-[#081528] text-[#38BDF8]'
+                            : 'border-[#1E293B] bg-[#0D1426] text-[#94A3B8]'
                         }`}
                       >
-                        <IconComponent className="h-3.5 w-3.5" />
+                        <IconComponent className="h-4 w-4" />
                       </div>
                       <div className="truncate min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-xs text-[#ECEDEF]">{tool.name}</span>
-                          <span className="rounded bg-[#1B1D22] px-1.5 py-0.5 font-mono text-[9px] text-[#8B8F98] border border-[#2A2D33]">
+                          <span className="font-semibold text-xs text-[#F1F5F9]">{tool.name}</span>
+                          <span className="rounded bg-[#0D1426] px-1.5 py-0.5 font-mono text-[9px] text-[#94A3B8] border border-[#1E293B]">
                             {tool.categoryLabel}
                           </span>
                         </div>
-                        <p className="truncate text-[11px] text-[#8B8F98]">{tool.description}</p>
+                        <p className="truncate text-[11px] text-[#94A3B8]">{tool.description}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0 ml-3">
                       {tool.badge && (
-                        <span className="rounded bg-[#16233F] px-1.5 py-0.5 font-mono text-[9px] font-medium text-[#4F8CFF] border border-[#4F8CFF]/30">
+                        <span className="rounded bg-[#0C2340] px-1.5 py-0.5 font-mono text-[9px] font-medium text-[#38BDF8] border border-[#38BDF8]/30">
                           {tool.badge}
                         </span>
                       )}
-                      <span className="font-mono text-[10px] text-[#5B606D]">↵</span>
+                      <span className="font-mono text-[10px] text-[#64748B]">↵</span>
                     </div>
                   </a>
                 );
@@ -164,14 +164,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer info bar */}
-        <div className="flex items-center justify-between border-t border-[#2A2D33] bg-[#0B0C0F] px-3 py-1.5 text-[10px] text-[#5B606D] font-mono">
+        <div className="flex items-center justify-between border-t border-[#1E293B] bg-[#050811] px-3.5 py-2 text-[10px] text-[#64748B] font-mono">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Open</span>
             <span>ESC Dismiss</span>
           </div>
-          <span className="text-[#3FBE73] flex items-center gap-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#3FBE73]" />
+          <span className="text-[#34D399] flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#34D399]" />
             100% Client Memory
           </span>
         </div>
