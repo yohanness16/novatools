@@ -5,21 +5,18 @@ import {
   type BoostProgress,
 } from '../../engines/audioBoosterEngine';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
+import { AudioVisualizerScreen } from './AudioVisualizerScreen';
 import {
   Volume2,
-  VolumeX,
-  Volume1,
   Upload,
   Play,
   Pause,
   Download,
   Sparkles,
   Sliders,
-  ShieldCheck,
   RotateCcw,
   Loader2,
   AlertCircle,
-  Check,
   Activity,
   Mic,
   Radio,
@@ -162,7 +159,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch((e) => console.debug('Audio play failed:', e));
     }
   };
 
@@ -243,6 +240,122 @@ export const AudioBoosterWorkspace: React.FC = () => {
               Choose different file
             </button>
           </div>
+
+          {/* AUDIO WAVE VISUALIZER MONITOR SCREEN BOX */}
+          {(boostedResult || originalUrl) && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5 font-mono">
+                  <Activity className="h-3.5 w-3.5 text-sky-400" />
+                  <span>Audio Waveform & Spectrum Monitor</span>
+                </label>
+                <span className="text-[10px] font-mono text-slate-500">
+                  Interactive Screen · Click wave to play
+                </span>
+              </div>
+
+              {/* Dedicated Visualizer Canvas Box */}
+              <AudioVisualizerScreen
+                audioElement={audioRef.current}
+                isPlaying={isPlaying}
+                onTogglePlay={togglePlay}
+                gainDb={activeSource === 'boosted' ? (boostedResult ? boostedResult.gainDb : currentDbGain) : 0}
+                sourceLabel={activeSource === 'boosted' ? `Boosted Audio (+${boostedResult ? boostedResult.gainDb : currentDbGain} dB)` : 'Original Master Audio'}
+              />
+            </div>
+          )}
+
+          {/* Audio Player & A/B Comparison Controls */}
+          {(boostedResult || originalUrl) && (
+            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 space-y-3">
+              {currentAudioSrc && (
+                <audio
+                  ref={audioRef}
+                  src={currentAudioSrc}
+                  onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
+                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  className="hidden"
+                />
+              )}
+
+              {/* Player Top Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                {/* A/B Source Toggle Buttons */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-[#8B8F98]">Preview Channel:</span>
+                  <div className="flex items-center rounded bg-[#131418] p-0.5 border border-[#2A2D33]">
+                    <button
+                      onClick={() => {
+                        setActiveSource('original');
+                        setIsPlaying(false);
+                      }}
+                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
+                        activeSource === 'original'
+                          ? 'bg-[#1B1D22] text-[#ECEDEF]'
+                          : 'text-[#8B8F98] hover:text-[#ECEDEF]'
+                      }`}
+                    >
+                      Original
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveSource('boosted');
+                        setIsPlaying(false);
+                      }}
+                      disabled={!boostedResult}
+                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
+                        activeSource === 'boosted'
+                          ? 'bg-[#4F8CFF] text-white'
+                          : 'text-[#8B8F98] hover:text-[#ECEDEF] disabled:opacity-30'
+                      }`}
+                    >
+                      Boosted (+{boostedResult ? boostedResult.gainDb : currentDbGain} dB)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Download Button */}
+                {boostedResult && (
+                  <button
+                    onClick={handleDownload}
+                    className="flex items-center gap-1.5 rounded bg-[#122D1F] hover:bg-[#163827] border border-[#3FBE73]/40 px-3 py-1 text-xs font-semibold text-[#3FBE73] transition-colors"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Download Boosted WAV ({formatBytes(boostedResult.blob.size)})</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Playback Controls & Timeline Scrubber */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={togglePlay}
+                  className="flex h-8 w-8 items-center justify-center rounded bg-[#4F8CFF] text-white hover:bg-[#3B79F0] transition-colors shrink-0"
+                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                >
+                  {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
+                </button>
+
+                <div className="flex-1 space-y-1">
+                  <input
+                    type="range"
+                    min={0}
+                    max={duration || 1}
+                    step={0.1}
+                    value={currentTime}
+                    onChange={(e) => handleSeek(Number(e.target.value))}
+                    className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
+                    <span>{formatDuration(currentTime)}</span>
+                    <span>{formatDuration(duration)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Preset Selector Grid */}
           <div className="space-y-1.5">
@@ -339,7 +452,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
             <button
               onClick={handleProcess}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40 cursor-pointer"
             >
               {isProcessing ? (
                 <>
@@ -372,91 +485,6 @@ export const AudioBoosterWorkspace: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Audio Player & A/B Comparison */}
-          {(boostedResult || originalUrl) && (
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 space-y-3">
-              {currentAudioSrc && (
-                <audio
-                  ref={audioRef}
-                  src={currentAudioSrc}
-                  onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
-                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                  className="hidden"
-                />
-              )}
-
-              {/* Player Top Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                {/* A/B Source Toggle Buttons */}
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-[#8B8F98]">Preview Source:</span>
-                  <div className="flex items-center rounded bg-[#131418] p-0.5 border border-[#2A2D33]">
-                    <button
-                      onClick={() => setActiveSource('original')}
-                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
-                        activeSource === 'original'
-                          ? 'bg-[#1B1D22] text-[#ECEDEF]'
-                          : 'text-[#8B8F98] hover:text-[#ECEDEF]'
-                      }`}
-                    >
-                      Original
-                    </button>
-                    <button
-                      onClick={() => setActiveSource('boosted')}
-                      disabled={!boostedResult}
-                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
-                        activeSource === 'boosted'
-                          ? 'bg-[#4F8CFF] text-white'
-                          : 'text-[#8B8F98] hover:text-[#ECEDEF] disabled:opacity-30'
-                      }`}
-                    >
-                      Boosted (+{boostedResult ? boostedResult.gainDb : currentDbGain} dB)
-                    </button>
-                  </div>
-                </div>
-
-                {/* Download Button */}
-                {boostedResult && (
-                  <button
-                    onClick={handleDownload}
-                    className="flex items-center gap-1.5 rounded bg-[#122D1F] hover:bg-[#163827] border border-[#3FBE73]/40 px-3 py-1 text-xs font-semibold text-[#3FBE73] transition-colors"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    <span>Download Boosted WAV ({formatBytes(boostedResult.blob.size)})</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Playback Controls */}
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={togglePlay}
-                  className="flex h-8 w-8 items-center justify-center rounded bg-[#4F8CFF] text-white hover:bg-[#3B79F0] transition-colors shrink-0"
-                >
-                  {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
-                </button>
-
-                <div className="flex-1 space-y-1">
-                  <input
-                    type="range"
-                    min={0}
-                    max={duration || 1}
-                    step={0.1}
-                    value={currentTime}
-                    onChange={(e) => handleSeek(Number(e.target.value))}
-                    className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
-                  />
-                  <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
-                    <span>{formatDuration(currentTime)}</span>
-                    <span>{formatDuration(duration)}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
           {error && (
             <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">

@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { VideoEngine, type ExtractedAudioTrack } from '../../engines/videoEngine';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
+import { AudioVisualizerScreen } from './AudioVisualizerScreen';
 import JSZip from 'jszip';
-import { Music, CheckCircle2, AlertCircle, Loader2, Download, Layers, Globe, Radio } from 'lucide-react';
+import { Music, CheckCircle2, AlertCircle, Loader2, Download, Layers, Globe, Radio, Play, Pause, Activity } from 'lucide-react';
 
 interface ExtractedTrackWithUrl extends ExtractedAudioTrack {
   audioUrl: string;
@@ -13,8 +14,11 @@ export const AudioExtractorWorkspace: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isZipping, setIsZipping] = useState(false);
   const [tracks, setTracks] = useState<ExtractedTrackWithUrl[]>([]);
+  const [selectedTrackIndex, setSelectedTrackIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Revoke URLs on cleanup
   useEffect(() => {
@@ -33,6 +37,8 @@ export const AudioExtractorWorkspace: React.FC = () => {
     setError(null);
     setTracks([]);
     setFile(selectedFile);
+    setIsPlaying(false);
+    setSelectedTrackIndex(0);
   };
 
   const handleExtractAll = async () => {
@@ -47,11 +53,27 @@ export const AudioExtractorWorkspace: React.FC = () => {
         audioUrl: URL.createObjectURL(t.blob),
       }));
       setTracks(withUrls);
+      setSelectedTrackIndex(0);
+      setIsPlaying(false);
     } catch (err: any) {
       setError('Failed to extract audio tracks: ' + (err?.message || err));
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch((e) => console.debug('Audio play failed:', e));
+    }
+  };
+
+  const handleSelectTrack = (index: number) => {
+    setSelectedTrackIndex(index);
+    setIsPlaying(false);
   };
 
   const handleDownloadSingleTrack = (track: ExtractedTrackWithUrl) => {
@@ -82,6 +104,8 @@ export const AudioExtractorWorkspace: React.FC = () => {
       setIsZipping(false);
     }
   };
+
+  const currentActiveTrack = tracks[selectedTrackIndex];
 
   return (
     <div className="w-full space-y-4">
@@ -124,6 +148,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                 tracks.forEach((t) => URL.revokeObjectURL(t.audioUrl));
                 setFile(null);
                 setTracks([]);
+                setIsPlaying(false);
               }}
               className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
             >
@@ -137,7 +162,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
               <button
                 onClick={handleExtractAll}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+                className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -154,9 +179,40 @@ export const AudioExtractorWorkspace: React.FC = () => {
             </div>
           )}
 
-          {/* Extracted Audio Tracks List */}
-          {tracks.length > 0 && (
-            <div className="space-y-3">
+          {/* Extracted Audio Tracks List & Waveform Monitor */}
+          {tracks.length > 0 && currentActiveTrack && (
+            <div className="space-y-4">
+              {/* Hidden audio element for preview playback */}
+              <audio
+                ref={audioRef}
+                src={currentActiveTrack.audioUrl}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onEnded={() => setIsPlaying(false)}
+                className="hidden"
+              />
+
+              {/* Audio Wave Visualizer Screen Box */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5 font-mono">
+                    <Activity className="h-3.5 w-3.5 text-sky-400" />
+                    <span>Live Waveform & Track Monitor</span>
+                  </label>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Track {selectedTrackIndex + 1} of {tracks.length}
+                  </span>
+                </div>
+
+                <AudioVisualizerScreen
+                  audioElement={audioRef.current}
+                  isPlaying={isPlaying}
+                  onTogglePlay={togglePlay}
+                  sourceLabel={`${currentActiveTrack.name} (${currentActiveTrack.language || 'Default'})`}
+                />
+              </div>
+
+              {/* Tracks Header Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-2.5">
                 <div className="flex items-center gap-2">
                   <div className="flex h-5 w-5 items-center justify-center rounded bg-[#122D1F] text-[#3FBE73] border border-[#3FBE73]/30">
@@ -176,7 +232,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                   <button
                     onClick={handleDownloadAllZip}
                     disabled={isZipping}
-                    className="flex items-center gap-1.5 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+                    className="flex items-center gap-1.5 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] px-3 py-1.5 text-xs font-semibold text-white transition-colors cursor-pointer"
                   >
                     {isZipping ? (
                       <>
@@ -195,58 +251,84 @@ export const AudioExtractorWorkspace: React.FC = () => {
 
               {/* Individual Track Cards */}
               <div className="space-y-2">
-                {tracks.map((track, idx) => (
-                  <div
-                    key={track.id}
-                    className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3 space-y-2"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#131418] font-mono text-[10px] text-[#8B8F98] border border-[#2A2D33]">
-                          {idx + 1}
-                        </span>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs font-semibold text-[#ECEDEF]">
-                              {track.name}
-                            </span>
-                            {track.language && (
-                              <span className="inline-flex items-center gap-1 rounded bg-[#16233F] px-1.5 py-0.5 text-[10px] font-mono text-[#4F8CFF] border border-[#4F8CFF]/20">
-                                <Globe className="h-2.5 w-2.5" />
-                                {track.language}
-                              </span>
+                {tracks.map((track, idx) => {
+                  const isSelected = idx === selectedTrackIndex;
+                  return (
+                    <div
+                      key={track.id}
+                      onClick={() => handleSelectTrack(idx)}
+                      className={`rounded p-3 space-y-2 cursor-pointer transition-all border ${
+                        isSelected
+                          ? 'bg-[#16233F] border-sky-500/50 shadow-md shadow-sky-950/20'
+                          : 'bg-[#1B1D22] border-[#2A2D33] hover:border-slate-600'
+                      }`}
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isSelected) {
+                                togglePlay();
+                              } else {
+                                handleSelectTrack(idx);
+                                setTimeout(() => {
+                                  audioRef.current?.play().catch(() => {});
+                                }, 50);
+                              }
+                            }}
+                            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                              isSelected && isPlaying
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-[#131418] text-[#8B8F98] hover:text-white border border-[#2A2D33]'
+                            }`}
+                            title={isSelected && isPlaying ? 'Pause track' : 'Play & Monitor track'}
+                          >
+                            {isSelected && isPlaying ? (
+                              <Pause className="h-3 w-3" />
+                            ) : (
+                              <Play className="h-3 w-3 ml-0.5" />
                             )}
-                            {track.codec && (
-                              <span className="inline-flex items-center gap-1 rounded bg-[#131418] px-1.5 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
-                                <Radio className="h-2.5 w-2.5" />
-                                {track.codec}
+                          </button>
+
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className={`text-xs font-semibold ${isSelected ? 'text-white' : 'text-[#ECEDEF]'}`}>
+                                {track.name}
                               </span>
-                            )}
+                              {track.language && (
+                                <span className="inline-flex items-center gap-1 rounded bg-[#16233F] px-1.5 py-0.5 text-[10px] font-mono text-[#4F8CFF] border border-[#4F8CFF]/20">
+                                  <Globe className="h-2.5 w-2.5" />
+                                  {track.language}
+                                </span>
+                              )}
+                              {track.codec && (
+                                <span className="inline-flex items-center gap-1 rounded bg-[#131418] px-1.5 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
+                                  <Radio className="h-2.5 w-2.5" />
+                                  {track.codec}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                              {track.description} · {formatBytes(track.blob.size)}
+                            </p>
                           </div>
-                          <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
-                            {track.description} · {formatBytes(track.blob.size)}
-                          </p>
                         </div>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDownloadSingleTrack(track);
+                          }}
+                          className="self-start sm:self-auto flex items-center gap-1 rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2.5 py-1 text-xs font-medium text-[#ECEDEF] transition-colors"
+                        >
+                          <Download className="h-3 w-3 text-[#8B8F98]" />
+                          <span>Download WAV</span>
+                        </button>
                       </div>
-
-                      <button
-                        onClick={() => handleDownloadSingleTrack(track)}
-                        className="self-start sm:self-auto flex items-center gap-1 rounded bg-[#131418] hover:bg-[#181920] border border-[#2A2D33] px-2.5 py-1 text-xs font-medium text-[#ECEDEF] transition-colors"
-                      >
-                        <Download className="h-3 w-3 text-[#8B8F98]" />
-                        <span>Download WAV</span>
-                      </button>
                     </div>
-
-                    <div className="pt-0.5">
-                      <audio
-                        src={track.audioUrl}
-                        controls
-                        className="w-full h-8"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
