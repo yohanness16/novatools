@@ -7,7 +7,7 @@
     --bg-canvas: #050811;
     --bg-surface: #0A0F1D;
     --bg-sunken: #0D1426;
-    --border-hairline: #1E293B;
+    --border-hairline: rgba(255, 255, 255, 0.08);
     --text-primary: #F1F5F9;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
@@ -18,9 +18,30 @@
     --danger: #F87171;
   }
 
+  html.light {
+    --bg-canvas: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-sunken: #F1F5F9;
+    --border-hairline: rgba(0, 0, 0, 0.08);
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --accent: #0284C7;
+    --accent-subtle: #E0F2FE;
+    --success: #059669;
+    --warning: #D97706;
+    --danger: #DC2626;
+  }
+
   html {
     background-color: #050811;
     color: #F1F5F9;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  html.light {
+    background-color: #F8FAFC;
+    color: #0F172A;
   }
 
   body {
@@ -36,6 +57,16 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  html.light body {
+    background-color: #F8FAFC;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.12), transparent 70%),
+      radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.06), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.05), transparent 35%);
+    color: #0F172A;
   }
 
   /* Console-grade minimal scrollbars */
@@ -46,12 +77,21 @@
   ::-webkit-scrollbar-track {
     background: #050811;
   }
+  html.light ::-webkit-scrollbar-track {
+    background: #F1F5F9;
+  }
   ::-webkit-scrollbar-thumb {
     background: #1E293B;
     border-radius: 4px;
   }
+  html.light ::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+  }
   ::-webkit-scrollbar-thumb:hover {
     background: #334155;
+  }
+  html.light ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
   }
 }
 
@@ -62,6 +102,12 @@
     border-radius: 8px;
   }
 
+  html.light .console-panel {
+    background-color: #FFFFFF;
+    border-color: #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
   .console-card {
     background-color: #0A0F1D;
     border: 1px solid #1E293B;
@@ -69,10 +115,22 @@
     transition: border-color 0.15s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
 
+  html.light .console-card {
+    background-color: #FFFFFF;
+    border-color: #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
   .console-card:hover {
     border-color: #38BDF8;
     background-color: #0F172A;
     box-shadow: 0 0 20px -5px rgba(56, 189, 248, 0.15);
+  }
+
+  html.light .console-card:hover {
+    border-color: #0284C7;
+    background-color: #F8FAFC;
+    box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.12);
   }
 
   .console-input {
@@ -84,10 +142,21 @@
     transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
 
+  html.light .console-input {
+    background-color: #F1F5F9;
+    border-color: #CBD5E1;
+    color: #0F172A;
+  }
+
   .console-input:focus {
     border-color: #38BDF8;
     box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     outline: none;
+  }
+
+  html.light .console-input:focus {
+    border-color: #0284C7;
+    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
   }
 
   .console-dropzone {
@@ -97,9 +166,19 @@
     transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
   }
 
+  html.light .console-dropzone {
+    background-color: #F8FAFC;
+    border-color: #CBD5E1;
+  }
+
   .console-dropzone:hover {
     border-color: #38BDF8;
     background-color: #0E1A33;
+  }
+
+  html.light .console-dropzone:hover {
+    border-color: #0284C7;
+    background-color: #F0F9FF;
   }
 
   .privacy-ledger-strip {
@@ -116,6 +195,12 @@
     gap: 8px;
   }
 
+  html.light .privacy-ledger-strip {
+    color: #475569;
+    background-color: #F1F5F9;
+    border-color: #E2E8F0;
+  }
+
   .bg-checkerboard {
     background-image: linear-gradient(45deg, #131A2E 25%, transparent 25%),
       linear-gradient(-45deg, #131A2E 25%, transparent 25%),
@@ -123,6 +208,13 @@
       linear-gradient(-45deg, transparent 75%, #131A2E 75%);
     background-size: 16px 16px;
     background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  }
+
+  html.light .bg-checkerboard {
+    background-image: linear-gradient(45deg, #E2E8F0 25%, transparent 25%),
+      linear-gradient(-45deg, #E2E8F0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #E2E8F0 75%),
+      linear-gradient(-45deg, transparent 75%, #E2E8F0 75%);
   }
 }
 

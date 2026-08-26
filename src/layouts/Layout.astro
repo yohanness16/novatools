@@ -27,12 +27,30 @@ const adSenseClientId = 'ca-pub-6768212179657827';
 ---
 
 <!doctype html>
-<html lang="en" class="dark scroll-smooth bg-[#050811]">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    {/* Inline Theme Detection to prevent theme flash */}
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('novatools-theme');
+          if (stored === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
 
     {/* Primary SEO & Unified Multi-Entity Schema.org Graph */}
     <SEOHead
@@ -55,7 +73,7 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="bg-[#050811] text-[#F1F5F9] selection:bg-[#38BDF8]/25 selection:text-[#38BDF8] flex min-h-[100dvh] flex-col font-sans antialiased">
+  <body class="selection:bg-sky-500/25 selection:text-sky-500 flex min-h-[100dvh] flex-col font-sans antialiased">
     {/* Console Top Bar Header */}
     <Header client:load />
 

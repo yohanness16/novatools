@@ -2,116 +2,93 @@
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
 import {
-  Code, Repeat, ArrowRight, ShieldCheck, Sparkles
+  Code, Repeat, ArrowRight
 } from 'lucide-react';
 
-const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-svg-optimizer' || t.id === 'convert-image');
+const iconMap: Record<string, any> = {
+  Code, Repeat
+};
+
+const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-converter');
 ---
 
 <Layout
-  title="SVG Tools - 100% Client-Side Vector Utilities | NovaTools"
-  description="Minify, clean, and optimize SVG vector markup locally in your browser. Remove unused metadata and speed up page load times."
+  title="SVG & Vector Suite - 100% Private Vector Optimizer | NovaTools"
+  description="Optimize SVG code, strip illustrator metadata, reduce file payload size, and convert vectors safely in your browser."
 >
   <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
     
     {/* Suite Hero Header */}
-    <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-2xl space-y-4">
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/85 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-xl space-y-4">
       {/* Ambient Glow */}
       <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-cyan-500/15 blur-3xl" />
 
-      <div class="inline-flex items-center gap-2 rounded-full bg-[#0D1426] border border-white/10 px-3.5 py-1 text-xs font-mono text-cyan-400">
-        <Code class="h-3.5 w-3.5 text-cyan-400" />
-        <span>SVG SUITE</span>
+      <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 px-3.5 py-1 text-xs font-mono text-cyan-600 dark:text-cyan-300">
+        <Code class="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400" />
+        <span>SVG & VECTOR SUITE</span>
       </div>
 
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-        Precision <span class="bg-gradient-to-r from-cyan-200 via-sky-300 to-blue-400 bg-clip-text text-transparent">SVG Vector Tools</span>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+        High-Precision <span class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 dark:from-cyan-200 dark:via-sky-300 dark:to-blue-400 bg-clip-text text-transparent">Vector Studio</span>
       </h1>
 
-      <p class="text-sm sm:text-base text-[#94A3B8] max-w-2xl leading-relaxed">
+      <p class="text-sm sm:text-base text-slate-600 dark:text-[#94A3B8] max-w-2xl leading-relaxed">
         Clean messy illustrator exports, strip bloated editor metadata, and minify vector paths for ultra-lightweight web icons and illustrations.
       </p>
     </div>
 
     {/* Tools Grid */}
     <div class="space-y-6">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <h2 class="text-lg font-bold tracking-tight text-white">
-          Available SVG Tools
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+        <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+          All Vector Tools
         </h2>
-        <span class="text-xs text-[#94A3B8] font-mono">
-          Interactive Vector Utilities
+        <span class="text-xs text-slate-500 dark:text-[#94A3B8] font-mono">
+          {svgTools.length} tools available
         </span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* SVG Optimizer */}
-        <a
-          href="/image/svg-optimizer"
-          class="group flex flex-col justify-between rounded-xl border border-white/10 bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:bg-[#0D1426] hover:shadow-xl hover:shadow-cyan-950/30"
-        >
-          <div class="space-y-3.5">
-            <div class="flex items-center justify-between">
-              <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0D1426] border border-white/10 text-[#94A3B8] group-hover:text-cyan-400 group-hover:border-cyan-500/40 transition-colors">
-                <Code class="h-4 w-4" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {svgTools.map((tool) => {
+          const Icon = iconMap[tool.iconName] || Code;
+
+          return (
+            <a
+              href={tool.path}
+              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-[#0D1426] hover:shadow-xl hover:shadow-cyan-950/20"
+            >
+              <div class="space-y-3.5">
+                <div class="flex items-center justify-between">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#94A3B8] group-hover:text-cyan-600 dark:group-hover:text-cyan-300 group-hover:border-cyan-500/40 transition-colors">
+                    <Icon class="h-4 w-4" />
+                  </div>
+
+                  {tool.badge && (
+                    <span class="font-mono text-[10px] font-medium text-cyan-600 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-200 dark:border-cyan-500/30">
+                      {tool.badge}
+                    </span>
+                  )}
+                </div>
+
+                <div class="space-y-1.5">
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p class="text-xs text-slate-600 dark:text-[#94A3B8] line-clamp-2 leading-relaxed">
+                    {tool.description}
+                  </p>
+                </div>
               </div>
 
-              <span class="font-mono text-[10px] font-medium text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
-                Essential
-              </span>
-            </div>
-
-            <div class="space-y-1.5">
-              <h3 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
-                SVG Optimizer
-              </h3>
-              <p class="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
-                Minify and clean SVG vector files. Remove editor metadata, collapse paths, and shrink file sizes up to 80%.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06] font-mono text-[11px]">
-            <span class="text-[#34D399]">100% Private</span>
-            <span class="flex items-center gap-1 text-[#94A3B8] group-hover:text-cyan-400 transition-colors font-medium">
-              Launch <ArrowRight class="h-3 w-3" />
-            </span>
-          </div>
-        </a>
-
-        {/* Image Converter */}
-        <a
-          href="/image/converter"
-          class="group flex flex-col justify-between rounded-xl border border-white/10 bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:bg-[#0D1426] hover:shadow-xl hover:shadow-cyan-950/30"
-        >
-          <div class="space-y-3.5">
-            <div class="flex items-center justify-between">
-              <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0D1426] border border-white/10 text-[#94A3B8] group-hover:text-cyan-400 group-hover:border-cyan-500/40 transition-colors">
-                <Repeat class="h-4 w-4" />
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-200 dark:border-white/[0.06] font-mono text-[11px]">
+                <span class="text-emerald-600 dark:text-[#34D399]">100% Private</span>
+                <span class="flex items-center gap-1 text-slate-600 dark:text-[#94A3B8] group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors font-medium">
+                  Launch <ArrowRight class="h-3 w-3" />
+                </span>
               </div>
-
-              <span class="font-mono text-[10px] font-medium text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
-                Multi-Format
-              </span>
-            </div>
-
-            <div class="space-y-1.5">
-              <h3 class="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
-                SVG & Image Converter
-              </h3>
-              <p class="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
-                Convert SVG vectors to PNG, WebP, JPEG, and raster graphics without loss of definition.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06] font-mono text-[11px]">
-            <span class="text-[#34D399]">100% Private</span>
-            <span class="flex items-center gap-1 text-[#94A3B8] group-hover:text-cyan-400 transition-colors font-medium">
-              Launch <ArrowRight class="h-3 w-3" />
-            </span>
-          </div>
-        </a>
+            </a>
+          );
+        })}
       </div>
     </div>
 

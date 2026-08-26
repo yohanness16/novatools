@@ -86,7 +86,7 @@ export const HeroSection: React.FC = () => {
             {/* Brand Title with Darkened Yellow-Grey Gold Blend */}
             <div className="space-y-3">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15]">
-                <span className="block text-2xl sm:text-3xl font-semibold text-slate-300 mb-1">
+                <span className="block text-2xl sm:text-3xl font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Create, Convert & Edit with
                 </span>
                 <span className="inline-flex items-center select-none tracking-normal">
@@ -105,11 +105,11 @@ export const HeroSection: React.FC = () => {
                 </span>
               </h1>
 
-              {/* Typewriter Generator Area (Bluish light white-blue gradient) */}
+              {/* Typewriter Generator Area (Adaptive Gradient) */}
               <div className="min-h-[4.2rem] sm:min-h-[4rem] flex items-center">
-                <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-snug bg-gradient-to-r from-sky-100 via-cyan-200 to-blue-300 bg-clip-text text-transparent drop-shadow-sm">
+                <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-snug bg-gradient-to-r from-sky-900 via-cyan-800 to-indigo-950 dark:from-sky-100 dark:via-cyan-200 dark:to-blue-300 bg-clip-text text-transparent drop-shadow-sm">
                   {displayedText}
-                  <span className="inline-block w-0.5 h-5 sm:h-6 ml-1 bg-cyan-400 align-middle animate-pulse" />
+                  <span className="inline-block w-0.5 h-5 sm:h-6 ml-1 bg-cyan-500 dark:bg-cyan-400 align-middle animate-pulse" />
                 </p>
               </div>
             </div>
@@ -140,35 +140,35 @@ export const HeroSection: React.FC = () => {
                   <div className="flex items-center justify-center gap-4">
                     {/* Document 1 */}
                     <div className="h-28 w-22 rounded-xl bg-gradient-to-br from-red-500/25 via-red-600/10 to-transparent border border-red-400/30 p-3 shadow-xl flex flex-col justify-between animate-float">
-                      <FileText className="h-6 w-6 text-red-400" />
+                      <FileText className="h-6 w-6 text-red-500 dark:text-red-400" />
                       <div className="space-y-1.5">
-                        <div className="h-1.5 w-full bg-red-400/30 rounded" />
-                        <div className="h-1.5 w-3/4 bg-red-400/30 rounded" />
-                        <div className="h-1.5 w-1/2 bg-red-400/20 rounded" />
+                        <div className="h-1.5 w-full bg-red-500/30 rounded" />
+                        <div className="h-1.5 w-3/4 bg-red-500/30 rounded" />
+                        <div className="h-1.5 w-1/2 bg-red-500/20 rounded" />
                       </div>
                     </div>
 
                     {/* Merge Plus Icon */}
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-bold text-lg shadow-lg shadow-cyan-500/20">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-600 dark:text-cyan-300 font-bold text-lg shadow-lg shadow-cyan-500/20">
                       +
                     </div>
 
                     {/* Document 2 */}
                     <div className="h-28 w-22 rounded-xl bg-gradient-to-br from-blue-500/25 via-cyan-600/10 to-transparent border border-cyan-400/30 p-3 shadow-xl flex flex-col justify-between animate-float" style={{ animationDelay: '0.4s' }}>
-                      <FileText className="h-6 w-6 text-cyan-400" />
+                      <FileText className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
                       <div className="space-y-1.5">
-                        <div className="h-1.5 w-full bg-cyan-400/30 rounded" />
-                        <div className="h-1.5 w-2/3 bg-cyan-400/30 rounded" />
-                        <div className="h-1.5 w-1/2 bg-cyan-400/20 rounded" />
+                        <div className="h-1.5 w-full bg-cyan-500/30 rounded" />
+                        <div className="h-1.5 w-2/3 bg-cyan-500/30 rounded" />
+                        <div className="h-1.5 w-1/2 bg-cyan-500/20 rounded" />
                       </div>
                     </div>
                   </div>
 
                   {/* Clean Result Icon Pill */}
-                  <div className="flex items-center gap-2.5 rounded-full bg-[#0D1426]/90 border border-cyan-500/40 px-4 py-2 shadow-lg shadow-cyan-950/40">
-                    <CheckCircle2 className="h-4 w-4 text-[#34D399]" />
-                    <div className="h-2 w-24 bg-cyan-400/40 rounded-full" />
-                    <Lock className="h-3.5 w-3.5 text-cyan-300" />
+                  <div className="flex items-center gap-2.5 rounded-full bg-white/90 dark:bg-[#0D1426]/90 border border-cyan-500/40 px-4 py-2 shadow-lg shadow-cyan-950/20">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500 dark:text-[#34D399]" />
+                    <div className="h-2 w-24 bg-cyan-500/40 rounded-full" />
+                    <Lock className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-300" />
                   </div>
                 </div>
               )}
@@ -176,7 +176,7 @@ export const HeroSection: React.FC = () => {
               {/* ACTION 2: IMAGE CUTOUT VISUAL */}
               {activeShowcaseIndex === 1 && (
                 <div className="w-full flex items-center justify-center animate-fade-in">
-                  <div className="relative w-64 h-44 rounded-2xl border border-teal-400/30 bg-checkerboard flex items-center justify-center shadow-2xl shadow-teal-950/30 overflow-hidden">
+                  <div className="relative w-64 h-44 rounded-2xl border border-teal-400/30 bg-checkerboard flex items-center justify-center shadow-2xl shadow-teal-950/20 overflow-hidden">
                     <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-tr from-teal-400 via-cyan-300 to-emerald-300 text-slate-950 shadow-2xl shadow-teal-400/40 animate-pulse">
                       <Wand2 className="h-10 w-10" />
                     </div>
@@ -187,14 +187,14 @@ export const HeroSection: React.FC = () => {
               {/* ACTION 3: VIDEO / AUDIO VISUAL */}
               {activeShowcaseIndex === 2 && (
                 <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 animate-fade-in">
-                  <div className="w-full rounded-2xl border border-indigo-400/30 bg-[#0A0F1D]/80 p-4 space-y-3 shadow-2xl shadow-indigo-950/30">
+                  <div className="w-full rounded-2xl border border-indigo-400/30 bg-white/90 dark:bg-[#0A0F1D]/80 p-4 space-y-3 shadow-2xl shadow-indigo-950/20">
                     <div className="flex items-center justify-between">
-                      <Video className="h-5 w-5 text-indigo-400" />
-                      <Volume2 className="h-5 w-5 text-cyan-400" />
+                      <Video className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                      <Volume2 className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
                     </div>
 
                     {/* Equalizer Waveform */}
-                    <div className="relative h-10 w-full rounded-lg bg-slate-950/80 overflow-hidden flex items-center px-2">
+                    <div className="relative h-10 w-full rounded-lg bg-slate-100 dark:bg-slate-950/80 overflow-hidden flex items-center px-2">
                       <div className="flex items-center gap-1.5 w-full h-full">
                         {[40, 75, 30, 90, 50, 85, 100, 45, 65, 95, 30, 90, 75, 40, 60, 100, 35, 70, 85, 45].map((h, i) => (
                           <div
@@ -213,9 +213,9 @@ export const HeroSection: React.FC = () => {
               {/* ACTION 4: SUBTITLES / TRANSCRIPTION VISUAL */}
               {activeShowcaseIndex === 3 && (
                 <div className="w-full max-w-sm flex flex-col items-center justify-center gap-3 animate-fade-in">
-                  <div className="w-full rounded-2xl border border-purple-400/30 bg-[#0A0F1D]/80 p-5 space-y-3 shadow-2xl shadow-purple-950/30">
+                  <div className="w-full rounded-2xl border border-purple-400/30 bg-white/90 dark:bg-[#0A0F1D]/80 p-5 space-y-3 shadow-2xl shadow-purple-950/20">
                     <div className="flex items-center justify-between">
-                      <Subtitles className="h-5 w-5 text-purple-400" />
+                      <Subtitles className="h-5 w-5 text-purple-500 dark:text-purple-400" />
                       <div className="flex items-center gap-1">
                         <span className="h-2 w-2 rounded-full bg-purple-400 animate-ping" />
                         <span className="h-2 w-2 rounded-full bg-purple-400" />
@@ -243,7 +243,7 @@ export const HeroSection: React.FC = () => {
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     idx === activeShowcaseIndex
                       ? 'w-6 bg-[#D4C596] shadow-[0_0_8px_rgba(212,197,150,0.4)]'
-                      : 'w-2 bg-slate-700 hover:bg-slate-500'
+                      : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-500'
                   }`}
                   aria-label={`View showcase ${idx + 1}`}
                 />
@@ -255,19 +255,19 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* BOTTOM OF 100VH HERO: Trust Highlights Bar spanning full width under both text and graphic */}
-      <div className="w-full pt-6 pb-2 border-t border-white/[0.07] flex flex-wrap items-center justify-around gap-4 text-xs sm:text-sm text-[#94A3B8]">
+      {/* BOTTOM OF 100VH HERO: Trust Highlights Bar */}
+      <div className="w-full pt-6 pb-2 border-t border-slate-200 dark:border-white/[0.07] flex flex-wrap items-center justify-around gap-4 text-xs sm:text-sm text-slate-600 dark:text-[#94A3B8]">
         <div className="flex items-center gap-2.5">
-          <ShieldCheck className="h-4 w-4 text-[#34D399] shrink-0" />
-          <span className="font-medium text-slate-200">Zero Uploads</span>
+          <ShieldCheck className="h-4 w-4 text-emerald-500 dark:text-[#34D399] shrink-0" />
+          <span className="font-medium text-slate-800 dark:text-slate-200">Zero Uploads</span>
         </div>
         <div className="flex items-center gap-2.5">
-          <Zap className="h-4 w-4 text-[#38BDF8] shrink-0" />
-          <span className="font-medium text-slate-200">Instant Speed</span>
+          <Zap className="h-4 w-4 text-sky-500 dark:text-[#38BDF8] shrink-0" />
+          <span className="font-medium text-slate-800 dark:text-slate-200">Instant Speed</span>
         </div>
         <div className="flex items-center gap-2.5">
-          <Lock className="h-4 w-4 text-[#A78BFA] shrink-0" />
-          <span className="font-medium text-slate-200">Private by Design</span>
+          <Lock className="h-4 w-4 text-purple-500 dark:text-[#A78BFA] shrink-0" />
+          <span className="font-medium text-slate-800 dark:text-slate-200">Private by Design</span>
         </div>
       </div>
     </section>
