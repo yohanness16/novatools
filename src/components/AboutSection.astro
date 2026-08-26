@@ -7,7 +7,7 @@ import { CheckCircle2 } from 'lucide-react';
   <div class="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl -z-10" />
   <div class="pointer-events-none absolute top-1/3 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10" />
 
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24">
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20">
     
     {/* Section Header: Enlarged About Us without icon */}
     <div class="text-center max-w-2xl mx-auto">
@@ -16,8 +16,8 @@ import { CheckCircle2 } from 'lucide-react';
       </h2>
     </div>
 
-    {/* STORY BLOCK 1: Left Image, Right Text */}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    {/* STORY BLOCK 1: Left Image, Right Text (Scroll-reactive) */}
+    <div class="about-story-block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center transition-[opacity,transform,filter] duration-300 ease-out will-change-[opacity,transform]">
       
       {/* Left Column: Real Application Screenshot */}
       <div class="lg:col-span-6 relative group">
@@ -68,9 +68,14 @@ import { CheckCircle2 } from 'lucide-react';
 
     </div>
 
+    {/* DIVIDING SEPARATOR LINE BETWEEN STORY BLOCKS */}
+    <div class="relative w-full max-w-4xl mx-auto my-6 flex items-center justify-center">
+      <div class="w-full h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div class="absolute h-1.5 w-1.5 rounded-full bg-cyan-400/80 shadow-[0_0_10px_rgba(56,189,248,0.7)]" />
+    </div>
 
-    {/* STORY BLOCK 2: Left Text, Right Image */}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    {/* STORY BLOCK 2: Left Text, Right Image (Scroll-reactive) */}
+    <div class="about-story-block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center transition-[opacity,transform,filter] duration-300 ease-out will-change-[opacity,transform]">
       
       {/* Left Column: Copy & Narrative */}
       <div class="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
@@ -123,3 +128,49 @@ import { CheckCircle2 } from 'lucide-react';
 
   </div>
 </section>
+
+<script>
+  function setupScrollFade() {
+    const blocks = document.querySelectorAll<HTMLElement>('.about-story-block');
+    if (!blocks.length) return;
+
+    let ticking = false;
+
+    const updateScrollFade = () => {
+      const windowHeight = window.innerHeight;
+      const centerY = windowHeight * 0.52;
+
+      blocks.forEach((block) => {
+        const rect = block.getBoundingClientRect();
+        const blockCenter = rect.top + rect.height / 2;
+        const distanceFromCenter = Math.abs(centerY - blockCenter);
+        const maxDistance = windowHeight * 0.6;
+
+        // Smooth proximity-based opacity & scaling
+        let progress = 1 - (distanceFromCenter / maxDistance);
+        progress = Math.max(0.2, Math.min(1, progress));
+
+        block.style.opacity = `${progress}`;
+        block.style.transform = `scale(${0.96 + 0.04 * progress})`;
+        block.style.filter = progress < 0.35 ? 'blur(1px)' : 'none';
+      });
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollFade);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    updateScrollFade();
+  }
+
+  // Run on initial load
+  setupScrollFade();
+  document.addEventListener('astro:page-load', setupScrollFade);
+</script>
