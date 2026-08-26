@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Sparkles, ShieldCheck, Zap, ArrowRight, Search, 
-  Layers, Scissors, Image as ImageIcon, Video, Subtitles, 
-  FileText, CheckCircle2, Lock, Volume2, Wand2
+  ArrowRight, ShieldCheck, Zap, Lock,
+  FileText, Wand2, Video, Subtitles, CheckCircle2, Volume2
 } from 'lucide-react';
 
 const TYPEWRITER_SENTENCES = [
@@ -11,55 +10,17 @@ const TYPEWRITER_SENTENCES = [
   "Unlock fast client-side tools designed for speed, security, and effortless workflows."
 ];
 
+// Yellow character palette with soft subtle lightning shimmer
 const BRAND_LETTERS = [
-  { char: 'N', color: '#38BDF8', glow: 'rgba(56, 189, 248, 0.6)' },
-  { char: 'o', color: '#60A5FA', glow: 'rgba(96, 165, 250, 0.6)' },
-  { char: 'v', color: '#818CF8', glow: 'rgba(129, 140, 248, 0.6)' },
-  { char: 'a', color: '#A78BFA', glow: 'rgba(167, 139, 250, 0.6)' },
-  { char: 'T', color: '#38BDF8', glow: 'rgba(56, 189, 248, 0.6)' },
-  { char: 'o', color: '#2DD4BF', glow: 'rgba(45, 212, 191, 0.6)' },
-  { char: 'o', color: '#60A5FA', glow: 'rgba(96, 165, 250, 0.6)' },
-  { char: 'l', color: '#93C5FD', glow: 'rgba(147, 197, 253, 0.6)' },
-  { char: 's', color: '#67E8F9', glow: 'rgba(103, 232, 249, 0.6)' },
-];
-
-const SHOWCASE_ACTIONS = [
-  {
-    id: 'pdf-merge',
-    title: 'Smart PDF Merge & Protect',
-    tag: 'Document Action',
-    icon: FileText,
-    accentColor: '#38BDF8',
-    description: 'Combine confidential contracts and encrypt with 256-bit security entirely in private memory.',
-    previewType: 'pdf'
-  },
-  {
-    id: 'bg-remove',
-    title: 'AI Background Cutout',
-    tag: 'Image Action',
-    icon: Wand2,
-    accentColor: '#2DD4BF',
-    description: 'Instant subject separation with clean alpha transparency with zero cloud server transfers.',
-    previewType: 'bg-cutout'
-  },
-  {
-    id: 'video-trim',
-    title: 'Video Trim & Audio Extract',
-    tag: 'Video Action',
-    icon: Video,
-    accentColor: '#818CF8',
-    description: 'Cut lossless video clips and boost volume without quality loss or long waiting times.',
-    previewType: 'video'
-  },
-  {
-    id: 'subtitles',
-    title: 'Auto Subtitles & Transcripts',
-    tag: 'Speech Action',
-    icon: Subtitles,
-    accentColor: '#A78BFA',
-    description: 'Generate accurate timed SRT captions from audio files directly on your local device.',
-    previewType: 'subtitles'
-  }
+  { char: 'N', color: '#FEF08A' },
+  { char: 'o', color: '#FDE047' },
+  { char: 'v', color: '#FACC15' },
+  { char: 'a', color: '#EAB308' },
+  { char: 'T', color: '#FDE047' },
+  { char: 'o', color: '#FACC15' },
+  { char: 'o', color: '#FDE047' },
+  { char: 'l', color: '#FEF08A' },
+  { char: 's', color: '#FACC15' },
 ];
 
 export const HeroSection: React.FC = () => {
@@ -78,22 +39,18 @@ export const HeroSection: React.FC = () => {
 
     const timer = setTimeout(() => {
       if (!isDeleting) {
-        // Typing forward
         if (displayedText.length < fullSentence.length) {
           setDisplayedText(fullSentence.substring(0, displayedText.length + 1));
           setTypingSpeed(38);
         } else {
-          // Finished typing sentence, pause before deleting
           setTypingSpeed(2600);
           setIsDeleting(true);
         }
       } else {
-        // Deleting backwards
         if (displayedText.length > 0) {
           setDisplayedText(fullSentence.substring(0, displayedText.length - 1));
           setTypingSpeed(18);
         } else {
-          // Finished deleting, move to next sentence
           setIsDeleting(false);
           setCurrentSentenceIndex((prev) => (prev + 1) % TYPEWRITER_SENTENCES.length);
           setTypingSpeed(450);
@@ -107,58 +64,38 @@ export const HeroSection: React.FC = () => {
   // Showcase Auto-rotate logic
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveShowcaseIndex((prev) => (prev + 1) % SHOWCASE_ACTIONS.length);
-    }, 4800);
+      setActiveShowcaseIndex((prev) => (prev + 1) % 4);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
-  const openSearch = () => {
-    const event = new KeyboardEvent('keydown', {
-      key: 'k',
-      ctrlKey: true,
-      bubbles: true
-    });
-    window.dispatchEvent(event);
-  };
-
-  const activeAction = SHOWCASE_ACTIONS[activeShowcaseIndex];
-
   return (
-    <section className="relative w-full overflow-hidden pt-6 pb-14 lg:py-16">
+    <section className="relative w-full overflow-hidden pt-4 pb-12 lg:py-16">
       {/* Ambient Sci-Fi Glow Background Orbs */}
       <div className="pointer-events-none absolute -top-24 left-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="pointer-events-none absolute top-1/3 -right-20 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-10 left-1/3 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
 
       <div className="w-full px-4 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
-          {/* LEFT COLUMN: Hero Copy, Animated Brand, and Typewriter */}
+          {/* LEFT COLUMN: Hero Copy, Brand, Typewriter, Yellow Explore Button */}
           <div className="lg:col-span-7 space-y-6 sm:space-y-7 text-left">
             
-            {/* Top Pill / Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#0A0F1D]/90 border border-[#1E293B] px-3.5 py-1.5 shadow-[0_0_15px_rgba(56,189,248,0.1)]">
-              <span className="flex h-2 w-2 rounded-full bg-[#38BDF8] animate-ping" />
-              <span className="text-[11px] sm:text-xs font-medium text-[#94A3B8] tracking-wide">
-                100% Private Document & Media Engine
-              </span>
-            </div>
-
-            {/* Brand Title with Multicolor Revolving Lightning Effect */}
+            {/* Brand Title with Soft Yellow Shimmer */}
             <div className="space-y-3">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
                 <span className="block text-2xl sm:text-3xl font-semibold text-slate-300 mb-1">
                   Create, Convert & Edit with
                 </span>
-                <span className="inline-flex items-center select-none">
+                <span className="inline-flex items-center select-none tracking-normal">
                   {BRAND_LETTERS.map((item, idx) => (
                     <span
                       key={idx}
-                      className="inline-block animate-lightning transition-all duration-300 font-extrabold"
+                      className="inline-block transition-all duration-300 font-extrabold hover:scale-105"
                       style={{
                         color: item.color,
-                        animationDelay: `${idx * 0.22}s`,
-                        textShadow: `0 0 16px ${item.glow}`
+                        textShadow: '0 0 10px rgba(250, 204, 21, 0.4)'
                       }}
                     >
                       {item.char}
@@ -181,26 +118,15 @@ export const HeroSection: React.FC = () => {
               Fast, privacy-first utility tools that run directly in your browser. No files are ever sent to external servers, no subscriptions, and no upload queues.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            {/* Action Button: Yellow Gradient "Explore" */}
+            <div className="pt-2">
               <a
                 href="#catalog"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#2563EB] hover:from-[#0EA5E9] hover:to-[#1D4ED8] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 px-7 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
               >
-                <span>Explore All 21+ Tools</span>
-                <ArrowRight className="h-4 w-4" />
+                <span>Explore</span>
+                <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </a>
-
-              <button
-                onClick={openSearch}
-                className="inline-flex items-center gap-2.5 rounded-xl bg-[#0A0F1D]/80 hover:bg-[#0D1426] border border-white/10 hover:border-[#38BDF8]/50 px-4 py-3 text-sm font-medium text-[#F1F5F9] transition-all shadow-inner group cursor-pointer"
-              >
-                <Search className="h-4 w-4 text-[#38BDF8]" />
-                <span>Quick Search</span>
-                <kbd className="hidden sm:inline-block rounded bg-[#050811] px-1.5 py-0.5 text-[10px] font-mono text-[#94A3B8] border border-white/10 group-hover:text-[#38BDF8]">
-                  ⌘K
-                </kbd>
-              </button>
             </div>
 
             {/* Trust Highlights */}
@@ -222,200 +148,126 @@ export const HeroSection: React.FC = () => {
           </div>
 
 
-          {/* RIGHT COLUMN: Live Action Showcase (Transparent, PNG/Action-like with smooth animated cards) */}
-          <div className="lg:col-span-5 relative">
+          {/* RIGHT COLUMN: Pure Visual Action Graphic (No Box Container, No Text Clutter, Clean Transparency) */}
+          <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
             
-            {/* Interactive Showcase Container with Transparent Glass Aesthetics */}
-            <div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-[#0A0F1D]/70 to-[#050811]/90 backdrop-blur-xl p-5 sm:p-6 shadow-2xl shadow-cyan-950/40 overflow-hidden">
+            {/* Action Graphic Area (Clean, borderless, floating naturally) */}
+            <div className="relative w-full h-72 sm:h-80 flex items-center justify-center">
               
-              {/* Header of Action Box */}
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div 
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border transition-colors"
-                    style={{
-                      borderColor: `${activeAction.accentColor}50`,
-                      backgroundColor: `${activeAction.accentColor}15`,
-                      color: activeAction.accentColor
-                    }}
-                  >
-                    <activeAction.icon className="h-4 w-4" />
+              {/* ACTION 1: PDF MERGING VISUAL (No Text) */}
+              {activeShowcaseIndex === 0 && (
+                <div className="w-full flex flex-col items-center justify-center gap-4 animate-fade-in">
+                  <div className="flex items-center justify-center gap-4">
+                    {/* Document 1 */}
+                    <div className="h-28 w-22 rounded-xl bg-gradient-to-br from-red-500/25 via-red-600/10 to-transparent border border-red-400/30 p-3 shadow-xl flex flex-col justify-between animate-float">
+                      <FileText className="h-6 w-6 text-red-400" />
+                      <div className="space-y-1.5">
+                        <div className="h-1.5 w-full bg-red-400/30 rounded" />
+                        <div className="h-1.5 w-3/4 bg-red-400/30 rounded" />
+                        <div className="h-1.5 w-1/2 bg-red-400/20 rounded" />
+                      </div>
+                    </div>
+
+                    {/* Merge Plus Icon */}
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-bold text-lg shadow-lg shadow-cyan-500/20">
+                      +
+                    </div>
+
+                    {/* Document 2 */}
+                    <div className="h-28 w-22 rounded-xl bg-gradient-to-br from-blue-500/25 via-cyan-600/10 to-transparent border border-cyan-400/30 p-3 shadow-xl flex flex-col justify-between animate-float" style={{ animationDelay: '0.4s' }}>
+                      <FileText className="h-6 w-6 text-cyan-400" />
+                      <div className="space-y-1.5">
+                        <div className="h-1.5 w-full bg-cyan-400/30 rounded" />
+                        <div className="h-1.5 w-2/3 bg-cyan-400/30 rounded" />
+                        <div className="h-1.5 w-1/2 bg-cyan-400/20 rounded" />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#94A3B8]">
-                      {activeAction.tag}
-                    </span>
-                    <h3 className="text-sm font-semibold text-white">
-                      {activeAction.title}
-                    </h3>
+
+                  {/* Clean Result Icon Pill */}
+                  <div className="flex items-center gap-2.5 rounded-full bg-[#0D1426]/90 border border-cyan-500/40 px-4 py-2 shadow-lg shadow-cyan-950/40">
+                    <CheckCircle2 className="h-4 w-4 text-[#34D399]" />
+                    <div className="h-2 w-24 bg-cyan-400/40 rounded-full" />
+                    <Lock className="h-3.5 w-3.5 text-cyan-300" />
                   </div>
                 </div>
+              )}
 
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#34D399] bg-[#34D399]/10 px-2 py-0.5 rounded border border-[#34D399]/20">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#34D399] animate-pulse" />
-                  Live Action
-                </span>
-              </div>
-
-              {/* Dynamic Action Preview Stage (Transparent / Action Graphic) */}
-              <div className="relative h-60 w-full rounded-xl border border-white/5 bg-[#070B16]/60 flex items-center justify-center overflow-hidden p-4">
-                
-                {/* ACTION 1: PDF MERGE & ENCRYPTION */}
-                {activeAction.previewType === 'pdf' && (
-                  <div className="w-full flex flex-col items-center justify-center gap-3 animate-fade-in">
-                    <div className="flex items-center justify-center gap-3">
-                      {/* Document 1 */}
-                      <div className="h-24 w-18 rounded-lg bg-gradient-to-br from-red-500/20 to-blue-500/10 border border-white/15 p-2 shadow-lg flex flex-col justify-between animate-float">
-                        <div className="flex items-center justify-between">
-                          <FileText className="h-4 w-4 text-red-400" />
-                          <span className="text-[8px] font-mono text-slate-400">PDF 1</span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="h-1 w-full bg-white/20 rounded" />
-                          <div className="h-1 w-3/4 bg-white/20 rounded" />
-                        </div>
-                        <span className="text-[8px] font-mono text-emerald-400">Ready</span>
-                      </div>
-
-                      {/* Merge Plus Sign */}
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-bold text-sm">
-                        +
-                      </div>
-
-                      {/* Document 2 */}
-                      <div className="h-24 w-18 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/10 border border-white/15 p-2 shadow-lg flex flex-col justify-between animate-float" style={{ animationDelay: '0.3s' }}>
-                        <div className="flex items-center justify-between">
-                          <FileText className="h-4 w-4 text-cyan-400" />
-                          <span className="text-[8px] font-mono text-slate-400">PDF 2</span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="h-1 w-full bg-white/20 rounded" />
-                          <div className="h-1 w-2/3 bg-white/20 rounded" />
-                        </div>
-                        <span className="text-[8px] font-mono text-emerald-400">Ready</span>
-                      </div>
-                    </div>
-
-                    {/* Result Output Bar */}
-                    <div className="w-full max-w-xs flex items-center justify-between rounded-lg bg-[#0D1426] border border-cyan-500/30 px-3 py-1.5 text-xs text-slate-200 shadow-md">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-[#34D399]" />
-                        <span className="font-mono text-[11px]">merged_protected.pdf</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-cyan-400">256-bit AES</span>
+              {/* ACTION 2: IMAGE CUTOUT VISUAL (No Text) */}
+              {activeShowcaseIndex === 1 && (
+                <div className="w-full flex items-center justify-center animate-fade-in">
+                  <div className="relative w-64 h-44 rounded-2xl border border-teal-400/30 bg-checkerboard flex items-center justify-center shadow-2xl shadow-teal-950/30 overflow-hidden">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-tr from-teal-400 via-cyan-300 to-emerald-300 text-slate-950 shadow-2xl shadow-teal-400/40 animate-pulse">
+                      <Wand2 className="h-10 w-10" />
                     </div>
                   </div>
-                )}
-
-                {/* ACTION 2: IMAGE BACKGROUND REMOVAL CUTOUT */}
-                {activeAction.previewType === 'bg-cutout' && (
-                  <div className="w-full h-full flex items-center justify-center animate-fade-in">
-                    <div className="relative w-56 h-36 rounded-xl border border-white/15 bg-checkerboard flex items-center justify-center overflow-hidden shadow-xl">
-                      {/* Transparent Subject Cutout simulation */}
-                      <div className="relative flex flex-col items-center justify-center text-center p-3">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-teal-400 to-cyan-300 text-slate-950 shadow-lg shadow-teal-500/30 animate-pulse">
-                          <Wand2 className="h-7 w-7" />
-                        </div>
-                        <span className="mt-2 font-mono text-[10px] text-teal-300 font-semibold bg-[#050811]/90 px-2 py-0.5 rounded border border-teal-400/30">
-                          Alpha PNG Transparent
-                        </span>
-                      </div>
-
-                      {/* Corner badge */}
-                      <div className="absolute top-2 right-2 rounded bg-black/70 px-1.5 py-0.5 text-[9px] font-mono text-white border border-white/10">
-                        100% Clean Edge
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* ACTION 3: VIDEO TRIMMER & AUDIO EXTRACTION */}
-                {activeAction.previewType === 'video' && (
-                  <div className="w-full flex flex-col items-center justify-center gap-3 animate-fade-in">
-                    {/* Video timeline track */}
-                    <div className="w-full rounded-lg bg-[#0A0F1D] border border-white/10 p-3 space-y-2">
-                      <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                        <span>00:04.20</span>
-                        <span className="text-[#818CF8]">Active Range: 00:02 - 00:18</span>
-                        <span>00:30.00</span>
-                      </div>
-
-                      {/* Scrubber Bar */}
-                      <div className="relative h-6 w-full rounded bg-slate-900 overflow-hidden flex items-center px-1">
-                        {/* Audio wave bars */}
-                        <div className="flex items-center gap-1 w-full h-full opacity-60">
-                          {[40, 70, 30, 90, 50, 80, 100, 45, 65, 85, 30, 90, 75, 40, 60, 95, 35].map((h, i) => (
-                            <div
-                              key={i}
-                              className="flex-1 bg-[#818CF8] rounded-full"
-                              style={{ height: `${h}%` }}
-                            />
-                          ))}
-                        </div>
-
-                        {/* Selected Trim region */}
-                        <div className="absolute inset-y-0 left-1/4 right-1/3 bg-indigo-500/25 border-x-2 border-indigo-400" />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 text-xs">
-                      <span className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px] bg-[#0D1426] px-2.5 py-1 rounded border border-white/10">
-                        <Volume2 className="h-3.5 w-3.5 text-indigo-400" />
-                        Audio Boost +6dB
-                      </span>
-                      <span className="text-[#34D399] font-mono text-[11px] bg-[#34D399]/10 px-2 py-1 rounded border border-[#34D399]/20">
-                        Lossless Extract
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* ACTION 4: AUTO SUBTITLES & TRANSCRIPTION */}
-                {activeAction.previewType === 'subtitles' && (
-                  <div className="w-full flex flex-col items-center justify-center gap-2.5 animate-fade-in">
-                    <div className="w-full rounded-lg bg-[#0A0F1D] border border-white/10 p-3 space-y-2 text-left">
-                      <div className="flex items-center justify-between text-[10px] font-mono text-purple-300">
-                        <span>[00:00.00 → 00:04.50]</span>
-                        <span className="bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-200">SRT / VTT</span>
-                      </div>
-                      <p className="text-xs text-slate-100 font-medium bg-[#111827]/80 p-2 rounded border border-purple-500/30">
-                        "NovaTools converts and secures media in milliseconds without cloud latency."
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
-                      <span>Speech to Text in 99+ Languages</span>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Description & Action Selector Tabs */}
-              <div className="mt-4 space-y-3">
-                <p className="text-xs text-[#94A3B8] leading-relaxed">
-                  {activeAction.description}
-                </p>
-
-                {/* Interactive Action Dots / Tabs */}
-                <div className="grid grid-cols-4 gap-1.5 pt-1">
-                  {SHOWCASE_ACTIONS.map((action, idx) => (
-                    <button
-                      key={action.id}
-                      onClick={() => setActiveShowcaseIndex(idx)}
-                      className={`py-1.5 px-1 text-center rounded-lg text-[10px] font-mono transition-all border ${
-                        idx === activeShowcaseIndex
-                          ? 'bg-[#0D1426] text-cyan-300 border-cyan-500/40 shadow-sm'
-                          : 'text-[#64748B] hover:text-slate-300 hover:bg-[#0D1426]/50 border-transparent'
-                      }`}
-                    >
-                      {action.tag.split(' ')[0]}
-                    </button>
-                  ))}
                 </div>
-              </div>
+              )}
 
+              {/* ACTION 3: VIDEO / AUDIO VISUAL (No Text) */}
+              {activeShowcaseIndex === 2 && (
+                <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 animate-fade-in">
+                  <div className="w-full rounded-2xl border border-indigo-400/30 bg-[#0A0F1D]/80 p-4 space-y-3 shadow-2xl shadow-indigo-950/30">
+                    <div className="flex items-center justify-between">
+                      <Video className="h-5 w-5 text-indigo-400" />
+                      <Volume2 className="h-5 w-5 text-cyan-400" />
+                    </div>
+
+                    {/* Equalizer Waveform */}
+                    <div className="relative h-10 w-full rounded-lg bg-slate-950/80 overflow-hidden flex items-center px-2">
+                      <div className="flex items-center gap-1.5 w-full h-full">
+                        {[40, 75, 30, 90, 50, 85, 100, 45, 65, 95, 30, 90, 75, 40, 60, 100, 35, 70, 85, 45].map((h, i) => (
+                          <div
+                            key={i}
+                            className="flex-1 bg-gradient-to-t from-indigo-500 to-cyan-400 rounded-full"
+                            style={{ height: `${h}%` }}
+                          />
+                        ))}
+                      </div>
+                      <div className="absolute inset-y-0 left-1/4 right-1/4 bg-cyan-400/20 border-x-2 border-cyan-400" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ACTION 4: SUBTITLES / TRANSCRIPTION VISUAL (No Text) */}
+              {activeShowcaseIndex === 3 && (
+                <div className="w-full max-w-sm flex flex-col items-center justify-center gap-3 animate-fade-in">
+                  <div className="w-full rounded-2xl border border-purple-400/30 bg-[#0A0F1D]/80 p-5 space-y-3 shadow-2xl shadow-purple-950/30">
+                    <div className="flex items-center justify-between">
+                      <Subtitles className="h-5 w-5 text-purple-400" />
+                      <div className="flex items-center gap-1">
+                        <span className="h-2 w-2 rounded-full bg-purple-400 animate-ping" />
+                        <span className="h-2 w-2 rounded-full bg-purple-400" />
+                      </div>
+                    </div>
+
+                    {/* Soundwave lines simulating speech */}
+                    <div className="space-y-2">
+                      <div className="h-2 w-full bg-gradient-to-r from-purple-400/50 to-indigo-400/50 rounded-full" />
+                      <div className="h-2 w-4/5 bg-gradient-to-r from-purple-400/40 to-indigo-400/40 rounded-full" />
+                      <div className="h-2 w-3/5 bg-gradient-to-r from-purple-400/30 to-indigo-400/30 rounded-full" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Minimal Dot Indicators */}
+            <div className="flex items-center gap-2 pt-2">
+              {[0, 1, 2, 3].map((idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveShowcaseIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === activeShowcaseIndex
+                      ? 'w-6 bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.5)]'
+                      : 'w-2 bg-slate-700 hover:bg-slate-500'
+                  }`}
+                  aria-label={`View showcase ${idx + 1}`}
+                />
+              ))}
             </div>
 
           </div>
@@ -425,3 +277,4 @@ export const HeroSection: React.FC = () => {
     </section>
   );
 };
+
