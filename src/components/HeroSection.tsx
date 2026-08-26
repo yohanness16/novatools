@@ -10,17 +10,17 @@ const TYPEWRITER_SENTENCES = [
   "Unlock fast client-side tools designed for speed, security, and effortless workflows."
 ];
 
-// Yellow character palette with soft subtle lightning shimmer
+// Darkened yellow blended with subtle grey-gold tones
 const BRAND_LETTERS = [
-  { char: 'N', color: '#FEF08A' },
-  { char: 'o', color: '#FDE047' },
-  { char: 'v', color: '#FACC15' },
-  { char: 'a', color: '#EAB308' },
-  { char: 'T', color: '#FDE047' },
-  { char: 'o', color: '#FACC15' },
-  { char: 'o', color: '#FDE047' },
-  { char: 'l', color: '#FEF08A' },
-  { char: 's', color: '#FACC15' },
+  { char: 'N', color: '#D4C596' },
+  { char: 'o', color: '#E5D5A4' },
+  { char: 'v', color: '#C9B87F' },
+  { char: 'a', color: '#BAA86D' },
+  { char: 'T', color: '#E5D5A4' },
+  { char: 'o', color: '#D4C596' },
+  { char: 'o', color: '#C9B87F' },
+  { char: 'l', color: '#BAA86D' },
+  { char: 's', color: '#D4C596' },
 ];
 
 export const HeroSection: React.FC = () => {
@@ -70,21 +70,22 @@ export const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden pt-4 pb-12 lg:py-16">
+    <section className="relative w-full min-h-[calc(100vh-4rem)] flex flex-col justify-between overflow-hidden px-6 sm:px-10 lg:px-16 xl:px-24 py-8 lg:py-10">
       {/* Ambient Sci-Fi Glow Background Orbs */}
       <div className="pointer-events-none absolute -top-24 left-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="pointer-events-none absolute top-1/3 -right-20 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-10 left-1/3 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
 
-      <div className="w-full px-4 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+      {/* Main Hero Content (Centered) */}
+      <div className="w-full flex-1 flex items-center my-auto">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
-          {/* LEFT COLUMN: Hero Copy, Brand, Typewriter, Yellow Explore Button */}
-          <div className="lg:col-span-7 space-y-6 sm:space-y-7 text-left">
+          {/* LEFT COLUMN: Hero Brand, Typewriter, and Explore Button */}
+          <div className="lg:col-span-7 space-y-7 text-left">
             
-            {/* Brand Title with Soft Yellow Shimmer */}
+            {/* Brand Title with Darkened Yellow-Grey Gold Blend */}
             <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15]">
                 <span className="block text-2xl sm:text-3xl font-semibold text-slate-300 mb-1">
                   Create, Convert & Edit with
                 </span>
@@ -95,7 +96,7 @@ export const HeroSection: React.FC = () => {
                       className="inline-block transition-all duration-300 font-extrabold hover:scale-105"
                       style={{
                         color: item.color,
-                        textShadow: '0 0 10px rgba(250, 204, 21, 0.4)'
+                        textShadow: '0 0 10px rgba(212, 197, 150, 0.25)'
                       }}
                     >
                       {item.char}
@@ -113,48 +114,27 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* User-Centric Value Bullets */}
-            <p className="text-sm sm:text-base text-[#94A3B8] max-w-xl leading-relaxed">
-              Fast, privacy-first utility tools that run directly in your browser. No files are ever sent to external servers, no subscriptions, and no upload queues.
-            </p>
-
-            {/* Action Button: Yellow Gradient "Explore" */}
-            <div className="pt-2">
+            {/* Action Button: Darkened Yellow & Grey Blend "Explore" */}
+            <div className="pt-1">
               <a
                 href="#catalog"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 px-7 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#D8C47F] via-[#B8A76B] to-[#71717A] hover:from-[#E5D593] hover:to-[#52525B] px-8 py-3.5 text-sm font-bold text-[#090C12] shadow-lg shadow-amber-950/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
               >
                 <span>Explore</span>
                 <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </a>
             </div>
 
-            {/* Trust Highlights */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-white/[0.06] text-xs text-[#94A3B8]">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-[#34D399] shrink-0" />
-                <span className="font-medium text-slate-200">Zero Uploads</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-[#38BDF8] shrink-0" />
-                <span className="font-medium text-slate-200">Instant Speed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-[#A78BFA] shrink-0" />
-                <span className="font-medium text-slate-200">Private by Design</span>
-              </div>
-            </div>
-
           </div>
 
 
-          {/* RIGHT COLUMN: Pure Visual Action Graphic (No Box Container, No Text Clutter, Clean Transparency) */}
+          {/* RIGHT COLUMN: Pure Visual Action Graphic (Clean, Borderless, Transparency) */}
           <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
             
-            {/* Action Graphic Area (Clean, borderless, floating naturally) */}
+            {/* Action Graphic Area */}
             <div className="relative w-full h-72 sm:h-80 flex items-center justify-center">
               
-              {/* ACTION 1: PDF MERGING VISUAL (No Text) */}
+              {/* ACTION 1: PDF MERGING VISUAL */}
               {activeShowcaseIndex === 0 && (
                 <div className="w-full flex flex-col items-center justify-center gap-4 animate-fade-in">
                   <div className="flex items-center justify-center gap-4">
@@ -193,7 +173,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               )}
 
-              {/* ACTION 2: IMAGE CUTOUT VISUAL (No Text) */}
+              {/* ACTION 2: IMAGE CUTOUT VISUAL */}
               {activeShowcaseIndex === 1 && (
                 <div className="w-full flex items-center justify-center animate-fade-in">
                   <div className="relative w-64 h-44 rounded-2xl border border-teal-400/30 bg-checkerboard flex items-center justify-center shadow-2xl shadow-teal-950/30 overflow-hidden">
@@ -204,7 +184,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               )}
 
-              {/* ACTION 3: VIDEO / AUDIO VISUAL (No Text) */}
+              {/* ACTION 3: VIDEO / AUDIO VISUAL */}
               {activeShowcaseIndex === 2 && (
                 <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 animate-fade-in">
                   <div className="w-full rounded-2xl border border-indigo-400/30 bg-[#0A0F1D]/80 p-4 space-y-3 shadow-2xl shadow-indigo-950/30">
@@ -230,7 +210,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               )}
 
-              {/* ACTION 4: SUBTITLES / TRANSCRIPTION VISUAL (No Text) */}
+              {/* ACTION 4: SUBTITLES / TRANSCRIPTION VISUAL */}
               {activeShowcaseIndex === 3 && (
                 <div className="w-full max-w-sm flex flex-col items-center justify-center gap-3 animate-fade-in">
                   <div className="w-full rounded-2xl border border-purple-400/30 bg-[#0A0F1D]/80 p-5 space-y-3 shadow-2xl shadow-purple-950/30">
@@ -262,7 +242,7 @@ export const HeroSection: React.FC = () => {
                   onClick={() => setActiveShowcaseIndex(idx)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     idx === activeShowcaseIndex
-                      ? 'w-6 bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.5)]'
+                      ? 'w-6 bg-[#D4C596] shadow-[0_0_8px_rgba(212,197,150,0.4)]'
                       : 'w-2 bg-slate-700 hover:bg-slate-500'
                   }`}
                   aria-label={`View showcase ${idx + 1}`}
@@ -272,6 +252,22 @@ export const HeroSection: React.FC = () => {
 
           </div>
 
+        </div>
+      </div>
+
+      {/* BOTTOM OF 100VH HERO: Trust Highlights Bar spanning full width under both text and graphic */}
+      <div className="w-full pt-6 pb-2 border-t border-white/[0.07] flex flex-wrap items-center justify-around gap-4 text-xs sm:text-sm text-[#94A3B8]">
+        <div className="flex items-center gap-2.5">
+          <ShieldCheck className="h-4 w-4 text-[#34D399] shrink-0" />
+          <span className="font-medium text-slate-200">Zero Uploads</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <Zap className="h-4 w-4 text-[#38BDF8] shrink-0" />
+          <span className="font-medium text-slate-200">Instant Speed</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <Lock className="h-4 w-4 text-[#A78BFA] shrink-0" />
+          <span className="font-medium text-slate-200">Private by Design</span>
         </div>
       </div>
     </section>
