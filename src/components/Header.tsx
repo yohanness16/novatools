@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CommandPalette } from './CommandPalette';
-import { Search, Menu, X, FileText, Image as ImageIcon, Video, Code, Cpu } from 'lucide-react';
+import { Search, Menu, X, FileText, Image as ImageIcon, Video, Code } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
@@ -19,15 +19,12 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-[#1E293B]/70 bg-[#050811]/85 backdrop-blur-xl transition-all">
+      <header className="sticky top-0 z-40 w-full bg-transparent backdrop-blur-md border-b border-white/[0.06] transition-all">
         <div className="w-full flex h-16 items-center justify-between px-4 sm:px-6 lg:px-10 gap-4">
-          {/* Logo & Brand (Left) */}
+          {/* Brand Name Only (Left) */}
           <div className="flex items-center shrink-0">
-            <a href="/" className="flex items-center gap-3 text-left group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-indigo-500/20 border border-cyan-500/30 text-[#38BDF8] shadow-[0_0_15px_rgba(56,189,248,0.2)] group-hover:border-[#38BDF8] group-hover:shadow-[0_0_22px_rgba(56,189,248,0.35)] transition-all">
-                <Cpu className="h-5 w-5" />
-              </div>
-              <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-[#38BDF8] transition-colors">
+            <a href="/" className="flex items-center text-left group">
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-[#38BDF8] transition-colors">
                 NovaTools
               </span>
             </a>
@@ -37,7 +34,7 @@ export const Header: React.FC = () => {
           <div className="flex-1 max-w-lg hidden md:flex items-center justify-center mx-4">
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="w-full flex items-center justify-between gap-3 rounded-lg bg-[#0A0F1D]/80 hover:bg-[#0D1426] border border-[#1E293B] hover:border-[#38BDF8]/60 px-3.5 py-2 text-xs text-[#94A3B8] transition-all shadow-inner group cursor-pointer"
+              className="w-full flex items-center justify-between gap-3 rounded-lg bg-[#0A0F1D]/60 hover:bg-[#0D1426]/80 border border-white/10 hover:border-[#38BDF8]/60 px-3.5 py-2 text-xs text-[#94A3B8] transition-all shadow-inner group cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
                 <Search className="h-4 w-4 text-[#64748B] group-hover:text-[#38BDF8] transition-colors" />
@@ -45,7 +42,7 @@ export const Header: React.FC = () => {
                   Search tools, actions & formats...
                 </span>
               </div>
-              <kbd className="inline-flex items-center rounded bg-[#050811] px-2 py-0.5 font-mono text-[10px] text-[#64748B] border border-[#1E293B] group-hover:border-[#38BDF8]/40 group-hover:text-[#38BDF8] transition-colors">
+              <kbd className="inline-flex items-center rounded bg-[#050811]/80 px-2 py-0.5 font-mono text-[10px] text-[#64748B] border border-white/10 group-hover:border-[#38BDF8]/40 group-hover:text-[#38BDF8] transition-colors">
                 ⌘K
               </kbd>
             </button>
@@ -57,28 +54,28 @@ export const Header: React.FC = () => {
             <nav className="hidden lg:flex items-center gap-1.5 sm:gap-2">
               <a
                 href="/#pdf-suite"
-                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <FileText className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>PDF</span>
               </a>
               <a
                 href="/#image-suite"
-                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <ImageIcon className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>Image</span>
               </a>
               <a
                 href="/#video-suite"
-                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <Video className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>Video & Audio</span>
               </a>
               <a
                 href="/#svg-suite"
-                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426] border border-transparent hover:border-[#1E293B] transition-all"
+                className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <Code className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>SVG</span>
@@ -88,7 +85,7 @@ export const Header: React.FC = () => {
             {/* Mobile Search Button */}
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="md:hidden rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426] hover:text-white border border-[#1E293B] transition-colors"
+              className="md:hidden rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426]/80 hover:text-white border border-white/10 transition-colors"
               aria-label="Search"
             >
               <Search className="h-4 w-4" />
@@ -97,7 +94,7 @@ export const Header: React.FC = () => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426] hover:text-white lg:hidden border border-[#1E293B] transition-colors"
+              className="rounded-lg p-2 text-[#94A3B8] hover:bg-[#0D1426]/80 hover:text-white lg:hidden border border-white/10 transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
