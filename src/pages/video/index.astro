@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { TOOLS } from '../../lib/toolsData';
+import {
+  Film, Scissors, Music, VolumeX, Subtitles, Volume2, Repeat,
+  ArrowRight, Video as VideoIcon, Sparkles
+} from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+  Film, Scissors, Music, VolumeX, Subtitles, Volume2, Repeat, VideoIcon
+};
+
+const videoTools = TOOLS.filter(t => t.category === 'video');
+---
+
+<Layout
+  title="Video & Audio Suite - 100% Client-Side Media Tools | NovaTools"
+  description="Trim video, boost volume, transcribe subtitles, mute audio, and convert videos to GIF directly in your browser. Zero cloud uploads."
+>
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+    
+    {/* Suite Hero Header */}
+    <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-2xl space-y-4">
+      {/* Ambient Glow */}
+      <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-purple-500/15 blur-3xl" />
+
+      <div class="inline-flex items-center gap-2 rounded-full bg-[#0D1426] border border-white/10 px-3.5 py-1 text-xs font-mono text-purple-400">
+        <VideoIcon class="h-3.5 w-3.5 text-purple-400" />
+        <span>VIDEO & AUDIO SUITE ({videoTools.length} TOOLS)</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+        Next-Gen <span class="bg-gradient-to-r from-purple-200 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">Video & Audio Suite</span>
+      </h1>
+
+      <p class="text-sm sm:text-base text-[#94A3B8] max-w-2xl leading-relaxed">
+        Fast client-side video processing powered by WebCodecs and WebAssembly. Trim clips, isolate soundtracks, amplify audio, and generate subtitles without uploading GBs of video to remote servers.
+      </p>
+
+      {/* Trust Highlights */}
+      <div class="flex flex-wrap items-center gap-6 pt-2 text-xs text-[#94A3B8] font-mono">
+        <span class="flex items-center gap-1.5 text-slate-200">
+          <span class="h-2 w-2 rounded-full bg-[#34D399]" />
+          Zero Cloud Uploads
+        </span>
+        <span class="flex items-center gap-1.5 text-slate-200">
+          <span class="h-2 w-2 rounded-full bg-purple-400" />
+          No Watermarks
+        </span>
+        <span class="flex items-center gap-1.5 text-slate-200">
+          <span class="h-2 w-2 rounded-full bg-[#38BDF8]" />
+          Hardware Accelerated
+        </span>
+      </div>
+    </div>
+
+    {/* Tools Grid */}
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h2 class="text-lg font-bold tracking-tight text-white">
+          All Video & Audio Tools
+        </h2>
+        <span class="text-xs text-[#94A3B8] font-mono">
+          {videoTools.length} tools available
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {videoTools.map((tool) => {
+          const Icon = iconMap[tool.iconName] || VideoIcon;
+
+          return (
+            <a
+              href={tool.path}
+              class="group flex flex-col justify-between rounded-xl border border-white/10 bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-purple-500/50 hover:bg-[#0D1426] hover:shadow-xl hover:shadow-purple-950/30"
+            >
+              <div class="space-y-3.5">
+                <div class="flex items-center justify-between">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0D1426] border border-white/10 text-[#94A3B8] group-hover:text-purple-400 group-hover:border-purple-500/40 transition-colors">
+                    <Icon class="h-4 w-4" />
+                  </div>
+
+                  {tool.badge && (
+                    <span class="font-mono text-[10px] font-medium text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-500/30">
+                      {tool.badge}
+                    </span>
+                  )}
+                </div>
+
+                <div class="space-y-1.5">
+                  <h3 class="text-base font-bold text-white group-hover:text-purple-400 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p class="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">
+                    {tool.description}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06] font-mono text-[11px]">
+                <span class="text-[#34D399]">100% Private</span>
+                <span class="flex items-center gap-1 text-[#94A3B8] group-hover:text-purple-400 transition-colors font-medium">
+                  Launch <ArrowRight class="h-3 w-3" />
+                </span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+
+  </div>
+</Layout>

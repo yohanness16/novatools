@@ -53,28 +53,28 @@ export const Header: React.FC = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1.5 sm:gap-2">
               <a
-                href="/#pdf-suite"
+                href="/pdf"
                 className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <FileText className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>PDF</span>
               </a>
               <a
-                href="/#image-suite"
+                href="/image"
                 className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <ImageIcon className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>Image</span>
               </a>
               <a
-                href="/#video-suite"
+                href="/video"
                 className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <Video className="h-4 w-4 text-[#38BDF8]/80" />
                 <span>Video & Audio</span>
               </a>
               <a
-                href="/#svg-suite"
+                href="/svg"
                 className="flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0D1426]/60 border border-transparent hover:border-white/10 transition-all"
               >
                 <Code className="h-4 w-4 text-[#38BDF8]/80" />
@@ -107,7 +107,7 @@ export const Header: React.FC = () => {
           <div className="border-t border-[#1E293B] bg-[#050811]/95 backdrop-blur-xl px-4 py-4 lg:hidden space-y-3">
             <div className="grid grid-cols-2 gap-2.5">
               <a
-                href="/#pdf-suite"
+                href="/pdf"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
@@ -115,7 +115,7 @@ export const Header: React.FC = () => {
                 PDF Suite
               </a>
               <a
-                href="/#image-suite"
+                href="/image"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
@@ -123,7 +123,7 @@ export const Header: React.FC = () => {
                 Image Suite
               </a>
               <a
-                href="/#video-suite"
+                href="/video"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
                 Video & Audio
               </a>
               <a
-                href="/#svg-suite"
+                href="/svg"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 rounded-lg bg-[#0A0F1D] p-2.5 text-xs font-medium text-[#F1F5F9] border border-[#1E293B] hover:border-[#38BDF8]/50 transition-colors"
               >
