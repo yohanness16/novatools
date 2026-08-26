@@ -115,4 +115,43 @@
     align-items: center;
     gap: 8px;
   }
+
+  .bg-checkerboard {
+    background-image: linear-gradient(45deg, #131A2E 25%, transparent 25%),
+      linear-gradient(-45deg, #131A2E 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #131A2E 75%),
+      linear-gradient(-45deg, transparent 75%, #131A2E 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  }
+}
+
+@keyframes lightning-shimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px currentColor);
+    transform: translateY(0px) scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    filter: drop-shadow(0 0 12px currentColor) brightness(1.25);
+    transform: translateY(-2px) scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-lightning {
+  animation: lightning-shimmer 2.4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float-slow 4s ease-in-out infinite;
 }
