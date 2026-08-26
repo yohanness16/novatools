@@ -67,7 +67,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24">
+    <div className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-16 sm:pt-24">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm transition-opacity"
