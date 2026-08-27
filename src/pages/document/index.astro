@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { TOOLS } from '../../lib/toolsData';
+import {
+  FileText, Presentation, FileSpreadsheet, Printer, Sparkles,
+  ArrowRight, ShieldCheck
+} from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+  FileText, Presentation, FileSpreadsheet, Printer, Sparkles
+};
+
+const docTools = TOOLS.filter(t => t.category === 'document');
+---
+
+<Layout
+  title="Document Suite - 100% Private Client-Side Document & AI Tools | NovaTools"
+  description="Transform Markdown, Word DOCX, and CSV into PDF, PPTX presentations, and Excel spreadsheets with zero data loss and in-browser AI."
+>
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+    
+    {/* Suite Hero Header */}
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/85 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-xl space-y-4">
+      {/* Ambient Glow */}
+      <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-indigo-500/15 blur-3xl" />
+
+      <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 px-3.5 py-1 text-xs font-mono text-indigo-600 dark:text-indigo-400">
+        <Sparkles class="h-3.5 w-3.5 text-indigo-500 dark:text-indigo-400" />
+        <span>DOCUMENT & AI SUITE ({docTools.length} TOOLS)</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+        Zero-Data-Loss <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Document & AI Utilities</span>
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 dark:text-[#94A3B8] max-w-2xl leading-relaxed">
+        Transform Markdown, Word (.docx), and CSV files into vector PDFs, PowerPoint slide decks, and Excel workbooks directly in your browser. Powered by on-device AI with 100% privacy and zero server uploads.
+      </p>
+
+      <div class="pt-2">
+        <a
+          href="/document/studio"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold shadow-glow-sm transition-all"
+        >
+          <Sparkles class="w-4 h-4" />
+          Launch Document Studio
+          <ArrowRight class="w-4 h-4" />
+        </a>
+      </div>
+    </div>
+
+    {/* Tools Grid */}
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+        <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+          All Document & AI Tools
+        </h2>
+        <span class="text-xs text-slate-500 dark:text-[#94A3B8] font-mono">
+          {docTools.length} tools available
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {docTools.map((tool) => {
+          const Icon = iconMap[tool.iconName] || FileText;
+
+          return (
+            <a
+              href={tool.path}
+              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/90 p-6 transition-all duration-300 hover:border-indigo-500/50 hover:bg-slate-50 dark:hover:bg-[#0D1426] hover:shadow-xl hover:shadow-indigo-950/20"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-white transition-colors group-hover:border-indigo-500/30 group-hover:bg-indigo-500/10 group-hover:text-indigo-400">
+                    <Icon class="h-5 w-5" />
+                  </div>
+
+                  {tool.badge && (
+                    <span class="rounded-full bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 text-[10px] font-mono font-medium text-indigo-400">
+                      {tool.badge}
+                    </span>
+                  )}
+                </div>
+
+                <div class="space-y-1">
+                  <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-indigo-400 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p class="text-xs text-slate-600 dark:text-[#94A3B8] line-clamp-2 leading-relaxed">
+                    {tool.description}
+                  </p>
+                </div>
+              </div>
+
+              <div class="pt-4 mt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs font-semibold text-indigo-500 dark:text-indigo-400">
+                <span>Launch Tool</span>
+                <ArrowRight class="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+
+  </div>
+</Layout>

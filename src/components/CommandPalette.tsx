@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TOOLS, type ToolMeta } from '../lib/toolsData';
-import { Search, X, Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus, Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles, Volume2, Sparkles, Hash } from 'lucide-react';
+import { Search, X, Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus, Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles, Volume2, Sparkles, Hash, FileText, Presentation, FileSpreadsheet, Printer } from 'lucide-react';
 
 const iconMap: Record<string, React.ElementType> = {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
   Repeat, Minimize2, Maximize2, ShieldCheck, Code, Film, Clock, Music, VolumeX, Subtitles,
-  Volume2, Sparkles, Hash,
+  Volume2, Sparkles, Hash, FileText, Presentation, FileSpreadsheet, Printer,
 };
 
 interface CommandPaletteProps {

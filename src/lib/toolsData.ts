@@ -2,7 +2,7 @@ export interface ToolMeta {
   id: string;
   slug: string;
   name: string;
-  category: 'pdf' | 'image' | 'video' | 'svg';
+  category: 'pdf' | 'image' | 'video' | 'svg' | 'document';
   categoryLabel: string;
   description: string;
   longDescription: string;
@@ -606,13 +606,147 @@ export const TOOLS: ToolMeta[] = [
       { question: 'Can I export in vertical format for TikTok, Reels, or YouTube Shorts?', answer: 'Yes! You can choose 9:16 Vertical, 16:9 Landscape, or 1:1 Square canvas format before rendering.' },
       { question: 'Are my audio and video files uploaded to any external server?', answer: 'No! All audio decoding, canvas animation, and video compilation execute 100% locally inside your browser memory.' }
     ]
+  },
+  // DOCUMENT & AI SUITE
+  {
+    id: 'doc-studio',
+    slug: 'studio',
+    name: 'Universal Document Studio',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: '100% client-side document editor with AI slide generation, table extraction, and multi-format export (PDF, DOCX, PPTX, XLSX).',
+    longDescription: 'Transform Markdown, Word DOCX, and CSV files in your browser. Real-time split editor, AI presentation generation, structured spreadsheet synthesis, and crisp vector PDF printing with zero server uploads.',
+    iconName: 'FileText',
+    badge: 'AI Powered',
+    path: '/document/studio',
+    keywords: ['document studio', 'markdown to pdf', 'markdown to docx', 'doc to pptx', 'doc to excel', 'client-side document converter'],
+    features: [
+      '100% Client-Side: Zero server uploads, total confidentiality',
+      'Lossless AST Transformation between Markdown, Word, PowerPoint, and Excel',
+      'In-Browser AI Assistant: Generates presentations, extracts data, and polishes tone',
+      'Instant Vector PDF and Word (.docx) generation with tables and code blocks'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Input Content', desc: 'Type Markdown or upload a .docx, .md, or .csv file.' },
+      { step: 2, title: 'AI Enhance & Preview', desc: 'Click "AI to Slides" or "AI to Excel" to generate presentations and sheets.' },
+      { step: 3, title: 'Export', desc: 'Download as PDF, DOCX, PPTX, or XLSX with a single click.' }
+    ],
+    faqs: [
+      { question: 'Are my confidential documents uploaded to any AI server?', answer: 'No! All processing runs 100% locally in your browser using Chrome Built-in AI (Gemini Nano) or WebAssembly AST algorithms.' }
+    ]
+  },
+  {
+    id: 'md-to-pdf',
+    slug: 'md-to-pdf',
+    name: 'Markdown to PDF',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: 'Convert Markdown documents into beautiful vector PDFs with CSS Paged Media typography.',
+    longDescription: 'High-fidelity Markdown to PDF conversion in browser. Preserves tables, syntax-highlighted code blocks, blockquotes, and math equations with crisp vector typography.',
+    iconName: 'Printer',
+    badge: 'Lossless',
+    path: '/document/md-to-pdf',
+    keywords: ['markdown to pdf', 'md to pdf', 'convert markdown to pdf in browser'],
+    features: [
+      'Zero server upload, instant local rendering',
+      'Full GFM Table support with styled borders',
+      'Syntax highlighted code blocks'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Paste Markdown', desc: 'Enter your markdown notes or drop a .md file.' },
+      { step: 2, title: 'Review Preview', desc: 'Inspect the live rendered document layout.' },
+      { step: 3, title: 'Print / Save PDF', desc: 'Click "PDF Export" to trigger crisp vector printing.' }
+    ],
+    faqs: [
+      { question: 'Can I include tables and code?', answer: 'Yes! All GFM tables, syntax-highlighted code blocks, and blockquotes are rendered losslessly.' }
+    ]
+  },
+  {
+    id: 'md-to-docx',
+    slug: 'md-to-docx',
+    name: 'Markdown to Word (DOCX)',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: 'Convert Markdown or edit DOCX files into native Microsoft Word (.docx) documents.',
+    longDescription: 'Generate fully styled Microsoft Word (.docx) OpenXML documents directly in the browser. Ingest existing .docx files or compile Markdown into Word tables, styled headers, and callouts.',
+    iconName: 'FileText',
+    badge: 'Popular',
+    path: '/document/md-to-docx',
+    keywords: ['markdown to word', 'markdown to docx', 'md to docx', 'docx editor'],
+    features: [
+      'Native OpenXML DOCX compilation',
+      'Ingests uploaded .docx files into clean Markdown',
+      'Formatted Word tables with header styling and shading'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload or Type', desc: 'Upload a .docx file or write Markdown.' },
+      { step: 2, title: 'Preview & Format', desc: 'Verify your headings, lists, and tables.' },
+      { step: 3, title: 'Download DOCX', desc: 'Download standard Microsoft Word OpenXML file.' }
+    ],
+    faqs: [
+      { question: 'Does it work with Microsoft Word and Google Docs?', answer: 'Yes! The generated .docx files are fully compatible with Word, Google Docs, LibreOffice, and Apple Pages.' }
+    ]
+  },
+  {
+    id: 'doc-to-slides',
+    slug: 'doc-to-slides',
+    name: 'Document to Slides (PPTX)',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: 'Transform documents and notes into professional PowerPoint presentation slide decks.',
+    longDescription: 'Intelligently decompose documents into 16:9 widescreen PowerPoint (.pptx) presentations with multiple card layouts, statistic callouts, code slides, and speaker notes.',
+    iconName: 'Presentation',
+    badge: 'AI Slides',
+    path: '/document/doc-to-slides',
+    keywords: ['doc to pptx', 'markdown to slides', 'markdown to powerpoint', 'ai presentation generator'],
+    features: [
+      'AI-powered semantic slide chunking',
+      '4 Designer Themes: Dark Indigo, Corporate Blue, Emerald Clean, Sunset Modern',
+      'Automatic speaker notes and metric statistic cards'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Paste Document', desc: 'Enter document notes or project specifications.' },
+      { step: 2, title: 'Generate Slides', desc: 'Use AI or heuristic parser to generate 16:9 slides.' },
+      { step: 3, title: 'Download PPTX', desc: 'Export native PowerPoint presentation.' }
+    ],
+    faqs: [
+      { question: 'Are the slides editable in PowerPoint?', answer: 'Yes! The downloaded .pptx is a native presentation with fully editable text boxes, shapes, and tables.' }
+    ]
+  },
+  {
+    id: 'doc-to-excel',
+    slug: 'doc-to-excel',
+    name: 'Document to Excel (XLSX)',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: 'Extract tables and synthesize structured datasets from documents into Excel (.xlsx) workbooks.',
+    longDescription: 'Scan narrative text or Markdown documents for tabular data and export formatted multi-sheet Excel (.xlsx) workbooks and CSV files with auto-detected data types.',
+    iconName: 'FileSpreadsheet',
+    badge: 'Smart Data',
+    path: '/document/doc-to-excel',
+    keywords: ['doc to excel', 'markdown to xlsx', 'markdown table to excel', 'extract tables to excel'],
+    features: [
+      'Extracts all GFM and HTML tables from documents',
+      'AI Smart Extractor for unstructured text',
+      'Multi-sheet Excel workbook generation with column auto-sizing'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Input Notes/Tables', desc: 'Paste document with tables or narrative text.' },
+      { step: 2, title: 'Extract & Inspect', desc: 'Review the interactive spreadsheet grid.' },
+      { step: 3, title: 'Download XLSX', desc: 'Export multi-sheet Excel spreadsheet.' }
+    ],
+    faqs: [
+      { question: 'Does it auto-detect numbers and currency?', answer: 'Yes! Numbers and financial values are automatically parsed and formatted as numeric cells.' }
+    ]
   }
 ];
 
 export const CATEGORIES = [
   { id: 'all', label: 'All Tools', count: TOOLS.length },
+  { id: 'document', label: 'Document Suite', count: TOOLS.filter(t => t.category === 'document').length },
   { id: 'pdf', label: 'PDF Suite', count: TOOLS.filter(t => t.category === 'pdf').length },
   { id: 'image', label: 'Image Suite', count: TOOLS.filter(t => t.category === 'image').length },
   { id: 'video', label: 'Video & Audio', count: TOOLS.filter(t => t.category === 'video').length },
   { id: 'svg', label: 'SVG Tools', count: TOOLS.filter(t => t.category === 'svg').length },
 ];
+

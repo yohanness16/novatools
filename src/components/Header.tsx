@@ -21,7 +21,8 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'PDF Suite', href: '/pdf', icon: FileText },
+  { label: 'Doc Suite', href: '/document', icon: FileText },
+  { label: 'PDF Suite', href: '/pdf', icon: Layers },
   { label: 'Image Suite', href: '/image', icon: ImageIcon },
   { label: 'Video & Audio', href: '/video', icon: Video },
   { label: 'SVG Tools', href: '/svg', icon: Code2 },

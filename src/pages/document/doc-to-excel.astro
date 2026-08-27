@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import DocStudioWorkspace from '../../components/workspaces/DocStudioWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'doc-to-excel')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <DocStudioWorkspace client:load />
+</ToolPageLayout>
