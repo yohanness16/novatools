@@ -11,7 +11,8 @@ import {
   Code2, 
   Info, 
   ArrowRight,
-  Layers
+  Layers,
+  Workflow
 } from 'lucide-react';
 
 interface NavItem {
@@ -21,6 +22,7 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
+  { label: 'Diagrams', href: '/diagram', icon: Workflow },
   { label: 'Doc Suite', href: '/document', icon: FileText },
   { label: 'PDF Suite', href: '/pdf', icon: Layers },
   { label: 'Image Suite', href: '/image', icon: ImageIcon },

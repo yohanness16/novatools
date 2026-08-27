@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import DiagramStudioWorkspace from '../../components/workspaces/DiagramStudioWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'doc-to-erd')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <DiagramStudioWorkspace client:load />
+</ToolPageLayout>

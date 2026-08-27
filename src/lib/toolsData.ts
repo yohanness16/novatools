@@ -2,7 +2,7 @@ export interface ToolMeta {
   id: string;
   slug: string;
   name: string;
-  category: 'pdf' | 'image' | 'video' | 'svg' | 'document';
+  category: 'pdf' | 'image' | 'video' | 'svg' | 'document' | 'diagram';
   categoryLabel: string;
   description: string;
   longDescription: string;
@@ -790,15 +790,123 @@ export const TOOLS: ToolMeta[] = [
     faqs: [
       { question: 'Will the generated Word file be fully editable?', answer: 'Yes! The exported .docx contains native editable paragraphs, headings, and bullet points compatible with Microsoft Word and Google Docs.' }
     ]
+  },
+  // DIAGRAM & VISUALIZER SUITE
+  {
+    id: 'diagram-studio',
+    slug: 'studio',
+    name: 'AI Document-to-Diagram Studio',
+    category: 'diagram',
+    categoryLabel: 'Diagram Suite',
+    description: 'Transform documents, architecture notes, and schemas into interactive Mermaid.js Flowcharts, ERDs, and Architecture maps.',
+    longDescription: '100% client-side AI diagram studio. Ingest PDF, Word DOCX, or Markdown and synthesize flowcharts, database ERDs, sequence diagrams, and software architecture maps with vector SVG and 4K PNG export.',
+    iconName: 'Workflow',
+    badge: 'AI Diagram',
+    path: '/diagram/studio',
+    keywords: ['document to diagram', 'ai diagram generator', 'markdown to mermaid', 'pdf to flowchart', 'pdf to erd', 'architecture visualizer'],
+    features: [
+      '100% Client-Side: Zero server uploads, total confidentiality',
+      'Supports Flowcharts, Database ERDs, Sequence, Architecture & Mindmaps',
+      'Interactive visual canvas with live zoom, pan, and theme styling',
+      'One-click export to Vector SVG, 4K PNG, and Mermaid code'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload or Paste', desc: 'Drop a PDF/DOCX document or paste text specs.' },
+      { step: 2, title: 'Select Diagram Type', desc: 'Choose Flowchart, ERD, Sequence, Architecture, or Mindmap.' },
+      { step: 3, title: 'Export Graphic', desc: 'Download as Vector SVG, High-Res PNG, or copy code.' }
+    ],
+    faqs: [
+      { question: 'Are my architecture and database diagrams uploaded to a remote AI server?', answer: 'No! All diagram parsing, AI prompting, and Mermaid rendering execute 100% locally inside your browser.' }
+    ]
+  },
+  {
+    id: 'doc-to-flowchart',
+    slug: 'doc-to-flowchart',
+    name: 'Document to Flowchart',
+    category: 'diagram',
+    categoryLabel: 'Diagram Suite',
+    description: 'Decompose business processes and algorithmic steps from text into clean visual flowcharts.',
+    longDescription: 'Turn complex user flows, onboarding steps, and decision logic into beautiful Mermaid flowcharts with directional controls and SVG export.',
+    iconName: 'GitBranch',
+    badge: 'Flowchart',
+    path: '/diagram/doc-to-flowchart',
+    keywords: ['doc to flowchart', 'text to flowchart', 'ai flowchart maker'],
+    features: [
+      'Automatic decision diamond and process node detection',
+      'Supports Top-Down (TD) and Left-to-Right (LR) layouts',
+      'Crisp vector SVG export'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Input Process', desc: 'Enter bullet points, SOP notes, or algorithm steps.' },
+      { step: 2, title: 'Generate Flowchart', desc: 'Inspect the generated decision flow.' },
+      { step: 3, title: 'Download SVG/PNG', desc: 'Export high-resolution diagram.' }
+    ],
+    faqs: [
+      { question: 'Can I edit the flowchart code manually?', answer: 'Yes! The studio includes a live Mermaid code editor with real-time preview.' }
+    ]
+  },
+  {
+    id: 'doc-to-erd',
+    slug: 'doc-to-erd',
+    name: 'Document to Database ERD',
+    category: 'diagram',
+    categoryLabel: 'Diagram Suite',
+    description: 'Extract database entities, tables, attributes, and relationships into visual Entity-Relationship diagrams.',
+    longDescription: 'Scan SQL schemas, documentation, or tables to extract entities, primary/foreign keys, and cardinalities into clean Mermaid ER diagrams.',
+    iconName: 'Database',
+    badge: 'Database ERD',
+    path: '/diagram/doc-to-erd',
+    keywords: ['doc to erd', 'sql to erd', 'ai database diagram', 'entity relationship diagram generator'],
+    features: [
+      'Extracts tables, columns, and data types',
+      'Automatic primary and foreign key mapping',
+      'Relationship cardinality modeling (1:N, M:N)'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Input Schema/Docs', desc: 'Paste database tables, SQL, or specification text.' },
+      { step: 2, title: 'Generate ERD', desc: 'Review entity relationships and tables.' },
+      { step: 3, title: 'Export', desc: 'Download as SVG or copy Mermaid code.' }
+    ],
+    faqs: [
+      { question: 'Does it support SQL schemas?', answer: 'Yes! Paste CREATE TABLE statements or Markdown tables to instantly extract ER diagrams.' }
+    ]
+  },
+  {
+    id: 'doc-to-architecture',
+    slug: 'doc-to-architecture',
+    name: 'Document to Architecture Map',
+    category: 'diagram',
+    categoryLabel: 'Diagram Suite',
+    description: 'Visualize system tiers, microservices, cloud infrastructure, and component relationships.',
+    longDescription: 'Map software architecture specifications into multi-tier diagrams with Client, API Gateway, Microservices, and Database subgraphs.',
+    iconName: 'Layers',
+    badge: 'Architecture',
+    path: '/diagram/doc-to-architecture',
+    keywords: ['doc to architecture', 'system architecture diagram', 'microservices diagram generator'],
+    features: [
+      'Multi-tier subgraph grouping',
+      'Microservice dependency mapping',
+      'Theme customization with dark and light palettes'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Input Tech Stack', desc: 'Paste architecture notes or system specs.' },
+      { step: 2, title: 'Synthesize Architecture', desc: 'Inspect tiers and service connections.' },
+      { step: 3, title: 'Export Diagram', desc: 'Download 4K PNG or vector SVG.' }
+    ],
+    faqs: [
+      { question: 'Is this suitable for design docs and RFCs?', answer: 'Yes! Perfect for embedding in engineering RFCs, system documentation, and pitch decks.' }
+    ]
   }
 ];
 
 export const CATEGORIES = [
   { id: 'all', label: 'All Tools', count: TOOLS.length },
+  { id: 'diagram', label: 'Diagram Suite', count: TOOLS.filter(t => t.category === 'diagram').length },
   { id: 'document', label: 'Document Suite', count: TOOLS.filter(t => t.category === 'document').length },
   { id: 'pdf', label: 'PDF Suite', count: TOOLS.filter(t => t.category === 'pdf').length },
   { id: 'image', label: 'Image Suite', count: TOOLS.filter(t => t.category === 'image').length },
   { id: 'video', label: 'Video & Audio', count: TOOLS.filter(t => t.category === 'video').length },
   { id: 'svg', label: 'SVG Tools', count: TOOLS.filter(t => t.category === 'svg').length },
 ];
+
 

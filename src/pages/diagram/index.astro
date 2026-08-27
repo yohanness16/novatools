@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { TOOLS } from '../../lib/toolsData';
+import {
+  Workflow, GitBranch, Database, Layers,
+  ArrowRight, ShieldCheck, Sparkles
+} from 'lucide-react';
+
+const iconMap: Record<string, any> = {
+  Workflow, GitBranch, Database, Layers, Sparkles
+};
+
+const diagramTools = TOOLS.filter(t => t.category === 'diagram');
+---
+
+<Layout
+  title="Diagram Suite - 100% Private Client-Side AI Diagram Studio | NovaTools"
+  description="Transform documents, architecture notes, and database schemas into interactive Mermaid.js Flowcharts, ERDs, and Architecture maps."
+>
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+    
+    {/* Suite Hero Header */}
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/85 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-xl space-y-4">
+      {/* Ambient Glow */}
+      <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-purple-500/15 blur-3xl" />
+
+      <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 px-3.5 py-1 text-xs font-mono text-purple-600 dark:text-purple-400">
+        <Workflow class="h-3.5 w-3.5 text-purple-500 dark:text-purple-400" />
+        <span>DIAGRAM & VISUALIZER SUITE ({diagramTools.length} TOOLS)</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+        AI Document-to-Diagram <span class="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 bg-clip-text text-transparent">& Architecture Studio</span>
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 dark:text-[#94A3B8] max-w-2xl leading-relaxed">
+        Automatically convert documents, PDF specifications, SQL schemas, and architecture RFCs into visual Mermaid.js flowcharts, database ERDs, and sequence maps with 100% client-side execution.
+      </p>
+
+      <div class="pt-2">
+        <a
+          href="/diagram/studio"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold shadow-glow-sm transition-all"
+        >
+          <Sparkles class="w-4 h-4" />
+          Launch Diagram Studio
+          <ArrowRight class="w-4 h-4" />
+        </a>
+      </div>
+    </div>
+
+    {/* Tools Grid */}
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+        <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+          All Diagram Tools
+        </h2>
+        <span class="text-xs text-slate-500 dark:text-[#94A3B8] font-mono">
+          {diagramTools.length} tools available
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {diagramTools.map((tool) => {
+          const Icon = iconMap[tool.iconName] || Workflow;
+
+          return (
+            <a
+              href={tool.path}
+              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/90 p-6 transition-all duration-300 hover:border-purple-500/50 hover:bg-slate-50 dark:hover:bg-[#0D1426] hover:shadow-xl hover:shadow-purple-950/20"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-white transition-colors group-hover:border-purple-500/30 group-hover:bg-purple-500/10 group-hover:text-purple-400">
+                    <Icon class="h-5 w-5" />
+                  </div>
+
+                  {tool.badge && (
+                    <span class="rounded-full bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 text-[10px] font-mono font-medium text-purple-400">
+                      {tool.badge}
+                    </span>
+                  )}
+                </div>
+
+                <div class="space-y-1">
+                  <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-purple-400 transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p class="text-xs text-slate-600 dark:text-[#94A3B8] line-clamp-2 leading-relaxed">
+                    {tool.description}
+                  </p>
+                </div>
+              </div>
+
+              <div class="pt-4 mt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs font-semibold text-purple-500 dark:text-purple-400">
+                <span>Launch Studio</span>
+                <ArrowRight class="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+
+  </div>
+</Layout>
