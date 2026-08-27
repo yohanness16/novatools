@@ -316,19 +316,49 @@ export class PdfEngine {
         // Sort items in the line by X ascending (left to right)
         lineItems.sort((a, b) => a.transform[4] - b.transform[4]);
 
-        const lineText = lineItems.map((it) => it.str).join(' ').trim();
+        // Check if items have large horizontal gaps indicating table columns
+        const isMultiColumn = lineItems.length >= 2 && lineItems.some((it, idx) => {
+          if (idx === 0) return false;
+          const prev = lineItems[idx - 1];
+          const gap = it.transform[4] - (prev.transform[4] + prev.width);
+          return gap > 30; // 30pt gap indicates column separation
+        });
+
+        let lineText = '';
+        if (isMultiColumn) {
+          const cells = lineItems.map((it) => it.str.trim()).filter(Boolean);
+          if (cells.length >= 2) {
+            lineText = `| ${cells.join(' | ')} |`;
+          } else {
+            lineText = lineItems.map((it) => it.str).join(' ').trim();
+          }
+        } else {
+          // Format text with bold/italic if font indicates it
+          const formattedWords = lineItems.map((it) => {
+            let str = it.str;
+            const fontLower = (it as any).fontName?.toLowerCase() || '';
+            if (fontLower.includes('bold') && !str.startsWith('**') && str.length > 1) {
+              str = `**${str}**`;
+            } else if ((fontLower.includes('italic') || fontLower.includes('oblique')) && !str.startsWith('*') && str.length > 1) {
+              str = `*${str}*`;
+            }
+            return str;
+          });
+          lineText = formattedWords.join(' ').trim();
+        }
+
         if (!lineText) continue;
 
-        pageRawLines.push(lineText);
+        pageRawLines.push(lineItems.map((it) => it.str).join(' ').trim());
 
-        // Approximate font size from transform matrix: transform[0] or transform[3] (height/scale)
+        // Approximate font size from transform matrix
         const avgFontSize = lineItems.reduce((acc, it) => acc + (it.height || Math.abs(it.transform[0]) || 12), 0) / lineItems.length;
 
         // Detect Markdown headings based on font size / casing
-        if (avgFontSize >= 20 || (avgFontSize >= 16 && lineText.length < 60 && !lineText.endsWith('.'))) {
-          pageLines.push(`## ${lineText}\n`);
-        } else if (avgFontSize >= 14 && lineText.length < 80 && !lineText.endsWith('.')) {
-          pageLines.push(`### ${lineText}\n`);
+        if (!lineText.startsWith('|') && (avgFontSize >= 20 || (avgFontSize >= 16 && lineText.length < 60 && !lineText.endsWith('.')))) {
+          pageLines.push(`\n## ${lineText.replace(/[*_]/g, '')}\n`);
+        } else if (!lineText.startsWith('|') && (avgFontSize >= 14 && lineText.length < 80 && !lineText.endsWith('.'))) {
+          pageLines.push(`\n### ${lineText.replace(/[*_]/g, '')}\n`);
         } else if (lineText.startsWith('•') || lineText.startsWith('-') || lineText.startsWith('*')) {
           pageLines.push(`- ${lineText.replace(/^[•\-*]\s*/, '')}`);
         } else if (/^\d+[\.\)]\s+/.test(lineText)) {
@@ -338,7 +368,29 @@ export class PdfEngine {
         }
       }
 
-      const pageMd = pageLines.join('\n');
+      // Check if consecutive table lines need a Markdown separator row
+      const processedLines: string[] = [];
+      let inTable = false;
+      for (let lIdx = 0; lIdx < pageLines.length; lIdx++) {
+        const curLine = pageLines[lIdx];
+        if (curLine.startsWith('|') && curLine.endsWith('|')) {
+          if (!inTable) {
+            inTable = true;
+            processedLines.push(curLine);
+            // Insert separator row
+            const colCount = curLine.split('|').length - 2;
+            const sep = `| ${Array(colCount).fill('---').join(' | ')} |`;
+            processedLines.push(sep);
+          } else {
+            processedLines.push(curLine);
+          }
+        } else {
+          inTable = false;
+          processedLines.push(curLine);
+        }
+      }
+
+      const pageMd = processedLines.join('\n');
       const pagePlain = pageRawLines.join('\n');
       pagesData.push({ pageNumber: i, text: pagePlain, markdown: pageMd });
 

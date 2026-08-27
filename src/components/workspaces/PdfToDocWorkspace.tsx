@@ -122,6 +122,27 @@ export default function PdfToDocWorkspace() {
     URL.revokeObjectURL(url);
   };
 
+  const [activeViewMode, setActiveViewMode] = useState<'preview' | 'editor' | 'visual'>('preview');
+  const [pageCanvasUrl, setPageCanvasUrl] = useState<string | null>(null);
+
+  // Render canvas visual thumbnail whenever selected page changes
+  React.useEffect(() => {
+    if (pdfBuffer && pageCount > 0) {
+      PdfEngine.renderPageToCanvas(pdfBuffer, selectedPageIdx + 1, 1.2)
+        .then((canvas) => setPageCanvasUrl(canvas.toDataURL()))
+        .catch(() => setPageCanvasUrl(null));
+    }
+  }, [selectedPageIdx, pdfBuffer, pageCount]);
+
+  const handlePageMarkdownChange = (newMd: string) => {
+    const updatedPages = [...pages];
+    if (updatedPages[selectedPageIdx]) {
+      updatedPages[selectedPageIdx].markdown = newMd;
+      setPages(updatedPages);
+      setExtractedMarkdown(updatedPages.map((p) => p.markdown).join('\n\n'));
+    }
+  };
+
   const metadata = DocEngine.getDocMetadata(extractedMarkdown, docTitle);
 
   return (
@@ -203,7 +224,7 @@ export default function PdfToDocWorkspace() {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left: Page Navigator */}
-            <div className="lg:col-span-4 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[600px] shadow-xl">
+            <div className="lg:col-span-4 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-blue-400" />
@@ -226,7 +247,7 @@ export default function PdfToDocWorkspace() {
                     <div>
                       <div className="font-bold text-zinc-200">Page {p.pageNumber}</div>
                       <p className="text-[11px] opacity-70 line-clamp-2 mt-0.5 font-mono">
-                        {p.text.slice(0, 100) || 'Empty page'}
+                        {p.text.slice(0, 80) || 'Empty or image page'}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800">
@@ -237,13 +258,48 @@ export default function PdfToDocWorkspace() {
               </div>
             </div>
 
-            {/* Right: Editable Live Document View */}
-            <div className="lg:col-span-8 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[600px] shadow-xl">
+            {/* Right: Multi-Mode Live Document Inspector */}
+            <div className="lg:col-span-8 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
+              {/* Header Mode Switcher */}
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                  Extracted Document Structure (Page {selectedPageIdx + 1})
-                </span>
+                <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-xl border border-zinc-800">
+                  <button
+                    onClick={() => setActiveViewMode('preview')}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                      activeViewMode === 'preview'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    Word Preview
+                  </button>
+
+                  <button
+                    onClick={() => setActiveViewMode('editor')}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                      activeViewMode === 'editor'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    <FileCode className="w-3.5 h-3.5" />
+                    Edit Text
+                  </button>
+
+                  <button
+                    onClick={() => setActiveViewMode('visual')}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                      activeViewMode === 'visual'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    Original PDF
+                  </button>
+                </div>
+
                 <button
                   onClick={handleCopy}
                   className="p-1.5 rounded-lg bg-zinc-800/60 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 text-xs flex items-center gap-1 transition"
@@ -254,13 +310,43 @@ export default function PdfToDocWorkspace() {
                 </button>
               </div>
 
-              <div className="flex-1 bg-zinc-950/70 border border-zinc-900 rounded-xl p-6 overflow-y-auto prose prose-invert prose-indigo max-w-none text-xs sm:text-sm">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: DocEngine.markdownToHtml(pages[selectedPageIdx]?.markdown || extractedMarkdown),
-                  }}
+              {/* View Mode 1: Rendered HTML/Word Document */}
+              {activeViewMode === 'preview' && (
+                <div className="flex-1 bg-white text-zinc-900 rounded-xl p-8 overflow-y-auto shadow-inner border border-zinc-300 prose prose-indigo max-w-none text-xs sm:text-sm">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DocEngine.markdownToHtml(pages[selectedPageIdx]?.markdown || extractedMarkdown),
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* View Mode 2: Editable Markdown Editor */}
+              {activeViewMode === 'editor' && (
+                <textarea
+                  value={pages[selectedPageIdx]?.markdown || ''}
+                  onChange={(e) => handlePageMarkdownChange(e.target.value)}
+                  placeholder="Edit extracted text or markdown..."
+                  className="flex-1 w-full bg-zinc-950/80 border border-zinc-900 rounded-xl p-4 text-xs font-mono text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 resize-none overflow-y-auto leading-relaxed shadow-inner"
                 />
-              </div>
+              )}
+
+              {/* View Mode 3: Original Visual PDF Canvas Snapshot */}
+              {activeViewMode === 'visual' && (
+                <div className="flex-1 bg-zinc-950/80 border border-zinc-900 rounded-xl p-4 flex items-center justify-center overflow-auto">
+                  {pageCanvasUrl ? (
+                    <img
+                      src={pageCanvasUrl}
+                      alt={`PDF Page ${selectedPageIdx + 1}`}
+                      className="max-h-full max-w-full rounded shadow-2xl border border-zinc-700 object-contain"
+                    />
+                  ) : (
+                    <div className="text-xs text-zinc-500 flex items-center gap-2">
+                      <RefreshCw className="w-4 h-4 animate-spin" /> Rendering page visual...
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
