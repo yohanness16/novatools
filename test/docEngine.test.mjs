@@ -73,4 +73,11 @@ const smartSlides = await AiDocEngine.generateSmartSlideDeck(sampleMd);
 assert(smartSlides.length >= 2);
 console.log(`✅ AiDocEngine: AI engine cascade test passed (Tier: ${aiInfo.tier})`);
 
+// 8. Test Printable HTML for Vector PDF Generation
+const printableHtml = DocEngine.generatePrintableHtml(sampleMd, 'Project Alpha Specs');
+assert(printableHtml.includes('@page {'));
+assert(printableHtml.includes('Project Alpha Specs'));
+assert(printableHtml.includes('table {'));
+console.log('✅ DocEngine: Printable vector PDF HTML generation passed');
+
 console.log('\n🎉 ALL DOCUMENT SUITE TESTS PASSED 100%!');

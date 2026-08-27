@@ -254,6 +254,122 @@ export class PdfEngine {
   }
 
   /**
+   * Extract structured text, headings, and lists from a PDF document
+   */
+  static async extractTextAndStructureFromPdf(
+    sourceBuffer: ArrayBuffer,
+    onProgress?: (current: number, total: number) => void
+  ): Promise<{
+    markdown: string;
+    plainText: string;
+    pageCount: number;
+    pages: { pageNumber: number; text: string; markdown: string }[];
+  }> {
+    const pdfjsLib = await this.loadPdfJs();
+    if (!pdfjsLib) throw new Error('PDF.js renderer is not available.');
+
+    const cloned = sourceBuffer.slice(0);
+    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(cloned) });
+    const pdfDoc = await loadingTask.promise;
+    const numPages = pdfDoc.numPages;
+    const pagesData: { pageNumber: number; text: string; markdown: string }[] = [];
+
+    for (let i = 1; i <= numPages; i++) {
+      const page = await pdfDoc.getPage(i);
+      const textContent = await page.getTextContent();
+      const items = textContent.items as Array<{
+        str: string;
+        transform: number[];
+        width: number;
+        height: number;
+      }>;
+
+      // Group text items by roughly the same Y coordinate (within 4pt tolerance)
+      const linesMap = new Map<number, typeof items>();
+
+      for (const item of items) {
+        if (!item.str || item.str.trim() === '') continue;
+        const y = Math.round(item.transform[5]); // Y coordinate
+        let foundLineY: number | null = null;
+
+        for (const existingY of linesMap.keys()) {
+          if (Math.abs(existingY - y) <= 4) {
+            foundLineY = existingY;
+            break;
+          }
+        }
+
+        if (foundLineY !== null) {
+          linesMap.get(foundLineY)!.push(item);
+        } else {
+          linesMap.set(y, [item]);
+        }
+      }
+
+      // Sort lines by Y descending (top of page to bottom)
+      const sortedY = Array.from(linesMap.keys()).sort((a, b) => b - a);
+      const pageLines: string[] = [];
+      const pageRawLines: string[] = [];
+
+      for (const y of sortedY) {
+        const lineItems = linesMap.get(y)!;
+        // Sort items in the line by X ascending (left to right)
+        lineItems.sort((a, b) => a.transform[4] - b.transform[4]);
+
+        const lineText = lineItems.map((it) => it.str).join(' ').trim();
+        if (!lineText) continue;
+
+        pageRawLines.push(lineText);
+
+        // Approximate font size from transform matrix: transform[0] or transform[3] (height/scale)
+        const avgFontSize = lineItems.reduce((acc, it) => acc + (it.height || Math.abs(it.transform[0]) || 12), 0) / lineItems.length;
+
+        // Detect Markdown headings based on font size / casing
+        if (avgFontSize >= 20 || (avgFontSize >= 16 && lineText.length < 60 && !lineText.endsWith('.'))) {
+          pageLines.push(`## ${lineText}\n`);
+        } else if (avgFontSize >= 14 && lineText.length < 80 && !lineText.endsWith('.')) {
+          pageLines.push(`### ${lineText}\n`);
+        } else if (lineText.startsWith('•') || lineText.startsWith('-') || lineText.startsWith('*')) {
+          pageLines.push(`- ${lineText.replace(/^[•\-*]\s*/, '')}`);
+        } else if (/^\d+[\.\)]\s+/.test(lineText)) {
+          pageLines.push(lineText);
+        } else {
+          pageLines.push(lineText);
+        }
+      }
+
+      const pageMd = pageLines.join('\n');
+      const pagePlain = pageRawLines.join('\n');
+      pagesData.push({ pageNumber: i, text: pagePlain, markdown: pageMd });
+
+      if (onProgress) onProgress(i, numPages);
+    }
+
+    const fullMarkdown = pagesData.map((p) => p.markdown).join('\n\n');
+    const fullPlainText = pagesData.map((p) => p.text).join('\n\n');
+
+    return {
+      markdown: fullMarkdown,
+      plainText: fullPlainText,
+      pageCount: numPages,
+      pages: pagesData,
+    };
+  }
+
+  /**
+   * Converts a PDF directly into a styled Microsoft Word (.docx) document
+   */
+  static async pdfToDocx(
+    sourceBuffer: ArrayBuffer,
+    docTitle = 'Converted Document',
+    onProgress?: (current: number, total: number) => void
+  ): Promise<Blob> {
+    const { markdown } = await this.extractTextAndStructureFromPdf(sourceBuffer, onProgress);
+    const { DocEngine } = await import('./docEngine');
+    return await DocEngine.markdownToDocx(markdown, docTitle);
+  }
+
+  /**
    * Parse range text (e.g. "1-3, 5, 7-9") into 0-based page indices
    */
   private static parsePageRanges(rangesStr: string, totalPages: number): number[] {
@@ -279,3 +395,4 @@ export class PdfEngine {
     return Array.from(indicesSet).sort((a, b) => a - b);
   }
 }
+

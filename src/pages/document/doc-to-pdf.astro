@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import DocToPdfWorkspace from '../../components/workspaces/DocToPdfWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'doc-to-pdf')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <DocToPdfWorkspace client:load />
+</ToolPageLayout>

@@ -738,6 +738,58 @@ export const TOOLS: ToolMeta[] = [
     faqs: [
       { question: 'Does it auto-detect numbers and currency?', answer: 'Yes! Numbers and financial values are automatically parsed and formatted as numeric cells.' }
     ]
+  },
+  {
+    id: 'doc-to-pdf',
+    slug: 'doc-to-pdf',
+    name: 'Word & Doc to PDF',
+    category: 'document',
+    categoryLabel: 'Document Suite',
+    description: 'Convert Word (.docx) and Markdown files into crisp vector PDFs with CSS Paged Media typography.',
+    longDescription: 'High-performance in-browser Word and Document to PDF conversion. Preserves tables, syntax-highlighted code blocks, blockquotes, and custom margins with 100% privacy and zero server uploads.',
+    iconName: 'Printer',
+    badge: 'Vector PDF',
+    path: '/document/doc-to-pdf',
+    keywords: ['doc to pdf', 'docx to pdf', 'word to pdf', 'convert word to pdf in browser'],
+    features: [
+      '100% Client-Side: Zero server uploads, total confidentiality',
+      'Lossless OpenXML parsing for .docx and Markdown',
+      'Crisp vector PDF typography with table border styling'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload DOCX / MD', desc: 'Select or drag your Word document or Markdown file.' },
+      { step: 2, title: 'Preview & Format', desc: 'Inspect live rendered vector layout.' },
+      { step: 3, title: 'Export PDF', desc: 'Click "Export Vector PDF" to print or save your document.' }
+    ],
+    faqs: [
+      { question: 'Is my document uploaded to a cloud server?', answer: 'No! All parsing and PDF rendering occurs completely inside your local browser memory.' }
+    ]
+  },
+  {
+    id: 'pdf-to-doc',
+    slug: 'pdf-to-doc',
+    name: 'PDF to Word (DOCX)',
+    category: 'pdf',
+    categoryLabel: 'PDF Suite',
+    description: 'Extract text, structure, and headings from PDF into editable Microsoft Word (.docx) and Markdown.',
+    longDescription: 'Convert PDF documents into editable Microsoft Word (.docx), Markdown (.md), and plain text. Reconstructs line hierarchy, detects headings from font weights, and exports OpenXML with zero server uploads.',
+    iconName: 'FileText',
+    badge: 'Editable DOCX',
+    path: '/pdf/pdf-to-doc',
+    keywords: ['pdf to doc', 'pdf to docx', 'pdf to word', 'convert pdf to word in browser', 'extract text from pdf'],
+    features: [
+      '100% Client-Side: Zero server uploads, total confidentiality',
+      'Semantic text and typography reconstruction',
+      'Exports native editable Microsoft Word (.docx) and Markdown'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Upload PDF', desc: 'Select or drop your PDF document.' },
+      { step: 2, title: 'Inspect Extraction', desc: 'Review extracted pages and structured formatting.' },
+      { step: 3, title: 'Download DOCX', desc: 'Download native Microsoft Word file or Markdown.' }
+    ],
+    faqs: [
+      { question: 'Will the generated Word file be fully editable?', answer: 'Yes! The exported .docx contains native editable paragraphs, headings, and bullet points compatible with Microsoft Word and Google Docs.' }
+    ]
   }
 ];
 
