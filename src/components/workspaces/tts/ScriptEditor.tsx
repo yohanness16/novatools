@@ -9,7 +9,8 @@ import {
   Type, 
   Smile, 
   Sliders, 
-  Flame 
+  Flame,
+  Volume2
 } from 'lucide-react';
 
 interface ScriptEditorProps {
@@ -23,19 +24,19 @@ interface ScriptEditorProps {
 
 const SAMPLE_SCRIPTS = [
   {
-    title: 'Natural Conversational',
+    title: '💬 Conversational',
     content: "Hey there! [ay] You won't believe what just happened today. [sigh] I tried to export the video three times, but ugh, the server crashed! [pause: 500ms] Fortunately, NovaTools runs 100% in the browser now. Whoa, isn't that cool?",
   },
   {
-    title: 'Storyteller & Narrative',
+    title: '📖 Storytelling',
     content: "The old library was quiet — save for the ticking of an antique grandfather clock. [sigh] Clara turned the parchment page, [cough] gazing upon coordinates long forgotten. 'We found it,' she whispered. [pause: 500ms] 'After all these years.'",
   },
   {
-    title: 'Podcast Host Opener',
+    title: '🎙️ Podcast Intro',
     content: "Welcome back to Tech Frontiers! [haha] Today, we are testing client-side AI text to speech with Kokoro-82M. [pause: 300ms] Hmm... zero latency, zero cloud costs, and studio fidelity right in your browser. Let's dive right in!",
   },
   {
-    title: 'Dramatic Dialogue',
+    title: '🎭 Dramatic Scene',
     content: "Wait, stop right there! [gasp] Did you hear that sound? [pause: 500ms] Phew... it was just the wind. Ugh, you really scared me for a second!",
   }
 ];
@@ -85,28 +86,27 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800 p-5 shadow-xl flex flex-col gap-4">
+    <div className="bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl flex flex-col gap-4">
       {/* Header & Sample Presets */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <FileText className="w-5 h-5 text-indigo-400" />
             Script & Speech Editor
           </h3>
           <p className="text-xs text-slate-400">
-            Type or paste your text. Insert human expressions and pauses for ultra-realistic cadence.
+            Write or paste your script below. Click expression chips to insert natural human cues.
           </p>
         </div>
 
-        {/* Sample Templates Dropdown */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-slate-400">Samples:</span>
+        {/* Preset Selector */}
+        <div className="flex items-center gap-1.5 flex-wrap">
           {SAMPLE_SCRIPTS.map((sample, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => onChange(sample.content)}
-              className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700 text-slate-300 transition-all"
+              className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700/80 text-slate-300 transition-all font-medium cursor-pointer"
             >
               {sample.title}
             </button>
@@ -115,26 +115,26 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
       </div>
 
       {/* Expression & Pause Toolbar */}
-      <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 flex flex-col gap-2.5">
+      <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <Smile className="w-4 h-4 text-amber-400" />
-            <span className="text-xs font-semibold text-slate-200">
-              Human Expression & Breath Markers
+            <span className="text-xs font-bold text-slate-200">
+              Human Expressions Soundboard
             </span>
-            <span className="text-[10px] text-slate-400">
+            <span className="text-[10px] text-slate-500">
               (Click to insert at cursor)
             </span>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={enhanceExpressions}
               onChange={(e) => onToggleExpressions(e.target.checked)}
               className="w-3.5 h-3.5 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0 cursor-pointer"
             />
-            <span className="text-xs font-medium text-slate-300">
+            <span className="text-xs font-semibold text-indigo-300">
               Auto-interpret "ugh", "sigh", "ay", "cough", etc.
             </span>
           </label>
@@ -148,10 +148,11 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
               type="button"
               onClick={() => insertTag(exp.tag)}
               title={exp.description}
-              className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-800/90 hover:bg-indigo-600 hover:text-white border border-slate-700 text-slate-300 transition-all flex items-center gap-1"
+              className="text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-indigo-600 hover:text-white border border-slate-700 text-slate-200 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
             >
+              <span>{exp.icon}</span>
               <span>{exp.label}</span>
-              <span className="text-[9px] text-slate-500 font-mono">{exp.tag}</span>
+              <span className="text-[10px] text-slate-400 font-mono">{exp.tag}</span>
             </button>
           ))}
 
@@ -163,15 +164,16 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
               key={pause.tag}
               type="button"
               onClick={() => insertTag(pause.tag)}
-              className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-amber-950/40 hover:bg-amber-600 hover:text-white border border-amber-800/40 text-amber-300 transition-all"
+              className="text-xs font-medium px-2.5 py-1 rounded-lg bg-amber-950/40 hover:bg-amber-600 hover:text-white border border-amber-800/50 text-amber-300 transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-sm"
             >
-              {pause.label}
+              <span>⏱️</span>
+              <span>{pause.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Main Textarea */}
+      {/* Main Text Area */}
       <div className="relative">
         <textarea
           ref={textareaRef}
@@ -179,7 +181,7 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
           onChange={(e) => onChange(e.target.value)}
           placeholder="Enter your script here... Type natural conversational phrases with expressions like 'ugh', 'sigh', 'ay', or insert tag markers like [cough] and [pause: 500ms]."
           rows={6}
-          className="w-full bg-slate-950/70 border border-slate-700/80 rounded-xl p-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all resize-y font-sans leading-relaxed"
+          className="w-full bg-slate-950/90 border border-slate-700/90 rounded-xl p-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all resize-y font-sans leading-relaxed shadow-inner"
         />
 
         {/* Quick Clear / Paste buttons */}
@@ -188,7 +190,7 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             type="button"
             onClick={handlePaste}
             title="Paste from clipboard"
-            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-400 hover:text-white transition-all text-xs flex items-center gap-1"
+            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs flex items-center gap-1 cursor-pointer"
           >
             <Clipboard className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Paste</span>
@@ -198,7 +200,7 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
               type="button"
               onClick={() => onChange('')}
               title="Clear text"
-              className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-red-900/60 border border-slate-700 hover:border-red-500/50 text-slate-400 hover:text-red-300 transition-all text-xs"
+              className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-red-900/60 border border-slate-700 hover:border-red-500/50 text-slate-400 hover:text-red-300 transition-all text-xs cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </button>
@@ -223,7 +225,7 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1 text-slate-300">
             <Sliders className="w-3.5 h-3.5 text-indigo-400" />
-            Speed: <strong className="text-indigo-400 font-mono">{speed.toFixed(2)}x</strong>
+            Pacing: <strong className="text-indigo-400 font-mono">{speed.toFixed(2)}x</strong>
           </span>
           <input
             type="range"
@@ -232,7 +234,7 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             step="0.05"
             value={speed}
             onChange={(e) => onSpeedChange(parseFloat(e.target.value))}
-            className="w-24 sm:w-32 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+            className="w-28 sm:w-36 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
           />
         </div>
       </div>
