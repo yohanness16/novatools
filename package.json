@@ -20,6 +20,7 @@
     "framer-motion": "^12.4.7",
     "jszip": "^3.10.1",
     "katex": "^0.18.4",
+    "kokoro-js": "^1.2.1",
     "lucide-react": "^1.33.0",
     "mammoth": "^1.12.1",
     "marked": "^18.0.11",

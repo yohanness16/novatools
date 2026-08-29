@@ -1,0 +1,11 @@
+---
+import ToolPageLayout from '../../components/ToolPageLayout.astro';
+import { TextToSpeechWorkspace } from '../../components/workspaces/TextToSpeechWorkspace';
+import { TOOLS } from '../../lib/toolsData';
+
+const tool = TOOLS.find(t => t.id === 'text-to-speech')!;
+---
+
+<ToolPageLayout tool={tool}>
+  <TextToSpeechWorkspace client:load />
+</ToolPageLayout>

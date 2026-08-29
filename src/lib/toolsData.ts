@@ -607,6 +607,37 @@ export const TOOLS: ToolMeta[] = [
       { question: 'Are my audio and video files uploaded to any external server?', answer: 'No! All audio decoding, canvas animation, and video compilation execute 100% locally inside your browser memory.' }
     ]
   },
+  {
+    id: 'text-to-speech',
+    slug: 'text-to-speech',
+    name: 'AI Voice Studio & Text-to-Speech',
+    category: 'video',
+    categoryLabel: 'Video & Audio',
+    description: 'Synthesize studio-quality, natural human voiceovers with Kokoro-82M, human expressions (ugh, sigh, cough), voice blending, and WAV export.',
+    longDescription: 'Turn scripts and articles into lifelike speech 100% in your browser using the open-weight Kokoro-82M neural model. Features 50+ diverse voices, custom dual-voice blending, natural conversational interjections (ugh, sigh, cough, ay, hmm), dynamic speed/pause control, interactive waveform visualizer, and instant 24kHz WAV & SRT subtitle export with zero server costs or data tracking.',
+    iconName: 'Volume2',
+    badge: 'Kokoro-82M AI',
+    path: '/video/text-to-speech',
+    keywords: ['text to speech', 'ai voice generator', 'kokoro tts', 'voiceover studio', 'ai narrator', 'humanic tts', 'client-side tts', 'tts with expressions'],
+    features: [
+      '100% Client-Side Neural Inference via Kokoro-82M ONNX and WebGPU/WASM',
+      'Humanic Expressions & Interjections: Handles "ugh", "cough", "ay", "sigh", "hmm", "whoa", "phew", etc.',
+      '50+ High-Fidelity Voices across American, British, Japanese, French, Spanish, Italian, and Hindi accents',
+      'Dual-Voice Blender: Interpolate between two voice styles to forge custom unique human timbres',
+      'Interactive Animated Waveform Visualizer and timecode playback scrubber',
+      'Multi-Format Export: High-fidelity 24kHz WAV and timestamped SRT subtitles'
+    ],
+    howToSteps: [
+      { step: 1, title: 'Write or Paste Script', desc: 'Type your text and click expression buttons like [ugh], [sigh], or [pause: 500ms] to craft natural cadence.' },
+      { step: 2, title: 'Choose or Blend Voices', desc: 'Pick from 50+ built-in voices or enable the Voice Blender to mix two distinct styles.' },
+      { step: 3, title: 'Generate & Export', desc: 'Click "Generate Speech" to synthesize speech locally on your GPU/CPU, preview waveform, and download WAV audio.' }
+    ],
+    faqs: [
+      { question: 'Does Kokoro-82M TTS require sending text to a server?', answer: 'No! The neural network model executes entirely inside your browser sandbox via WebGPU and WebAssembly. Your text and audio never leave your computer.' },
+      { question: 'How are human expressions like "ugh" and "sigh" generated?', answer: 'NovaTools uses an intelligent expression normalizer that maps natural interjections into phonetic breath and pause cadences that the neural vocoder renders smoothly.' },
+      { question: 'Is WebGPU required to use this tool?', answer: 'No! If your browser supports WebGPU, it utilizes hardware acceleration for sub-second synthesis. If not, it automatically falls back to multi-threaded WebAssembly (WASM).' }
+    ]
+  },
   // DOCUMENT & AI SUITE
   {
     id: 'doc-studio',
