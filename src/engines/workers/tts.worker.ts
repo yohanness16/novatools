@@ -16,7 +16,7 @@ async function isWebGPUSupported(): Promise<boolean> {
   }
 }
 
-async function getOrInitTTS(dtype = 'q8', requestedDevice = 'auto') {
+async function getOrInitTTS(dtype = 'q8', requestedDevice = 'wasm') {
   if (ttsInstance) return ttsInstance;
   if (isInitializing) {
     while (isInitializing) {
@@ -32,12 +32,9 @@ async function getOrInitTTS(dtype = 'q8', requestedDevice = 'auto') {
     if (requestedDevice === 'webgpu') {
       const gpuOk = await isWebGPUSupported();
       deviceToUse = gpuOk ? 'webgpu' : null;
-    } else if (requestedDevice === 'wasm') {
-      deviceToUse = null; // null defaults to wasm in transformers.js
     } else {
-      // Auto: check if WebGPU is truly available and functional
-      const gpuOk = await isWebGPUSupported();
-      deviceToUse = gpuOk ? 'webgpu' : null;
+      // Default to null (WASM) for 100% universal browser stability
+      deviceToUse = null;
     }
 
     activeDeviceId = deviceToUse === 'webgpu' ? 'webgpu' : 'wasm';
@@ -48,41 +45,73 @@ async function getOrInitTTS(dtype = 'q8', requestedDevice = 'auto') {
         progress: 10, 
         loaded: 10, 
         total: 100, 
-        message: `Loading Kokoro-82M (${activeDeviceId.toUpperCase()})...` 
+        message: `Connecting to Kokoro-82M repository (${activeDeviceId.toUpperCase()})...` 
       }
     });
+
+    let simulatedProgress = 15;
+    const progressInterval = setInterval(() => {
+      if (simulatedProgress < 85) {
+        simulatedProgress += 5;
+        self.postMessage({
+          type: 'MODEL_PROGRESS',
+          payload: {
+            progress: simulatedProgress,
+            loaded: simulatedProgress,
+            total: 100,
+            message: `Downloading neural weights (~86MB, cached in browser) - ${simulatedProgress}%`
+          }
+        });
+      }
+    }, 1200);
 
     try {
       ttsInstance = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {
         dtype: dtype as any,
         device: deviceToUse as any,
         progress_callback: (p: any) => {
-          if (p && typeof p.progress === 'number') {
-            const pct = Math.round(p.progress * 100);
-            self.postMessage({
-              type: 'MODEL_PROGRESS',
-              payload: {
-                progress: Math.min(95, Math.max(10, pct)),
-                loaded: p.loaded || 0,
-                total: p.total || 100,
-                message: p.file ? `Loading ${p.file} (${pct}%)` : `Downloading neural weights (${pct}%)`
-              }
-            });
+          if (!p) return;
+          let pct = 0;
+          if (typeof p.progress === 'number' && !isNaN(p.progress)) {
+            pct = Math.round(p.progress * 100);
+          } else if (p.status === 'done') {
+            pct = 90;
           }
+
+          if (pct > 0) {
+            simulatedProgress = Math.max(simulatedProgress, pct);
+          }
+
+          let fileMsg = 'Downloading Kokoro-82M weights';
+          if (p.file) {
+            fileMsg = `Loading ${p.file.split('/').pop()}`;
+          }
+
+          self.postMessage({
+            type: 'MODEL_PROGRESS',
+            payload: {
+              progress: Math.min(92, Math.max(10, simulatedProgress)),
+              loaded: p.loaded || simulatedProgress,
+              total: p.total || 100,
+              message: `${fileMsg} (${Math.min(92, simulatedProgress)}%)`
+            }
+          });
         }
       });
-    } catch (primaryErr: any) {
-      console.warn('Primary TTS initialization failed, falling back to pure WASM:', primaryErr);
-      activeDeviceId = 'wasm';
-      self.postMessage({
-        type: 'MODEL_PROGRESS',
-        payload: { progress: 30, loaded: 30, total: 100, message: 'Initializing universal WASM engine...' }
-      });
+    } finally {
+      clearInterval(progressInterval);
+    }
 
-      ttsInstance = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {
-        dtype: 'q8',
-        device: null,
-      });
+    // Warm-up phonemizer and default voice
+    self.postMessage({
+      type: 'MODEL_PROGRESS',
+      payload: { progress: 95, loaded: 95, total: 100, message: 'Warming up phonemizer & neural graph...' }
+    });
+
+    try {
+      await ttsInstance.generate('Hello', { voice: 'af_heart' });
+    } catch (warmupErr) {
+      console.warn('Micro-warmup noticed:', warmupErr);
     }
 
     self.postMessage({
@@ -111,24 +140,50 @@ self.onmessage = async (e: MessageEvent) => {
 
   if (type === 'INIT') {
     try {
-      await getOrInitTTS(payload?.dtype, payload?.device);
+      await getOrInitTTS(payload?.dtype, payload?.device || 'wasm');
     } catch (err) {
       // Handled in getOrInitTTS
     }
   } else if (type === 'GENERATE') {
-    const { id, text, voice = 'af_heart', speed = 1.0, dtype = 'q8', device = 'auto' } = payload;
+    const { id, text, voice = 'af_heart', speed = 1.0, dtype = 'q8', device = 'wasm' } = payload;
     try {
       const instance = await getOrInitTTS(dtype, device);
 
       self.postMessage({
         type: 'MODEL_PROGRESS',
-        payload: { progress: 95, loaded: 95, total: 100, message: 'Synthesizing 24kHz audio...' }
+        payload: { progress: 20, loaded: 20, total: 100, message: 'Phonemizing conversational script...' }
       });
 
-      // Generate speech
-      const audioResult = await instance.generate(text, {
-        voice,
-        speed: Number(speed) || 1.0,
+      // Periodic progress ticker during neural inference
+      let synthProgress = 30;
+      const synthTicker = setInterval(() => {
+        if (synthProgress < 90) {
+          synthProgress += 10;
+          self.postMessage({
+            type: 'MODEL_PROGRESS',
+            payload: {
+              progress: synthProgress,
+              loaded: synthProgress,
+              total: 100,
+              message: `Synthesizing neural speech audio (${synthProgress}%)...`
+            }
+          });
+        }
+      }, 800);
+
+      let audioResult: any;
+      try {
+        audioResult = await instance.generate(text, {
+          voice,
+          speed: Number(speed) || 1.0,
+        });
+      } finally {
+        clearInterval(synthTicker);
+      }
+
+      self.postMessage({
+        type: 'MODEL_PROGRESS',
+        payload: { progress: 95, loaded: 95, total: 100, message: 'Encoding 24kHz Hi-Fi audio buffer...' }
       });
 
       // Extract Float32Array PCM samples
