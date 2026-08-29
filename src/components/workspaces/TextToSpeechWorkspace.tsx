@@ -151,41 +151,41 @@ export const TextToSpeechWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 space-y-6">
-      {/* Studio Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-950 border border-indigo-500/30 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Studio Header Banner with Generous Padding */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-950 border border-indigo-500/30 p-8 sm:p-10 shadow-2xl backdrop-blur-xl">
         {/* Glow ambient accent */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-bold tracking-wide">
+              <Sparkles className="w-4 h-4 text-indigo-400" />
               Kokoro-82M High-Fidelity Neural Vocoder
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
               AI Voice Studio & Humanic TTS
             </h1>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               Synthesize lifelike, studio-grade speech right in your browser. Features 24+ natural voices, 
               custom dual-voice blending, and realistic human expressions (<em>"ugh"</em>, <em>"sigh"</em>, <em>"cough"</em>, <em>"ay"</em>, <em>"whoa"</em>).
             </p>
           </div>
 
-          {/* Engine Status & Backend Controls */}
-          <div className="flex flex-col gap-3 bg-slate-950/85 p-4 rounded-2xl border border-slate-800 shrink-0 shadow-lg min-w-[280px]">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className={`w-3 h-3 rounded-full ${isEngineReady ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-amber-400 animate-pulse'}`} />
+          {/* Engine Status & Backend Controls Card */}
+          <div className="flex flex-col gap-4 bg-slate-950/90 p-5 rounded-2xl border border-slate-800 shrink-0 shadow-2xl min-w-[300px]">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-3.5 h-3.5 rounded-full ${isEngineReady ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-amber-400 animate-pulse'}`} />
                 <div>
-                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="text-sm font-bold text-white flex items-center gap-1.5">
+                    <Zap className="w-4 h-4 text-amber-400" />
                     {isEngineReady ? activeEngineTag : 'Engine Initializing...'}
                   </div>
-                  <div className="text-[10px] text-slate-400 flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                    100% Local & Private (No API Key)
+                  <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    100% Client-Side Privacy
                   </div>
                 </div>
               </div>
@@ -195,16 +195,16 @@ export const TextToSpeechWorkspace: React.FC = () => {
                   type="button"
                   onClick={handlePreload}
                   disabled={isPreloading}
-                  className="px-3 py-1 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-[11px] font-semibold flex items-center justify-center gap-1 shadow transition-all cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-105 active:scale-95"
                 >
                   {isPreloading ? (
                     <>
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       <span>Loading...</span>
                     </>
                   ) : (
                     <>
-                      <DownloadCloud className="w-3 h-3" />
+                      <DownloadCloud className="w-3.5 h-3.5" />
                       <span>Preload Model</span>
                     </>
                   )}
@@ -213,17 +213,17 @@ export const TextToSpeechWorkspace: React.FC = () => {
             </div>
 
             {/* Backend Device Mode Switcher */}
-            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-              <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                <Cpu className="w-3.5 h-3.5 text-indigo-400" />
-                Mode:
+            <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <Cpu className="w-4 h-4 text-indigo-400" />
+                Backend:
               </span>
-              <div className="flex items-center bg-slate-900 rounded-lg p-0.5 border border-slate-800">
+              <div className="flex items-center bg-slate-900 rounded-xl p-1 border border-slate-800">
                 <button
                   type="button"
                   onClick={() => setDeviceMode('wasm')}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded transition-all cursor-pointer ${
-                    deviceMode === 'wasm' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                    deviceMode === 'wasm' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   WASM (Universal CPU)
@@ -231,8 +231,8 @@ export const TextToSpeechWorkspace: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setDeviceMode('webgpu')}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded transition-all cursor-pointer ${
-                    deviceMode === 'webgpu' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                    deviceMode === 'webgpu' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   WebGPU
@@ -242,35 +242,35 @@ export const TextToSpeechWorkspace: React.FC = () => {
           </div>
         </div>
 
-        {/* Live Progress Bar */}
+        {/* Live Progress Bar with Clear Metrics */}
         {(progress.status === 'loading_model' || isSynthesizing) && (
-          <div className="mt-6 pt-4 border-t border-indigo-500/20 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-300 font-medium">
-              <span className="flex items-center gap-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-400" />
+          <div className="mt-8 pt-6 border-t border-indigo-500/20 space-y-3">
+            <div className="flex items-center justify-between text-xs sm:text-sm text-slate-200 font-semibold">
+              <span className="flex items-center gap-2.5">
+                <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
                 {progress.message || (isSynthesizing ? 'Synthesizing audio samples...' : 'Loading neural weights...')}
               </span>
-              <span className="font-mono text-indigo-300 font-bold">
+              <span className="font-mono text-indigo-300 font-black text-sm">
                 {progress.progress > 0 ? `${progress.progress}%` : 'Processing'}
               </span>
             </div>
-            <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
               <div 
                 className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 rounded-full transition-all duration-300 shadow-sm"
                 style={{ width: `${Math.max(8, progress.progress)}%` }}
               />
             </div>
-            <p className="text-[10px] text-slate-400 text-right">
-              💡 Kokoro-82M weights (~86MB) are stored in your browser's Cache/IndexedDB for instant reuse.
+            <p className="text-xs text-slate-400 text-right">
+              💡 Model weights (~86MB) are stored in your browser's IndexedDB for instant offline reuse.
             </p>
           </div>
         )}
       </div>
 
-      {/* Main Studio Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* Main Studio Grid with Spacious Columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Studio Column: Script Editor + CTA + Player */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-8">
           <ScriptEditor
             text={scriptText}
             onChange={setScriptText}
@@ -286,7 +286,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
               type="button"
               onClick={handleSynthesize}
               disabled={isSynthesizing || !scriptText.trim()}
-              className={`w-full py-4 px-6 rounded-2xl font-black text-sm tracking-wide shadow-2xl flex items-center justify-center gap-3 transition-all cursor-pointer ${
+              className={`w-full py-5 px-8 rounded-3xl font-black text-base tracking-wide shadow-2xl flex items-center justify-center gap-3 transition-all cursor-pointer ${
                 isSynthesizing || !scriptText.trim()
                   ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                   : 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-600/30 hover:scale-[1.01] active:scale-[0.99]'
@@ -294,12 +294,12 @@ export const TextToSpeechWorkspace: React.FC = () => {
             >
               {isSynthesizing ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin text-indigo-200" />
+                  <Loader2 className="w-6 h-6 animate-spin text-indigo-200" />
                   <span>Synthesizing Speech ({progress.progress > 0 ? `${progress.progress}%` : 'Processing'}...)</span>
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5 text-amber-300" />
+                  <Sparkles className="w-6 h-6 text-amber-300" />
                   <span>Generate Speech Audio</span>
                 </>
               )}
@@ -308,10 +308,10 @@ export const TextToSpeechWorkspace: React.FC = () => {
 
           {/* Error Notice Banner */}
           {errorMsg && (
-            <div className="p-4 rounded-2xl bg-red-950/60 border border-red-500/50 flex items-start gap-3 text-red-200 text-xs shadow-lg">
+            <div className="p-5 rounded-3xl bg-red-950/70 border border-red-500/50 flex items-start gap-3.5 text-red-200 text-xs sm:text-sm shadow-xl">
               <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="font-semibold block mb-0.5">Synthesis Notice</strong>
+                <strong className="font-bold block mb-1">Synthesis Notice</strong>
                 {errorMsg}
               </div>
             </div>
@@ -326,7 +326,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
         </div>
 
         {/* Right Studio Column: Voices & Blender & Guide */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-8">
           <VoiceSelector
             selectedVoiceId={selectedVoiceId}
             onSelectVoice={(id) => setSelectedVoiceId(id)}
@@ -339,31 +339,31 @@ export const TextToSpeechWorkspace: React.FC = () => {
             onToggle={setIsBlenderEnabled}
           />
 
-          {/* Expression Quick Soundboard */}
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800 p-5 shadow-xl space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+          {/* Expression Quick Soundboard Guide Card */}
+          <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 p-6 sm:p-7 shadow-xl space-y-4">
+            <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
               <Flame className="w-4 h-4 text-amber-400" />
               Human Expression Guide
             </h4>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
+            <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
                 <span className="font-mono text-amber-400 font-bold">[ugh]</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">Frustration / Exasperation</p>
+                <p className="text-xs text-slate-400 mt-1">Frustration / Exasperation</p>
               </div>
-              <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
+              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
                 <span className="font-mono text-amber-400 font-bold">[sigh]</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">Deep breath release</p>
+                <p className="text-xs text-slate-400 mt-1">Deep breath release</p>
               </div>
-              <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
+              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
                 <span className="font-mono text-amber-400 font-bold">[cough]</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">Throat clearing pause</p>
+                <p className="text-xs text-slate-400 mt-1">Throat clearing pause</p>
               </div>
-              <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
+              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
                 <span className="font-mono text-amber-400 font-bold">[ay]</span>
-                <p className="text-[11px] text-slate-400 mt-0.5">Upbeat exclamation</p>
+                <p className="text-xs text-slate-400 mt-1">Upbeat exclamation</p>
               </div>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400 leading-relaxed">
               💡 Tip: You can also insert timing tags like <code className="text-indigo-300 font-mono">[pause: 500ms]</code> or commas to create natural breathing pauses.
             </p>
           </div>
