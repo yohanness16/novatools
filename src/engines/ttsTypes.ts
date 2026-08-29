@@ -21,7 +21,7 @@ export interface SynthesisOptions {
   voice: string;
   voiceMix?: VoiceMixConfig;
   speed: number; // 0.5 to 2.0
-  device?: 'webgpu' | 'wasm';
+  device?: 'auto' | 'webgpu' | 'wasm';
   dtype?: 'q8' | 'q4' | 'fp16' | 'fp32';
   enhanceExpressions?: boolean;
 }

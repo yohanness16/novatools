@@ -30,12 +30,15 @@ import {
   DownloadCloud,
   Check,
   Flame,
-  Radio
+  Radio,
+  Settings2
 } from 'lucide-react';
 
 export const TextToSpeechWorkspace: React.FC = () => {
   const [selectedVoiceId, setSelectedVoiceId] = useState<string>('af_heart');
   const [isBlenderEnabled, setIsBlenderEnabled] = useState<boolean>(false);
+  const [deviceMode, setDeviceMode] = useState<'auto' | 'wasm' | 'webgpu'>('auto');
+  const [activeEngineTag, setActiveEngineTag] = useState<string>('WASM/WebGPU');
   const [voiceMix, setVoiceMix] = useState<VoiceMixConfig>({
     primaryVoice: 'af_heart',
     secondaryVoice: 'af_bella',
@@ -68,12 +71,17 @@ export const TextToSpeechWorkspace: React.FC = () => {
       setProgress(p);
       if (p.status === 'idle' && p.progress === 100) {
         setIsEngineReady(true);
+        if (p.message.includes('WEBGPU')) {
+          setActiveEngineTag('WebGPU Active');
+        } else if (p.message.includes('WASM')) {
+          setActiveEngineTag('WASM Active');
+        }
       }
     });
     ttsEngineRef.current = engine;
 
-    // Trigger non-blocking warm-up / initialization
-    engine.init('q8', 'webgpu')
+    // Background warm-up with safe auto-detection
+    engine.init('q8', deviceMode)
       .then(() => setIsEngineReady(true))
       .catch((e) => console.warn('Background TTS warm-up notice:', e));
 
@@ -81,14 +89,14 @@ export const TextToSpeechWorkspace: React.FC = () => {
       ttsEngineRef.current?.terminate();
       ttsEngineRef.current = null;
     };
-  }, []);
+  }, [deviceMode]);
 
   const selectedVoice = useMemo(() => {
     return BUILTIN_VOICES.find(v => v.id === selectedVoiceId) || BUILTIN_VOICES[0];
   }, [selectedVoiceId]);
 
   const handlePreload = async () => {
-    if (isEngineReady || isPreloading) return;
+    if (isPreloading) return;
     setIsPreloading(true);
     setErrorMsg(null);
 
@@ -96,10 +104,10 @@ export const TextToSpeechWorkspace: React.FC = () => {
       if (!ttsEngineRef.current) {
         ttsEngineRef.current = new TTSEngine((p) => setProgress(p));
       }
-      await ttsEngineRef.current.init('q8', 'webgpu');
+      await ttsEngineRef.current.init('q8', deviceMode);
       setIsEngineReady(true);
     } catch (err: any) {
-      setErrorMsg(err?.message || 'Failed to download model weights. Please check your connection.');
+      setErrorMsg(err?.message || 'Failed to initialize engine. Falling back to universal CPU mode.');
     } finally {
       setIsPreloading(false);
     }
@@ -124,7 +132,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
         voiceMix: isBlenderEnabled ? voiceMix : undefined,
         speed,
         enhanceExpressions,
-        device: 'webgpu',
+        device: deviceMode,
         dtype: 'q8',
       });
 
@@ -132,7 +140,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
       setIsEngineReady(true);
     } catch (err: any) {
       console.error('TTS Generation Error:', err);
-      setErrorMsg(err?.message || 'Speech synthesis failed. Please try again.');
+      setErrorMsg(err?.message || 'Speech synthesis failed. Please try again or switch to WASM mode.');
     } finally {
       setIsSynthesizing(false);
     }
@@ -161,42 +169,81 @@ export const TextToSpeechWorkspace: React.FC = () => {
             </p>
           </div>
 
-          {/* Engine Status Card */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 shrink-0 shadow-lg">
-            <div className="flex items-center gap-3">
-              <div className={`w-3 h-3 rounded-full ${isEngineReady ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-amber-400 animate-pulse'}`} />
-              <div>
-                <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
-                  {isEngineReady ? 'Engine Ready (WebGPU/WASM)' : 'Engine Standby'}
-                </div>
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                  100% Client-Side Privacy
+          {/* Engine Status & Backend Selector */}
+          <div className="flex flex-col gap-3 bg-slate-950/85 p-4 rounded-2xl border border-slate-800 shrink-0 shadow-lg min-w-[280px]">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-3 h-3 rounded-full ${isEngineReady ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-amber-400 animate-pulse'}`} />
+                <div>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    {isEngineReady ? activeEngineTag : 'Engine Standby'}
+                  </div>
+                  <div className="text-[10px] text-slate-400 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                    100% Local & Private
+                  </div>
                 </div>
               </div>
+
+              {!isEngineReady && (
+                <button
+                  type="button"
+                  onClick={handlePreload}
+                  disabled={isPreloading}
+                  className="px-3 py-1 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-[11px] font-semibold flex items-center justify-center gap-1 shadow transition-all cursor-pointer"
+                >
+                  {isPreloading ? (
+                    <>
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <DownloadCloud className="w-3 h-3" />
+                      <span>Preload</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
 
-            {!isEngineReady && (
-              <button
-                type="button"
-                onClick={handlePreload}
-                disabled={isPreloading}
-                className="mt-2 sm:mt-0 px-3.5 py-1.5 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer"
-              >
-                {isPreloading ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  <>
-                    <DownloadCloud className="w-3.5 h-3.5" />
-                    <span>Preload Model (~86MB)</span>
-                  </>
-                )}
-              </button>
-            )}
+            {/* Backend Device Mode Picker */}
+            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
+                <Cpu className="w-3.5 h-3.5 text-indigo-400" />
+                Backend:
+              </span>
+              <div className="flex items-center bg-slate-900 rounded-lg p-0.5 border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setDeviceMode('auto')}
+                  className={`px-2 py-0.5 text-[10px] font-semibold rounded transition-all cursor-pointer ${
+                    deviceMode === 'auto' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Auto
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeviceMode('wasm')}
+                  className={`px-2 py-0.5 text-[10px] font-semibold rounded transition-all cursor-pointer ${
+                    deviceMode === 'wasm' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  WASM (CPU)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeviceMode('webgpu')}
+                  className={`px-2 py-0.5 text-[10px] font-semibold rounded transition-all cursor-pointer ${
+                    deviceMode === 'webgpu' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  WebGPU
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

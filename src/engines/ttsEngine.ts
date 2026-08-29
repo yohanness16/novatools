@@ -58,7 +58,7 @@ export class TTSEngine {
     return this.worker;
   }
 
-  public async init(dtype = 'q8', device = 'webgpu'): Promise<void> {
+  public async init(dtype = 'q8', device = 'auto'): Promise<void> {
     if (typeof window === 'undefined') return;
     if (this.isReady) return;
 

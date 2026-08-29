@@ -1,13 +1,24 @@
 import { KokoroTTS } from 'kokoro-js';
 
 let ttsInstance: any = null;
-let activeDeviceId = 'wasm'; // Default safe, WebGPU if supported
+let activeDeviceId = 'wasm';
 let isInitializing = false;
 
-async function getOrInitTTS(dtype = 'q8', requestedDevice = 'webgpu') {
+async function isWebGPUSupported(): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !('gpu' in navigator) || !navigator.gpu) {
+    return false;
+  }
+  try {
+    const adapter = await (navigator.gpu as any).requestAdapter();
+    return !!adapter;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function getOrInitTTS(dtype = 'q8', requestedDevice = 'auto') {
   if (ttsInstance) return ttsInstance;
   if (isInitializing) {
-    // Wait for in-flight initialization
     while (isInitializing) {
       await new Promise(r => setTimeout(r, 100));
     }
@@ -16,30 +27,42 @@ async function getOrInitTTS(dtype = 'q8', requestedDevice = 'webgpu') {
 
   isInitializing = true;
   try {
-    const hasGpu = typeof navigator !== 'undefined' && 'gpu' in navigator;
-    activeDeviceId = (requestedDevice === 'webgpu' && hasGpu) ? 'webgpu' : 'wasm';
+    let deviceToUse: string | null = null;
+
+    if (requestedDevice === 'webgpu') {
+      const gpuOk = await isWebGPUSupported();
+      deviceToUse = gpuOk ? 'webgpu' : null;
+    } else if (requestedDevice === 'wasm') {
+      deviceToUse = null; // null defaults to wasm in transformers.js
+    } else {
+      // Auto: check if WebGPU is truly available and functional
+      const gpuOk = await isWebGPUSupported();
+      deviceToUse = gpuOk ? 'webgpu' : null;
+    }
+
+    activeDeviceId = deviceToUse === 'webgpu' ? 'webgpu' : 'wasm';
 
     self.postMessage({
       type: 'MODEL_PROGRESS',
       payload: { 
-        progress: 5, 
-        loaded: 5, 
+        progress: 10, 
+        loaded: 10, 
         total: 100, 
-        message: `Loading Kokoro-82M weights (${activeDeviceId.toUpperCase()})...` 
+        message: `Loading Kokoro-82M (${activeDeviceId.toUpperCase()})...` 
       }
     });
 
     try {
       ttsInstance = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {
         dtype: dtype as any,
-        device: activeDeviceId as any,
+        device: deviceToUse as any,
         progress_callback: (p: any) => {
           if (p && typeof p.progress === 'number') {
             const pct = Math.round(p.progress * 100);
             self.postMessage({
               type: 'MODEL_PROGRESS',
               payload: {
-                progress: Math.min(95, Math.max(5, pct)),
+                progress: Math.min(95, Math.max(10, pct)),
                 loaded: p.loaded || 0,
                 total: p.total || 100,
                 message: p.file ? `Loading ${p.file} (${pct}%)` : `Downloading neural weights (${pct}%)`
@@ -48,21 +71,18 @@ async function getOrInitTTS(dtype = 'q8', requestedDevice = 'webgpu') {
           }
         }
       });
-    } catch (gpuErr) {
-      if (activeDeviceId === 'webgpu') {
-        console.warn('WebGPU failed in worker, falling back to WASM:', gpuErr);
-        activeDeviceId = 'wasm';
-        self.postMessage({
-          type: 'MODEL_PROGRESS',
-          payload: { progress: 50, loaded: 50, total: 100, message: 'WebGPU fallback -> Initializing WASM runtime...' }
-        });
-        ttsInstance = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {
-          dtype: dtype as any,
-          device: 'wasm' as any,
-        });
-      } else {
-        throw gpuErr;
-      }
+    } catch (primaryErr: any) {
+      console.warn('Primary TTS initialization failed, falling back to pure WASM:', primaryErr);
+      activeDeviceId = 'wasm';
+      self.postMessage({
+        type: 'MODEL_PROGRESS',
+        payload: { progress: 30, loaded: 30, total: 100, message: 'Initializing universal WASM engine...' }
+      });
+
+      ttsInstance = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {
+        dtype: 'q8',
+        device: null,
+      });
     }
 
     self.postMessage({
@@ -75,6 +95,7 @@ async function getOrInitTTS(dtype = 'q8', requestedDevice = 'webgpu') {
 
     return ttsInstance;
   } catch (err: any) {
+    console.error('Fatal TTS Worker Init Error:', err);
     self.postMessage({
       type: 'ERROR',
       payload: { id: 'init', error: err?.message || 'Failed to initialize Kokoro TTS engine' }
@@ -92,16 +113,16 @@ self.onmessage = async (e: MessageEvent) => {
     try {
       await getOrInitTTS(payload?.dtype, payload?.device);
     } catch (err) {
-      // Error handled inside getOrInitTTS
+      // Handled in getOrInitTTS
     }
   } else if (type === 'GENERATE') {
-    const { id, text, voice = 'af_heart', speed = 1.0, dtype = 'q8', device = 'webgpu' } = payload;
+    const { id, text, voice = 'af_heart', speed = 1.0, dtype = 'q8', device = 'auto' } = payload;
     try {
       const instance = await getOrInitTTS(dtype, device);
 
       self.postMessage({
         type: 'MODEL_PROGRESS',
-        payload: { progress: 95, loaded: 95, total: 100, message: 'Synthesizing audio samples...' }
+        payload: { progress: 95, loaded: 95, total: 100, message: 'Synthesizing 24kHz audio...' }
       });
 
       // Generate speech
@@ -110,19 +131,19 @@ self.onmessage = async (e: MessageEvent) => {
         speed: Number(speed) || 1.0,
       });
 
-      // Extract Float32Array PCM
+      // Extract Float32Array PCM samples
       let pcmData: Float32Array;
-      if (audioResult.audio instanceof Float32Array) {
+      if (audioResult && audioResult.audio instanceof Float32Array) {
         pcmData = audioResult.audio;
-      } else if (audioResult.data instanceof Float32Array) {
+      } else if (audioResult && audioResult.data instanceof Float32Array) {
         pcmData = audioResult.data;
       } else if (audioResult instanceof Float32Array) {
         pcmData = audioResult;
       } else {
-        pcmData = new Float32Array(audioResult.audio || audioResult.data || []);
+        pcmData = new Float32Array(audioResult?.audio || audioResult?.data || []);
       }
 
-      const sampleRate = audioResult.sampling_rate || 24000;
+      const sampleRate = audioResult?.sampling_rate || 24000;
       const duration = pcmData.length / sampleRate;
 
       self.postMessage({
