@@ -9,42 +9,253 @@ import type {
 import { normalizeHumanScript } from './ttsExpressions';
 
 export const BUILTIN_VOICES: VoiceOption[] = [
-  // American English (Female)
-  { id: 'af_heart', name: 'Heart (Flagship)', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Warm, highly articulate studio voice (Top Quality)', category: 'natural' },
-  { id: 'af_bella', name: 'Bella', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Smooth, bright, expressive storytelling tone', category: 'narrative' },
-  { id: 'af_sky', name: 'Sky', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Energetic, youthful, clear and upbeat', category: 'conversational' },
-  { id: 'af_nicole', name: 'Nicole', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Calm, crisp corporate & educational tone', category: 'narrative' },
-  { id: 'af_sarah', name: 'Sarah', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Friendly, casual everyday cadence', category: 'conversational' },
-  { id: 'af_alloy', name: 'Alloy', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Modern, balanced neutral synthetic narrator', category: 'character' },
-  { id: 'af_aoede', name: 'Aoede', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Warm melodic voice with expressive inflection', category: 'narrative' },
-  { id: 'af_kore', name: 'Kore', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Gentle, intimate, soft audiobook cadence', category: 'narrative' },
-  { id: 'af_nova', name: 'Nova', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Direct, clear, assertive presenter tone', category: 'conversational' },
-  { id: 'af_river', name: 'River', gender: 'female', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Relaxed, calm, ambient narrative tone', category: 'natural' },
-
-  // American English (Male)
-  { id: 'am_adam', name: 'Adam', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Deep, resonant, engaging narrative voice', category: 'natural' },
-  { id: 'am_michael', name: 'Michael', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Authoritative broadcast & podcast host style', category: 'narrative' },
-  { id: 'am_liam', name: 'Liam', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Friendly, casual, modern conversational tone', category: 'conversational' },
-  { id: 'am_eric', name: 'Eric', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Articulate educational & documentary voice', category: 'natural' },
-  { id: 'am_echo', name: 'Echo', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Crisp baritone with confident clarity', category: 'narrative' },
-  { id: 'am_onyx', name: 'Onyx', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Deep, dramatic low-register voice', category: 'character' },
-  { id: 'am_puck', name: 'Puck', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Playful, upbeat, animated character style', category: 'character' },
-  { id: 'am_fenrir', name: 'Fenrir', gender: 'male', language: 'en-us', country: 'United States', flag: '🇺🇸', description: 'Strong, commanding cinematic voice', category: 'character' },
-
-  // British English (Female & Male)
-  { id: 'bf_emma', name: 'Emma', gender: 'female', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Polished British RP, classic literature style', category: 'narrative' },
-  { id: 'bf_isabella', name: 'Isabella', gender: 'female', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Gentle, expressive modern British accent', category: 'conversational' },
-  { id: 'bf_alice', name: 'Alice', gender: 'female', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Clear, crisp British narrator', category: 'natural' },
-  { id: 'bf_lily', name: 'Lily', gender: 'female', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Youthful, bright British voice', category: 'conversational' },
-  { id: 'bm_george', name: 'George', gender: 'male', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Sophisticated, deep British narrative voice', category: 'narrative' },
-  { id: 'bm_lewis', name: 'Lewis', gender: 'male', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Warm British storytelling voice', category: 'natural' },
-  { id: 'bm_fable', name: 'Fable', gender: 'male', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Rich theatrical British speaker', category: 'character' },
-  { id: 'bm_daniel', name: 'Daniel', gender: 'male', language: 'en-gb', country: 'United Kingdom', flag: '🇬🇧', description: 'Natural modern British male tone', category: 'conversational' },
+  // Flagship & Top Tier Voices
+  { 
+    id: 'af_heart', 
+    name: 'Heart', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Warm, highly articulate studio voice. Studio Flagship.', 
+    category: 'natural',
+    grade: 'A',
+    traits: 'Warm • Articulate • Studio Flagship'
+  },
+  { 
+    id: 'af_bella', 
+    name: 'Bella', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Smooth, bright, expressive storytelling & podcast tone.', 
+    category: 'narrative',
+    grade: 'A-',
+    traits: 'Expressive • Storyteller • Bright'
+  },
+  { 
+    id: 'am_michael', 
+    name: 'Michael', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Authoritative broadcast host and documentary narrator.', 
+    category: 'narrative',
+    grade: 'B+',
+    traits: 'Authoritative • Broadcast • Deep'
+  },
+  { 
+    id: 'bf_emma', 
+    name: 'Emma', 
+    gender: 'female', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Polished British RP, classic literature & premium audiobooks.', 
+    category: 'narrative',
+    grade: 'B-',
+    traits: 'British RP • Elegant • Literature'
+  },
+  { 
+    id: 'am_fenrir', 
+    name: 'Fenrir', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Deep, commanding cinematic voice for trailers & dramatic reads.', 
+    category: 'character',
+    grade: 'B+',
+    traits: 'Cinematic • Deep • Dramatic'
+  },
+  { 
+    id: 'af_nicole', 
+    name: 'Nicole', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Calm, crisp corporate, tech & educational presentation voice.', 
+    category: 'conversational',
+    grade: 'B-',
+    traits: 'Crisp • Professional • Clear'
+  },
+  { 
+    id: 'am_adam', 
+    name: 'Adam', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Resonant, engaging narrative and audiobook voice.', 
+    category: 'narrative',
+    grade: 'B',
+    traits: 'Resonant • Engaging • Narrative'
+  },
+  { 
+    id: 'af_sky', 
+    name: 'Sky', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Energetic, youthful, clear and upbeat conversational cadence.', 
+    category: 'conversational',
+    grade: 'B',
+    traits: 'Youthful • Upbeat • Casual'
+  },
+  { 
+    id: 'am_liam', 
+    name: 'Liam', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Friendly, casual, modern conversational tone.', 
+    category: 'conversational',
+    grade: 'B',
+    traits: 'Friendly • Modern • Relatable'
+  },
+  { 
+    id: 'bm_george', 
+    name: 'George', 
+    gender: 'male', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Sophisticated, deep British narrative storytelling voice.', 
+    category: 'narrative',
+    grade: 'B',
+    traits: 'Sophisticated • British • Storytelling'
+  },
+  { 
+    id: 'af_sarah', 
+    name: 'Sarah', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Friendly, natural everyday American conversational tone.', 
+    category: 'conversational',
+    grade: 'B',
+    traits: 'Natural • Casual • Friendly'
+  },
+  { 
+    id: 'am_echo', 
+    name: 'Echo', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Crisp baritone with confident clarity and modern energy.', 
+    category: 'natural',
+    grade: 'B',
+    traits: 'Baritone • Confident • Sharp'
+  },
+  { 
+    id: 'bf_isabella', 
+    name: 'Isabella', 
+    gender: 'female', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Gentle, expressive modern British accent.', 
+    category: 'conversational',
+    grade: 'B',
+    traits: 'Expressive • Modern British'
+  },
+  { 
+    id: 'bm_lewis', 
+    name: 'Lewis', 
+    gender: 'male', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Warm British storytelling and documentary voice.', 
+    category: 'narrative',
+    grade: 'B',
+    traits: 'Warm • British • Documentaries'
+  },
+  { 
+    id: 'af_aoede', 
+    name: 'Aoede', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Warm melodic voice with nuanced inflection.', 
+    category: 'narrative',
+    grade: 'B',
+    traits: 'Melodic • Warm • Nuanced'
+  },
+  { 
+    id: 'am_puck', 
+    name: 'Puck', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Playful, upbeat, animated character style.', 
+    category: 'character',
+    grade: 'B',
+    traits: 'Playful • Animated • Character'
+  },
+  { 
+    id: 'af_kore', 
+    name: 'Kore', 
+    gender: 'female', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Gentle, intimate, soft audiobook and meditation cadence.', 
+    category: 'narrative',
+    grade: 'B',
+    traits: 'Gentle • Intimate • Soft'
+  },
+  { 
+    id: 'am_onyx', 
+    name: 'Onyx', 
+    gender: 'male', 
+    language: 'en-us', 
+    country: 'United States', 
+    flag: '🇺🇸', 
+    description: 'Deep, dramatic low-register cinematic voice.', 
+    category: 'character',
+    grade: 'B',
+    traits: 'Low-register • Cinematic • Heavy'
+  },
+  { 
+    id: 'bf_alice', 
+    name: 'Alice', 
+    gender: 'female', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Clear, crisp British narrator.', 
+    category: 'natural',
+    grade: 'B',
+    traits: 'Crisp • British Narrator'
+  },
+  { 
+    id: 'bm_daniel', 
+    name: 'Daniel', 
+    gender: 'male', 
+    language: 'en-gb', 
+    country: 'United Kingdom', 
+    flag: '🇬🇧', 
+    description: 'Natural modern British male conversational tone.', 
+    category: 'conversational',
+    grade: 'B',
+    traits: 'Modern British • Natural'
+  }
 ];
 
 export class TTSEngine {
   private worker: Worker | null = null;
   public isReady = false;
+  public activeDevice = 'wasm';
   private onProgressCallback?: (p: TTSProgress) => void;
 
   constructor(onProgress?: (p: TTSProgress) => void) {
@@ -73,15 +284,16 @@ export class TTSEngine {
             progress: payload.progress,
             message: payload.message,
             loadedBytes: payload.loaded,
-            totalBytes: payload.total
+            totalBytes: payload.total,
           });
         } else if (type === 'READY') {
           this.isReady = true;
+          this.activeDevice = payload.device;
           worker.removeEventListener('message', handleMsg);
           this.onProgressCallback?.({
             status: 'idle',
             progress: 100,
-            message: `Engine Ready (${payload.device.toUpperCase()})`
+            message: `Engine Ready (${payload.device.toUpperCase()})`,
           });
           resolve();
         } else if (type === 'ERROR' && (payload as any).id === 'init') {
@@ -89,7 +301,7 @@ export class TTSEngine {
           this.onProgressCallback?.({
             status: 'error',
             progress: 0,
-            message: (payload as any).error
+            message: (payload as any).error,
           });
           reject(new Error((payload as any).error));
         }
@@ -102,15 +314,14 @@ export class TTSEngine {
 
   public async synthesize(options: SynthesisOptions): Promise<SynthesizedAudioResult> {
     const worker = this.getWorker();
-
-    const script = normalizeHumanScript(options.text, options.enhanceExpressions ?? true);
+    const script = normalizeHumanScript(options.text);
     const requestId = `tts_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
     return new Promise((resolve, reject) => {
       this.onProgressCallback?.({
         status: 'synthesizing',
         progress: 10,
-        message: 'Processing script phonetics...'
+        message: 'Preparing phonetics & sentence chunks...',
       });
 
       const handleMsg = (e: MessageEvent<TTSWorkerOutboundMessage>) => {
@@ -120,7 +331,18 @@ export class TTSEngine {
           this.onProgressCallback?.({
             status: 'synthesizing',
             progress: payload.progress,
-            message: payload.message
+            message: payload.message,
+          });
+        } else if (type === 'CHUNK_PROGRESS' && payload.id === requestId) {
+          this.onProgressCallback?.({
+            status: 'synthesizing',
+            progress: payload.progress,
+            message: payload.message,
+            chunkIndex: payload.chunkIndex,
+            totalChunks: payload.totalChunks,
+            elapsedMs: payload.elapsedMs,
+            estimatedRemainingMs: payload.estimatedRemainingMs,
+            etaFormatted: payload.etaFormatted,
           });
         } else if (type === 'COMPLETE' && payload.id === requestId) {
           worker.removeEventListener('message', handleMsg);
@@ -132,7 +354,7 @@ export class TTSEngine {
           this.onProgressCallback?.({
             status: 'done',
             progress: 100,
-            message: 'Audio generated successfully!'
+            message: 'Audio generated successfully!',
           });
 
           resolve({
@@ -141,14 +363,14 @@ export class TTSEngine {
             duration,
             sampleRate,
             cues,
-            url
+            url,
           });
         } else if (type === 'ERROR' && (payload as any).id === requestId) {
           worker.removeEventListener('message', handleMsg);
           this.onProgressCallback?.({
             status: 'error',
             progress: 0,
-            message: (payload as any).error
+            message: (payload as any).error,
           });
           reject(new Error((payload as any).error));
         }
@@ -160,8 +382,8 @@ export class TTSEngine {
         payload: {
           ...options,
           text: script,
-          id: requestId
-        }
+          id: requestId,
+        },
       });
     });
   }
@@ -180,7 +402,6 @@ export class TTSEngine {
  */
 export function pcmToWavBlob(pcmData: Float32Array, sampleRate = 24000): Blob {
   if (!pcmData || !(pcmData instanceof Float32Array)) {
-    console.error('Invalid pcmData supplied to pcmToWavBlob:', pcmData);
     pcmData = new Float32Array(0);
   }
 
@@ -227,9 +448,6 @@ function writeAscii(view: DataView, offset: number, str: string): void {
   }
 }
 
-/**
- * Format timestamp in SRT standard format (HH:MM:SS,mmm)
- */
 export function formatTimeSrt(seconds: number): string {
   const safe = Math.max(0, isNaN(seconds) ? 0 : seconds);
   const hrs = Math.floor(safe / 3600);
@@ -239,9 +457,6 @@ export function formatTimeSrt(seconds: number): string {
   return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')},${ms.toString().padStart(3, '0')}`;
 }
 
-/**
- * Export cues to SRT subtitle file
- */
 export function cuesToSrt(cues: AudioCue[]): string {
   return cues
     .map((c, i) => `${i + 1}\n${formatTimeSrt(c.start)} --> ${formatTimeSrt(c.end)}\n${c.text.trim()}\n`)

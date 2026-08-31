@@ -1,67 +1,66 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   TTSEngine, 
-  BUILTIN_VOICES,
-  cuesToSrt 
+  BUILTIN_VOICES 
 } from '../../engines/ttsEngine';
 import type { 
   VoiceOption, 
-  VoiceMixConfig, 
+  VoiceSettings,
   SynthesizedAudioResult, 
-  TTSProgress 
+  TTSProgress,
+  GenerationHistoryItem
 } from '../../engines/ttsTypes';
 import { VoiceSelector } from './tts/VoiceSelector';
-import { VoiceBlender } from './tts/VoiceBlender';
+import { VoiceSettingsModal } from './tts/VoiceSettingsModal';
 import { ScriptEditor } from './tts/ScriptEditor';
 import { AudioPlayerCard } from './tts/AudioPlayerCard';
+import { GenerationHistory } from './tts/GenerationHistory';
 import { 
   Volume2, 
   Sparkles, 
-  Zap, 
-  Cpu, 
-  ShieldCheck, 
+  Sliders, 
   Loader2, 
   AlertCircle, 
-  CheckCircle2, 
   Play,
-  Layers,
-  HelpCircle,
-  Activity,
-  DownloadCloud,
-  Check,
-  Flame,
-  Radio,
-  Settings2,
-  HardDrive
+  ChevronDown,
+  Zap,
+  Cpu,
+  RotateCcw
 } from 'lucide-react';
 
 export const TextToSpeechWorkspace: React.FC = () => {
   const [selectedVoiceId, setSelectedVoiceId] = useState<string>('af_heart');
-  const [isBlenderEnabled, setIsBlenderEnabled] = useState<boolean>(false);
-  const [deviceMode, setDeviceMode] = useState<'wasm' | 'webgpu'>('wasm');
-  const [activeEngineTag, setActiveEngineTag] = useState<string>('WASM (Universal)');
-  const [voiceMix, setVoiceMix] = useState<VoiceMixConfig>({
-    primaryVoice: 'af_heart',
-    secondaryVoice: 'af_bella',
-    blendRatio: 0.3,
+  const [isVoiceSelectorOpen, setIsVoiceSelectorOpen] = useState<boolean>(false);
+  const [isVoiceSettingsOpen, setIsVoiceSettingsOpen] = useState<boolean>(false);
+
+  const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>({
+    stability: 0.5,
+    speed: 1.0,
+    blendEnabled: false,
+    blendConfig: {
+      primaryVoice: 'af_heart',
+      secondaryVoice: 'af_bella',
+      blendRatio: 0.3,
+    },
   });
 
+  const [deviceMode, setDeviceMode] = useState<'auto' | 'webgpu' | 'wasm'>('auto');
+  const [activeDevice, setActiveDevice] = useState<string>('wasm');
+
   const [scriptText, setScriptText] = useState<string>(
-    "Hey there! [ay] Welcome to the all-new NovaTools AI Voice Studio. [pause: 300ms] " +
-    "You can generate studio-quality, human-like voiceovers with natural expressions like 'ugh', 'sigh', 'cough', and 'whoa' — all running 100% privately in your browser! [sigh] Isn't that amazing?"
+    "Welcome to the all-new AI Voice Studio. You can generate studio-quality, lifelike voiceovers for videos, audiobooks, podcasts, and presentations — with unlimited length and crystal-clear acoustic fidelity."
   );
-  const [speed, setSpeed] = useState<number>(1.0);
-  const [enhanceExpressions, setEnhanceExpressions] = useState<boolean>(true);
 
   const [progress, setProgress] = useState<TTSProgress>({
     status: 'idle',
     progress: 0,
     message: '',
   });
+
   const [isSynthesizing, setIsSynthesizing] = useState<boolean>(false);
-  const [isPreloading, setIsPreloading] = useState<boolean>(false);
   const [isEngineReady, setIsEngineReady] = useState<boolean>(false);
   const [audioResult, setAudioResult] = useState<SynthesizedAudioResult | null>(null);
+  const [historyItems, setHistoryItems] = useState<GenerationHistoryItem[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const ttsEngineRef = useRef<TTSEngine | null>(null);
@@ -72,11 +71,6 @@ export const TextToSpeechWorkspace: React.FC = () => {
       setProgress(p);
       if (p.status === 'idle' && p.progress === 100) {
         setIsEngineReady(true);
-        if (p.message.includes('WEBGPU')) {
-          setActiveEngineTag('WebGPU Active');
-        } else {
-          setActiveEngineTag('WASM (Universal)');
-        }
       }
     });
     ttsEngineRef.current = engine;
@@ -85,9 +79,9 @@ export const TextToSpeechWorkspace: React.FC = () => {
     engine.init('q8', deviceMode)
       .then(() => {
         setIsEngineReady(true);
-        setActiveEngineTag(deviceMode === 'webgpu' ? 'WebGPU Active' : 'WASM (Universal)');
+        setActiveDevice(engine.activeDevice);
       })
-      .catch((e) => console.warn('Background TTS warm-up notice:', e));
+      .catch((e) => console.warn('TTS warm-up notice:', e));
 
     return () => {
       ttsEngineRef.current?.terminate();
@@ -99,26 +93,8 @@ export const TextToSpeechWorkspace: React.FC = () => {
     return BUILTIN_VOICES.find(v => v.id === selectedVoiceId) || BUILTIN_VOICES[0];
   }, [selectedVoiceId]);
 
-  const handlePreload = async () => {
-    if (isPreloading) return;
-    setIsPreloading(true);
-    setErrorMsg(null);
-
-    try {
-      if (!ttsEngineRef.current) {
-        ttsEngineRef.current = new TTSEngine((p) => setProgress(p));
-      }
-      await ttsEngineRef.current.init('q8', deviceMode);
-      setIsEngineReady(true);
-    } catch (err: any) {
-      setErrorMsg(err?.message || 'Failed to initialize engine.');
-    } finally {
-      setIsPreloading(false);
-    }
-  };
-
   const handleSynthesize = async () => {
-    if (!scriptText.trim()) return;
+    if (!scriptText.trim() || isSynthesizing) return;
 
     setErrorMsg(null);
     setIsSynthesizing(true);
@@ -128,20 +104,43 @@ export const TextToSpeechWorkspace: React.FC = () => {
         ttsEngineRef.current = new TTSEngine((p) => setProgress(p));
       }
 
-      const activeVoice = isBlenderEnabled ? voiceMix.primaryVoice : selectedVoiceId;
+      const activeVoice = voiceSettings.blendEnabled ? voiceSettings.blendConfig.primaryVoice : selectedVoiceId;
 
       const result = await ttsEngineRef.current.synthesize({
         text: scriptText,
         voice: activeVoice,
-        voiceMix: isBlenderEnabled ? voiceMix : undefined,
-        speed,
-        enhanceExpressions,
+        voiceMix: voiceSettings.blendEnabled ? voiceSettings.blendConfig : undefined,
+        speed: voiceSettings.speed,
+        stability: voiceSettings.stability,
         device: deviceMode,
-        dtype: 'q8',
+        dtype: deviceMode === 'webgpu' ? 'fp32' : 'q8',
       });
+
+      result.voiceId = selectedVoice.id;
+      result.voiceName = selectedVoice.name;
+      result.voiceFlag = selectedVoice.flag;
+      result.text = scriptText;
+      result.createdAt = Date.now();
 
       setAudioResult(result);
       setIsEngineReady(true);
+
+      // Add to session history
+      const historyItem: GenerationHistoryItem = {
+        id: `take_${Date.now()}`,
+        text: scriptText,
+        voiceId: selectedVoice.id,
+        voiceName: selectedVoice.name,
+        voiceFlag: selectedVoice.flag,
+        duration: result.duration,
+        url: result.url,
+        blob: result.audioBlob,
+        cues: result.cues,
+        timestamp: Date.now(),
+        speed: voiceSettings.speed,
+      };
+
+      setHistoryItems((prev) => [historyItem, ...prev]);
     } catch (err: any) {
       console.error('TTS Generation Error:', err);
       setErrorMsg(err?.message || 'Speech synthesis failed. Please try again.');
@@ -150,225 +149,188 @@ export const TextToSpeechWorkspace: React.FC = () => {
     }
   };
 
+  const handleSelectHistoryItem = (item: GenerationHistoryItem) => {
+    setAudioResult({
+      audioBuffer: null,
+      audioBlob: item.blob,
+      duration: item.duration,
+      sampleRate: 24000,
+      cues: item.cues,
+      url: item.url,
+      voiceId: item.voiceId,
+      voiceName: item.voiceName,
+      voiceFlag: item.voiceFlag,
+      text: item.text,
+      createdAt: item.timestamp,
+    });
+  };
+
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      {/* Studio Header Banner with Generous Padding */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-950 border border-indigo-500/30 p-8 sm:p-10 shadow-2xl backdrop-blur-xl">
-        {/* Glow ambient accent */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-bold tracking-wide">
-              <Sparkles className="w-4 h-4 text-indigo-400" />
-              Kokoro-82M High-Fidelity Neural Vocoder
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-              AI Voice Studio & Humanic TTS
-            </h1>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              Synthesize lifelike, studio-grade speech right in your browser. Features 24+ natural voices, 
-              custom dual-voice blending, and realistic human expressions (<em>"ugh"</em>, <em>"sigh"</em>, <em>"cough"</em>, <em>"ay"</em>, <em>"whoa"</em>).
-            </p>
-          </div>
-
-          {/* Engine Status & Backend Controls Card */}
-          <div className="flex flex-col gap-4 bg-slate-950/90 p-5 rounded-2xl border border-slate-800 shrink-0 shadow-2xl min-w-[300px]">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className={`w-3.5 h-3.5 rounded-full ${isEngineReady ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' : 'bg-amber-400 animate-pulse'}`} />
-                <div>
-                  <div className="text-sm font-bold text-white flex items-center gap-1.5">
-                    <Zap className="w-4 h-4 text-amber-400" />
-                    {isEngineReady ? activeEngineTag : 'Engine Initializing...'}
-                  </div>
-                  <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    100% Client-Side Privacy
-                  </div>
-                </div>
-              </div>
-
-              {!isEngineReady && (
-                <button
-                  type="button"
-                  onClick={handlePreload}
-                  disabled={isPreloading}
-                  className="px-3.5 py-1.5 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-105 active:scale-95"
-                >
-                  {isPreloading ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Loading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <DownloadCloud className="w-3.5 h-3.5" />
-                      <span>Preload Model</span>
-                    </>
-                  )}
-                </button>
-              )}
-            </div>
-
-            {/* Backend Device Mode Switcher */}
-            <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-              <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Cpu className="w-4 h-4 text-indigo-400" />
-                Backend:
-              </span>
-              <div className="flex items-center bg-slate-900 rounded-xl p-1 border border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setDeviceMode('wasm')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                    deviceMode === 'wasm' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  WASM (Universal CPU)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDeviceMode('webgpu')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                    deviceMode === 'webgpu' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  WebGPU
-                </button>
-              </div>
-            </div>
-          </div>
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      
+      {/* Studio Header (ElevenLabs Minimal Style) */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
+            <Volume2 className="w-7 h-7 text-indigo-500" />
+            AI Voice Studio
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Synthesize lifelike speech with natural cadence, multi-chunk long text support, and ultra-fast neural vocoding.
+          </p>
         </div>
 
-        {/* Live Progress Bar with Clear Metrics */}
-        {(progress.status === 'loading_model' || isSynthesizing) && (
-          <div className="mt-8 pt-6 border-t border-indigo-500/20 space-y-3">
-            <div className="flex items-center justify-between text-xs sm:text-sm text-slate-200 font-semibold">
-              <span className="flex items-center gap-2.5">
-                <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
-                {progress.message || (isSynthesizing ? 'Synthesizing audio samples...' : 'Loading neural weights...')}
-              </span>
-              <span className="font-mono text-indigo-300 font-black text-sm">
-                {progress.progress > 0 ? `${progress.progress}%` : 'Processing'}
+        {/* Top Control Bar (Voice Picker & Settings Pill Buttons) */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Active Voice Dropdown Button */}
+          <button
+            type="button"
+            onClick={() => setIsVoiceSelectorOpen(true)}
+            className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-white transition-all shadow-md cursor-pointer group"
+          >
+            <div className="w-7 h-7 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
+              {selectedVoice.flag}
+            </div>
+            <div className="text-left">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs sm:text-sm font-bold text-white leading-tight">
+                  {selectedVoice.name}
+                </span>
+                {selectedVoice.grade && (
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300">
+                    {selectedVoice.grade}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] text-slate-400 capitalize">
+                {selectedVoice.country} • {selectedVoice.gender}
               </span>
             </div>
-            <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
-              <div 
-                className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 rounded-full transition-all duration-300 shadow-sm"
-                style={{ width: `${Math.max(8, progress.progress)}%` }}
-              />
+            <ChevronDown className="w-4 h-4 text-slate-400 ml-1" />
+          </button>
+
+          {/* Voice Settings Button */}
+          <button
+            type="button"
+            onClick={() => setIsVoiceSettingsOpen(true)}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-slate-200 hover:text-white transition-all shadow-md cursor-pointer text-xs font-semibold"
+          >
+            <Sliders className="w-4 h-4 text-indigo-400" />
+            <span>Voice settings</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Studio Script Editor */}
+      <div className="space-y-4">
+        <ScriptEditor
+          text={scriptText}
+          onChange={setScriptText}
+          speed={voiceSettings.speed}
+          onGenerate={handleSynthesize}
+          isGenerating={isSynthesizing}
+        />
+
+        {/* Primary Action Button Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          
+          {/* Progress / ETA Banner */}
+          <div className="flex-1">
+            {isSynthesizing && (
+              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-indigo-500/30 space-y-2 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-200">
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
+                    <span>{progress.message || 'Synthesizing speech...'}</span>
+                  </span>
+                  <span className="font-mono text-indigo-300 font-bold">
+                    {progress.progress > 0 ? `${progress.progress}%` : ''}
+                  </span>
+                </div>
+                <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                  <div
+                    className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-300"
+                    style={{ width: `${Math.max(10, progress.progress)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ElevenLabs Style Generate Button */}
+          <button
+            type="button"
+            onClick={handleSynthesize}
+            disabled={isSynthesizing || !scriptText.trim()}
+            className={`py-4 px-8 rounded-2xl font-bold text-sm sm:text-base tracking-wide shadow-xl flex items-center justify-center gap-2.5 transition-all cursor-pointer shrink-0 ${
+              isSynthesizing || !scriptText.trim()
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/60'
+                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98]'
+            }`}
+          >
+            {isSynthesizing ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin text-indigo-200" />
+                <span>
+                  {progress.chunkIndex && progress.totalChunks && progress.totalChunks > 1
+                    ? `Generating part ${progress.chunkIndex}/${progress.totalChunks}`
+                    : 'Generating speech...'}
+                </span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5 text-indigo-200" />
+                <span>Generate speech</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Error Alert */}
+        {errorMsg && (
+          <div className="p-4 rounded-2xl bg-red-950/60 border border-red-500/50 flex items-start gap-3 text-red-200 text-xs sm:text-sm shadow-lg animate-in fade-in">
+            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold block mb-0.5">Synthesis Alert</strong>
+              {errorMsg}
             </div>
-            <p className="text-xs text-slate-400 text-right">
-              💡 Model weights (~86MB) are stored in your browser's IndexedDB for instant offline reuse.
-            </p>
           </div>
         )}
       </div>
 
-      {/* Main Studio Grid with Spacious Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Studio Column: Script Editor + CTA + Player */}
-        <div className="lg:col-span-7 space-y-8">
-          <ScriptEditor
-            text={scriptText}
-            onChange={setScriptText}
-            speed={speed}
-            onSpeedChange={setSpeed}
-            enhanceExpressions={enhanceExpressions}
-            onToggleExpressions={setEnhanceExpressions}
-          />
+      {/* Output Audio Waveform Player */}
+      <AudioPlayerCard
+        result={audioResult}
+        voiceName={audioResult?.voiceName || selectedVoice.name}
+        voiceFlag={audioResult?.voiceFlag || selectedVoice.flag}
+      />
 
-          {/* Primary Action Button */}
-          <div>
-            <button
-              type="button"
-              onClick={handleSynthesize}
-              disabled={isSynthesizing || !scriptText.trim()}
-              className={`w-full py-5 px-8 rounded-3xl font-black text-base tracking-wide shadow-2xl flex items-center justify-center gap-3 transition-all cursor-pointer ${
-                isSynthesizing || !scriptText.trim()
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-                  : 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-600/30 hover:scale-[1.01] active:scale-[0.99]'
-              }`}
-            >
-              {isSynthesizing ? (
-                <>
-                  <Loader2 className="w-6 h-6 animate-spin text-indigo-200" />
-                  <span>Synthesizing Speech ({progress.progress > 0 ? `${progress.progress}%` : 'Processing'}...)</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-6 h-6 text-amber-300" />
-                  <span>Generate Speech Audio</span>
-                </>
-              )}
-            </button>
-          </div>
+      {/* Generation History Takes */}
+      <GenerationHistory
+        items={historyItems}
+        onSelect={handleSelectHistoryItem}
+        onClear={() => setHistoryItems([])}
+        selectedId={audioResult?.createdAt ? `take_${audioResult.createdAt}` : undefined}
+      />
 
-          {/* Error Notice Banner */}
-          {errorMsg && (
-            <div className="p-5 rounded-3xl bg-red-950/70 border border-red-500/50 flex items-start gap-3.5 text-red-200 text-xs sm:text-sm shadow-xl">
-              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-              <div>
-                <strong className="font-bold block mb-1">Synthesis Notice</strong>
-                {errorMsg}
-              </div>
-            </div>
-          )}
+      {/* Voice Selector Modal Sheet */}
+      <VoiceSelector
+        selectedVoiceId={selectedVoiceId}
+        onSelectVoice={(id) => setSelectedVoiceId(id)}
+        isOpen={isVoiceSelectorOpen}
+        onClose={() => setIsVoiceSelectorOpen(false)}
+      />
 
-          {/* Audio Waveform Player Output */}
-          <AudioPlayerCard
-            result={audioResult}
-            voiceName={selectedVoice.name}
-            voiceFlag={selectedVoice.flag}
-          />
-        </div>
-
-        {/* Right Studio Column: Voices & Blender & Guide */}
-        <div className="lg:col-span-5 space-y-8">
-          <VoiceSelector
-            selectedVoiceId={selectedVoiceId}
-            onSelectVoice={(id) => setSelectedVoiceId(id)}
-          />
-
-          <VoiceBlender
-            config={voiceMix}
-            onChange={setVoiceMix}
-            isEnabled={isBlenderEnabled}
-            onToggle={setIsBlenderEnabled}
-          />
-
-          {/* Expression Quick Soundboard Guide Card */}
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 p-6 sm:p-7 shadow-xl space-y-4">
-            <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Flame className="w-4 h-4 text-amber-400" />
-              Human Expression Guide
-            </h4>
-            <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
-              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
-                <span className="font-mono text-amber-400 font-bold">[ugh]</span>
-                <p className="text-xs text-slate-400 mt-1">Frustration / Exasperation</p>
-              </div>
-              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
-                <span className="font-mono text-amber-400 font-bold">[sigh]</span>
-                <p className="text-xs text-slate-400 mt-1">Deep breath release</p>
-              </div>
-              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
-                <span className="font-mono text-amber-400 font-bold">[cough]</span>
-                <p className="text-xs text-slate-400 mt-1">Throat clearing pause</p>
-              </div>
-              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800">
-                <span className="font-mono text-amber-400 font-bold">[ay]</span>
-                <p className="text-xs text-slate-400 mt-1">Upbeat exclamation</p>
-              </div>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              💡 Tip: You can also insert timing tags like <code className="text-indigo-300 font-mono">[pause: 500ms]</code> or commas to create natural breathing pauses.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Voice Settings Modal Sheet */}
+      <VoiceSettingsModal
+        isOpen={isVoiceSettingsOpen}
+        onClose={() => setIsVoiceSettingsOpen(false)}
+        settings={voiceSettings}
+        onChange={setVoiceSettings}
+        deviceMode={deviceMode}
+        onDeviceChange={setDeviceMode}
+        activeDevice={activeDevice}
+      />
     </div>
   );
 };

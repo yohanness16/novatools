@@ -8,10 +8,10 @@ import {
   Download, 
   FileText, 
   Music, 
-  Check, 
-  Sparkles, 
   Volume2,
-  Share2
+  VolumeX,
+  Sparkles,
+  ChevronDown
 } from 'lucide-react';
 
 interface AudioPlayerCardProps {
@@ -28,6 +28,9 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [isMuted, setIsMuted] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
@@ -37,6 +40,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = result.url;
+        audioRef.current.playbackRate = playbackRate;
         audioRef.current.load();
       }
       setCurrentTime(0);
@@ -88,6 +92,20 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     }
   };
 
+  const handleRateChange = (rate: number) => {
+    setPlaybackRate(rate);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = rate;
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   // Waveform visualization animation
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -99,8 +117,8 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const numBars = 70;
-      const barWidth = 4;
+      const numBars = 80;
+      const barWidth = 3;
       const spacing = 3;
       const totalWidth = numBars * (barWidth + spacing);
       const startX = (canvas.width - totalWidth) / 2;
@@ -116,24 +134,24 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         // Wave profile calculation
         let barHeight = 6;
         if (isPlaying) {
-          const sine = Math.sin(phase + i * 0.25);
+          const sine = Math.sin(phase + i * 0.28);
           const amp = Math.sin((i / numBars) * Math.PI);
-          barHeight = Math.max(6, Math.abs(sine) * 48 * amp + 6);
+          barHeight = Math.max(6, Math.abs(sine) * 44 * amp + 6);
         } else {
           const staticAmp = Math.sin((i / numBars) * Math.PI);
-          barHeight = Math.max(6, staticAmp * 32 + (i % 3) * 4);
+          barHeight = Math.max(6, staticAmp * 28 + (i % 4) * 3);
         }
 
         const y = (canvas.height - barHeight) / 2;
 
         if (isPast) {
-          ctx.fillStyle = '#818cf8'; // Indigo 400
+          ctx.fillStyle = '#6366f1'; // Indigo 500
         } else {
           ctx.fillStyle = '#334155'; // Slate 700
         }
 
         ctx.beginPath();
-        ctx.roundRect(x, y, barWidth, barHeight, 3);
+        ctx.roundRect(x, y, barWidth, barHeight, 2);
         ctx.fill();
       }
 
@@ -155,7 +173,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     if (!result?.url) return;
     const a = document.createElement('a');
     a.href = result.url;
-    a.download = `kokoro-speech-${Date.now()}.wav`;
+    a.download = `voice-generation-${Date.now()}.wav`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -182,24 +200,10 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     return `${m}:${rem.toString().padStart(2, '0')}`;
   };
 
-  if (!result) {
-    return (
-      <div className="bg-slate-900/60 rounded-3xl border border-slate-800/90 p-8 sm:p-10 text-center flex flex-col items-center justify-center gap-4 shadow-xl">
-        <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-slate-500 shadow-inner">
-          <Music className="w-8 h-8" />
-        </div>
-        <div>
-          <h4 className="text-base font-bold text-slate-200">No Audio Generated Yet</h4>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-md">
-            Type or customize your script above and click "Generate Speech Audio" to hear high-fidelity 24kHz Kokoro-82M AI synthesis.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (!result) return null;
 
   return (
-    <div className="bg-gradient-to-b from-slate-900/90 to-slate-950/90 backdrop-blur-xl rounded-3xl border border-indigo-500/40 p-6 sm:p-7 shadow-2xl shadow-indigo-950/30 space-y-5">
+    <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-indigo-500/30 p-6 shadow-2xl space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -207,59 +211,62 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         className="hidden"
       />
 
-      {/* Header with Voice Badge & Audio Meta */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-indigo-500/20">
+      {/* Header Info */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center text-2xl shadow-inner">
+          <div className="w-11 h-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-2xl shadow-inner">
             {voiceFlag}
           </div>
           <div>
             <h4 className="text-base font-bold text-white flex items-center gap-2">
               <span>{voiceName}</span>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                 24kHz Hi-Fi
               </span>
             </h4>
             <p className="text-xs text-slate-400 mt-0.5">
-              Duration: {duration.toFixed(1)}s • 100% Client-Side Synthesized
+              Duration: {duration.toFixed(1)}s • Complete Take
             </p>
           </div>
         </div>
 
-        {/* Quick actions */}
+        {/* Action Downloads */}
         <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handleDownloadWav}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/20 transition-all cursor-pointer hover:scale-105 active:scale-95"
           >
-            <Download className="w-4 h-4" />
-            <span>Download WAV</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>Download Audio (WAV)</span>
           </button>
-          <button
-            type="button"
-            onClick={handleDownloadSrt}
-            title="Download SRT Subtitles"
-            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
-          >
-            <FileText className="w-4 h-4" />
-            <span className="hidden sm:inline">SRT</span>
-          </button>
+          
+          {result.cues && result.cues.length > 0 && (
+            <button
+              type="button"
+              onClick={handleDownloadSrt}
+              title="Download Subtitles (.SRT)"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>SRT</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Waveform Canvas */}
-      <div className="bg-slate-950/90 rounded-2xl p-4 border border-slate-800/80 shadow-inner">
+      {/* Waveform Visualization Canvas */}
+      <div className="bg-slate-950/90 rounded-2xl p-3 border border-slate-800 shadow-inner">
         <canvas
           ref={canvasRef}
           width={600}
-          height={70}
-          className="w-full h-16 sm:h-20 block"
+          height={60}
+          className="w-full h-14 block"
         />
       </div>
 
-      {/* Player Controls Bar */}
-      <div className="flex items-center gap-4 p-2">
+      {/* Audio Controls Bar */}
+      <div className="flex items-center gap-4">
         {/* Play/Pause Button */}
         <button
           type="button"
@@ -269,7 +276,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
           {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
         </button>
 
-        {/* Replay Button */}
+        {/* Restart Button */}
         <button
           type="button"
           onClick={handleRestart}
@@ -279,21 +286,49 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
           <RotateCcw className="w-4 h-4" />
         </button>
 
-        {/* Current Time / Duration */}
-        <span className="text-xs sm:text-sm font-mono text-slate-300 font-semibold shrink-0">
-          {formatTime(currentTime)} / {formatTime(duration)}
-        </span>
+        {/* Timeline Scrubber */}
+        <div className="flex-1 flex items-center gap-3">
+          <span className="text-xs font-mono text-slate-300 font-semibold shrink-0">
+            {formatTime(currentTime)}
+          </span>
+          <input
+            type="range"
+            min="0"
+            max={duration || 1}
+            step="0.05"
+            value={currentTime}
+            onChange={handleSeek}
+            className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+          />
+          <span className="text-xs font-mono text-slate-400 shrink-0">
+            {formatTime(duration)}
+          </span>
+        </div>
 
-        {/* Scrub Slider */}
-        <input
-          type="range"
-          min="0"
-          max={duration || 1}
-          step="0.05"
-          value={currentTime}
-          onChange={handleSeek}
-          className="flex-1 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-        />
+        {/* Playback Rate Dropdown */}
+        <div className="flex items-center gap-1 bg-slate-800/80 rounded-xl p-1 text-xs">
+          {[1.0, 1.25, 1.5].map((rate) => (
+            <button
+              key={rate}
+              type="button"
+              onClick={() => handleRateChange(rate)}
+              className={`px-2 py-1 rounded-lg font-mono font-medium transition-all cursor-pointer ${
+                playbackRate === rate ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {rate}x
+            </button>
+          ))}
+        </div>
+
+        {/* Mute Button */}
+        <button
+          type="button"
+          onClick={toggleMute}
+          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+        >
+          {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
+        </button>
       </div>
     </div>
   );

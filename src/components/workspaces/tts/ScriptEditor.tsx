@@ -1,77 +1,39 @@
-import React, { useRef } from 'react';
-import { HUMAN_EXPRESSIONS, PAUSE_PRESETS } from '../../../engines/ttsExpressions';
+import React, { useRef, useState } from 'react';
+import { SAMPLE_SCRIPTS, type SampleScript } from '../../../engines/ttsExpressions';
 import { 
-  FileText, 
-  Sparkles, 
-  Trash2, 
   Clipboard, 
+  Trash2, 
+  Sparkles, 
   Clock, 
   Type, 
-  Smile, 
-  Sliders, 
-  Flame,
-  Volume2
+  ChevronDown, 
+  FileText,
+  Check
 } from 'lucide-react';
 
 interface ScriptEditorProps {
   text: string;
   onChange: (text: string) => void;
   speed: number;
-  onSpeedChange: (speed: number) => void;
-  enhanceExpressions: boolean;
-  onToggleExpressions: (enhance: boolean) => void;
+  onGenerate?: () => void;
+  isGenerating?: boolean;
 }
-
-const SAMPLE_SCRIPTS = [
-  {
-    title: '💬 Conversational',
-    content: "Hey there! [ay] You won't believe what just happened today. [sigh] I tried to export the video three times, but ugh, the server crashed! [pause: 500ms] Fortunately, NovaTools runs 100% in the browser now. Whoa, isn't that cool?",
-  },
-  {
-    title: '📖 Storytelling',
-    content: "The old library was quiet — save for the ticking of an antique grandfather clock. [sigh] Clara turned the parchment page, [cough] gazing upon coordinates long forgotten. 'We found it,' she whispered. [pause: 500ms] 'After all these years.'",
-  },
-  {
-    title: '🎙️ Podcast Intro',
-    content: "Welcome back to Tech Frontiers! [haha] Today, we are testing client-side AI text to speech with Kokoro-82M. [pause: 300ms] Hmm... zero latency, zero cloud costs, and studio fidelity right in your browser. Let's dive right in!",
-  },
-  {
-    title: '🎭 Dramatic Scene',
-    content: "Wait, stop right there! [gasp] Did you hear that sound? [pause: 500ms] Phew... it was just the wind. Ugh, you really scared me for a second!",
-  }
-];
 
 export const ScriptEditor: React.FC<ScriptEditorProps> = ({
   text,
   onChange,
   speed,
-  onSpeedChange,
-  enhanceExpressions,
-  onToggleExpressions,
+  onGenerate,
+  isGenerating,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [showSamplesMenu, setShowSamplesMenu] = useState(false);
+  const [copiedNotification, setCopiedNotification] = useState(false);
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
   const charCount = text.length;
+  // Standard human speech rate: ~150 words per minute
   const estSeconds = Math.max(1, Math.round((wordCount / (150 * (speed || 1))) * 60));
-
-  const insertTag = (tag: string) => {
-    if (!textareaRef.current) {
-      onChange(text + ' ' + tag);
-      return;
-    }
-    const el = textareaRef.current;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const newText = text.substring(0, start) + ' ' + tag + ' ' + text.substring(end);
-    onChange(newText);
-
-    setTimeout(() => {
-      el.focus();
-      const nextPos = start + tag.length + 2;
-      el.setSelectionRange(nextPos, nextPos);
-    }, 0);
-  };
 
   const handlePaste = async () => {
     try {
@@ -79,162 +41,128 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
       if (clipText) {
         onChange(clipText);
       }
-    } catch (e) {
+    } catch {
       // Fallback
     }
   };
 
+  const handleSelectSample = (sample: SampleScript) => {
+    onChange(sample.content);
+    setShowSamplesMenu(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (onGenerate && !isGenerating && text.trim()) {
+        onGenerate();
+      }
+    }
+  };
+
   return (
-    <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 p-6 sm:p-7 shadow-2xl space-y-6">
-      {/* Header & Sample Presets */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
-        <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2.5">
-            <FileText className="w-6 h-6 text-indigo-400" />
-            Script & Speech Editor
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Write or paste your script below. Click expression chips to insert realistic human cues.
-          </p>
+    <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col transition-all">
+      
+      {/* Top Header of Editor Card */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-950/40">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Script / Prompt
+          </span>
         </div>
 
-        {/* Preset Selector Chips */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {SAMPLE_SCRIPTS.map((sample, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => onChange(sample.content)}
-              className="text-xs px-3 py-1.5 rounded-xl bg-slate-950/80 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700/80 text-slate-300 hover:text-white transition-all font-medium cursor-pointer shadow-sm"
-            >
-              {sample.title}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Human Expressions Soundboard Toolbar */}
-      <div className="bg-slate-950/90 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-inner">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-2">
-            <Smile className="w-5 h-5 text-amber-400" />
-            <span className="text-xs sm:text-sm font-bold text-white">
-              Human Expression Soundboard
-            </span>
-            <span className="text-xs text-slate-400 hidden sm:inline">
-              (Click to insert at cursor position)
-            </span>
-          </div>
-
-          <label className="flex items-center gap-2.5 cursor-pointer select-none bg-indigo-950/40 px-3 py-1.5 rounded-xl border border-indigo-500/30">
-            <input
-              type="checkbox"
-              checked={enhanceExpressions}
-              onChange={(e) => onToggleExpressions(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0 cursor-pointer"
-            />
-            <span className="text-xs font-semibold text-indigo-200">
-              Interpret words like "ugh", "sigh", "ay"
-            </span>
-          </label>
-        </div>
-
-        {/* Expression Chips with Generous Padding */}
-        <div className="flex flex-wrap items-center gap-2">
-          {HUMAN_EXPRESSIONS.map((exp) => (
-            <button
-              key={exp.tag}
-              type="button"
-              onClick={() => insertTag(exp.tag)}
-              title={exp.description}
-              className="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-900 hover:bg-indigo-600 hover:text-white border border-slate-700/90 text-slate-200 transition-all flex items-center gap-2 cursor-pointer active:scale-95 shadow-sm hover:shadow-indigo-500/20"
-            >
-              <span className="text-base">{exp.icon}</span>
-              <span>{exp.label}</span>
-              <span className="text-[10px] text-slate-400 font-mono">{exp.tag}</span>
-            </button>
-          ))}
-
-          {/* Pause Presets */}
-          <div className="h-6 w-px bg-slate-700/80 mx-1 hidden sm:block" />
-
-          {PAUSE_PRESETS.map((pause) => (
-            <button
-              key={pause.tag}
-              type="button"
-              onClick={() => insertTag(pause.tag)}
-              className="text-xs font-semibold px-3 py-2 rounded-xl bg-amber-950/50 hover:bg-amber-600 hover:text-white border border-amber-800/60 text-amber-300 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
-            >
-              <span>⏱️</span>
-              <span>{pause.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Main Text Area with Generous Padding */}
-      <div className="relative">
-        <textarea
-          ref={textareaRef}
-          value={text}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Enter your script here... Type natural conversational phrases with expressions like 'ugh', 'sigh', 'ay', or insert tag markers like [cough] and [pause: 500ms]."
-          rows={7}
-          className="w-full bg-slate-950/90 border border-slate-700/80 rounded-2xl p-5 sm:p-6 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all resize-y font-sans leading-relaxed shadow-inner"
-        />
-
-        {/* Quick Clear / Paste buttons */}
-        <div className="absolute top-4 right-4 flex items-center gap-2">
+        {/* Sample Scripts Menu */}
+        <div className="relative">
           <button
             type="button"
-            onClick={handlePaste}
-            title="Paste from clipboard"
-            className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-md"
+            onClick={() => setShowSamplesMenu(!showSamplesMenu)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm hover:text-white"
           >
-            <Clipboard className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Paste</span>
+            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Sample scripts</span>
+            <ChevronDown className="w-3 h-3 text-slate-400" />
           </button>
-          {text && (
-            <button
-              type="button"
-              onClick={() => onChange('')}
-              title="Clear text"
-              className="p-1.5 rounded-xl bg-slate-900/90 hover:bg-red-950/80 border border-slate-700 hover:border-red-500/50 text-slate-400 hover:text-red-300 transition-all text-xs cursor-pointer shadow-md"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+
+          {showSamplesMenu && (
+            <div className="absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl py-1.5 z-30 animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                Choose a sample
+              </div>
+              {SAMPLE_SCRIPTS.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => handleSelectSample(s)}
+                  className="w-full text-left px-3.5 py-2.5 hover:bg-indigo-600/20 hover:text-white text-slate-300 text-xs transition-colors flex flex-col gap-0.5 cursor-pointer"
+                >
+                  <span className="font-bold text-white">{s.title}</span>
+                  <span className="text-[11px] text-slate-400 line-clamp-1">{s.content}</span>
+                </button>
+              ))}
+            </div>
           )}
         </div>
       </div>
 
-      {/* Footer Stats & Speed Slider with Ample Spacing */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-xs sm:text-sm text-slate-300">
-        <div className="flex items-center gap-6">
-          <span className="flex items-center gap-2">
-            <Type className="w-4 h-4 text-indigo-400" />
-            <strong className="text-white font-bold">{wordCount}</strong> words ({charCount} chars)
-          </span>
-          <span className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-emerald-400" />
-            Est. Duration: <strong className="text-white font-bold">~{estSeconds}s</strong>
-          </span>
+      {/* Main Textarea */}
+      <div className="relative p-6 flex-1 min-h-[220px]">
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Start typing or paste your text here to generate lifelike speech..."
+          rows={8}
+          className="w-full h-full bg-transparent border-0 text-slate-100 placeholder-slate-500 focus:outline-none resize-y text-base sm:text-lg leading-relaxed font-sans"
+        />
+      </div>
+
+      {/* Footer Status Bar with Word/Char Counts & Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-t border-slate-800/80 bg-slate-950/60 text-xs text-slate-400">
+        
+        {/* Stats */}
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-1.5">
+            <Type className="w-3.5 h-3.5 text-indigo-400" />
+            <span>
+              <strong className="text-white font-bold">{charCount.toLocaleString()}</strong> characters
+              <span className="text-slate-500 ml-1">({wordCount} words)</span>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-emerald-400" />
+            <span>
+              Est. <strong className="text-white font-bold">~{estSeconds}s</strong>
+            </span>
+          </div>
         </div>
 
-        {/* Speed Adjustment */}
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-            <Sliders className="w-4 h-4 text-indigo-400" />
-            Pacing: <strong className="text-indigo-400 font-mono font-bold">{speed.toFixed(2)}x</strong>
-          </span>
-          <input
-            type="range"
-            min="0.5"
-            max="2.0"
-            step="0.05"
-            value={speed}
-            onChange={(e) => onSpeedChange(parseFloat(e.target.value))}
-            className="w-28 sm:w-36 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-          />
+        {/* Action Buttons & Shortcut Hint */}
+        <div className="flex items-center gap-2.5 self-end sm:self-auto">
+          <button
+            type="button"
+            onClick={handlePaste}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm text-xs font-medium"
+          >
+            <Clipboard className="w-3.5 h-3.5" />
+            <span>Paste</span>
+          </button>
+
+          {text && (
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-red-950/80 hover:text-red-300 hover:border-red-500/40 border border-transparent text-slate-400 transition-all cursor-pointer shadow-sm text-xs font-medium"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Clear</span>
+            </button>
+          )}
+
+          <div className="hidden lg:flex items-center gap-1 pl-2 text-[11px] text-slate-500 border-l border-slate-800">
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Enter</kbd>
+          </div>
         </div>
       </div>
     </div>

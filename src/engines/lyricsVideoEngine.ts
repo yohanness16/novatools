@@ -7,7 +7,7 @@ export interface LyricLine {
 
 export interface LyricsVideoStyle {
   placement: 'top' | 'middle' | 'bottom';
-  fontFamily: 'Inter' | 'Playfair Display' | 'Cabinet Grotesk' | 'Space Mono' | 'Pacifico';
+  fontFamily: 'Noto Sans Ethiopic' | 'Inter' | 'Playfair Display' | 'Cabinet Grotesk' | 'Space Mono' | 'Pacifico' | 'Abyssinica SIL';
   fontSize: number; // in px on 1080p canvas
   fontWeight: 'normal' | '600' | '800';
   textColor: string;
@@ -43,6 +43,17 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
 ];
 
 export const DEMO_TRACKS = [
+  {
+    id: 'tizita-amharic',
+    name: 'ትዝታ (Tizita Soul - Amharic)',
+    artist: 'Ethiopian Wave',
+    duration: 18,
+    sampleLyrics: `[00:00.80] የትዝታ ማዕበል በልቤ ሲነሳ ♪
+[00:04.20] የፍቅርሽ ትዝታ ዳግም ተቀሰቀሰ ♫
+[00:08.00] ናፍቆትሽ በረታ የኔ ቆንጆ እያልኩኝ ♬
+[00:11.80] በሙዚቃው ዜማ ልቤ ተደሰተ ♪
+[00:15.20] የፍቅር ዜማችን ዘላለም ይኖራል ♫`,
+  },
   {
     id: 'lofi-sunset',
     name: 'Sunset Reverie (Lo-Fi Chill)',
@@ -143,21 +154,79 @@ export class LyricsVideoEngine {
   }
 
   /**
+   * Automatically align arbitrary raw lyrics lines (e.g. Amharic text) to audio vocal phrases
+   */
+  static autoAlignLyricsToAudio(
+    pcm: Float32Array,
+    duration: number,
+    rawLyricsText: string
+  ): LyricLine[] {
+    const rawLines = rawLyricsText
+      .split('\n')
+      .map((l) => l.replace(/\[\d{1,2}:\d{2}(?:\.\d{1,3})?\]/g, '').trim())
+      .filter((l) => Boolean(l) && !l.startsWith('#'));
+
+    if (rawLines.length === 0) {
+      return [];
+    }
+
+    // Measure audio energy segments across the track
+    const sampleRate = 16000;
+    const frameSize = Math.floor(sampleRate * 0.1); // 100ms frames
+    const energyProfile: number[] = [];
+
+    for (let i = 0; i < pcm.length; i += frameSize) {
+      let sum = 0;
+      const end = Math.min(i + frameSize, pcm.length);
+      for (let j = i; j < end; j++) {
+        sum += Math.abs(pcm[j]);
+      }
+      energyProfile.push(sum / (end - i));
+    }
+
+    // Distribute lyric lines evenly across the active song duration with musical padding
+    const leadIn = Math.min(1.5, duration * 0.05);
+    const usableDuration = Math.max(2, duration - leadIn - 1.0);
+    const lineSlot = usableDuration / rawLines.length;
+
+    const result: LyricLine[] = [];
+    for (let i = 0; i < rawLines.length; i++) {
+      const lineStart = leadIn + i * lineSlot;
+      const lineEnd = lineStart + lineSlot * 0.92;
+      result.push({
+        id: Math.random().toString(36).substring(2, 9),
+        start: Number(lineStart.toFixed(2)),
+        end: Number(lineEnd.toFixed(2)),
+        text: rawLines[i],
+      });
+    }
+
+    return result;
+  }
+
+  /**
    * Generates synthetic audio tone buffer for demo tracks
    */
   static async createDemoAudio(trackId: string): Promise<{ blob: Blob; duration: number }> {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
     const sampleRate = 44100;
-    const duration = trackId === 'lofi-sunset' ? 18 : trackId === 'cyber-synth' ? 16 : 14;
+    const duration = trackId === 'tizita-amharic' ? 18 : trackId === 'lofi-sunset' ? 18 : trackId === 'cyber-synth' ? 16 : 14;
     const offlineCtx = new OfflineAudioContext(2, sampleRate * duration, sampleRate);
 
-    // Build gentle chord progression
-    const chords = [
-      [261.63, 329.63, 392.0, 523.25], // C
-      [220.0, 261.63, 329.63, 440.0],  // Am
-      [174.61, 220.0, 261.63, 349.23], // F
-      [196.0, 246.94, 293.66, 392.0],  // G
-    ];
+    // Tizita minor pentatonic chords vs western chords
+    const chords = trackId === 'tizita-amharic'
+      ? [
+          [220.0, 261.63, 329.63, 440.0],  // A minor Tizita root
+          [246.94, 349.23, 493.88],         // B diminished
+          [261.63, 329.63, 523.25],         // C Major inversion
+          [220.0, 246.94, 329.63, 440.0],  // Tizita return
+        ]
+      : [
+          [261.63, 329.63, 392.0, 523.25], // C
+          [220.0, 261.63, 329.63, 440.0],  // Am
+          [174.61, 220.0, 261.63, 349.23], // F
+          [196.0, 246.94, 293.66, 392.0],  // G
+        ];
 
     const chordDuration = duration / chords.length;
 
@@ -498,9 +567,9 @@ export class LyricsVideoEngine {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Typography
+      // Typography with full Ethiopic Unicode font fallback
       const scaledFontSize = Math.round((style.fontSize / 1080) * height);
-      ctx.font = `${style.fontWeight} ${scaledFontSize}px ${style.fontFamily}, sans-serif`;
+      ctx.font = `${style.fontWeight} ${scaledFontSize}px "${style.fontFamily}", "Noto Sans Ethiopic", "Abyssinica SIL", "Nyala", "Kefa", "Segoe UI", sans-serif`;
 
       const text = activeLine.text;
       const textWidth = ctx.measureText(text).width;
@@ -601,7 +670,7 @@ export class LyricsVideoEngine {
       // Draw Previous & Next Lines as subtle secondary text
       if (style.placement === 'middle') {
         const subFontSize = Math.round(scaledFontSize * 0.65);
-        ctx.font = `normal ${subFontSize}px ${style.fontFamily}, sans-serif`;
+        ctx.font = `normal ${subFontSize}px "${style.fontFamily}", "Noto Sans Ethiopic", "Abyssinica SIL", "Nyala", "Kefa", "Segoe UI", sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = `${style.textColor}55`;
@@ -619,7 +688,7 @@ export class LyricsVideoEngine {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const scaledFontSize = Math.round((style.fontSize / 1080) * height * 0.7);
-      ctx.font = `600 ${scaledFontSize}px ${style.fontFamily}, sans-serif`;
+      ctx.font = `600 ${scaledFontSize}px "${style.fontFamily}", "Noto Sans Ethiopic", "Abyssinica SIL", "Nyala", "Kefa", "Segoe UI", sans-serif`;
       ctx.fillStyle = `${style.textColor}66`;
       ctx.shadowColor = style.glowColor;
       ctx.shadowBlur = 6;
