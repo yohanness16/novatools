@@ -102,5 +102,58 @@ const docTools = TOOLS.filter(t => t.category === 'document');
       </div>
     </div>
 
+    {/* Educational & Architectural Suite Deep Dive */}
+    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 font-mono">
+            <Sparkles class="h-4 w-4" />
+            <span>Architecture & Capabilities</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            About the NovaTools Document Suite
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span class="rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 px-3 py-1 border border-indigo-200 dark:border-indigo-800/50">
+            OpenXML & AST Engine
+          </span>
+          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+            100% Client-Side
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            The NovaTools Document Suite bridges the gap between raw text, structured documentation, and executive deliverables. Traditional office software and online converters require uploading private business plans, financial models, and legal contracts to remote cloud servers, exposing sensitive intellectual property to storage risks and data retention policies.
+          </p>
+          <p>
+            NovaTools re-engineers document manipulation from the ground up using client-side Abstract Syntax Tree (AST) parsing and native OpenXML compilers. Every Markdown conversion, Word (.docx) styling, PowerPoint (.pptx) slide generation, and Excel (.xlsx) spreadsheet synthesis executes entirely in local browser RAM.
+          </p>
+        </div>
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            Whether turning engineering Markdown specifications into executive presentation decks, extracting complex data tables into formatted spreadsheets, or compiling publication-grade vector PDFs with CSS Paged Media typography, all transformations happen with zero server latency.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <ShieldCheck class="h-4 w-4 text-emerald-500" /> Total Confidentiality
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">0 bytes uploaded. Files remain in volatile memory and vanish on tab close.</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <FileText class="h-4 w-4 text-indigo-500" /> Lossless OpenXML
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Generates genuine, fully editable Word, PowerPoint, and Excel binaries.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </Layout>

@@ -93,5 +93,58 @@ const videoTools = TOOLS.filter(t => t.category === 'video');
       </div>
     </div>
 
+    {/* Educational & Architectural Suite Deep Dive */}
+    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-300 font-mono">
+            <Video class="h-4 w-4" />
+            <span>Hardware-Accelerated Engine</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            About the NovaTools Video & Audio Suite
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span class="rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 px-3 py-1 border border-purple-200 dark:border-purple-500/30">
+            WebCodecs & Web Audio API
+          </span>
+          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+            Zero Upload Bandwidth
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            The NovaTools Video & Audio Suite solves the bandwidth and confidentiality bottlenecks of modern media production. Uploading multi-gigabyte 4K recordings or confidential podcasts to cloud servers wastes hours of network time and exposes sensitive unreleased footage.
+          </p>
+          <p>
+            By leveraging modern browser APIs including WebCodecs, Web Audio API DSP graphs, and multithreaded WebAssembly workers, video trimming, bitrate compression, audio normalization, AI Whisper speech-to-text subtitling, and Kokoro neural voice synthesis occur locally on your machine.
+          </p>
+        </div>
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            Enjoy studio-grade output without server watermarks, paid subscription tiers, or cloud rendering queue bottlenecks.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Clock class="h-4 w-4 text-purple-500" /> Instant Processing
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Direct hardware access eliminates multi-gigabyte upload and download cycles.</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Volume2 class="h-4 w-4 text-purple-500" /> Studio DSP Acoustics
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Brickwall limiting and dynamics compression prevent digital clipping.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </Layout>

@@ -102,5 +102,58 @@ const diagramTools = TOOLS.filter(t => t.category === 'diagram');
       </div>
     </div>
 
+    {/* Educational & Architectural Suite Deep Dive */}
+    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 font-mono">
+            <Workflow class="h-4 w-4" />
+            <span>Visual Synthesis Engine</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            About the NovaTools Diagram Studio
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span class="rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 px-3 py-1 border border-purple-200 dark:border-purple-800/50">
+            Mermaid.js & Vector Canvas
+          </span>
+          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+            100% Private Specs
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            The NovaTools Diagram Studio automates the translation of complex text documents, system architecture RFCs, database SQL schemas, and standard operating procedures into interactive visual diagrams.
+          </p>
+          <p>
+            System architects and engineering leads can generate Flowcharts, Entity-Relationship Diagrams (ERDs), Sequence charts, and multi-tier Cloud Architecture diagrams in seconds without uploading confidential database tables or proprietary source code to external servers.
+          </p>
+        </div>
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            Rendered with client-side Mermaid.js on an interactive canvas with smooth pan, zoom, and 4K vector SVG/PNG export, your system diagrams are presentation-ready for design reviews and executive pitch decks.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Database class="h-4 w-4 text-purple-500" /> Confidential Schemas
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Parse SQL statements into ERDs without leaking table relations.</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <GitBranch class="h-4 w-4 text-purple-500" /> Interactive Canvas
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Pan, zoom, and export 4K PNGs or resolution-independent SVGs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </Layout>

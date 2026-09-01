@@ -93,5 +93,58 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
       </div>
     </div>
 
+    {/* Educational & Architectural Suite Deep Dive */}
+    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-300 font-mono">
+            <ImageIcon class="h-4 w-4" />
+            <span>GPU & Neural Architecture</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            About the NovaTools Image Studio
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span class="rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 px-3 py-1 border border-teal-200 dark:border-teal-500/30">
+            ONNX Web & WebGPU
+          </span>
+          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+            Zero Cloud Uploads
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            The NovaTools Image Studio delivers professional-grade raster and vector graphics processing without the security risks of uploading personal photos or unreleased product prototypes to external clouds.
+          </p>
+          <p>
+            By compiling high-performance neural segmentation models and modern image codecs into WebAssembly and WebGPU runtimes, AI background removal, intelligent compression with live visual diffing, next-gen format transcoding (AVIF, WebP), and EXIF privacy sanitization happen directly on your local GPU and CPU.
+          </p>
+        </div>
+        <div class="lg:col-span-6 space-y-3.5">
+          <p>
+            Users benefit from zero queue delays, instant batch conversions, and complete metadata protection. Hidden GPS coordinates, camera serial numbers, and personal timestamps are stripped before sharing images online.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Sparkles class="h-4 w-4 text-teal-500" /> On-Device AI
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Neural network inference runs locally via WebGPU shaders in real time.</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <ShieldCheck class="h-4 w-4 text-emerald-500" /> Privacy Scrubbing
+              </span>
+              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Permanent removal of sensitive EXIF, IPTC, and location headers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 </Layout>
