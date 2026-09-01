@@ -1,3 +1,5 @@
+import { EDUCATIONAL_CONTENT } from './educationalData';
+
 export interface ToolMeta {
   id: string;
   slug: string;
@@ -13,9 +15,18 @@ export interface ToolMeta {
   features: string[];
   howToSteps: { step: number; title: string; desc: string }[];
   faqs: { question: string; answer: string }[];
+  about?: {
+    paragraphs: string[];
+    technicalMechanism: string;
+    supportedFormats: string[];
+  };
+  useCases?: {
+    title: string;
+    description: string;
+  }[];
 }
 
-export const TOOLS: ToolMeta[] = [
+const RAW_TOOLS: ToolMeta[] = [
   // PDF SUITE
   {
     id: 'merge-pdf',
@@ -929,6 +940,16 @@ export const TOOLS: ToolMeta[] = [
     ]
   }
 ];
+
+export const TOOLS: ToolMeta[] = RAW_TOOLS.map((tool) => {
+  const edu = EDUCATIONAL_CONTENT[tool.id];
+  if (!edu) return tool;
+  return {
+    ...tool,
+    about: edu.about,
+    useCases: edu.useCases,
+  };
+});
 
 export const CATEGORIES = [
   { id: 'all', label: 'All Tools', count: TOOLS.length },

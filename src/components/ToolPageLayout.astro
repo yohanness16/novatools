@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { AdSlot } from './AdSlot';
 import { ConsoleRail } from './ConsoleRail';
 import { type ToolMeta, TOOLS } from '../lib/toolsData';
-import { ChevronRight, ShieldCheck, HelpCircle, Layers, ArrowRight, Terminal } from 'lucide-react';
+import { ChevronRight, ShieldCheck, HelpCircle, Layers, ArrowRight, Terminal, BookOpen, Sparkles } from 'lucide-react';
 
 interface Props {
   tool: ToolMeta;
@@ -58,13 +58,42 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
           <slot />
         </section>
 
+        {/* Educational / About Section */}
+        {tool.about && (
+          <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-6 space-y-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-[#2A2D33] pb-3">
+              <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
+                <BookOpen class="h-4 w-4 text-sky-600 dark:text-[#4F8CFF]" />
+                <span>About {tool.name}</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+                {tool.about.technicalMechanism && (
+                  <span class="rounded bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 px-2 py-0.5 border border-sky-200 dark:border-sky-800/50">
+                    {tool.about.technicalMechanism}
+                  </span>
+                )}
+                {tool.about.supportedFormats && tool.about.supportedFormats.length > 0 && (
+                  <span class="rounded bg-slate-100 dark:bg-[#1B1D22] text-slate-600 dark:text-[#8B8F98] px-2 py-0.5 border border-slate-200 dark:border-[#2A2D33]">
+                    {tool.about.supportedFormats.join(', ')}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
+              {tool.about.paragraphs.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Technical Specification & How-To */}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           {/* How-To Steps */}
           <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
               <Layers class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
-              <span>Execution Steps</span>
+              <span>Step-by-Step Execution Guide</span>
             </div>
 
             <div class="space-y-2">
@@ -86,7 +115,7 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
           <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
               <Terminal class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
-              <span>Engine Features</span>
+              <span>Key Features & Client Architecture</span>
             </div>
 
             <ul class="space-y-2 text-xs text-slate-700 dark:text-[#8B8F98]">
@@ -100,12 +129,36 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
           </section>
         </div>
 
+        {/* Common Practical Use Cases */}
+        {tool.useCases && tool.useCases.length > 0 && (
+          <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
+              <Sparkles class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
+              <span>Common Practical Use Cases</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {tool.useCases.map((uc) => (
+                <div class="rounded-lg bg-slate-50 dark:bg-[#1B1D22] p-3.5 border border-slate-200 dark:border-[#2A2D33] space-y-1.5 flex flex-col justify-between">
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-[#ECEDEF] flex items-center gap-1.5">
+                    <span class="h-1.5 w-1.5 rounded-full bg-sky-500 shrink-0" />
+                    {uc.title}
+                  </h4>
+                  <p class="text-[11px] text-slate-600 dark:text-[#8B8F98] leading-relaxed flex-1">
+                    {uc.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* FAQs */}
         {tool.faqs && tool.faqs.length > 0 && (
           <section class="rounded-xl border border-slate-200 dark:border-[#2A2D33] bg-white dark:bg-[#131418] p-4 sm:p-5 space-y-3">
             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#8B8F98]">
               <HelpCircle class="h-3.5 w-3.5 text-sky-600 dark:text-[#4F8CFF]" />
-              <span>Technical FAQs</span>
+              <span>Frequently Asked Questions (FAQ)</span>
             </div>
 
             <div class="space-y-2">
