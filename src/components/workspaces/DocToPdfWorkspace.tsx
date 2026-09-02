@@ -57,7 +57,6 @@ export default function DocToPdfWorkspace() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
-  const [previewTab, setPreviewTab] = useState<'preview' | 'source'>('preview');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,23 +87,39 @@ export default function DocToPdfWorkspace() {
     }
   };
 
-  const handleExportPdf = () => {
+  const handleDownloadPdf = async () => {
     setIsProcessing(true);
-    setStatusMessage('Preparing vector print preview...');
+    setStatusMessage('Generating direct PDF binary in browser RAM...');
     try {
-      DocEngine.triggerBrowserPdfPrint(markdown, docTitle || 'Document', theme, pageSize);
-      setStatusMessage('Export dialogue ready!');
+      const pdfBlob = await DocEngine.markdownToPdfBlob(markdown, docTitle || 'Document', theme, pageSize);
+      downloadBlob(pdfBlob, `${(docTitle || 'document').toLowerCase().replace(/\s+/g, '-')}.pdf`);
+      setStatusMessage('PDF downloaded successfully!');
     } catch (err: any) {
-      setStatusMessage(`Error: ${err.message || 'Print generation failed'}`);
+      setStatusMessage(`PDF generation fallback: Opening print preview...`);
+      DocEngine.triggerBrowserPdfPrint(markdown, docTitle || 'Document', theme, pageSize);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setStatusMessage(''), 3000);
     }
   };
 
-  const handleExportDocx = async () => {
+  const handlePrintPdf = () => {
     setIsProcessing(true);
-    setStatusMessage('Compiling Word binary...');
+    setStatusMessage('Preparing vector print preview...');
+    try {
+      DocEngine.triggerBrowserPdfPrint(markdown, docTitle || 'Document', theme, pageSize);
+      setStatusMessage('Print dialogue ready!');
+    } catch (err: any) {
+      setStatusMessage(`Error: ${err.message || 'Print preview failed'}`);
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setStatusMessage(''), 3000);
+    }
+  };
+
+  const handleDownloadDocx = async () => {
+    setIsProcessing(true);
+    setStatusMessage('Compiling Microsoft Word binary...');
     try {
       const blob = await DocEngine.markdownToDocx(markdown, docTitle || 'Document');
       downloadBlob(blob, `${(docTitle || 'document').toLowerCase().replace(/\s+/g, '-')}.docx`);
@@ -115,6 +130,13 @@ export default function DocToPdfWorkspace() {
       setIsProcessing(false);
       setTimeout(() => setStatusMessage(''), 3000);
     }
+  };
+
+  const handleDownloadMarkdown = () => {
+    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+    downloadBlob(blob, `${(docTitle || 'document').toLowerCase().replace(/\s+/g, '-')}.md`);
+    setStatusMessage('Markdown file downloaded!');
+    setTimeout(() => setStatusMessage(''), 3000);
   };
 
   const handleCopyMarkdown = () => {
@@ -162,22 +184,42 @@ export default function DocToPdfWorkspace() {
 
           <button
             type="button"
-            onClick={handleExportDocx}
-            disabled={isProcessing}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
+            onClick={handleDownloadMarkdown}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer"
           >
-            <FileCode className="h-3.5 w-3.5" />
-            <span>Export DOCX</span>
+            <Download className="h-3.5 w-3.5" />
+            <span>Download .MD</span>
           </button>
 
           <button
             type="button"
-            onClick={handleExportPdf}
+            onClick={handleDownloadDocx}
+            disabled={isProcessing}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
+          >
+            <FileCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span>Download DOCX</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
             disabled={isProcessing}
             className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-40 active:scale-95"
           >
+            <Download className="h-3.5 w-3.5" />
+            <span>Download PDF (.pdf)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrintPdf}
+            disabled={isProcessing}
+            title="Open browser vector print dialogue"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
+          >
             <Printer className="h-3.5 w-3.5" />
-            <span>Print / Save Vector PDF</span>
+            <span>Print / Vector</span>
           </button>
         </div>
       </div>
@@ -262,7 +304,7 @@ export default function DocToPdfWorkspace() {
 
         {/* RIGHT: Live KaTeX & Document Preview */}
         <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] overflow-hidden shadow-sm">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
             <span className="font-bold text-slate-700 dark:text-[#d1d5db]">
               LIVE_RENDER // {theme.toUpperCase()}
             </span>

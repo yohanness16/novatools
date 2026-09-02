@@ -1,194 +1,230 @@
 /**
  * Presentation & Slide Deck Engine for NovaTools
  * Generates Native PowerPoint Presentations (.pptx) from Markdown & Universal AST
- * 100% Client-Side Web Runtime with Theme Customization
+ * Features AI-Level Content Ingestion, Onyx Dark Theme, Bento Grid Cards, and Multi-Column Layouts
+ * 100% Client-Side Web Runtime
  */
 
 import pptxgen from 'pptxgenjs';
 import type { DocSlide, SlideTheme, DocTable } from './docTypes';
 
+export type AdvancedSlideTheme = 'onyx-dark' | 'dark-indigo' | 'corporate-blue' | 'minimal-emerald' | 'sunset-modern';
+
 interface ThemeColorPalette {
   background: string;
   cardBg: string;
   accent: string;
+  accentSecondary: string;
   text: string;
   subtext: string;
   border: string;
+  codeBg: string;
 }
 
 export class PptxEngine {
-  private static THEMES: Record<SlideTheme, ThemeColorPalette> = {
+  public static THEMES: Record<string, ThemeColorPalette> = {
+    'onyx-dark': {
+      background: '0A0B0E',
+      cardBg: '141721',
+      accent: '3B82F6', // Electric Blue
+      accentSecondary: '10B981', // Emerald
+      text: 'F8FAFC',
+      subtext: '94A3B8',
+      border: '282E3E',
+      codeBg: '07080B',
+    },
     'dark-indigo': {
       background: '09090B',
       cardBg: '18181B',
       accent: '6366F1',
+      accentSecondary: 'A855F7',
       text: 'F8FAFC',
       subtext: '94A3B8',
       border: '27272A',
+      codeBg: '050507',
     },
     'corporate-blue': {
       background: 'FFFFFF',
-      cardBg: 'F1F5F9',
-      accent: '2563EB',
+      cardBg: 'F8FAFC',
+      accent: '1E40AF',
+      accentSecondary: '0284C7',
       text: '0F172A',
       subtext: '475569',
-      border: 'CBD5E1',
+      border: 'E2E8F0',
+      codeBg: '0F172A',
     },
     'minimal-emerald': {
       background: '022C22',
       cardBg: '064E3B',
       accent: '10B981',
+      accentSecondary: '34D399',
       text: 'F0FDF4',
       subtext: 'A7F3D0',
       border: '065F46',
+      codeBg: '011A14',
     },
     'sunset-modern': {
       background: '18181B',
       cardBg: '27272A',
       accent: 'F97316',
+      accentSecondary: 'FB923C',
       text: 'FAFAFA',
       subtext: 'A1A1AA',
       border: '3F3F46',
+      codeBg: '0F0F12',
     },
   };
 
   /**
-   * Decomposes Markdown document into structured presentation slides
+   * AI-Level Smart Semantic Content Ingestion:
+   * Analyzes document structure, statistical indicators, tables, and comparisons
+   * to automatically produce visually balanced, high-converting keynote slide decks.
    */
   static markdownToSlides(markdown: string): DocSlide[] {
-    const lines = markdown.split('\n');
+    const rawSections = markdown.split(/\n(?=#{1,3}\s+)/);
     const slides: DocSlide[] = [];
-    let currentSlide: DocSlide | null = null;
-    let slideCounter = 1;
+    let slideIndex = 1;
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const trimmed = line.trim();
+    for (let sIdx = 0; sIdx < rawSections.length; sIdx++) {
+      const section = rawSections[sIdx].trim();
+      if (!section) continue;
 
-      if (!trimmed) continue;
+      const lines = section.split('\n').map((l) => l.trim()).filter(Boolean);
+      if (lines.length === 0) continue;
 
-      // H1 creates Title slide or major transition slide
-      if (trimmed.startsWith('# ')) {
-        if (currentSlide) slides.push(currentSlide);
-        currentSlide = {
-          id: `slide-${slideCounter++}`,
-          title: trimmed.replace(/^#\s+/, ''),
-          layout: slides.length === 0 ? 'title' : 'content',
-          bullets: [],
-        };
+      const headerMatch = lines[0].match(/^(#{1,3})\s+(.+)$/);
+      const title = headerMatch ? headerMatch[2].replace(/[*_`]/g, '') : `Slide ${slideIndex}`;
+      const headerLevel = headerMatch ? headerMatch[1].length : 2;
+      const bodyLines = headerMatch ? lines.slice(1) : lines;
+
+      // 1. First H1 Header is always a Hero Title Slide
+      if (sIdx === 0 && headerLevel === 1) {
+        const subtitleLine = bodyLines.find((l) => !l.startsWith('#') && !l.startsWith('-') && !l.startsWith('`')) || '';
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          subtitle: subtitleLine.replace(/[*_`]/g, ''),
+          layout: 'title',
+          bullets: bodyLines.filter((l) => l.startsWith('- ') || l.startsWith('* ')).map((b) => b.replace(/^[-*]\s+/, '').replace(/[*_`]/g, '')),
+          speakerNotes: `Welcome everyone. Today we are presenting ${title}.`,
+        });
         continue;
       }
 
-      // H2 creates a new Content / Topic slide
-      if (trimmed.startsWith('## ')) {
-        if (currentSlide) slides.push(currentSlide);
-        currentSlide = {
-          id: `slide-${slideCounter++}`,
-          title: trimmed.replace(/^##\s+/, ''),
-          layout: 'content',
-          bullets: [],
-        };
+      // 2. Check for Code Block Slide
+      const codeBlockMatch = section.match(/```(\w*)\n([\s\S]+?)```/);
+      if (codeBlockMatch) {
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          layout: 'code',
+          codeSnippet: {
+            language: codeBlockMatch[1] || 'typescript',
+            code: codeBlockMatch[2].trim(),
+          },
+          speakerNotes: `Walk through the implementation logic and architecture for ${title}.`,
+        });
         continue;
       }
 
-      // If no slide initialized yet, create a default first slide
-      if (!currentSlide) {
-        currentSlide = {
-          id: `slide-${slideCounter++}`,
-          title: 'Overview',
-          layout: 'content',
-          bullets: [],
-        };
-      }
-
-      // H3 / Subtitles
-      if (trimmed.startsWith('### ')) {
-        if (!currentSlide.subtitle) {
-          currentSlide.subtitle = trimmed.replace(/^###\s+/, '');
-        } else {
-          currentSlide.bullets = currentSlide.bullets || [];
-          currentSlide.bullets.push(`📌 ${trimmed.replace(/^###\s+/, '')}`);
-        }
-        continue;
-      }
-
-      // Blockquotes -> Quote Slide
-      if (trimmed.startsWith('> ')) {
-        const quoteContent = trimmed.replace(/^>\s+/, '');
-        currentSlide.layout = 'quote';
-        currentSlide.quoteText = quoteContent;
-        continue;
-      }
-
-      // Code blocks -> Code Slide
-      if (trimmed.startsWith('```')) {
-        const lang = trimmed.replace(/^```/, '') || 'code';
-        const codeLines: string[] = [];
-        i++;
-        while (i < lines.length && !lines[i].trim().startsWith('```')) {
-          codeLines.push(lines[i]);
-          i++;
-        }
-        currentSlide.layout = 'code';
-        currentSlide.codeSnippet = {
-          language: lang,
-          code: codeLines.join('\n'),
-        };
-        continue;
-      }
-
-      // Tables
-      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
-        const tableLines: string[] = [];
-        while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
-          tableLines.push(lines[i].trim());
-          i++;
-        }
-        i--; // Adjust loop pointer
-
+      // 3. Check for Table Slide
+      if (section.includes('|') && bodyLines.some((l) => l.startsWith('|') && l.endsWith('|'))) {
+        const tableLines = bodyLines.filter((l) => l.startsWith('|') && l.endsWith('|'));
         if (tableLines.length >= 2) {
-          const headerCells = tableLines[0].split('|').slice(1, -1).map((c) => c.trim());
-          const bodyRows: string[][] = [];
+          const headers = tableLines[0].split('|').slice(1, -1).map((c) => c.trim().replace(/[*_`]/g, ''));
+          const rows: string[][] = [];
           for (let r = 2; r < tableLines.length; r++) {
-            const cells = tableLines[r].split('|').slice(1, -1).map((c) => c.trim());
-            if (cells.length > 0) bodyRows.push(cells);
+            const cells = tableLines[r].split('|').slice(1, -1).map((c) => c.trim().replace(/[*_`]/g, ''));
+            if (cells.length > 0) rows.push(cells);
           }
-          currentSlide.layout = 'table';
-          currentSlide.tableData = {
-            headers: headerCells,
-            rows: bodyRows,
-          };
+          slides.push({
+            id: `slide-${slideIndex++}`,
+            title: title,
+            layout: 'table',
+            tableData: { headers, rows },
+            speakerNotes: `Review the comparative data matrix and performance specifications.`,
+          });
+          continue;
         }
+      }
+
+      // 4. Check for Blockquote Slide
+      const quoteLine = bodyLines.find((l) => l.startsWith('> '));
+      if (quoteLine && bodyLines.length <= 3) {
+        const quoteText = quoteLine.replace(/^>\s+/, '').replace(/[*_`]/g, '');
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          layout: 'quote',
+          quoteText: quoteText,
+          quoteAuthor: 'Executive Strategy Directive',
+          speakerNotes: `Emphasize this core principle: "${quoteText}"`,
+        });
         continue;
       }
 
-      // Bullets
-      if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
-        const bulletText = trimmed.replace(/^[-*]\s+|\d+\.\s+/, '');
-        currentSlide.bullets = currentSlide.bullets || [];
-        currentSlide.bullets.push(bulletText);
+      // 5. Check for Metrics / Stats Slide (Look for numbers with %, $, K, M, ms, x)
+      const metricLines = bodyLines.filter((l) => {
+        const cleaned = l.replace(/^[-*]\s+|\d+\.\s+/, '');
+        return /([$€£¥]?[0-9,.]+[KM%Bx+]?)\s*[-:]\s*(.+)/i.test(cleaned) || /\b\d+(\.\d+)?(%)|\b\d+x\b|\b\$\d+/i.test(cleaned);
+      });
+
+      if (metricLines.length >= 2) {
+        const bullets = metricLines.map((m) => m.replace(/^[-*]\s+|\d+\.\s+/, '').replace(/[*_`]/g, ''));
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          layout: 'stats',
+          bullets: bullets,
+          speakerNotes: `Highlight critical milestones, quantitative KPIs, and growth vectors.`,
+        });
         continue;
       }
 
-      // Key metrics detection (e.g., "$50M Revenue" or "99.9% Uptime")
-      const metricMatch = trimmed.match(/^([$€£¥]?[0-9,.]+[KM%B+]?)\s*[-:]\s*(.+)$/i);
-      if (metricMatch && !currentSlide.statNumber) {
-        currentSlide.layout = 'stats';
-        currentSlide.statNumber = metricMatch[1];
-        currentSlide.statLabel = metricMatch[2];
+      // 6. Check for Agenda / Roadmaps / Milestones
+      if (/agenda|roadmap|table of contents|overview|timeline/i.test(title)) {
+        const bullets = bodyLines.map((l) => l.replace(/^[-*]\s+|\d+\.\s+/, '').replace(/[*_`]/g, ''));
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          layout: 'agenda',
+          bullets: bullets.slice(0, 5),
+          speakerNotes: `Outline today's roadmap and strategic agenda items.`,
+        });
         continue;
       }
 
-      // Regular paragraph text
-      currentSlide.bullets = currentSlide.bullets || [];
-      currentSlide.bullets.push(trimmed);
+      // 7. Check for Two-Column Comparison / Split
+      const bulletItems = bodyLines
+        .filter((l) => l.startsWith('- ') || l.startsWith('* ') || /^\d+\.\s+/.test(l) || (l.length > 0 && !l.startsWith('#')))
+        .map((l) => l.replace(/^[-*]\s+|\d+\.\s+/, '').replace(/[*_`]/g, ''));
+
+      if (bulletItems.length >= 4 && bulletItems.length % 2 === 0) {
+        const half = bulletItems.length / 2;
+        slides.push({
+          id: `slide-${slideIndex++}`,
+          title: title,
+          layout: 'two-column',
+          columns: [
+            { title: 'Core Advantages', bullets: bulletItems.slice(0, half) },
+            { title: 'Strategic Execution', bullets: bulletItems.slice(half) },
+          ],
+          speakerNotes: `Break down the primary pillars and execution mechanics for ${title}.`,
+        });
+        continue;
+      }
+
+      // 8. Default High-Impact Content Slide
+      slides.push({
+        id: `slide-${slideIndex++}`,
+        title: title,
+        layout: 'content',
+        bullets: bulletItems.length > 0 ? bulletItems.slice(0, 5) : ['Key objective overview', 'Detailed contextual insight', 'Actionable recommendation'],
+        speakerNotes: `Present the key strategic findings of ${title} clearly to stakeholders.`,
+      });
     }
 
-    if (currentSlide) {
-      slides.push(currentSlide);
-    }
-
-    // If only 1 slide generated, ensure title slide is properly styled
+    // If only 1 slide generated, ensure title slide is properly formatted
     if (slides.length === 1 && slides[0].layout === 'content') {
       slides[0].layout = 'title';
     }
@@ -197,13 +233,13 @@ export class PptxEngine {
   }
 
   /**
-   * Generates a native PowerPoint presentation (.pptx) Blob
+   * Generates a native PowerPoint presentation (.pptx) Blob with 16:9 Widescreen Onyx Dark Theme
    */
-  static async generatePptxBlob(slides: DocSlide[], theme: SlideTheme = 'dark-indigo'): Promise<Blob> {
+  static async generatePptxBlob(slides: DocSlide[], theme: SlideTheme | AdvancedSlideTheme = 'onyx-dark'): Promise<Blob> {
     const pptx = new pptxgen();
-    const colors = this.THEMES[theme] || this.THEMES['dark-indigo'];
+    const colors = this.THEMES[theme] || this.THEMES['onyx-dark'];
 
-    // 16:9 Widescreen Layout
+    // 16:9 Widescreen Layout (13.33 x 7.5 inches)
     pptx.layout = 'LAYOUT_16x9';
     pptx.author = 'NovaTools AI Presentation Suite';
     pptx.company = 'NovaTools';
@@ -215,13 +251,13 @@ export class PptxEngine {
       // Background color
       slide.background = { color: colors.background };
 
-      // Add Footer / Page Number
-      slide.addText(`NovaTools  •  Slide ${index + 1} of ${slides.length}`, {
+      // Footer / Page Counter / Branding
+      slide.addText(`NovaTools Onyx  •  Slide ${index + 1} of ${slides.length}`, {
         x: 0.8,
         y: 6.9,
-        w: 11.5,
-        h: 0.4,
-        fontSize: 10,
+        w: 11.7,
+        h: 0.35,
+        fontSize: 9.5,
         color: colors.subtext,
         align: 'right',
       });
@@ -232,36 +268,65 @@ export class PptxEngine {
       }
 
       switch (slideData.layout) {
+        // ==========================================
+        // 1. HERO KEYNOTE TITLE SLIDE
+        // ==========================================
         case 'title': {
-          // Accent Decorative Top Bar
-          slide.addShape(pptx.ShapeType.rect, {
-            x: 1.5,
-            y: 2.2,
-            w: 1.2,
-            h: 0.08,
-            fill: { color: colors.accent },
-            line: { color: colors.accent },
+          // Category Pill Tag
+          slide.addShape(pptx.ShapeType.roundRect, {
+            x: 1.2,
+            y: 1.8,
+            w: 2.2,
+            h: 0.4,
+            fill: { color: colors.cardBg },
+            line: { color: colors.accent, width: 1 },
           });
 
-          // Title
+          slide.addText('KEYNOTE BRIEF', {
+            x: 1.2,
+            y: 1.8,
+            w: 2.2,
+            h: 0.4,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
+            align: 'center',
+          });
+
+          // Large Title
           slide.addText(slideData.title, {
-            x: 1.5,
-            y: 2.5,
-            w: 10.0,
-            h: 1.6,
-            fontSize: 40,
+            x: 1.2,
+            y: 2.4,
+            w: 10.8,
+            h: 1.8,
+            fontSize: 42,
             bold: true,
             color: colors.text,
             align: 'left',
           });
 
-          // Subtitle
-          const subtitleText = slideData.subtitle || (slideData.bullets && slideData.bullets.length > 0 ? slideData.bullets.join('  •  ') : 'Generated with NovaTools 100% Client-Side Document Suite');
-          slide.addText(subtitleText, {
-            x: 1.5,
-            y: 4.3,
-            w: 10.0,
-            h: 1.0,
+          // Horizontal Accent Bar
+          slide.addShape(pptx.ShapeType.rect, {
+            x: 1.2,
+            y: 4.4,
+            w: 1.6,
+            h: 0.08,
+            fill: { color: colors.accent },
+            line: { color: colors.accent },
+          });
+
+          // Subtitle / Executive Summary Card
+          const subText =
+            slideData.subtitle ||
+            (slideData.bullets && slideData.bullets.length > 0
+              ? slideData.bullets.join('  •  ')
+              : '100% Client-Side In-Browser Executive Presentation');
+
+          slide.addText(subText, {
+            x: 1.2,
+            y: 4.6,
+            w: 10.5,
+            h: 1.4,
             fontSize: 18,
             color: colors.subtext,
             align: 'left',
@@ -269,128 +334,303 @@ export class PptxEngine {
           break;
         }
 
+        // ==========================================
+        // 2. STATS & MULTI-METRIC KPI GRID SLIDE
+        // ==========================================
         case 'stats': {
+          // Section Kicker
+          slide.addText('KEY PERFORMANCE INDICATORS', {
+            x: 0.8,
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
+          });
+
           // Slide Title
           slide.addText(slideData.title, {
             x: 0.8,
-            y: 0.8,
+            y: 0.9,
             w: 11.5,
-            h: 0.8,
-            fontSize: 28,
+            h: 0.7,
+            fontSize: 26,
             bold: true,
             color: colors.text,
           });
 
-          // Stat Card
-          slide.addShape(pptx.ShapeType.roundRect, {
-            x: 2.5,
-            y: 2.0,
-            w: 8.0,
-            h: 4.2,
-            fill: { color: colors.cardBg },
-            line: { color: colors.border, width: 1 },
-          });
+          const statItems = slideData.bullets && slideData.bullets.length > 0
+            ? slideData.bullets
+            : [slideData.statNumber ? `${slideData.statNumber} - ${slideData.statLabel || 'Metric'}` : '99.9% - Reliability'];
 
-          // Big Stat Number
-          slide.addText(slideData.statNumber || '100%', {
-            x: 2.5,
-            y: 2.5,
-            w: 8.0,
-            h: 1.8,
-            fontSize: 64,
+          const cardCount = Math.min(4, Math.max(2, statItems.length));
+          const cardWidth = (11.5 - (cardCount - 1) * 0.3) / cardCount;
+
+          statItems.slice(0, 4).forEach((item, idx) => {
+            const cardX = 0.8 + idx * (cardWidth + 0.3);
+            const cardY = 1.9;
+            const cardHeight = 4.6;
+
+            // Stat Card Container
+            slide.addShape(pptx.ShapeType.roundRect, {
+              x: cardX,
+              y: cardY,
+              w: cardWidth,
+              h: cardHeight,
+              fill: { color: colors.cardBg },
+              line: { color: idx === 0 ? colors.accent : colors.border, width: 1.5 },
+            });
+
+            // Parse stat number vs label
+            const match = item.match(/^([$€£¥]?[0-9,.]+[KM%Bx+]?)\s*[-:]\s*(.+)$/i);
+            const num = match ? match[1] : item.split(' ')[0];
+            const label = match ? match[2] : item.replace(num, '').trim() || 'Performance Score';
+
+            // Big Number
+            slide.addText(num, {
+              x: cardX + 0.2,
+              y: cardY + 0.8,
+              w: cardWidth - 0.4,
+              h: 1.2,
+              fontSize: 38,
+              bold: true,
+              color: idx % 2 === 0 ? colors.accent : colors.accentSecondary,
+              align: 'center',
+            });
+
+            // Divider line
+            slide.addShape(pptx.ShapeType.rect, {
+              x: cardX + 0.4,
+              y: cardY + 2.2,
+              w: cardWidth - 0.8,
+              h: 0.04,
+              fill: { color: colors.border },
+              line: { color: colors.border },
+            });
+
+            // Label text
+            slide.addText(label, {
+              x: cardX + 0.3,
+              y: cardY + 2.4,
+              w: cardWidth - 0.6,
+              h: 1.8,
+              fontSize: 14,
+              color: colors.text,
+              align: 'center',
+            });
+          });
+          break;
+        }
+
+        // ==========================================
+        // 3. TWO-COLUMN SPLIT COMPARISON SLIDE
+        // ==========================================
+        case 'two-column': {
+          slide.addText('STRATEGIC BREAKDOWN', {
+            x: 0.8,
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
             bold: true,
             color: colors.accent,
-            align: 'center',
           });
 
-          // Stat Label
-          slide.addText(slideData.statLabel || slideData.subtitle || 'Key Performance Metric', {
-            x: 2.8,
-            y: 4.4,
-            w: 7.4,
-            h: 1.2,
-            fontSize: 20,
-            color: colors.text,
-            align: 'center',
-          });
-          break;
-        }
-
-        case 'quote': {
-          slide.addShape(pptx.ShapeType.roundRect, {
-            x: 1.2,
-            y: 1.5,
-            w: 10.8,
-            h: 4.8,
-            fill: { color: colors.cardBg },
-            line: { color: colors.accent, width: 2 },
-          });
-
-          slide.addText(`“${slideData.quoteText || slideData.title}”`, {
-            x: 1.8,
-            y: 2.2,
-            w: 9.6,
-            h: 2.6,
-            fontSize: 26,
-            italic: true,
-            color: colors.text,
-            align: 'center',
-          });
-
-          if (slideData.quoteAuthor || slideData.title) {
-            slide.addText(`— ${slideData.quoteAuthor || slideData.title}`, {
-              x: 1.8,
-              y: 5.0,
-              w: 9.6,
-              h: 0.6,
-              fontSize: 16,
-              bold: true,
-              color: colors.accent,
-              align: 'right',
-            });
-          }
-          break;
-        }
-
-        case 'code': {
           slide.addText(slideData.title, {
             x: 0.8,
-            y: 0.8,
+            y: 0.9,
             w: 11.5,
-            h: 0.8,
+            h: 0.7,
             fontSize: 26,
             bold: true,
             color: colors.text,
           });
 
-          // Code Container Shape
+          const cols = slideData.columns && slideData.columns.length >= 2
+            ? slideData.columns
+            : [
+                { title: 'Core Advantages', bullets: slideData.bullets?.slice(0, 3) || ['Scalable design', 'Instant execution'] },
+                { title: 'Implementation', bullets: slideData.bullets?.slice(3) || ['Zero dependencies', 'Private compute'] },
+              ];
+
+          cols.slice(0, 2).forEach((col, cIdx) => {
+            const colX = 0.8 + cIdx * 5.9;
+            const colY = 1.9;
+
+            // Column Card
+            slide.addShape(pptx.ShapeType.roundRect, {
+              x: colX,
+              y: colY,
+              w: 5.6,
+              h: 4.6,
+              fill: { color: colors.cardBg },
+              line: { color: cIdx === 0 ? colors.accent : colors.border, width: 1.5 },
+            });
+
+            // Column Header
+            slide.addText(col.title || `Pillar ${cIdx + 1}`, {
+              x: colX + 0.4,
+              y: colY + 0.3,
+              w: 4.8,
+              h: 0.5,
+              fontSize: 18,
+              bold: true,
+              color: cIdx === 0 ? colors.accent : colors.accentSecondary,
+            });
+
+            const bullets = col.bullets.map((b) => ({
+              text: b,
+              options: {
+                bullet: true,
+                fontSize: 14,
+                color: colors.text,
+                breakLine: true,
+                spaceBefore: 10,
+              },
+            }));
+
+            slide.addText(bullets, {
+              x: colX + 0.4,
+              y: colY + 1.0,
+              w: 4.8,
+              h: 3.2,
+            });
+          });
+          break;
+        }
+
+        // ==========================================
+        // 4. NUMBERED AGENDA / ROADMAP SLIDE
+        // ==========================================
+        case 'agenda': {
+          slide.addText('EXECUTIVE ROADMAP', {
+            x: 0.8,
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
+          });
+
+          slide.addText(slideData.title, {
+            x: 0.8,
+            y: 0.9,
+            w: 11.5,
+            h: 0.7,
+            fontSize: 26,
+            bold: true,
+            color: colors.text,
+          });
+
+          const items = slideData.bullets && slideData.bullets.length > 0 ? slideData.bullets.slice(0, 4) : ['Executive Brief', 'Architecture', 'Execution Plan', 'Next Steps'];
+
+          items.forEach((item, idx) => {
+            const itemY = 1.9 + idx * 1.15;
+
+            // Agenda item background card
+            slide.addShape(pptx.ShapeType.roundRect, {
+              x: 0.8,
+              y: itemY,
+              w: 11.7,
+              h: 0.95,
+              fill: { color: colors.cardBg },
+              line: { color: colors.border, width: 1 },
+            });
+
+            // Number badge
+            slide.addShape(pptx.ShapeType.roundRect, {
+              x: 1.1,
+              y: itemY + 0.15,
+              w: 0.8,
+              h: 0.65,
+              fill: { color: idx === 0 ? colors.accent : '282E3E' },
+            });
+
+            slide.addText(`0${idx + 1}`, {
+              x: 1.1,
+              y: itemY + 0.15,
+              w: 0.8,
+              h: 0.65,
+              fontSize: 14,
+              bold: true,
+              color: 'FFFFFF',
+              align: 'center',
+            });
+
+            // Item text
+            slide.addText(item, {
+              x: 2.2,
+              y: itemY + 0.2,
+              w: 10.0,
+              h: 0.55,
+              fontSize: 16,
+              bold: true,
+              color: colors.text,
+            });
+          });
+          break;
+        }
+
+        // ==========================================
+        // 5. CODE & TECHNICAL ARCHITECTURE SLIDE
+        // ==========================================
+        case 'code': {
+          slide.addText('TECHNICAL IMPLEMENTATION', {
+            x: 0.8,
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
+          });
+
+          slide.addText(slideData.title, {
+            x: 0.8,
+            y: 0.9,
+            w: 11.5,
+            h: 0.7,
+            fontSize: 26,
+            bold: true,
+            color: colors.text,
+          });
+
+          // Terminal window card
           slide.addShape(pptx.ShapeType.roundRect, {
             x: 0.8,
             y: 1.8,
-            w: 11.5,
+            w: 11.7,
             h: 4.8,
-            fill: { color: '0F172A' },
-            line: { color: '334155', width: 1 },
+            fill: { color: colors.codeBg },
+            line: { color: colors.border, width: 1.5 },
           });
 
-          // Language Badge
-          slide.addText((slideData.codeSnippet?.language || 'code').toUpperCase(), {
-            x: 1.2,
-            y: 2.0,
-            w: 2.0,
-            h: 0.4,
-            fontSize: 11,
+          // macOS window buttons (Red, Yellow, Green dots)
+          slide.addShape(pptx.ShapeType.oval, { x: 1.1, y: 2.05, w: 0.16, h: 0.16, fill: { color: 'EF4444' } });
+          slide.addShape(pptx.ShapeType.oval, { x: 1.35, y: 2.05, w: 0.16, h: 0.16, fill: { color: 'F59E0B' } });
+          slide.addShape(pptx.ShapeType.oval, { x: 1.6, y: 2.05, w: 0.16, h: 0.16, fill: { color: '10B981' } });
+
+          // Language Tag
+          slide.addText((slideData.codeSnippet?.language || 'typescript').toUpperCase(), {
+            x: 9.8,
+            y: 1.95,
+            w: 2.4,
+            h: 0.35,
+            fontSize: 10,
             bold: true,
             color: colors.accent,
+            align: 'right',
           });
 
-          // Code Content
-          slide.addText(slideData.codeSnippet?.code || '', {
-            x: 1.2,
-            y: 2.5,
-            w: 10.7,
-            h: 3.8,
-            fontSize: 13,
+          // Code Text
+          slide.addText(slideData.codeSnippet?.code || '// Implementation code here', {
+            x: 1.1,
+            y: 2.4,
+            w: 11.1,
+            h: 3.9,
+            fontSize: 12.5,
             fontFace: 'Courier New',
             color: 'E2E8F0',
             align: 'left',
@@ -398,12 +638,73 @@ export class PptxEngine {
           break;
         }
 
+        // ==========================================
+        // 6. QUOTE & STRATEGIC HIGHLIGHT SLIDE
+        // ==========================================
+        case 'quote': {
+          slide.addShape(pptx.ShapeType.roundRect, {
+            x: 1.2,
+            y: 1.5,
+            w: 10.9,
+            h: 4.8,
+            fill: { color: colors.cardBg },
+            line: { color: colors.accent, width: 2 },
+          });
+
+          // Big Quote Mark
+          slide.addText('“', {
+            x: 1.6,
+            y: 1.7,
+            w: 1.0,
+            h: 0.8,
+            fontSize: 54,
+            bold: true,
+            color: colors.accent,
+          });
+
+          slide.addText(slideData.quoteText || slideData.title, {
+            x: 1.8,
+            y: 2.4,
+            w: 9.7,
+            h: 2.4,
+            fontSize: 24,
+            italic: true,
+            color: colors.text,
+            align: 'center',
+          });
+
+          slide.addText(`— ${slideData.quoteAuthor || 'Executive Strategic Directive'}`, {
+            x: 1.8,
+            y: 5.0,
+            w: 9.7,
+            h: 0.6,
+            fontSize: 15,
+            bold: true,
+            color: colors.accentSecondary,
+            align: 'right',
+          });
+          break;
+        }
+
+        // ==========================================
+        // 7. STRUCTURED DATA TABLE SLIDE
+        // ==========================================
         case 'table': {
+          slide.addText('DATA MATRIX & BENCHMARKS', {
+            x: 0.8,
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
+          });
+
           slide.addText(slideData.title, {
             x: 0.8,
-            y: 0.8,
+            y: 0.9,
             w: 11.5,
-            h: 0.8,
+            h: 0.7,
             fontSize: 26,
             bold: true,
             color: colors.text,
@@ -427,7 +728,7 @@ export class PptxEngine {
             );
 
             // Data Rows
-            slideData.tableData.rows.slice(0, 7).forEach((row, rIdx) => {
+            slideData.tableData.rows.slice(0, 6).forEach((row, rIdx) => {
               tableRows.push(
                 row.map((cell) => ({
                   text: cell,
@@ -443,77 +744,116 @@ export class PptxEngine {
             slide.addTable(tableRows, {
               x: 0.8,
               y: 1.8,
-              w: 11.5,
+              w: 11.7,
               border: { type: 'solid', color: colors.border, pt: 1 },
             });
           }
           break;
         }
 
+        // ==========================================
+        // 8. BENTO GRID FEATURE CARDS (Default Content)
+        // ==========================================
         case 'content':
         default: {
-          // Header Accent bar
-          slide.addShape(pptx.ShapeType.rect, {
+          slide.addText('CORE STRATEGY', {
             x: 0.8,
-            y: 0.8,
-            w: 0.08,
-            h: 0.8,
-            fill: { color: colors.accent },
-            line: { color: colors.accent },
+            y: 0.6,
+            w: 11.5,
+            h: 0.3,
+            fontSize: 10,
+            bold: true,
+            color: colors.accent,
           });
 
-          // Title
           slide.addText(slideData.title, {
-            x: 1.1,
-            y: 0.8,
-            w: 11.0,
-            h: 0.8,
-            fontSize: 28,
+            x: 0.8,
+            y: 0.9,
+            w: 11.5,
+            h: 0.7,
+            fontSize: 26,
             bold: true,
             color: colors.text,
           });
 
-          // Subtitle if available
-          if (slideData.subtitle) {
-            slide.addText(slideData.subtitle, {
-              x: 1.1,
-              y: 1.6,
-              w: 11.0,
-              h: 0.5,
-              fontSize: 14,
-              color: colors.subtext,
+          const bulletItems = slideData.bullets && slideData.bullets.length > 0
+            ? slideData.bullets
+            : ['Key topic summary point 1', 'Detailed contextual insight 2', 'Actionable takeaway point 3'];
+
+          // 3-Card Bento Grid Layout
+          if (bulletItems.length === 3) {
+            const cardWidth = 3.7;
+            bulletItems.forEach((bText, bIdx) => {
+              const cardX = 0.8 + bIdx * 4.0;
+              const cardY = 1.9;
+
+              slide.addShape(pptx.ShapeType.roundRect, {
+                x: cardX,
+                y: cardY,
+                w: cardWidth,
+                h: 4.6,
+                fill: { color: colors.cardBg },
+                line: { color: bIdx === 0 ? colors.accent : colors.border, width: 1.5 },
+              });
+
+              slide.addShape(pptx.ShapeType.roundRect, {
+                x: cardX + 0.3,
+                y: cardY + 0.4,
+                w: 0.5,
+                h: 0.5,
+                fill: { color: bIdx === 0 ? colors.accent : colors.accentSecondary },
+              });
+
+              slide.addText(`0${bIdx + 1}`, {
+                x: cardX + 0.3,
+                y: cardY + 0.4,
+                w: 0.5,
+                h: 0.5,
+                fontSize: 11,
+                bold: true,
+                color: 'FFFFFF',
+                align: 'center',
+              });
+
+              slide.addText(bText, {
+                x: cardX + 0.3,
+                y: cardY + 1.2,
+                w: cardWidth - 0.6,
+                h: 3.0,
+                fontSize: 15,
+                color: colors.text,
+                align: 'left',
+              });
+            });
+          } else {
+            // Standard Single Bento Container
+            slide.addShape(pptx.ShapeType.roundRect, {
+              x: 0.8,
+              y: 1.9,
+              w: 11.7,
+              h: 4.6,
+              fill: { color: colors.cardBg },
+              line: { color: colors.border, width: 1 },
+            });
+
+            const formattedBullets = bulletItems.slice(0, 5).map((b) => ({
+              text: b,
+              options: {
+                bullet: true,
+                fontSize: 16,
+                color: colors.text,
+                breakLine: true,
+                spaceBefore: 12,
+              },
+            }));
+
+            slide.addText(formattedBullets, {
+              x: 1.3,
+              y: 2.2,
+              w: 10.7,
+              h: 4.0,
             });
           }
-
-          // Bullets card container
-          slide.addShape(pptx.ShapeType.roundRect, {
-            x: 0.8,
-            y: 2.2,
-            w: 11.5,
-            h: 4.4,
-            fill: { color: colors.cardBg },
-            line: { color: colors.border, width: 1 },
-          });
-
-          const bulletItems = slideData.bullets && slideData.bullets.length > 0 ? slideData.bullets : ['Key topic summary point 1', 'Detailed contextual insight 2', 'Actionable takeaway point 3'];
-
-          const formattedBullets = bulletItems.slice(0, 6).map((b) => ({
-            text: b,
-            options: {
-              bullet: true,
-              fontSize: 16,
-              color: colors.text,
-              breakLine: true,
-              spaceBefore: 12,
-            },
-          }));
-
-          slide.addText(formattedBullets, {
-            x: 1.3,
-            y: 2.5,
-            w: 10.5,
-            h: 3.8,
-          });
           break;
         }
       }

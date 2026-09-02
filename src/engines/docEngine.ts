@@ -1,6 +1,6 @@
 /**
  * Universal Document Engine for NovaTools
- * Handles Lossless Ingestion & Generation of Word (.docx), Markdown (.md), PDF, and HTML
+ * Handles Lossless Ingestion & Generation of Word (.docx), Markdown (.md), Direct Vector PDF (.pdf), and HTML
  * Supports KaTeX Math, Mermaid.js Diagrams, Prism Highlighting, and 4 Visual Themes
  * 100% Client-Side Web Runtime
  */
@@ -10,6 +10,7 @@ import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
 import { marked } from 'marked';
 import katex from 'katex';
+import { PDFDocument, rgb, StandardFonts, PageSizes } from 'pdf-lib';
 import {
   Document,
   Packer,
@@ -197,6 +198,360 @@ export class DocEngine {
     }
 
     return mdLines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  /**
+   * Generates a native, direct downloadable vector PDF Blob (.pdf) in browser RAM using pdf-lib
+   */
+  static async markdownToPdfBlob(
+    markdown: string,
+    docTitle = 'Document',
+    theme: DocTheme = 'github',
+    pageSize: 'A4' | 'Letter' = 'A4'
+  ): Promise<Blob> {
+    const pdfDoc = await PDFDocument.create();
+
+    const [pageWidth, pageHeight] = pageSize === 'A4' ? PageSizes.A4 : PageSizes.Letter;
+    const margin = 50;
+    const contentWidth = pageWidth - margin * 2;
+
+    const isAcademic = theme === 'academic';
+    const fontRegular = await pdfDoc.embedFont(isAcademic ? StandardFonts.TimesRoman : StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(isAcademic ? StandardFonts.TimesRomanBold : StandardFonts.HelveticaBold);
+    const fontItalic = await pdfDoc.embedFont(isAcademic ? StandardFonts.TimesRomanItalic : StandardFonts.HelveticaOblique);
+    const fontMono = await pdfDoc.embedFont(StandardFonts.Courier);
+
+    // Color palette based on theme
+    const primaryColor =
+      theme === 'executive'
+        ? rgb(0.12, 0.23, 0.54) // Navy
+        : theme === 'academic'
+        ? rgb(0.1, 0.1, 0.1) // Dark
+        : rgb(0.15, 0.38, 0.92); // Electric Blue
+
+    const textColor = rgb(0.1, 0.12, 0.15);
+    const mutedColor = rgb(0.4, 0.45, 0.52);
+
+    let currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+    let currentY = pageHeight - margin;
+
+    const checkPageBreak = (neededHeight: number) => {
+      if (currentY - neededHeight < margin + 30) {
+        currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+        currentY = pageHeight - margin;
+      }
+    };
+
+    // Helper to wrap text into lines fitting within maxWidth
+    const wrapText = (text: string, font: any, size: number, maxWidth: number): string[] => {
+      const words = text.split(' ');
+      const lines: string[] = [];
+      let currentLine = '';
+
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        const width = font.widthOfTextAtSize(testLine, size);
+        if (width <= maxWidth) {
+          currentLine = testLine;
+        } else {
+          if (currentLine) lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+      return lines.length > 0 ? lines : [''];
+    };
+
+    // Draw Top Header / Document Title
+    const titleText = docTitle.toUpperCase();
+    currentPage.drawRectangle({
+      x: margin,
+      y: currentY - 2,
+      width: 24,
+      height: 3,
+      color: primaryColor,
+    });
+    currentY -= 12;
+
+    const rawLines = markdown.split('\n');
+    let i = 0;
+
+    while (i < rawLines.length) {
+      const line = rawLines[i].trim();
+
+      if (!line) {
+        currentY -= 10;
+        i++;
+        continue;
+      }
+
+      // Heading 1 (# Heading)
+      if (line.startsWith('# ')) {
+        const hText = line.replace(/^#\s+/, '').replace(/[*_`]/g, '');
+        checkPageBreak(36);
+        currentY -= 8;
+        const wrapped = wrapText(hText, fontBold, 18, contentWidth);
+        for (const w of wrapped) {
+          currentPage.drawText(w, {
+            x: margin,
+            y: currentY,
+            size: 18,
+            font: fontBold,
+            color: primaryColor,
+          });
+          currentY -= 22;
+        }
+        // Underline separator rule
+        currentPage.drawLine({
+          start: { x: margin, y: currentY + 12 },
+          end: { x: margin + contentWidth, y: currentY + 12 },
+          thickness: 1,
+          color: rgb(0.85, 0.88, 0.92),
+        });
+        currentY -= 8;
+      }
+      // Heading 2 (## Heading)
+      else if (line.startsWith('## ')) {
+        const hText = line.replace(/^##\s+/, '').replace(/[*_`]/g, '');
+        checkPageBreak(30);
+        currentY -= 6;
+        const wrapped = wrapText(hText, fontBold, 14, contentWidth);
+        for (const w of wrapped) {
+          currentPage.drawText(w, {
+            x: margin,
+            y: currentY,
+            size: 14,
+            font: fontBold,
+            color: rgb(0.12, 0.15, 0.2),
+          });
+          currentY -= 18;
+        }
+        currentY -= 4;
+      }
+      // Heading 3 (### Heading)
+      else if (line.startsWith('### ')) {
+        const hText = line.replace(/^###\s+/, '').replace(/[*_`]/g, '');
+        checkPageBreak(24);
+        currentY -= 4;
+        const wrapped = wrapText(hText, fontBold, 11.5, contentWidth);
+        for (const w of wrapped) {
+          currentPage.drawText(w, {
+            x: margin,
+            y: currentY,
+            size: 11.5,
+            font: fontBold,
+            color: primaryColor,
+          });
+          currentY -= 16;
+        }
+      }
+      // Blockquotes (> Quote)
+      else if (line.startsWith('> ')) {
+        const qText = line.replace(/^>\s+/, '').replace(/[*_`]/g, '');
+        const wrapped = wrapText(qText, fontItalic, 10, contentWidth - 24);
+        const blockHeight = wrapped.length * 14 + 10;
+        checkPageBreak(blockHeight);
+
+        // Quote Left Bar
+        currentPage.drawRectangle({
+          x: margin,
+          y: currentY - blockHeight + 10,
+          width: 3,
+          height: blockHeight - 2,
+          color: primaryColor,
+        });
+
+        currentY -= 4;
+        for (const w of wrapped) {
+          currentPage.drawText(w, {
+            x: margin + 12,
+            y: currentY,
+            size: 10,
+            font: fontItalic,
+            color: rgb(0.3, 0.35, 0.42),
+          });
+          currentY -= 14;
+        }
+        currentY -= 6;
+      }
+      // Bullet items (- Item or * Item)
+      else if (line.startsWith('- ') || line.startsWith('* ') || /^\d+\.\s+/.test(line)) {
+        const bText = line.replace(/^[-*]\s+|\d+\.\s+/, '').replace(/[*_`]/g, '');
+        const wrapped = wrapText(bText, fontRegular, 10, contentWidth - 16);
+        checkPageBreak(wrapped.length * 14);
+
+        // Bullet point dot
+        currentPage.drawCircle({
+          x: margin + 4,
+          y: currentY + 3,
+          size: 2,
+          color: primaryColor,
+        });
+
+        for (let idx = 0; idx < wrapped.length; idx++) {
+          currentPage.drawText(wrapped[idx], {
+            x: margin + 14,
+            y: currentY,
+            size: 10,
+            font: fontRegular,
+            color: textColor,
+          });
+          currentY -= 14;
+        }
+      }
+      // Code blocks (```lang ... ```)
+      else if (line.startsWith('```')) {
+        const codeLines: string[] = [];
+        i++;
+        while (i < rawLines.length && !rawLines[i].trim().startsWith('```')) {
+          codeLines.push(rawLines[i]);
+          i++;
+        }
+        const blockHeight = codeLines.length * 13 + 16;
+        checkPageBreak(blockHeight);
+
+        // Background container
+        currentPage.drawRectangle({
+          x: margin,
+          y: currentY - blockHeight + 12,
+          width: contentWidth,
+          height: blockHeight,
+          color: rgb(0.08, 0.1, 0.14),
+        });
+
+        currentY -= 6;
+        for (const cLine of codeLines) {
+          currentPage.drawText(cLine.slice(0, 80), {
+            x: margin + 10,
+            y: currentY,
+            size: 8.5,
+            font: fontMono,
+            color: rgb(0.9, 0.94, 0.98),
+          });
+          currentY -= 13;
+        }
+        currentY -= 10;
+      }
+      // Tables (| Col 1 | Col 2 |)
+      else if (line.startsWith('|') && line.endsWith('|')) {
+        const tableLines: string[] = [];
+        while (i < rawLines.length && rawLines[i].trim().startsWith('|') && rawLines[i].trim().endsWith('|')) {
+          tableLines.push(rawLines[i].trim());
+          i++;
+        }
+        i--; // Adjust counter
+
+        if (tableLines.length >= 2) {
+          const headerCells = tableLines[0].split('|').slice(1, -1).map((c) => c.trim().replace(/[*_`]/g, ''));
+          const colWidth = contentWidth / headerCells.length;
+          const rowHeight = 18;
+
+          checkPageBreak(tableLines.length * rowHeight + 10);
+
+          // Header Row Background
+          currentPage.drawRectangle({
+            x: margin,
+            y: currentY - rowHeight + 12,
+            width: contentWidth,
+            height: rowHeight,
+            color: primaryColor,
+          });
+
+          // Draw Header Text
+          headerCells.forEach((hCell, cIdx) => {
+            currentPage.drawText(hCell.slice(0, 24), {
+              x: margin + cIdx * colWidth + 6,
+              y: currentY - 2,
+              size: 9,
+              font: fontBold,
+              color: rgb(1, 1, 1),
+            });
+          });
+          currentY -= rowHeight;
+
+          // Draw Data Rows
+          for (let r = 2; r < tableLines.length; r++) {
+            const cells = tableLines[r].split('|').slice(1, -1).map((c) => c.trim().replace(/[*_`]/g, ''));
+            checkPageBreak(rowHeight);
+
+            // Alternate Row Tint
+            if (r % 2 === 0) {
+              currentPage.drawRectangle({
+                x: margin,
+                y: currentY - rowHeight + 12,
+                width: contentWidth,
+                height: rowHeight,
+                color: rgb(0.96, 0.97, 0.98),
+              });
+            }
+
+            // Cell bottom line
+            currentPage.drawLine({
+              start: { x: margin, y: currentY - rowHeight + 12 },
+              end: { x: margin + contentWidth, y: currentY - rowHeight + 12 },
+              thickness: 0.5,
+              color: rgb(0.88, 0.9, 0.93),
+            });
+
+            cells.forEach((cell, cIdx) => {
+              currentPage.drawText(cell.slice(0, 24), {
+                x: margin + cIdx * colWidth + 6,
+                y: currentY - 2,
+                size: 8.5,
+                font: fontRegular,
+                color: textColor,
+              });
+            });
+            currentY -= rowHeight;
+          }
+          currentY -= 8;
+        }
+      }
+      // Standard Paragraph
+      else {
+        const cleanP = line.replace(/[*_`]/g, '');
+        const wrapped = wrapText(cleanP, fontRegular, 10, contentWidth);
+        checkPageBreak(wrapped.length * 14);
+
+        for (const w of wrapped) {
+          currentPage.drawText(w, {
+            x: margin,
+            y: currentY,
+            size: 10,
+            font: fontRegular,
+            color: textColor,
+          });
+          currentY -= 14;
+        }
+        currentY -= 4;
+      }
+
+      i++;
+    }
+
+    // Add Footer Pagination to all pages
+    const pageCount = pdfDoc.getPageCount();
+    const pages = pdfDoc.getPages();
+    for (let pIdx = 0; pIdx < pageCount; pIdx++) {
+      const p = pages[pIdx];
+      p.drawLine({
+        start: { x: margin, y: margin + 14 },
+        end: { x: pageWidth - margin, y: margin + 14 },
+        thickness: 0.5,
+        color: rgb(0.85, 0.88, 0.92),
+      });
+
+      p.drawText(`Page ${pIdx + 1} of ${pageCount}  •  NovaTools Private Suite`, {
+        x: margin,
+        y: margin,
+        size: 8,
+        font: fontRegular,
+        color: mutedColor,
+      });
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    return new Blob([pdfBytes], { type: 'application/pdf' });
   }
 
   /**
