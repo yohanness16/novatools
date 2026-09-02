@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { type ToolMeta, TOOLS } from '../lib/toolsData';
+import AdSenseAd from './AdSenseAd.astro';
 import { ShieldCheck, HelpCircle, Layers, ArrowRight, BookOpen, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 
 interface Props {
@@ -13,7 +14,7 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
 ---
 
 <Layout
-  title={`${tool.name} - 100% Private Local Tool | NovaTools`}
+  title={`${tool.name} - Private Online Tool | NovaTools`}
   description={tool.longDescription}
   keywords={tool.keywords}
   faqs={tool.faqs}
@@ -37,7 +38,7 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
         </h1>
       </div>
 
-      {/* Privacy Ledger Strip (Static, No Glowing Pulse) */}
+      {/* Privacy Ledger Strip */}
       <div class="privacy-ledger-strip shrink-0 self-start sm:self-auto border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#121316] text-slate-700 dark:text-[#d1d5db]">
         <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
         <span class="font-medium text-slate-900 dark:text-[#f9fafb]">0 bytes uploaded</span>
@@ -79,6 +80,9 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
     <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-7 shadow-sm">
       <slot />
     </section>
+
+    {/* Google AdSense Display Ad Unit */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
     {/* Educational Deep-Dive: Side-by-Side Bento Grid */}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
@@ -204,7 +208,7 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
                 </p>
               </div>
               <div class="mt-3 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-[#9ca3af] pt-2 border-t border-slate-200/60 dark:border-white/[0.04]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Local</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1">
                   Open <ArrowRight class="h-2.5 w-2.5" />
                 </span>

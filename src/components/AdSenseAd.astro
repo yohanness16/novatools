@@ -1,0 +1,36 @@
+---
+export interface Props {
+  slotId?: string;
+  adFormat?: string;
+  fullWidthResponsive?: boolean;
+  className?: string;
+}
+
+const {
+  slotId = '5386318888',
+  adFormat = 'auto',
+  fullWidthResponsive = true,
+  className = '',
+} = Astro.props;
+---
+
+<div class={`adsense-container max-w-5xl mx-auto my-6 px-4 flex flex-col justify-center items-center rounded-xl bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] shadow-sm overflow-hidden relative ${className}`}>
+  <div class="flex items-center justify-between w-full px-3 py-1.5 text-[10px] font-mono text-slate-500 dark:text-[#9ca3af] uppercase tracking-wider border-b border-slate-100 dark:border-white/[0.04]">
+    <span>Advertisement</span>
+    <span>Sponsored Display</span>
+  </div>
+  <div class="w-full flex justify-center py-2">
+    <!-- small ads -->
+    <ins
+      class="adsbygoogle"
+      style="display:block; width:100%; min-height:90px;"
+      data-ad-client="ca-pub-6768212179657827"
+      data-ad-slot={slotId}
+      data-ad-format={adFormat}
+      data-full-width-responsive={fullWidthResponsive ? 'true' : 'false'}
+    ></ins>
+    <script is:inline>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>

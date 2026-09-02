@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FileText,
   Printer,
@@ -6,50 +6,58 @@ import {
   Sparkles,
   Download,
   Eye,
-  Settings,
-  ShieldCheck,
   Check,
   RefreshCw,
   Sliders,
   Maximize2,
   FileCode,
+  BookOpen,
+  LayoutTemplate,
+  Copy,
 } from 'lucide-react';
-import { DocEngine } from '../../engines/docEngine';
+import { DocEngine, type DocTheme } from '../../engines/docEngine';
+import { downloadBlob } from '../../lib/utils';
 
-export default function DocToPdfWorkspace() {
-  const [markdown, setMarkdown] = useState<string>(`# Executive Proposal: NovaTools
+const SAMPLE_MARKDOWN = `# Quantum Wave Dynamics & System Architecture
 
-NovaTools is a **100% client-side** privacy-first media, document, and AI utility suite.
+NovaTools compiles **high-precision vector documents** with zero server communication.
 
-## Strategic Objectives
+## 1. Mathematical Formulation
 
-- **Complete Data Sovereignty**: All processing executes in the user's local browser memory.
-- **Sub-Second Performance**: Near-instantaneous transformations powered by WebAssembly.
-- **Zero Cloud Dependence**: Eliminates server egress costs, API keys, and vendor lock-in.
+The time-dependent Schrödinger equation in three-dimensional coordinate space:
 
-### Key Milestones & Projections
+$$i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\mathbf{r},t) = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + V(\\mathbf{r},t) \\right]\\Psi(\\mathbf{r},t)$$
 
-| Milestone Phase | Target Timeline | Security Rating | Status |
+Energy-frequency relation for relativistic mass: $E = mc^2$ and photon momentum $p = \\frac{h}{\\lambda}$.
+
+## 2. Benchmark Metrics & Performance
+
+| Engine Component | Latency | Accuracy | Memory Overhead |
 | :--- | :--- | :--- | :--- |
-| **Alpha Release** | Q1 2026 | Enterprise Zero-Trust | Completed |
-| **Beta Rollout** | Q2 2026 | SOC2 In-Browser Spec | Active |
-| **V1 Production** | Q3 2026 | 100% Verified Private | On Track |
+| **Vector PDF Synthesizer** | < 80ms | 100% Crisp Vector | 4.2 MB RAM |
+| **KaTeX Math Engine** | < 15ms | Sub-pixel Precision | 1.1 MB RAM |
+| **DOCX OpenXML Pipeline** | < 180ms | Microsoft Certified | 6.8 MB RAM |
 
-> "Privacy is not a setting; it is an architectural foundation."
-
-### Implementation Verification
+## 3. Core Implementation Logic
 
 \`\`\`typescript
-export async function verifyClientIntegrity(): Promise<boolean> {
-  // Confirm zero outbound network transmission during document conversion
-  return window.location.protocol.startsWith('http');
+export function computeVectorFidelity(equations: string[]): number {
+  return equations.reduce((acc, eq) => acc + eq.length, 0);
 }
 \`\`\`
-`);
-  const [docTitle, setDocTitle] = useState<string>('Executive Proposal');
+
+> "Sovereign computation guarantees that sensitive equations, research findings, and legal contracts remain strictly on user hardware."
+`;
+
+export default function DocToPdfWorkspace() {
+  const [markdown, setMarkdown] = useState<string>(SAMPLE_MARKDOWN);
+  const [docTitle, setDocTitle] = useState<string>('Quantum Wave Dynamics');
   const [pageSize, setPageSize] = useState<'A4' | 'Letter'>('A4');
+  const [theme, setTheme] = useState<DocTheme>('github');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
+  const [copied, setCopied] = useState<boolean>(false);
+  const [previewTab, setPreviewTab] = useState<'preview' | 'source'>('preview');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,115 +81,209 @@ export async function verifyClientIntegrity(): Promise<boolean> {
         setStatusMessage('Document loaded successfully!');
       }
     } catch (err: any) {
-      console.error(err);
-      setStatusMessage(`Error loading document: ${err.message}`);
+      setStatusMessage(`Error: ${err.message || 'Failed to ingest file'}`);
     } finally {
       setIsProcessing(false);
-      setTimeout(() => setStatusMessage(''), 3000);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      setTimeout(() => setStatusMessage(''), 4000);
     }
   };
 
-  const handlePrintPdf = () => {
-    setStatusMessage('Opening print dialog for Vector PDF generation...');
-    DocEngine.triggerBrowserPdfPrint(markdown, docTitle);
-    setTimeout(() => setStatusMessage(''), 3000);
+  const handleExportPdf = () => {
+    setIsProcessing(true);
+    setStatusMessage('Preparing vector print preview...');
+    try {
+      DocEngine.triggerBrowserPdfPrint(markdown, docTitle || 'Document', theme, pageSize);
+      setStatusMessage('Export dialogue ready!');
+    } catch (err: any) {
+      setStatusMessage(`Error: ${err.message || 'Print generation failed'}`);
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setStatusMessage(''), 3000);
+    }
+  };
+
+  const handleExportDocx = async () => {
+    setIsProcessing(true);
+    setStatusMessage('Compiling Word binary...');
+    try {
+      const blob = await DocEngine.markdownToDocx(markdown, docTitle || 'Document');
+      downloadBlob(blob, `${(docTitle || 'document').toLowerCase().replace(/\s+/g, '-')}.docx`);
+      setStatusMessage('DOCX exported successfully!');
+    } catch (err: any) {
+      setStatusMessage(`Error: ${err.message || 'DOCX export failed'}`);
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setStatusMessage(''), 3000);
+    }
+  };
+
+  const handleCopyMarkdown = () => {
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const metadata = DocEngine.getDocMetadata(markdown, docTitle);
+  const previewHtml = DocEngine.markdownToHtml(markdown);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
-      {/* Top Header Card */}
-      <div className="bg-surface/80 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-            <Printer className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-zinc-100 flex items-center gap-2">
-              Word / Doc to PDF Converter
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-medium">
-                Vector Quality
-              </span>
-            </h1>
-            <p className="text-xs text-zinc-400 flex items-center gap-2 mt-1">
-              <span>{metadata.wordCount} words</span>
-              <span>•</span>
-              <span>{metadata.readingTimeMinutes} min read</span>
-              <span>•</span>
-              <span>100% Client-Side Private</span>
-            </p>
-          </div>
+    <div className="space-y-6">
+      {/* Top Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/[0.08] pb-4">
+        {/* Document Title input */}
+        <div className="flex items-center gap-3 flex-1 max-w-md">
+          <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+          <input
+            type="text"
+            value={docTitle}
+            onChange={(e) => setDocTitle(e.target.value)}
+            placeholder="Document Title"
+            className="w-full bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] rounded-lg px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+          />
         </div>
 
-        {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        {/* Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2">
           <input
-            type="file"
             ref={fileInputRef}
-            onChange={handleFileUpload}
-            accept=".docx,.md,.txt,.html"
+            type="file"
+            accept=".md,.markdown,.txt,.docx"
             className="hidden"
+            onChange={handleFileUpload}
           />
           <button
+            type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="px-3.5 py-2 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-xs font-semibold text-zinc-200 flex items-center gap-1.5 transition shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer"
           >
-            <Upload className="w-3.5 h-3.5 text-zinc-400" />
-            Upload DOCX / MD
+            <Upload className="h-3.5 w-3.5" />
+            <span>Load File</span>
           </button>
 
           <button
-            onClick={handlePrintPdf}
-            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center gap-2 transition shadow-glow-sm"
+            type="button"
+            onClick={handleExportDocx}
+            disabled={isProcessing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
           >
-            <Printer className="w-4 h-4" />
-            Export Vector PDF
+            <FileCode className="h-3.5 w-3.5" />
+            <span>Export DOCX</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            disabled={isProcessing}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-40 active:scale-95"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            <span>Print / Save Vector PDF</span>
           </button>
         </div>
       </div>
 
-      {statusMessage && (
-        <div className="px-4 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-xs text-indigo-300 flex items-center gap-2 animate-pulse">
-          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-          {statusMessage}
+      {/* Theme & Styling Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3 rounded-lg bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] text-xs">
+        {/* Visual Themes */}
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-slate-500 dark:text-[#9ca3af] font-medium">Style Theme:</span>
+          <div className="flex items-center gap-1">
+            {(
+              [
+                { id: 'github', label: 'GitHub README' },
+                { id: 'notion', label: 'Notion Minimal' },
+                { id: 'academic', label: 'Academic IEEE' },
+                { id: 'executive', label: 'Executive Report' },
+              ] as const
+            ).map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTheme(t.id)}
+                className={`px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
+                  theme === t.id
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-[#9ca3af] hover:bg-slate-200 dark:hover:bg-white/[0.06]'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
 
-      {/* Side-by-side Editor and Live PDF Document Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Editor */}
-        <div className="lg:col-span-5 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-indigo-400" />
-              Source Content
-            </span>
+        {/* Page Size Selection */}
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-slate-500 dark:text-[#9ca3af] font-medium">Page Size:</span>
+          <div className="flex items-center gap-1">
+            {(['A4', 'Letter'] as const).map((ps) => (
+              <button
+                key={ps}
+                type="button"
+                onClick={() => setPageSize(ps)}
+                className={`px-2 py-0.5 rounded font-mono text-[11px] font-semibold transition-colors cursor-pointer ${
+                  pageSize === ps
+                    ? 'bg-slate-800 dark:bg-white text-white dark:text-slate-900'
+                    : 'text-slate-600 dark:text-[#9ca3af] hover:bg-slate-200 dark:hover:bg-white/[0.06]'
+                }`}
+              >
+                {ps}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Workspace Split Editor / Preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[520px]">
+        {/* LEFT: Markdown Code Editor */}
+        <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] overflow-hidden shadow-sm">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
+            <span className="font-bold text-slate-700 dark:text-[#d1d5db]">MARKDOWN_EDITOR</span>
+            <button
+              onClick={handleCopyMarkdown}
+              className="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+            >
+              {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+              <span>{copied ? 'Copied' : 'Copy'}</span>
+            </button>
           </div>
           <textarea
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
-            placeholder="Type or paste document content..."
-            className="flex-1 w-full bg-zinc-950/70 border border-zinc-900 rounded-xl p-4 text-xs font-mono text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-indigo-500/50 resize-none overflow-y-auto leading-relaxed shadow-inner"
+            placeholder="Type or paste Markdown, KaTeX formulas ($$E=mc^2$$), and tables here..."
+            className="flex-1 p-4 font-mono text-xs sm:text-sm bg-transparent text-slate-900 dark:text-[#f9fafb] focus:outline-none resize-none leading-relaxed"
           />
+          <div className="px-4 py-2 border-t border-slate-100 dark:border-white/[0.04] bg-slate-50/50 dark:bg-[#121316] text-[11px] font-mono text-slate-500 dark:text-[#9ca3af] flex justify-between">
+            <span>{metadata.wordCount} words · {metadata.charCount} chars</span>
+            <span>Est. ~{metadata.readingTimeMinutes} min reading</span>
+          </div>
         </div>
 
-        {/* Right Live Rendered PDF View */}
-        <div className="lg:col-span-7 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5 text-emerald-400" />
-              Print / PDF Live Preview
+        {/* RIGHT: Live KaTeX & Document Preview */}
+        <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] overflow-hidden shadow-sm">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
+            <span className="font-bold text-slate-700 dark:text-[#d1d5db]">
+              LIVE_RENDER // {theme.toUpperCase()}
             </span>
-            <span className="text-[11px] text-zinc-500 font-mono">Format: A4 Vector</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">KaTeX Math Active</span>
           </div>
 
-          <div className="flex-1 bg-white text-zinc-900 rounded-xl p-8 overflow-y-auto shadow-2xl border border-zinc-300 prose prose-indigo max-w-none text-xs sm:text-sm">
-            <div dangerouslySetInnerHTML={{ __html: DocEngine.markdownToHtml(markdown) }} />
+          <div className="flex-1 p-6 overflow-y-auto max-h-[580px] bg-white text-slate-900 dark:bg-[#1e2025] dark:text-[#d1d5db] prose prose-slate dark:prose-invert max-w-none text-xs sm:text-sm">
+            <div
+              dangerouslySetInnerHTML={{ __html: previewHtml }}
+              className={`doc-theme-${theme}`}
+            />
           </div>
         </div>
       </div>
+
+      {/* Status Bar */}
+      {statusMessage && (
+        <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 p-3 text-xs text-blue-700 dark:text-blue-300 font-mono">
+          {statusMessage}
+        </div>
+      )}
     </div>
   );
 }

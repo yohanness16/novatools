@@ -1,0 +1,33 @@
+---
+export interface Props {
+  slotId?: string;
+  layoutKey?: string;
+  className?: string;
+}
+
+const {
+  slotId = '1208717370',
+  layoutKey = '-eb+6l-2v-aq+u1',
+  className = '',
+} = Astro.props;
+---
+
+<div class={`adsense-feed-ad w-full my-6 bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] rounded-xl p-4 shadow-sm overflow-hidden ${className}`}>
+  <div class="flex items-center justify-between text-[10px] font-mono font-semibold text-slate-500 dark:text-[#9ca3af] uppercase tracking-wider pb-2 mb-2 border-b border-slate-100 dark:border-white/[0.04]">
+    <span>Sponsored Feed Content</span>
+    <span>Advertisement</span>
+  </div>
+  <div class="w-full">
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-format="fluid"
+      data-ad-layout-key={layoutKey}
+      data-ad-client="ca-pub-6768212179657827"
+      data-ad-slot={slotId}
+    ></ins>
+    <script is:inline>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>

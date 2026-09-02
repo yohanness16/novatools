@@ -75,7 +75,7 @@ export const HeroSection: React.FC = () => {
             {/* Encrypted Session Static Badge (No Pulsing) */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#121316] text-slate-700 dark:text-[#d1d5db] text-xs font-mono">
               <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-              <span>[ ENCRYPTED_LOCAL_SESSION ]</span>
+              <span>Private Client-Side Suite</span>
             </div>
 
             {/* Headline */}

@@ -55,11 +55,11 @@ export const ExifScrubberWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-6">
       {!file ? (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          className="group flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-white/[0.1] bg-slate-50 dark:bg-[#16171a] p-10 text-center hover:border-blue-500 hover:bg-slate-100 dark:hover:bg-[#1e2025] transition-all cursor-pointer"
         >
           <input
             ref={fileInputRef}
@@ -71,30 +71,30 @@ export const ExifScrubberWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
             <ShieldCheck className="h-5 w-5" />
           </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop photo to inspect & scrub EXIF, or <span className="text-[#4F8CFF] underline">browse files</span>
+          <h3 className="mt-3 text-xs font-bold text-slate-900 dark:text-white">
+            Drop photo to inspect & scrub EXIF, or <span className="text-blue-600 dark:text-blue-400 underline">browse files</span>
           </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
+          <p className="mt-0.5 font-mono text-[11px] text-slate-500 dark:text-[#9ca3af]">
             Strip GPS coordinates, device identifiers, and timestamps. 100% local processing.
           </p>
         </div>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
-            <div className="flex items-center gap-2.5">
+        <div className="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-5 shadow-sm">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/[0.06] pb-3">
+            <div className="flex items-center gap-3">
               {previewUrl && (
                 <img
                   src={previewUrl}
                   alt="Thumbnail"
-                  className="h-9 w-9 rounded object-cover border border-[#2A2D33]"
+                  className="h-10 w-10 rounded-lg object-cover border border-slate-200 dark:border-white/[0.08]"
                 />
               )}
               <div>
-                <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
-                <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+                <span className="text-xs font-bold text-slate-900 dark:text-white">{file.name}</span>
+                <p className="text-[10px] text-slate-500 dark:text-[#9ca3af] font-mono mt-0.5">
                   {formatBytes(file.size)} · {file.type || 'image/jpeg'}
                 </p>
               </div>
@@ -105,7 +105,7 @@ export const ExifScrubberWorkspace: React.FC = () => {
                 setPreviewUrl(null);
                 setTags([]);
               }}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+              className="font-mono text-[11px] text-slate-500 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Choose different photo
             </button>
@@ -114,46 +114,46 @@ export const ExifScrubberWorkspace: React.FC = () => {
           {/* Privacy Status Readout */}
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`rounded px-2.5 py-1 font-mono text-[11px] border flex items-center gap-1.5 ${
+              className={`rounded-lg px-3 py-1 font-mono text-xs border flex items-center gap-1.5 ${
                 hasGps
-                  ? 'bg-[#331614] border-[#F0564B]/40 text-[#F0564B]'
-                  : 'bg-[#122D1F] border-[#3FBE73]/30 text-[#3FBE73]'
+                  ? 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900/40 text-red-700 dark:text-red-400 font-bold'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
               }`}
             >
-              <MapPin className="h-3 w-3" />
+              <MapPin className="h-3.5 w-3.5" />
               {hasGps ? 'GPS Location Exposed' : 'No GPS Coordinates'}
             </span>
 
             <span
-              className={`rounded px-2.5 py-1 font-mono text-[11px] border flex items-center gap-1.5 ${
+              className={`rounded-lg px-3 py-1 font-mono text-xs border flex items-center gap-1.5 ${
                 hasExif
-                  ? 'bg-[#2E2413] border-[#E0A93E]/40 text-[#E0A93E]'
-                  : 'bg-[#122D1F] border-[#3FBE73]/30 text-[#3FBE73]'
+                  ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-500/30 text-amber-700 dark:text-amber-300 font-bold'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
               }`}
             >
-              <Camera className="h-3 w-3" />
+              <Camera className="h-3.5 w-3.5" />
               {hasExif ? `${tags.length} Metadata Tags Detected` : 'Zero EXIF Tags'}
             </span>
           </div>
 
           {/* Metadata Table */}
           {tags.length > 0 ? (
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] overflow-hidden">
-              <div className="border-b border-[#2A2D33] px-3.5 py-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#8B8F98]">
+            <div className="rounded-lg bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] overflow-hidden">
+              <div className="border-b border-slate-200 dark:border-white/[0.06] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-[#d1d5db]">
                 Detected EXIF Headers
               </div>
-              <div className="max-h-56 overflow-y-auto divide-y divide-[#2A2D33]">
+              <div className="max-h-56 overflow-y-auto divide-y divide-slate-200/60 dark:divide-white/[0.04]">
                 {tags.map((t, idx) => (
-                  <div key={idx} className="flex justify-between px-3.5 py-1.5 text-xs font-mono">
-                    <span className="text-[#8B8F98]">{t.name}</span>
-                    <span className="text-[#ECEDEF] max-w-[60%] truncate text-right">{t.value}</span>
+                  <div key={idx} className="flex justify-between px-4 py-2 text-xs font-mono">
+                    <span className="text-slate-500 dark:text-[#9ca3af]">{t.name}</span>
+                    <span className="text-slate-900 dark:text-[#f9fafb] max-w-[60%] truncate text-right font-medium">{t.value}</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-4 text-center">
-              <p className="text-xs text-[#8B8F98] font-mono">
+            <div className="rounded-lg bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] p-4 text-center">
+              <p className="text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
                 No sensitive EXIF tags detected in this image header.
               </p>
             </div>
@@ -164,7 +164,7 @@ export const ExifScrubberWorkspace: React.FC = () => {
             <button
               onClick={handleScrub}
               disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+              className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 py-2.5 px-4 text-xs font-bold text-white transition-colors disabled:opacity-40 cursor-pointer active:scale-95"
             >
               {isProcessing ? (
                 <>
@@ -174,20 +174,20 @@ export const ExifScrubberWorkspace: React.FC = () => {
               ) : (
                 <>
                   <ShieldCheck className="h-3.5 w-3.5" />
-                  <span>Sanitize & Download Clean Image</span>
+                  <span>Sanitize & Download Clean Photo</span>
                 </>
               )}
             </button>
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
+            <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/40 p-3 text-xs text-red-600 dark:text-red-400">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
           {success && (
-            <div className="flex items-center gap-2 rounded bg-[#122D1F] border border-[#3FBE73]/40 p-3 text-xs text-[#3FBE73]">
+            <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 p-3 text-xs text-emerald-700 dark:text-emerald-400">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               <span>Sanitized image downloaded without metadata.</span>
             </div>

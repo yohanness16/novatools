@@ -1,21 +1,27 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
+import AdSenseAd from '../../components/AdSenseAd.astro';
 import {
-  Workflow, GitBranch, Database, Layers,
-  ArrowRight, ShieldCheck, Sparkles
+  Network,
+  Share2,
+  Workflow,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
-  Workflow, GitBranch, Database, Layers, Sparkles
+  Network, Share2, Workflow, Sparkles
 };
 
 const diagramTools = TOOLS.filter(t => t.category === 'diagram');
 ---
 
 <Layout
-  title="Diagram Suite - 100% Private Client-Side AI Diagram Studio | NovaTools"
-  description="Transform documents, architecture notes, and database schemas into interactive Mermaid.js Flowcharts, ERDs, and Architecture maps."
+  title="Diagram Suite - Client-Side AI Diagram Studio | NovaTools"
+  description="Generate flowcharts, cloud architectures, sequence diagrams, and mind maps instantly from code and text. 100% private."
 >
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
@@ -23,30 +29,19 @@ const diagramTools = TOOLS.filter(t => t.category === 'diagram');
     <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 shadow-sm space-y-4">
       <div class="flex items-center justify-between">
         <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
-          <Workflow class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+          <Network class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
           <span>DIAGRAM_SUITE // {diagramTools.length} TOOLS</span>
         </div>
-        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Local Processing</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        Document-to-Diagram <span class="text-blue-600 dark:text-blue-400">& Architecture Studio</span>
+        Vector-Native <span class="text-blue-600 dark:text-blue-400">Diagram Studio</span>
       </h1>
 
       <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
-        Automatically convert documents, PDF specifications, SQL schemas, and architecture RFCs into visual Mermaid.js flowcharts, database ERDs, and sequence maps with 100% client-side execution.
+        Render complex software architectures, cloud infrastructure maps, and Mermaid flowcharts directly to SVG and PNG vector outputs without cloud tracking.
       </p>
-
-      <div class="pt-2">
-        <a
-          href="/diagram/studio"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-all"
-        >
-          <Sparkles class="w-4 h-4" />
-          Launch Diagram Studio
-          <ArrowRight class="w-4 h-4" />
-        </a>
-      </div>
     </div>
 
     {/* Tools Grid */}
@@ -60,9 +55,9 @@ const diagramTools = TOOLS.filter(t => t.category === 'diagram');
         </span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {diagramTools.map((tool) => {
-          const Icon = iconMap[tool.iconName] || Workflow;
+          const Icon = iconMap[tool.iconName] || Network;
 
           return (
             <a
@@ -93,7 +88,7 @@ const diagramTools = TOOLS.filter(t => t.category === 'diagram');
               </div>
 
               <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
@@ -104,58 +99,8 @@ const diagramTools = TOOLS.filter(t => t.category === 'diagram');
       </div>
     </div>
 
-    {/* Educational & Architectural Deep Dive */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
-            <Workflow class="h-4 w-4" />
-            <span>Visual Synthesis Engine</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            About the NovaTools Diagram Studio
-          </h2>
-        </div>
-        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
-            Mermaid.js & Vector Canvas
-          </span>
-          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
-            100% Private Specs
-          </span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
-        <div class="space-y-3">
-          <p>
-            The NovaTools Diagram Studio automates the translation of complex text documents, system architecture RFCs, database SQL schemas, and standard operating procedures into interactive visual diagrams.
-          </p>
-          <p>
-            System architects and engineering leads can generate Flowcharts, Entity-Relationship Diagrams (ERDs), Sequence charts, and multi-tier Cloud Architecture diagrams in seconds without uploading confidential database tables or proprietary source code to external servers.
-          </p>
-        </div>
-        <div class="space-y-3">
-          <p>
-            Rendered with client-side Mermaid.js on an interactive canvas with smooth pan, zoom, and 4K vector SVG/PNG export, your system diagrams are presentation-ready for design reviews and executive pitch decks.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Database class="h-4 w-4 text-blue-500" /> Confidential Schemas
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Parse SQL statements into ERDs without leaking table relations.</p>
-            </div>
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <GitBranch class="h-4 w-4 text-blue-500" /> Interactive Canvas
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Pan, zoom, and export 4K PNGs or resolution-independent SVGs.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    {/* AdSense Banner */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
   </div>
 </Layout>

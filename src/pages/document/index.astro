@@ -1,21 +1,27 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
+import AdSenseAd from '../../components/AdSenseAd.astro';
 import {
-  FileText, Presentation, FileSpreadsheet, Printer, Sparkles,
-  ArrowRight, ShieldCheck
+  FileText,
+  FileSpreadsheet,
+  FileCode,
+  LayoutTemplate,
+  Sparkles,
+  ArrowRight,
+  BookOpen,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
-  FileText, Presentation, FileSpreadsheet, Printer, Sparkles
+  FileText, FileSpreadsheet, FileCode, LayoutTemplate, Sparkles, BookOpen
 };
 
-const docTools = TOOLS.filter(t => t.category === 'document');
+const documentTools = TOOLS.filter(t => t.category === 'document');
 ---
 
 <Layout
-  title="Document Suite - 100% Private Client-Side Document & AI Tools | NovaTools"
-  description="Transform Markdown, Word DOCX, and CSV into PDF, PPTX presentations, and Excel spreadsheets with zero data loss and in-browser processing."
+  title="Document Suite - Client-Side Document & AI Tools | NovaTools"
+  description="Convert Word (.docx), Markdown (.md), PDF, and Excel (.xlsx) documents directly in your browser. 100% private."
 >
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
@@ -23,45 +29,34 @@ const docTools = TOOLS.filter(t => t.category === 'document');
     <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 shadow-sm space-y-4">
       <div class="flex items-center justify-between">
         <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
-          <Sparkles class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-          <span>DOCUMENT_SUITE // {docTools.length} TOOLS</span>
+          <FileText class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+          <span>DOC_SUITE // {documentTools.length} TOOLS</span>
         </div>
-        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Local Processing</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        Zero-Data-Loss <span class="text-blue-600 dark:text-blue-400">Document & AI Utilities</span>
+        OpenXML & Markdown <span class="text-blue-600 dark:text-blue-400">Document Studio</span>
       </h1>
 
       <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
-        Transform Markdown, Word (.docx), and CSV files into vector PDFs, PowerPoint slide decks, and Excel workbooks directly in your browser. Powered by on-device AI with 100% privacy and zero server uploads.
+        Losslessly convert Microsoft Word, Markdown, Excel spreadsheets, and vector documents with zero cloud dependencies.
       </p>
-
-      <div class="pt-2">
-        <a
-          href="/document/studio"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-all"
-        >
-          <Sparkles class="w-4 h-4" />
-          Launch Document Studio
-          <ArrowRight class="w-4 h-4" />
-        </a>
-      </div>
     </div>
 
     {/* Tools Grid */}
     <div class="space-y-4">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.06] pb-3">
         <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-          All Document & AI Tools
+          All Document Tools
         </h2>
         <span class="text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
-          {docTools.length} tools available
+          {documentTools.length} tools available
         </span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {docTools.map((tool) => {
+        {documentTools.map((tool) => {
           const Icon = iconMap[tool.iconName] || FileText;
 
           return (
@@ -93,7 +88,7 @@ const docTools = TOOLS.filter(t => t.category === 'document');
               </div>
 
               <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
@@ -104,58 +99,8 @@ const docTools = TOOLS.filter(t => t.category === 'document');
       </div>
     </div>
 
-    {/* Educational & Architectural Deep Dive */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
-            <Sparkles class="h-4 w-4" />
-            <span>Architecture & Capabilities</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Client-Side Document Architecture: AST & OpenXML
-          </h2>
-        </div>
-        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
-            OpenXML & AST Engine
-          </span>
-          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
-            100% Client-Side
-          </span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
-        <div class="space-y-3">
-          <p>
-            The NovaTools Document Suite bridges the gap between raw text, structured documentation, and executive deliverables. Traditional office software and online converters require uploading private business plans, financial models, and legal contracts to remote cloud servers, exposing sensitive intellectual property to storage risks.
-          </p>
-          <p>
-            NovaTools re-engineers document manipulation from the ground up using client-side Abstract Syntax Tree (AST) parsing and native OpenXML compilers. Every Markdown conversion, Word (.docx) styling, PowerPoint (.pptx) slide generation, and Excel (.xlsx) spreadsheet synthesis executes entirely in local browser RAM.
-          </p>
-        </div>
-        <div class="space-y-3">
-          <p>
-            Whether turning engineering Markdown specifications into executive presentation decks, extracting complex data tables into formatted spreadsheets, or compiling publication-grade vector PDFs with CSS Paged Media typography, all transformations happen with zero server latency.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck class="h-4 w-4 text-emerald-500" /> Total Confidentiality
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">0 bytes uploaded. Files remain in volatile memory and vanish on tab close.</p>
-            </div>
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <FileText class="h-4 w-4 text-blue-500" /> Lossless OpenXML
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Generates genuine, fully editable Word, PowerPoint, and Excel binaries.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    {/* AdSense Banner */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
   </div>
 </Layout>

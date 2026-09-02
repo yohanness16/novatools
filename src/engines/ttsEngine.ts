@@ -457,8 +457,23 @@ export function formatTimeSrt(seconds: number): string {
   return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')},${ms.toString().padStart(3, '0')}`;
 }
 
+export function formatTimeVtt(seconds: number): string {
+  const safe = Math.max(0, isNaN(seconds) ? 0 : seconds);
+  const hrs = Math.floor(safe / 3600);
+  const mins = Math.floor((safe % 3600) / 60);
+  const secs = Math.floor(safe % 60);
+  const ms = Math.floor((safe % 1) * 1000);
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+}
+
 export function cuesToSrt(cues: AudioCue[]): string {
   return cues
     .map((c, i) => `${i + 1}\n${formatTimeSrt(c.start)} --> ${formatTimeSrt(c.end)}\n${c.text.trim()}\n`)
+    .join('\n');
+}
+
+export function cuesToVtt(cues: AudioCue[]): string {
+  return 'WEBVTT\n\n' + cues
+    .map((c, i) => `${i + 1}\n${formatTimeVtt(c.start)} --> ${formatTimeVtt(c.end)}\n${c.text.trim()}\n`)
     .join('\n');
 }

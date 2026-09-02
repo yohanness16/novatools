@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { SynthesizedAudioResult } from '../../../engines/ttsTypes';
-import { cuesToSrt } from '../../../engines/ttsEngine';
+import { cuesToSrt, cuesToVtt } from '../../../engines/ttsEngine';
 import { 
   Play, 
   Pause, 
@@ -193,6 +193,20 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     URL.revokeObjectURL(url);
   };
 
+  const handleDownloadVtt = () => {
+    if (!result?.cues || result.cues.length === 0) return;
+    const vttContent = cuesToVtt(result.cues);
+    const blob = new Blob([vttContent], { type: 'text/vtt;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `subtitles-${Date.now()}.vtt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const formatTime = (secs: number) => {
     const s = Math.floor(secs || 0);
     const m = Math.floor(s / 60);
@@ -203,7 +217,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
   if (!result) return null;
 
   return (
-    <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-indigo-500/30 p-6 shadow-2xl space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
+    <div className="bg-white dark:bg-[#1e2025] rounded-xl border border-slate-200 dark:border-white/[0.08] p-6 shadow-sm space-y-5">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -212,45 +226,57 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       />
 
       {/* Header Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.06]">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-2xl shadow-inner">
+          <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 flex items-center justify-center text-2xl shadow-inner">
             {voiceFlag}
           </div>
           <div>
-            <h4 className="text-base font-bold text-white flex items-center gap-2">
+            <h4 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <span>{voiceName}</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 font-mono">
                 24kHz Hi-Fi
               </span>
             </h4>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Duration: {duration.toFixed(1)}s • Complete Take
+            <p className="text-xs text-slate-500 dark:text-[#9ca3af] mt-0.5 font-mono">
+              Duration: {duration.toFixed(1)}s • Lossless Take
             </p>
           </div>
         </div>
 
         {/* Action Downloads */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={handleDownloadWav}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/20 transition-all cursor-pointer hover:scale-105 active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer active:scale-95"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download Audio (WAV)</span>
           </button>
           
           {result.cues && result.cues.length > 0 && (
-            <button
-              type="button"
-              onClick={handleDownloadSrt}
-              title="Download Subtitles (.SRT)"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer"
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>SRT</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleDownloadSrt}
+                title="Download Subtitles (.SRT)"
+                className="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] hover:bg-slate-200 dark:hover:bg-[#202227] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] text-xs font-semibold font-mono transition-all cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>SRT</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownloadVtt}
+                title="Download Subtitles (.VTT)"
+                className="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] hover:bg-slate-200 dark:hover:bg-[#202227] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] text-xs font-semibold font-mono transition-all cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>VTT</span>
+              </button>
+            </div>
           )}
         </div>
       </div>

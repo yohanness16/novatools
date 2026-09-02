@@ -1,20 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
+import AdSenseAd from '../../components/AdSenseAd.astro';
 import {
-  Code, Repeat, ArrowRight, ShieldCheck, FileCode
+  Code,
+  FileCode,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
-  Code, Repeat
+  Code, FileCode, Layers
 };
 
-const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-converter');
+const svgTools = TOOLS.filter(t => t.category === 'svg');
 ---
 
 <Layout
-  title="SVG & Vector Suite - 100% Private Vector Optimizer | NovaTools"
-  description="Optimize SVG code, strip illustrator metadata, reduce file payload size, and convert vectors safely in your browser."
+  title="SVG & Vector Suite - Vector Optimizer | NovaTools"
+  description="Minify, clean, convert, and optimize vector SVG files directly in your browser. 100% private."
 >
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
@@ -23,17 +27,17 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
       <div class="flex items-center justify-between">
         <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
           <Code class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-          <span>SVG_VECTOR_SUITE</span>
+          <span>VECTOR_SUITE // {svgTools.length} TOOLS</span>
         </div>
-        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Local Processing</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        High-Precision <span class="text-blue-600 dark:text-blue-400">Vector Studio</span>
+        High-Precision <span class="text-blue-600 dark:text-blue-400">SVG & Vector Studio</span>
       </h1>
 
       <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
-        Clean messy illustrator exports, strip bloated editor metadata, and minify vector paths for ultra-lightweight web icons and illustrations.
+        Clean messy XML tags, minify path precision, convert vector shapes, and preview crisp SVG graphics in local memory.
       </p>
     </div>
 
@@ -81,7 +85,7 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
               </div>
 
               <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
@@ -92,58 +96,8 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
       </div>
     </div>
 
-    {/* Educational & Architectural Deep Dive */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
-            <Code class="h-4 w-4" />
-            <span>AST Vector Engine</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            About the NovaTools Vector Studio
-          </h2>
-        </div>
-        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
-            SVGO & JSX Transpiler
-          </span>
-          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
-            Zero Server Uploads
-          </span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
-        <div class="space-y-3">
-          <p>
-            The NovaTools SVG & Vector Studio transforms messy, bloated vector graphics exported from design applications (Figma, Adobe Illustrator, Sketch) into production-ready web assets and frontend UI components.
-          </p>
-          <p>
-            Operating entirely in local browser memory via SVGO Abstract Syntax Tree algorithms, redundant metadata, editor comments, empty groups, and numerical precision bloat are stripped in milliseconds.
-          </p>
-        </div>
-        <div class="space-y-3">
-          <p>
-            Beyond minification, developers can convert SVG vectors directly into clean, TypeScript-safe React JSX components formatted with camelCase SVG attributes and Tailwind CSS compatibility with a single click.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Code class="h-4 w-4 text-blue-500" /> React JSX Compiler
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Generates ready-to-use React/Next.js/Astro icon components.</p>
-            </div>
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Repeat class="h-4 w-4 text-emerald-500" /> Web Performance
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Reduces DOM node count and shrinks network transfer payloads.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    {/* AdSense Banner */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
   </div>
 </Layout>

@@ -115,12 +115,6 @@ export const Header: React.FC = () => {
                 NovaTools
               </span>
             </a>
-
-            {/* Static Security Badge (No Glowing/Pulsing Dot) */}
-            <div className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100/80 dark:bg-white/[0.04] text-[11px] font-mono text-slate-600 dark:text-[#9ca3af]">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>100% PRIVATE</span>
-            </div>
           </div>
 
           {/* Desktop Navigation Links */}

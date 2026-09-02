@@ -1,21 +1,30 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
+import AdSenseAd from '../../components/AdSenseAd.astro';
 import {
-  Sparkles, Minimize2, Repeat, Maximize2, ShieldCheck, Code,
-  ArrowRight, Image as ImageIcon, Wand2, Lock
+  Image as ImageIcon,
+  Crop,
+  Maximize,
+  RefreshCw,
+  Sparkles,
+  ShieldCheck,
+  Palette,
+  FileImage,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
-  Sparkles, Minimize2, Repeat, Maximize2, ShieldCheck, Code, ImageIcon
+  Crop, Maximize, RefreshCw, Sparkles, ShieldCheck, Palette, FileImage, Layers
 };
 
 const imageTools = TOOLS.filter(t => t.category === 'image');
 ---
 
 <Layout
-  title="Image Suite - 100% Private Client-Side Image Tools | NovaTools"
-  description="Remove backgrounds with neural AI, compress PNG/JPEG/WebP, resize dimensions, and scrub EXIF metadata directly in your browser."
+  title="Image Suite - Client-Side Image Tools | NovaTools"
+  description="Compress, convert, crop, upscale, remove backgrounds, and scrub EXIF metadata directly in your browser. 100% private."
 >
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
@@ -24,17 +33,17 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
       <div class="flex items-center justify-between">
         <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
           <ImageIcon class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-          <span>IMAGE_SUITE_V2 // {imageTools.length} TOOLS</span>
+          <span>IMAGE_SUITE // {imageTools.length} TOOLS</span>
         </div>
-        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Local Processing</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        Client-Side <span class="text-blue-600 dark:text-blue-400">Image Studio</span>
+        High-Performance <span class="text-blue-600 dark:text-blue-400">Image Studio</span>
       </h1>
 
       <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
-        Convert formats, strip GPS tracking metadata, resize dimensions, and extract crisp cutouts with neural AI segmentation running locally on your graphics device.
+        Convert formats, compress without perceptual loss, remove image backgrounds, and scrub privacy-invasive EXIF location tags in local memory.
       </p>
     </div>
 
@@ -82,7 +91,7 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
               </div>
 
               <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
@@ -93,58 +102,8 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
       </div>
     </div>
 
-    {/* Educational & Architectural Deep Dive */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
-            <ImageIcon class="h-4 w-4" />
-            <span>GPU & Neural Architecture</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Client-Side Image Studio Architecture
-          </h2>
-        </div>
-        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
-            ONNX Web & WebGPU
-          </span>
-          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
-            Zero Cloud Uploads
-          </span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
-        <div class="space-y-3">
-          <p>
-            The NovaTools Image Studio delivers professional-grade raster and vector graphics processing without the security risks of uploading personal photos or unreleased product prototypes to external clouds.
-          </p>
-          <p>
-            By running high-performance neural segmentation models and modern image codecs directly in local browser memory, AI background removal, intelligent compression with live visual diffing, next-gen format transcoding (AVIF, WebP), and EXIF privacy sanitization happen directly on your local device.
-          </p>
-        </div>
-        <div class="space-y-3">
-          <p>
-            Users benefit from zero queue delays, instant batch conversions, and complete metadata protection. Hidden GPS coordinates, camera serial numbers, and personal timestamps are stripped before sharing images online.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Wand2 class="h-4 w-4 text-blue-500" /> On-Device AI
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Neural network inference runs locally via WebGPU shaders in real time.</p>
-            </div>
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
-              <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck class="h-4 w-4 text-emerald-500" /> Privacy Scrubbing
-              </span>
-              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Permanent removal of sensitive EXIF, IPTC, and location headers.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    {/* AdSense Banner */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
   </div>
 </Layout>

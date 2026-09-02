@@ -3,11 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import { HeroSection } from '../components/HeroSection';
 import AboutSection from '../components/AboutSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
+import AdSenseAd from '../components/AdSenseAd.astro';
 import { ShieldCheck, Lock, Code, Eye } from 'lucide-react';
 ---
 
 <Layout
-  title="NovaTools - 100% Private In-Browser Media, Video & PDF Utilities"
+  title="NovaTools - In-Browser Media, Video & PDF Utilities"
   description="High-performance, privacy-first PDF, image, video, and audio tools running instantly in your browser. Zero cloud uploads, 100% free."
 >
   {/* Dynamic Interactive Hero Section (100vh) */}
@@ -19,8 +20,13 @@ import { ShieldCheck, Lock, Code, Eye } from 'lucide-react';
   {/* Interactive Bento Grid Services Section */}
   <ServicesSection />
 
+  {/* Google AdSense Display Slot */}
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AdSenseAd slotId="5386318888" className="my-8" />
+  </div>
+
   {/* Security Ledger & Open Architecture Guarantee */}
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
       <div class="flex items-center gap-2.5 border-b border-slate-200 dark:border-white/[0.06] pb-4 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
         <ShieldCheck class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />

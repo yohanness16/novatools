@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
+import AdSenseAd from '../../components/AdSenseAd.astro';
 import {
   Layers, Scissors, RotateCw, Lock, EyeOff, FileImage, FilePlus,
   ArrowRight, ShieldCheck, FileText, CheckCircle2, Shield
@@ -14,7 +15,7 @@ const pdfTools = TOOLS.filter(t => t.category === 'pdf');
 ---
 
 <Layout
-  title="PDF Suite - 100% Private Client-Side PDF Tools | NovaTools"
+  title="PDF Suite - Client-Side PDF Tools | NovaTools"
   description="Merge, split, rotate, encrypt, redact, and number PDF documents directly in your browser. Zero cloud uploads, total confidentiality."
 >
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
@@ -24,9 +25,9 @@ const pdfTools = TOOLS.filter(t => t.category === 'pdf');
       <div class="flex items-center justify-between">
         <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
           <FileText class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-          <span>PDF_SUITE_V2 // {pdfTools.length} TOOLS</span>
+          <span>PDF_SUITE // {pdfTools.length} TOOLS</span>
         </div>
-        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Local Processing</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
@@ -82,7 +83,7 @@ const pdfTools = TOOLS.filter(t => t.category === 'pdf');
               </div>
 
               <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
                 <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
@@ -92,6 +93,9 @@ const pdfTools = TOOLS.filter(t => t.category === 'pdf');
         })}
       </div>
     </div>
+
+    {/* AdSense Banner */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
 
     {/* Educational & Architectural Deep Dive */}
     <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
