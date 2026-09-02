@@ -1,10 +1,18 @@
 /**
  * Animated Lyrics & Music Video Engine for NovaTools
- * Provides 100% Client-Side In-Browser Video Synthesis, Karaoke Shaders,
- * Acoustic Beat Alignment, and Multilingual Speech & Lyric Recognition (Amharic, English, Spanish, Arabic, etc.)
+ * Provides 100% Client-Side In-Browser Video Synthesis, Multilingual Neural Song Transcription (Whisper AI),
+ * Embedded Audio Metadata Extraction (ID3v2 USLT/SYLT, M4A ©lyr), Acoustic Beat Alignment,
+ * and Amharic (አማርኛ) / Ethiopic Unicode Typography.
  */
 
 import { SubtitleEngine, type SubtitleCue } from './subtitleEngine';
+import { pipeline, env } from '@xenova/transformers';
+
+// Ensure browser-safe caching for transformers.js
+if (typeof window !== 'undefined') {
+  env.allowLocalModels = false;
+  env.useBrowserCache = true;
+}
 
 export interface LyricLine {
   id: string;
@@ -94,19 +102,241 @@ export const DEMO_TRACKS = [
 [00:08.00] Electric heartbeat in the digital rain
 [00:11.80] Rising higher through the cosmic plane ♪`,
   },
-  {
-    id: 'acoustic-peace',
-    name: 'Morning Light (Acoustic)',
-    artist: 'Serenity',
-    duration: 14,
-    sampleLyrics: `[00:00.80] Whisper of the morning breeze ♪
-[00:04.20] Sunlight dancing on the trees
-[00:07.80] Every moment pure and free ♫
-[00:11.00] In this peaceful harmony`,
-  },
 ];
 
+let whisperLyricsPipeline: any = null;
+let whisperModelLoaded: string | null = null;
+
 export class LyricsVideoEngine {
+  /**
+   * Extract Embedded Lyrics (ID3v2 USLT/SYLT, M4A ©lyr, Vorbis comments) directly from uploaded audio binary
+   */
+  static async extractEmbeddedAudioLyrics(file: File | Blob): Promise<{ lyrics: string; isSynced: boolean; title?: string; artist?: string } | null> {
+    try {
+      const sliceSize = Math.min(file.size, 1024 * 1024); // Read first 1MB
+      const arrayBuffer = await file.slice(0, sliceSize).arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
+
+      // Check ID3v2 tag (bytes 0, 1, 2 == 'ID3')
+      if (uint8[0] === 0x49 && uint8[1] === 0x44 && uint8[2] === 0x33) {
+        const version = uint8[3];
+        const id3Size = ((uint8[6] & 0x7f) << 21) | ((uint8[7] & 0x7f) << 14) | ((uint8[8] & 0x7f) << 7) | (uint8[9] & 0x7f);
+
+        let offset = 10;
+        const limit = Math.min(uint8.length, id3Size + 10);
+        const textDecoder = new TextDecoder('utf-8');
+        const isoDecoder = new TextDecoder('iso-8859-1');
+        const utf16Decoder = new TextDecoder('utf-16');
+
+        let title: string | undefined;
+        let artist: string | undefined;
+        let extractedLyrics: string | undefined;
+
+        while (offset + 10 < limit) {
+          const frameId = String.fromCharCode(uint8[offset], uint8[offset + 1], uint8[offset + 2], uint8[offset + 3]);
+          if (!/^[A-Z0-9]{4}$/.test(frameId)) break;
+
+          let frameSize = 0;
+          if (version === 4) {
+            frameSize = ((uint8[offset + 4] & 0x7f) << 21) | ((uint8[offset + 5] & 0x7f) << 14) | ((uint8[offset + 6] & 0x7f) << 7) | (uint8[offset + 7] & 0x7f);
+          } else {
+            frameSize = (uint8[offset + 4] << 24) | (uint8[offset + 5] << 16) | (uint8[offset + 6] << 8) | uint8[offset + 7];
+          }
+
+          if (frameSize <= 0 || offset + 10 + frameSize > limit) break;
+
+          const frameData = uint8.subarray(offset + 10, offset + 10 + frameSize);
+          const encoding = frameData[0];
+          const decoder = encoding === 1 ? utf16Decoder : encoding === 3 ? textDecoder : isoDecoder;
+
+          if (frameId === 'USLT') {
+            // Unsynchronized Lyric
+            try {
+              let descEnd = 4;
+              while (descEnd < frameData.length && frameData[descEnd] !== 0) descEnd++;
+              if (descEnd < frameData.length) descEnd++;
+              const text = decoder.decode(frameData.subarray(descEnd)).trim();
+              if (text.length > 5) extractedLyrics = text;
+            } catch {}
+          } else if (frameId === 'SYLT') {
+            // Synchronized Lyric
+            try {
+              const text = decoder.decode(frameData.subarray(6)).trim();
+              if (text.length > 5) extractedLyrics = text;
+            } catch {}
+          } else if (frameId === 'TIT2') {
+            title = decoder.decode(frameData.subarray(1)).replace(/\0/g, '').trim();
+          } else if (frameId === 'TPE1') {
+            artist = decoder.decode(frameData.subarray(1)).replace(/\0/g, '').trim();
+          }
+
+          offset += 10 + frameSize;
+        }
+
+        if (extractedLyrics) {
+          return {
+            lyrics: extractedLyrics,
+            isSynced: extractedLyrics.includes('['),
+            title,
+            artist,
+          };
+        }
+      }
+
+      // Check M4A / MP4 '©lyr' atom
+      for (let i = 0; i < uint8.length - 16; i++) {
+        if (uint8[i] === 0xa9 && uint8[i + 1] === 0x6c && uint8[i + 2] === 0x79 && uint8[i + 3] === 0x72) {
+          const dataStart = i + 16;
+          const text = new TextDecoder('utf-8').decode(uint8.subarray(dataStart, Math.min(uint8.length, dataStart + 4096))).trim();
+          if (text.length > 5) {
+            return { lyrics: text, isSynced: text.includes('[') };
+          }
+        }
+      }
+    } catch (e) {
+      console.debug('Embedded metadata check skipped:', e);
+    }
+    return null;
+  }
+
+  /**
+   * Neural Multilingual Whisper ASR Transcription:
+   * Chunks audio into 30-second windows and extracts real lyrics from the audio file
+   */
+  static async transcribeAudioLyrics(
+    mediaFile: File | Blob,
+    options: { language?: string; model?: string } = {},
+    onProgress?: (info: { message: string; progress: number }) => void
+  ): Promise<LyricLine[]> {
+    onProgress?.({ message: 'Decoding audio at 16,000 Hz Mono...', progress: 10 });
+    const { pcm, duration } = await SubtitleEngine.decodeAudioTo16k(mediaFile);
+
+    if (pcm.length === 0 || duration === 0) {
+      throw new Error('Audio stream is empty or unreadable.');
+    }
+
+    const language = options.language && options.language !== 'auto' ? options.language : undefined;
+    const modelName = options.model || (language === 'en' ? 'Xenova/whisper-tiny.en' : 'Xenova/whisper-tiny');
+
+    onProgress?.({
+      message: `Loading Neural Speech Recognition Model (${language ? language.toUpperCase() : 'Auto-Detect'})...`,
+      progress: 25,
+    });
+
+    if (!whisperLyricsPipeline || whisperModelLoaded !== modelName) {
+      whisperLyricsPipeline = await pipeline('automatic-speech-recognition', modelName, {
+        progress_callback: (p: any) => {
+          if (p.status === 'progress' && typeof p.progress === 'number') {
+            onProgress?.({
+              message: `Downloading AI Neural Weights (${p.file || ''}): ${Math.round(p.progress)}%`,
+              progress: 25 + Math.round(p.progress * 0.35),
+            });
+          }
+        },
+      });
+      whisperModelLoaded = modelName;
+    }
+
+    onProgress?.({
+      message: `Transcribing vocal lyrics from uploaded audio (${Math.round(duration)}s total)...`,
+      progress: 65,
+    });
+
+    // Chunking 30s blocks for full song stability
+    const sampleRate = 16000;
+    const windowLengthSec = 30;
+    const windowLengthSamples = windowLengthSec * sampleRate;
+    const strideSamples = 5 * sampleRate; // 5s overlap
+    const stepSamples = windowLengthSamples - strideSamples;
+
+    const resultCues: LyricLine[] = [];
+    const totalWindows = Math.max(1, Math.ceil(pcm.length / stepSamples));
+
+    for (let w = 0; w < totalWindows; w++) {
+      const startSample = w * stepSamples;
+      if (startSample >= pcm.length) break;
+
+      const endSample = Math.min(startSample + windowLengthSamples, pcm.length);
+      const windowPcm = pcm.subarray(startSample, endSample);
+      const windowOffsetSec = startSample / sampleRate;
+
+      onProgress?.({
+        message: `Analyzing song vocals (Part ${w + 1}/${totalWindows})...`,
+        progress: 65 + Math.round(((w + 1) / totalWindows) * 25),
+      });
+
+      try {
+        const output = await whisperLyricsPipeline(windowPcm, {
+          language: language,
+          task: 'transcribe',
+          return_timestamps: true,
+          chunk_length_s: 30,
+        });
+
+        const rawChunks = output.chunks || [];
+        if (rawChunks.length > 0) {
+          for (const chunk of rawChunks) {
+            const text = (chunk.text || '').trim();
+            if (!text || text.length < 2) continue;
+
+            let [chunkStart, chunkEnd] = chunk.timestamp || [0, (endSample - startSample) / sampleRate];
+            if (typeof chunkStart !== 'number' || isNaN(chunkStart)) chunkStart = 0;
+            if (typeof chunkEnd !== 'number' || isNaN(chunkEnd) || chunkEnd <= chunkStart) {
+              chunkEnd = chunkStart + 3.0;
+            }
+
+            const globalStart = Number((windowOffsetSec + chunkStart).toFixed(2));
+            const globalEnd = Number((windowOffsetSec + chunkEnd).toFixed(2));
+
+            // Prevent duplicate text from stride overlap
+            const isDuplicate = resultCues.some(
+              (c) => Math.abs(c.start - globalStart) < 1.5 && c.text.toLowerCase() === text.toLowerCase()
+            );
+
+            if (!isDuplicate) {
+              resultCues.push({
+                id: Math.random().toString(36).substring(2, 9),
+                start: globalStart,
+                end: globalEnd,
+                text,
+              });
+            }
+          }
+        } else if (output.text && output.text.trim()) {
+          const text = output.text.trim();
+          resultCues.push({
+            id: Math.random().toString(36).substring(2, 9),
+            start: Number(windowOffsetSec.toFixed(2)),
+            end: Number((windowOffsetSec + (endSample - startSample) / sampleRate).toFixed(2)),
+            text,
+          });
+        }
+      } catch (chunkErr) {
+        console.warn(`Window ${w} transcription error:`, chunkErr);
+      }
+    }
+
+    onProgress?.({ message: 'Formatting synchronized lyric lines...', progress: 95 });
+
+    if (resultCues.length === 0) {
+      throw new Error(
+        'No vocal lyrics could be transcribed from this audio. The track may be an instrumental, or background music overpowered the voice. You can paste your song lyrics and click "Auto-Align to Beats".'
+      );
+    }
+
+    // Sort by start time and fix end boundaries
+    resultCues.sort((a, b) => a.start - b.start);
+    for (let i = 0; i < resultCues.length; i++) {
+      if (i < resultCues.length - 1) {
+        resultCues[i].end = Math.max(resultCues[i].start + 1.5, Math.min(resultCues[i].start + 7.0, resultCues[i + 1].start));
+      } else {
+        resultCues[i].end = Math.min(duration, resultCues[i].start + 4.5);
+      }
+    }
+
+    return resultCues;
+  }
+
   /**
    * Parse LRC format: [mm:ss.xx] Lyric line text
    */
@@ -143,7 +373,6 @@ export class LyricsVideoEngine {
           });
         }
       } else {
-        // Plain text line without timestamp
         result.push({
           id: Math.random().toString(36).substring(2, 9),
           start: 0,
@@ -153,10 +382,7 @@ export class LyricsVideoEngine {
       }
     }
 
-    // Sort by start time
     result.sort((a, b) => a.start - b.start);
-
-    // Compute natural end times based on next line's start
     for (let i = 0; i < result.length; i++) {
       if (i < result.length - 1) {
         result[i].end = Math.max(result[i].start + 1.2, Math.min(result[i].start + 6.0, result[i + 1].start));
@@ -213,7 +439,6 @@ export class LyricsVideoEngine {
       energyProfile.push(sum / (end - i));
     }
 
-    // Detect song musical intro (first sustained energy above baseline)
     let introLeadIn = Math.min(1.5, duration * 0.05);
     const avgEnergy = energyProfile.reduce((a, b) => a + b, 0) / Math.max(1, energyProfile.length);
     for (let f = 0; f < Math.min(energyProfile.length, 100); f++) {
@@ -223,7 +448,6 @@ export class LyricsVideoEngine {
       }
     }
 
-    // Distribute lyric lines evenly across the active song duration with musical padding
     const usableDuration = Math.max(2, duration - introLeadIn - 1.0);
     const lineSlot = usableDuration / rawLines.length;
 
@@ -243,101 +467,40 @@ export class LyricsVideoEngine {
   }
 
   /**
-   * High-Level Speech & Lyric Detection Orchestrator:
-   * 1. Decodes audio PCM
+   * High-Level Master Extraction Orchestrator:
+   * 1. Inspects audio file for embedded ID3/M4A lyrics tags (returns instant accurate lyrics if present)
    * 2. If user provided raw lyrics, aligns them with audio energy
-   * 3. If no raw lyrics, runs Multilingual Whisper ASR with chosen language (am, en, es, fr, ar, etc.)
-   * 4. If audio is purely musical or Whisper has low confidence, synthesizes cadence-aligned lyric structure
+   * 3. Runs Neural Multilingual Whisper ASR on the uploaded audio to transcribe the real singing lyrics
    */
   static async detectOrGenerateLyrics(
     mediaFile: File | Blob,
     options: { language?: string; rawLyrics?: string } = {},
     onProgress?: (info: { message: string; progress: number }) => void
   ): Promise<LyricLine[]> {
-    onProgress?.({ message: 'Extracting and decoding audio stream...', progress: 10 });
-    const { pcm, duration } = await SubtitleEngine.decodeAudioTo16k(mediaFile);
-
-    if (pcm.length === 0 || duration === 0) {
-      throw new Error('No audio content found in this file.');
-    }
-
-    const language = options.language || 'auto';
-
-    // Path A: User already provided lyrics text (e.g. Amharic Ge'ez lyrics or English verses)
+    // 1. If user provided lyrics text in the editor, align directly
     if (options.rawLyrics && options.rawLyrics.trim().length > 0) {
-      onProgress?.({ message: 'Acoustic energy analysis & aligning lyrics to beats...', progress: 60 });
+      onProgress?.({ message: 'Aligning your lyrics to the audio rhythm & vocal beats...', progress: 50 });
+      const { pcm, duration } = await SubtitleEngine.decodeAudioTo16k(mediaFile);
       const aligned = this.autoAlignLyricsToAudio(pcm, duration, options.rawLyrics);
-      onProgress?.({ message: 'Lyrics aligned to song beats!', progress: 100 });
+      onProgress?.({ message: 'Lyrics successfully aligned to audio beats!', progress: 100 });
       return aligned;
     }
 
-    // Path B: Automatic Speech Recognition (ASR) via Whisper
-    onProgress?.({ message: `Loading multilingual speech recognition (${language.toUpperCase()})...`, progress: 30 });
-
-    try {
-      const cues = await SubtitleEngine.generateSubtitles(
-        mediaFile,
-        { language: language === 'auto' ? undefined : language, task: 'transcribe' },
-        (p) => {
-          onProgress?.({ message: p.message, progress: 30 + Math.round(p.progress * 0.6) });
-        }
-      );
-
-      // Verify if cues contain discernible words
-      const hasMeaningfulText = cues.length > 0 && cues.some((c) => c.text && !c.text.startsWith('[Audio Segment'));
-
-      if (hasMeaningfulText) {
-        return cues.map((c) => ({
-          id: c.id,
-          start: c.start,
-          end: c.end,
-          text: c.text,
-        }));
+    // 2. Check for embedded ID3 / M4A metadata lyrics
+    onProgress?.({ message: 'Checking audio file metadata for embedded lyrics...', progress: 15 });
+    const embedded = await this.extractEmbeddedAudioLyrics(mediaFile);
+    if (embedded && embedded.lyrics) {
+      onProgress?.({ message: `Extracted embedded lyrics from audio metadata (${embedded.title || 'Track'})!`, progress: 100 });
+      if (embedded.isSynced) {
+        return this.parseLrc(embedded.lyrics);
+      } else {
+        const { pcm, duration } = await SubtitleEngine.decodeAudioTo16k(mediaFile);
+        return this.autoAlignLyricsToAudio(pcm, duration, embedded.lyrics);
       }
-    } catch (e) {
-      console.warn('Whisper ASR non-fatal error during song detection:', e);
     }
 
-    // Path C: Song is musical or speech model did not find clear isolated speech.
-    // Create structured lyric lines synchronized to the song's energy envelope in the chosen language.
-    onProgress?.({ message: 'Synthesizing melodic lyric lines from audio envelope...', progress: 95 });
-
-    const amharicPresets = [
-      'የትዝታ ማዕበል በልቤ ሲነሳ ♪',
-      'የፍቅርሽ ትዝታ ዳግም ተቀሰቀሰ ♫',
-      'ናፍቆትሽ በረታ የኔ ቆንጆ እያልኩኝ ♬',
-      'በሙዚቃው ዜማ ልቤ ተደሰተ ♪',
-      'የፍቅር ዜማችን ዘላለም ይኖራል ♫',
-      'አንቺ ነሽ የልቤ የፍቅሬ መጀመሪያ ♬',
-      'ካንቺ ጋር ሲሆን አለሜ ያበራል ♪',
-      'የፍቅርሽ ብርሃን ሌሊቱን ያደምቃል ♫',
-    ];
-
-    const englishPresets = [
-      'Floating through the neon evening glow ♪',
-      'City lights begin to slowly show ♫',
-      'Melodies drifting across the silent sky ♬',
-      'Lost inside this quiet rhythm you and I ♪',
-      'Echoes of the stardust shining bright ♫',
-      'Rhythm pulsing through the atmosphere ♬',
-    ];
-
-    const spanishPresets = [
-      'Bajo las luces de la noche brillante ♪',
-      'El ritmo de la música en mi corazón ♫',
-      'Sintiendo la melodía en el aire ♬',
-      'Bailando juntos hasta el amanecer ♪',
-    ];
-
-    const selectedLines =
-      language === 'am'
-        ? amharicPresets
-        : language === 'es'
-        ? spanishPresets
-        : englishPresets;
-
-    const lyricsText = selectedLines.join('\n');
-    return this.autoAlignLyricsToAudio(pcm, duration, lyricsText);
+    // 3. Run Multilingual Neural Whisper ASR on the uploaded audio
+    return await this.transcribeAudioLyrics(mediaFile, { language: options.language }, onProgress);
   }
 
   /**
@@ -360,19 +523,18 @@ export class LyricsVideoEngine {
     const duration = trackId.includes('amharic') || trackId.includes('ethiopian') ? 18 : trackId === 'cyber-synth' ? 16 : 18;
     const offlineCtx = new OfflineAudioContext(2, sampleRate * duration, sampleRate);
 
-    // Tizita minor pentatonic chords vs western chords
     const chords = trackId.includes('amharic') || trackId.includes('ethiopian')
       ? [
-          [220.0, 261.63, 329.63, 440.0],  // A minor Tizita root
-          [246.94, 349.23, 493.88],         // B diminished
-          [261.63, 329.63, 523.25],         // C Major inversion
-          [220.0, 246.94, 329.63, 440.0],  // Tizita return
+          [220.0, 261.63, 329.63, 440.0],
+          [246.94, 349.23, 493.88],
+          [261.63, 329.63, 523.25],
+          [220.0, 246.94, 329.63, 440.0],
         ]
       : [
-          [261.63, 329.63, 392.0, 523.25], // C
-          [220.0, 261.63, 329.63, 440.0],  // Am
-          [174.61, 220.0, 261.63, 349.23], // F
-          [196.0, 246.94, 293.66, 392.0],  // G
+          [261.63, 329.63, 392.0, 523.25],
+          [220.0, 261.63, 329.63, 440.0],
+          [174.61, 220.0, 261.63, 349.23],
+          [196.0, 246.94, 293.66, 392.0],
         ];
 
     const chordDuration = duration / chords.length;
@@ -411,7 +573,7 @@ export class LyricsVideoEngine {
   static audioBufferToWavBlob(buffer: AudioBuffer): Blob {
     const numChannels = buffer.numberOfChannels;
     const sampleRate = buffer.sampleRate;
-    const format = 1; // PCM
+    const format = 1;
     const bitDepth = 16;
 
     const channelData: Float32Array[] = [];
@@ -497,7 +659,6 @@ export class LyricsVideoEngine {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Star particles
       for (let i = 0; i < 40; i++) {
         const starX = (Math.sin(i * 99 + time * 0.05) * 0.5 + 0.5) * width;
         const starY = (Math.cos(i * 33 + time * 0.03) * 0.5 + 0.5) * height;
@@ -516,7 +677,6 @@ export class LyricsVideoEngine {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Perspective horizon grid
       ctx.strokeStyle = 'rgba(6, 182, 212, 0.25)';
       ctx.lineWidth = 1.5;
       const horizon = height * 0.65;
@@ -545,7 +705,6 @@ export class LyricsVideoEngine {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Glowing sun sphere
       const sunGrad = ctx.createRadialGradient(width / 2, height * 0.55, 10, width / 2, height * 0.55, 140);
       sunGrad.addColorStop(0, '#FDE047');
       sunGrad.addColorStop(0.5, '#FB923C');
@@ -582,7 +741,6 @@ export class LyricsVideoEngine {
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Ambient light orbs
       const orbGrad = ctx.createRadialGradient(
         width * 0.7 + Math.sin(time * 0.3) * 60,
         height * 0.3 + Math.cos(time * 0.4) * 40,
@@ -597,7 +755,6 @@ export class LyricsVideoEngine {
       ctx.fillRect(0, 0, width, height);
 
     } else {
-      // Minimal Obsidian
       const grad = ctx.createRadialGradient(width / 2, height / 2, 20, width / 2, height / 2, width * 0.7);
       grad.addColorStop(0, '#1E293B');
       grad.addColorStop(0.6, '#0F172A');
@@ -653,7 +810,7 @@ export class LyricsVideoEngine {
     const { width, height } = canvas;
     ctx.clearRect(0, 0, width, height);
 
-    // 1. Draw Background (Video / Image / Preset)
+    // 1. Draw Background
     if (bgMedia.video && bgMedia.video.readyState >= 2) {
       ctx.save();
       if (style.backgroundBlur > 0) {
@@ -700,27 +857,25 @@ export class LyricsVideoEngine {
       ctx.restore();
     }
 
-    // 5. Find current, previous, and next lyric lines
+    // 5. Find current active lyric line
     const activeIndex = lyrics.findIndex(
       (line) => currentTime >= line.start && currentTime <= line.end
     );
     const activeLine = activeIndex !== -1 ? lyrics[activeIndex] : null;
 
-    // Determine Y position based on placement setting
     let targetCenterY = height * 0.5;
     if (style.placement === 'top') targetCenterY = height * 0.22;
     if (style.placement === 'bottom') targetCenterY = height * 0.78;
 
     // 6. Render Active Lyric Line
     if (activeLine) {
-      const lineDuration = activeLine.end - activeLine.start;
+      const lineDuration = Math.max(0.2, activeLine.end - activeLine.start);
       const progress = Math.max(0, Math.min(1, (currentTime - activeLine.start) / lineDuration));
 
       ctx.save();
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Typography with full Ethiopic / Amharic Unicode font fallback stack
       const scaledFontSize = Math.round((style.fontSize / 1080) * height);
       ctx.font = `${style.fontWeight} ${scaledFontSize}px "${style.fontFamily}", "Noto Sans Ethiopic", "Abyssinica SIL", "Nyala", "Kefa", "Segoe UI", sans-serif`;
 
@@ -729,7 +884,6 @@ export class LyricsVideoEngine {
       const textX = width / 2;
       let textY = targetCenterY;
 
-      // Draw background pill box if enabled
       if (style.showPillBg) {
         const paddingX = scaledFontSize * 0.8;
         const paddingY = scaledFontSize * 0.4;
@@ -742,9 +896,7 @@ export class LyricsVideoEngine {
         ctx.fill();
       }
 
-      // Apply Transition Animation
       if (style.transitionEffect === 'karaoke') {
-        // Karaoke Sweep Fill
         const gradient = ctx.createLinearGradient(
           textX - textWidth / 2,
           0,
@@ -762,7 +914,6 @@ export class LyricsVideoEngine {
         ctx.fillStyle = gradient;
         ctx.fillText(text, textX, textY);
 
-        // Musical note badge at active line end
         if (style.showMusicalNotes) {
           ctx.font = `600 ${scaledFontSize * 0.7}px serif`;
           ctx.fillStyle = style.activeColor;
@@ -770,7 +921,6 @@ export class LyricsVideoEngine {
         }
 
       } else if (style.transitionEffect === 'pop') {
-        // Kinetic Pop & Scale Bounce
         const entryScale = progress < 0.15 ? 0.7 + (progress / 0.15) * 0.35 : 1.0;
         ctx.translate(textX, textY);
         ctx.scale(entryScale, entryScale);
@@ -782,7 +932,6 @@ export class LyricsVideoEngine {
         ctx.fillText(text, textX, textY);
 
       } else if (style.transitionEffect === 'typewriter') {
-        // Typewriter Character Reveal
         const visibleChars = Math.floor(progress * text.length);
         const revealedText = text.substring(0, visibleChars);
 
@@ -792,7 +941,6 @@ export class LyricsVideoEngine {
         ctx.fillText(revealedText, textX, textY);
 
       } else if (style.transitionEffect === 'wave') {
-        // Undulating Wave Float
         textY += Math.sin(currentTime * 4) * (scaledFontSize * 0.15);
 
         ctx.shadowColor = style.glowColor;
@@ -801,7 +949,6 @@ export class LyricsVideoEngine {
         ctx.fillText(text, textX, textY);
 
       } else if (style.transitionEffect === 'neon') {
-        // Neon Glow Flicker
         const flicker = 0.85 + Math.sin(currentTime * 20) * 0.15;
         ctx.shadowColor = style.glowColor;
         ctx.shadowBlur = style.glowIntensity * flicker;
@@ -809,7 +956,6 @@ export class LyricsVideoEngine {
         ctx.fillText(text, textX, textY);
 
       } else {
-        // Smooth Fade
         const fadeIn = Math.min(1, progress * 4);
         const fadeOut = Math.min(1, (1 - progress) * 4);
         const alpha = Math.min(fadeIn, fadeOut);
@@ -823,7 +969,6 @@ export class LyricsVideoEngine {
 
       ctx.restore();
     } else {
-      // Draw Next Upcoming Line as subtle preview
       const nextLine = lyrics.find((line) => line.start > currentTime);
       if (nextLine && nextLine.start - currentTime < 2.0) {
         ctx.save();
@@ -854,7 +999,6 @@ export class LyricsVideoEngine {
     const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
     const duration = audioBuffer.duration;
 
-    // Dimensions based on Aspect Ratio
     let width = 1920;
     let height = 1080;
     if (style.aspectRatio === '9:16') {
@@ -871,22 +1015,17 @@ export class LyricsVideoEngine {
     const ctx = offscreenCanvas.getContext('2d');
     if (!ctx) throw new Error('Could not create offscreen 2D canvas context');
 
-    // Create Canvas MediaStream (30 FPS)
     const canvasStream = (offscreenCanvas as any).captureStream(30);
-
-    // Create Web Audio destination node for the MediaRecorder
     const dest = audioCtx.createMediaStreamDestination();
     const sourceNode = audioCtx.createBufferSource();
     sourceNode.buffer = audioBuffer;
     sourceNode.connect(dest);
 
-    // Combine video and audio tracks
     const combinedStream = new MediaStream([
       ...canvasStream.getVideoTracks(),
       ...dest.stream.getAudioTracks(),
     ]);
 
-    // Choose supported MIME type
     const mimeTypes = [
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
@@ -897,7 +1036,7 @@ export class LyricsVideoEngine {
 
     const recorder = new MediaRecorder(combinedStream, {
       mimeType: chosenMime,
-      videoBitsPerSecond: 6000000, // 6 Mbps HD
+      videoBitsPerSecond: 6000000,
     });
 
     const recordedChunks: Blob[] = [];
@@ -909,9 +1048,7 @@ export class LyricsVideoEngine {
       recorder.onstop = () => {
         try {
           audioCtx.close();
-        } catch {
-          // Ignore
-        }
+        } catch {}
         const finalBlob = new Blob(recordedChunks, { type: chosenMime });
         resolve(finalBlob);
       };
@@ -919,17 +1056,13 @@ export class LyricsVideoEngine {
       recorder.onerror = (e) => {
         try {
           audioCtx.close();
-        } catch {
-          // Ignore
-        }
+        } catch {}
         reject(e);
       };
 
-      // Start Recording
       recorder.start(100);
       sourceNode.start(0);
 
-      const startTime = performance.now();
       const fps = 30;
       const totalFrames = Math.ceil(duration * fps);
       let frameIndex = 0;
@@ -943,7 +1076,6 @@ export class LyricsVideoEngine {
           return;
         }
 
-        // Render Frame
         LyricsVideoEngine.renderFrame(ctx, offscreenCanvas, currentTime, lyrics, style, bgMedia);
 
         const progressPercent = Math.min(100, Math.round((frameIndex / totalFrames) * 100));
