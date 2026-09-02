@@ -282,7 +282,7 @@ const RAW_TOOLS: ToolMeta[] = [
       'Output formats: WebP, PNG, JPEG, AVIF, BMP, ICO',
       'Batch multi-file conversion simultaneously',
       'Adjustable compression quality slider',
-      'Fast HTML5 Canvas and WASM pipeline'
+      'Fast HTML5 Canvas and Local In-Browser Pipeline'
     ],
     howToSteps: [
       { step: 1, title: 'Upload Images', desc: 'Select one or more images from your computer or phone.' },
@@ -631,7 +631,7 @@ const RAW_TOOLS: ToolMeta[] = [
     path: '/video/text-to-speech',
     keywords: ['text to speech', 'ai voice generator', 'kokoro tts', 'voiceover studio', 'ai narrator', 'humanic tts', 'client-side tts', 'tts with expressions'],
     features: [
-      '100% Client-Side Neural Inference via Kokoro-82M ONNX and WebGPU/WASM',
+      '100% Client-Side Neural Inference via Kokoro-82M ONNX and WebGPU / Local Engine',
       'Humanic Expressions & Interjections: Handles "ugh", "cough", "ay", "sigh", "hmm", "whoa", "phew", etc.',
       '50+ High-Fidelity Voices across American, British, Japanese, French, Spanish, Italian, and Hindi accents',
       'Dual-Voice Blender: Interpolate between two voice styles to forge custom unique human timbres',
@@ -644,9 +644,9 @@ const RAW_TOOLS: ToolMeta[] = [
       { step: 3, title: 'Generate & Export', desc: 'Click "Generate Speech" to synthesize speech locally on your GPU/CPU, preview waveform, and download WAV audio.' }
     ],
     faqs: [
-      { question: 'Does Kokoro-82M TTS require sending text to a server?', answer: 'No! The neural network model executes entirely inside your browser sandbox via WebGPU and WebAssembly. Your text and audio never leave your computer.' },
+      { question: 'Does Kokoro-82M TTS require sending text to a server?', answer: 'No! The neural network model executes entirely inside your browser sandbox via WebGPU and client-side processing. Your text and audio never leave your computer.' },
       { question: 'How are human expressions like "ugh" and "sigh" generated?', answer: 'NovaTools uses an intelligent expression normalizer that maps natural interjections into phonetic breath and pause cadences that the neural vocoder renders smoothly.' },
-      { question: 'Is WebGPU required to use this tool?', answer: 'No! If your browser supports WebGPU, it utilizes hardware acceleration for sub-second synthesis. If not, it automatically falls back to multi-threaded WebAssembly (WASM).' }
+      { question: 'Is WebGPU required to use this tool?', answer: 'No! If your browser supports WebGPU, it utilizes hardware acceleration for sub-second synthesis. If not, it automatically falls back to multi-threaded in-browser execution.' }
     ]
   },
   // DOCUMENT & AI SUITE

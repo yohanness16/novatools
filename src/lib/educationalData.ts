@@ -284,9 +284,9 @@ export const EDUCATIONAL_CONTENT: Record<string, ToolEducationalContent> = {
     "about": {
       "paragraphs": [
         "The Image Converter enables fast, batch format transcoding across modern and legacy image formats, including WebP, AVIF, PNG, JPEG, BMP, and ICO. Whether modernizing web assets to reduce page weight or converting screenshots to universal JPEG formats, transcoding is instant.",
-        "By utilizing native HTML5 Canvas encoding and WebAssembly codecs in local browser memory, hundreds of images can be converted simultaneously without uploading gigabytes of image data across the internet."
+        "By utilizing native HTML5 Canvas encoding and client-side codecs in local browser memory, hundreds of images can be converted simultaneously without uploading gigabytes of image data across the internet."
       ],
-      "technicalMechanism": "HTML5 Canvas & WASM Image Codecs",
+      "technicalMechanism": "HTML5 Canvas & Local Image Codecs",
       "supportedFormats": [
         ".png",
         ".jpg",

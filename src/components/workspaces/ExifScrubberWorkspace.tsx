@@ -78,7 +78,7 @@ export const ExifScrubberWorkspace: React.FC = () => {
             Drop photo to inspect & scrub EXIF, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Strip GPS coordinates, device identifiers, and timestamps. 100% local WASM.
+            Strip GPS coordinates, device identifiers, and timestamps. 100% local processing.
           </p>
         </div>
       ) : (

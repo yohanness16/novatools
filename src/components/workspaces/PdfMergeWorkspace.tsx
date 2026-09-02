@@ -144,7 +144,7 @@ export const PdfMergeWorkspace: React.FC = () => {
           Drop PDF files here, or <span className="text-[#4F8CFF] underline">browse files</span>
         </h3>
         <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-          Select 2+ documents to merge into one sequence. 100% local WASM.
+          Select 2+ documents to merge into one sequence. 100% local processing.
         </p>
       </div>
 

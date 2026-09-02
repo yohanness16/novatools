@@ -48,7 +48,7 @@ NovaTools provides **100% client-side** privacy-first media, document, and AI ut
 | :--- | :--- | :--- | :--- |
 | **PDF Engine** | < 120ms | 100% In-Browser | Vector PDF, Print |
 | **DOCX OpenXML** | < 250ms | Zero Server Upload | .docx, Word |
-| **PPTX Slide Deck** | < 300ms | Client-Side WASM | .pptx, 16:9 Deck |
+| **PPTX Slide Deck** | < 300ms | Client-Side Engine | .pptx, 16:9 Deck |
 | **Excel Spreadsheet**| < 80ms | 100% Local | .xlsx, .csv |
 
 ## Key Metric Highlights

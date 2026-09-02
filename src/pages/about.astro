@@ -1,88 +1,92 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Shield, Cpu, Lock, Zap, Server, Globe } from 'lucide-react';
+import { Shield, Cpu, Lock, Zap, Server, Globe, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
 ---
 
 <Layout
   title="Architecture & Philosophy - NovaTools"
-  description="Learn about NovaTools, our mission to eliminate privacy risks in online file conversions, and our WebAssembly client-side runtime."
+  description="Learn about NovaTools, our mission to eliminate privacy risks in online file conversions, and our client-side local runtime."
 >
-  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+  <div class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-10">
     {/* Page Header */}
-    <div class="space-y-2.5">
-      <div class="inline-flex items-center gap-1.5 rounded border border-[#3FBE73]/30 bg-[#122D1F] px-2.5 py-0.5 text-[11px] font-mono font-medium text-[#3FBE73]">
-        <Shield class="h-3.5 w-3.5" />
+    <div class="space-y-3">
+      <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
+        <Shield class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
         <span>Local-First Engineering Architecture</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#ECEDEF]">
+      <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
         High-Performance Media & Document Runtime
       </h1>
-      <p class="text-xs sm:text-sm text-[#8B8F98] max-w-2xl leading-relaxed">
+      <p class="text-sm text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
         Confidential financial records, medical records, private photos, and proprietary video footage should never travel across remote servers simply to be converted or compressed.
       </p>
     </div>
 
-    {/* Mission & Problem Statement */}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="rounded border border-[#2A2D33] bg-[#131418] p-5 space-y-2">
-        <div class="flex h-8 w-8 items-center justify-center rounded bg-[#331614] text-[#F0564B] border border-[#F0564B]/30">
+    {/* Comparison: Cloud Problem vs Local Solution */}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 space-y-3 shadow-sm">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40">
           <Server class="h-4 w-4" />
         </div>
-        <h3 class="text-xs font-semibold text-[#ECEDEF]">The Cloud Converter Problem</h3>
-        <p class="text-xs text-[#8B8F98] leading-relaxed">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">The Cloud Converter Problem</h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
           Traditional web converters upload private documents to remote cloud infrastructure. 
-          Even with deletion promises, files transit networks, sit in storage buckets, and risk exposure.
+          Even with deletion promises, files transit public networks, sit in unverified storage buckets, and risk exposure to interception.
         </p>
       </div>
 
-      <div class="rounded border border-[#2A2D33] bg-[#131418] p-5 space-y-2">
-        <div class="flex h-8 w-8 items-center justify-center rounded bg-[#122D1F] text-[#3FBE73] border border-[#3FBE73]/30">
+      <div class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 space-y-3 shadow-sm">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
           <Cpu class="h-4 w-4" />
         </div>
-        <h3 class="text-xs font-semibold text-[#ECEDEF]">The WebAssembly Solution</h3>
-        <p class="text-xs text-[#8B8F98] leading-relaxed">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">The Client-Side Solution</h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
           NovaTools executes 100% of its workloads directly inside your browser sandbox. 
-          By utilizing compiled <strong>WebAssembly (WASM)</strong> and WebCodecs, your device processes files at native speeds.
+          By utilizing compiled in-browser engines, WebCodecs, and Web Audio DSP, your device processes files at native speed with zero data leakage.
         </p>
       </div>
     </div>
 
     {/* Technical Core Pillars */}
-    <section class="rounded border border-[#2A2D33] bg-[#131418] p-5 sm:p-6 space-y-4">
-      <h2 class="font-mono text-xs font-semibold uppercase tracking-wider text-[#ECEDEF]">Core Architectural Pillars</h2>
+    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="border-b border-slate-200 dark:border-white/[0.06] pb-3">
+        <h2 class="font-mono text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+          Core Architectural Pillars
+        </h2>
+      </div>
 
-      <div class="space-y-3">
-        <div class="flex items-start gap-3">
-          <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#16233F] text-[#4F8CFF] border border-[#4F8CFF]/30 mt-0.5">
-            <Lock class="h-3.5 w-3.5" />
+      <div class="space-y-4">
+        <div class="flex items-start gap-4 rounded-lg bg-slate-50 dark:bg-[#16171a] p-4 border border-slate-200 dark:border-white/[0.06]">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40 mt-0.5">
+            <Lock class="h-4 w-4" />
           </div>
           <div>
-            <h4 class="text-xs font-semibold text-[#ECEDEF]">Zero Server Transmission</h4>
-            <p class="text-xs text-[#8B8F98] mt-0.5 leading-relaxed">
-              When you load a file into NovaTools, it is held in typed ArrayBuffers in local memory. No binary file payload ever leaves your device.
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Zero Server Transmission</h4>
+            <p class="text-xs text-slate-600 dark:text-[#9ca3af] mt-1 leading-relaxed">
+              When you load a file into NovaTools, it is held in typed ArrayBuffers in local memory. No binary file payload ever leaves your device or touches an external server.
             </p>
           </div>
         </div>
 
-        <div class="flex items-start gap-3">
-          <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#122D1F] text-[#3FBE73] border border-[#3FBE73]/30 mt-0.5">
-            <Zap class="h-3.5 w-3.5" />
+        <div class="flex items-start gap-4 rounded-lg bg-slate-50 dark:bg-[#16171a] p-4 border border-slate-200 dark:border-white/[0.06]">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40 mt-0.5">
+            <Zap class="h-4 w-4" />
           </div>
           <div>
-            <h4 class="text-xs font-semibold text-[#ECEDEF]">Direct Hardware Acceleration</h4>
-            <p class="text-xs text-[#8B8F98] mt-0.5 leading-relaxed">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Direct Hardware Acceleration</h4>
+            <p class="text-xs text-slate-600 dark:text-[#9ca3af] mt-1 leading-relaxed">
               Zero network queues or server-side throttling. Transcoding and calculations occur across client CPU and GPU cores in parallel.
             </p>
           </div>
         </div>
 
-        <div class="flex items-start gap-3">
-          <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#1B1D22] text-[#8B8F98] border border-[#2A2D33] mt-0.5">
-            <Globe class="h-3.5 w-3.5" />
+        <div class="flex items-start gap-4 rounded-lg bg-slate-50 dark:bg-[#16171a] p-4 border border-slate-200 dark:border-white/[0.06]">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e2025] text-slate-700 dark:text-[#d1d5db] border border-slate-200 dark:border-white/[0.08] mt-0.5">
+            <Globe class="h-4 w-4" />
           </div>
           <div>
-            <h4 class="text-xs font-semibold text-[#ECEDEF]">Offline Capable & Sovereign</h4>
-            <p class="text-xs text-[#8B8F98] mt-0.5 leading-relaxed">
+            <h4 class="text-sm font-bold text-slate-900 dark:text-white">Offline Capable & Sovereign</h4>
+            <p class="text-xs text-slate-600 dark:text-[#9ca3af] mt-1 leading-relaxed">
               Because workloads execute locally, tools function even in restricted environments, on airplanes, or in air-gapped workstations.
             </p>
           </div>
@@ -91,8 +95,11 @@ import { Shield, Cpu, Lock, Zap, Server, Globe } from 'lucide-react';
     </section>
 
     {/* Contact CTA */}
-    <div class="pt-2 text-xs text-[#8B8F98] font-mono">
-      Questions or bug reports? <a href="/contact" class="text-[#4F8CFF] hover:underline">Open a ticket</a>.
+    <div class="pt-2 text-xs text-slate-500 dark:text-[#9ca3af] font-mono flex items-center justify-between">
+      <span>Questions or architectural inquiries?</span>
+      <a href="/contact" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-semibold">
+        Contact Engineering <ArrowRight class="h-3 w-3" />
+      </a>
     </div>
   </div>
 </Layout>

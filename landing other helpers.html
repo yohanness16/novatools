@@ -1,0 +1,1363 @@
+<!-- About NovaTools Architecture -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About NovaTools - Local-First Architecture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fed65b",
+                        "error": "#ba1a1a",
+                        "primary": "#003d9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1c1b1d",
+                        "surface": "#fcf8fb",
+                        "on-surface-variant": "#434654",
+                        "on-secondary-fixed": "#241a00",
+                        "inverse-primary": "#b2c5ff",
+                        "outline": "#737685",
+                        "surface-tint": "#0c56d0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "background": "#fcf8fb",
+                        "on-tertiary-container": "#d2d3d3",
+                        "tertiary": "#424444",
+                        "surface-dim": "#dcd9dc",
+                        "tertiary-container": "#595b5b",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface-container": "#f0edf0",
+                        "outline-variant": "#c3c6d6",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "primary-container": "#0052cc",
+                        "on-primary-container": "#c4d2ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-container": "#745c00",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container-highest": "#e5e1e4",
+                        "surface-container-low": "#f6f2f5",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dae2ff",
+                        "secondary-fixed-dim": "#e9c349",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-background": "#1c1b1d",
+                        "inverse-on-surface": "#f3f0f2",
+                        "secondary": "#735c00",
+                        "surface-bright": "#fcf8fb",
+                        "inverse-surface": "#313032",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-variant": "#e5e1e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "workbench-gap": "1px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    backgroundImage: {
+                        'honeycomb': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 20.5zm0-5v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 15.5zm10.825-6.25v-2.5L28.66 5.5l-2.165 1.25v2.5l2.165 1.25 2.165-1.25zM20 30.5v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 30.5zm0-10v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 20.5zm10.825-6.25v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25 2.165-1.25zM20 40.5v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 40.5zm0-10v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25L20 30.5zm10.825-6.25v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25 2.165-1.25zM10.825 34.25v-2.5l-2.165-1.25-2.165 1.25v2.5l2.165 1.25 2.165-1.25z' fill='%23e4e4e7' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E\")",
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .laser-divider {
+            position: relative;
+        }
+        .laser-divider::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: theme('colors.outline-variant');
+            transition: all 0.3s ease;
+        }
+        .laser-divider:hover::after {
+            background-color: theme('colors.primary');
+            box-shadow: 0 0 4px theme('colors.primary');
+        }
+        .laser-divider-vertical {
+            position: relative;
+        }
+        .laser-divider-vertical::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 1px;
+            background-color: theme('colors.outline-variant');
+            transition: all 0.3s ease;
+        }
+        .laser-divider-vertical:hover::after {
+            background-color: theme('colors.primary');
+            box-shadow: 0 0 4px theme('colors.primary');
+        }
+        
+        /* Workbench bento styling */
+        .bento-cell {
+            background-color: theme('colors.surface-container-lowest');
+            border: 1px solid theme('colors.outline-variant');
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-cell:hover {
+            border-color: theme('colors.outline');
+        }
+        
+        .security-heartbeat {
+            width: 6px;
+            height: 6px;
+            background-color: theme('colors.primary');
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 82, 204, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 4px rgba(0, 82, 204, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 82, 204, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Anchor -->
+<header class="bg-surface dark:bg-background text-primary dark:text-primary-fixed fixed top-0 w-full h-16 z-50 border-b border-outline-variant dark:border-outline flex justify-between items-center px-6 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">NovaTools</span>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-2 rounded-DEFAULT" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-2 rounded-DEFAULT" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-2 rounded-DEFAULT" href="#">Security</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors">help</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline flex items-center justify-center overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, brushed aluminum server rack interface panel with small glowing blue LED indicators in a clinical, white server room. Professional industrial design aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbk3nhVP1t73OMXXMeXKsglQ48pREHqLQIXDF1n_KxhsWqEicEhwS1w__fXHtzWXoe6xdkzyMJQapip0yVZzDDdE40_8SuVES-2hFhTh9xIPJ8W5I2mK52yMysp4IPTSmFB65mkWC4gUtNvEq6If4-5-yGYL1SbGI-RCdRxopzg6ccTo1dB_EnCxURVyGOsl-b3y0USyjXJWxPL8NU4FDviI9XJBdiaq8nInH8Xe6xEToUD9jZQbvt"/>
+</div>
+</div>
+</header>
+<!-- SideNav - Workbench Layout -->
+<aside class="hidden lg:flex flex-col py-4 gap-4 bg-surface-container-low dark:bg-surface-dim text-primary dark:text-primary-fixed-dim fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant dark:border-outline">
+<div class="px-6 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-surface-container-high border border-outline flex items-center justify-center">
+<img alt="System Node" class="w-full h-full object-cover" data-alt="Abstract geometrical representation of a central processing node using glowing blue and white cube structures on a stark gray background, illustrating technical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBCiWSDScFgQs46xrYVCme5ZEEXkUGOviQN7ytmDcNmN_igUAXFA6AKHvWegxKQUusPeSmbhrTEAdse6hRA98mV7vNNA2xjzMziO43szYmmtMRP3DXrhSGluEYIczFRmWfVHRUY2vkJGn2b0EWCgeJ5kMl5r8N4VQWlCdizsvq8o9cbnLuR16sfH0DR7fC2eyVAnuDcHkQ3vyFORaWn4G5hu-kwxa9Ld_AFN9AocifjVFObZsQ8d-i"/>
+</div>
+<div>
+<h2 class="font-mono-label text-mono-label font-bold">NODE_01</h2>
+<span class="font-mono-data text-mono-data text-outline text-[10px]">[ ENCRYPTED ]</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col px-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[20px]">build</span>
+<span class="font-mono-label text-mono-label">Tools</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-mono-label text-mono-label">Workspaces</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span class="font-mono-label text-mono-label">Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-mono-label text-mono-label">Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[20px]">settings_input_component</span>
+<span class="font-mono-label text-mono-label">System</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-2 bg-primary-container text-on-primary-container font-mono-label text-mono-label rounded-DEFAULT border border-transparent hover:border-primary transition-all">New Project</button>
+</div>
+<div class="mt-4 border-t border-outline-variant pt-4 flex flex-col gap-2 px-2">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[16px]">monitor_heart</span>
+<span class="font-mono-label text-mono-label">Status</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-DEFAULT" href="#">
+<span class="material-symbols-outlined text-[16px]">code</span>
+<span class="font-mono-label text-mono-label">Version</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-16 min-h-screen flex flex-col bg-honeycomb bg-fixed">
+<!-- Section 1: Philosophy & Comparison (100vh) -->
+<section class="min-h-[calc(100vh-64px)] p-margin-mobile lg:p-margin-desktop flex flex-col justify-center laser-divider">
+<div class="max-w-6xl mx-auto w-full">
+<header class="mb-12">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high border border-outline-variant rounded-DEFAULT mb-4">
+<div class="security-heartbeat"></div>
+<span class="font-mono-label text-mono-label text-on-surface-variant uppercase tracking-widest">Local-First Engineering Architecture</span>
+</div>
+<h1 class="font-display text-display text-on-surface mb-6">High-Performance Media &amp; Document Runtime</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl leading-relaxed">
+                        NovaTools is built on a fundamental paradigm shift: moving compute to the edge. By utilizing WebAssembly, we eliminate the need for server round-trips, ensuring your data never leaves your local machine context.
+                    </p>
+</header>
+<!-- Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-workbench-gap bg-outline-variant">
+<!-- The Cloud Problem -->
+<div class="bento-cell bg-surface p-8">
+<div class="flex justify-between items-start mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error">cloud_off</span>
+                                The Cloud Converter Problem
+                            </h3>
+<span class="font-mono-label text-mono-label text-outline">[ LEGACY ]</span>
+</div>
+<div class="space-y-4 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-tertiary">lock_open</span>
+<div>
+<strong class="text-on-surface block">Data Transit Vulnerability</strong>
+                                    Files are uploaded across public networks to third-party servers for processing, exposing sensitive data to interception.
+                                </div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-tertiary">storage</span>
+<div>
+<strong class="text-on-surface block">Unverifiable Caching</strong>
+                                    Processed files often remain on remote servers indefinitely, creating lingering security risks despite "auto-delete" promises.
+                                </div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-tertiary">hourglass_bottom</span>
+<div>
+<strong class="text-on-surface block">Latency Bottlenecks</strong>
+                                    Processing speed is inherently limited by your upload/download bandwidth, not your device's computational power.
+                                </div>
+</div>
+</div>
+</div>
+<!-- The WASM Solution -->
+<div class="bento-cell bg-surface p-8 relative">
+<!-- Active indicator -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="flex justify-between items-start mb-6">
+<h3 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">memory</span>
+                                The WebAssembly Solution
+                            </h3>
+<span class="font-mono-label text-mono-label text-primary">[ ACTIVE ]</span>
+</div>
+<div class="space-y-4 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-primary">security</span>
+<div>
+<strong class="text-on-surface block">Zero Transit Architecture</strong>
+                                    Operations run locally inside your browser's secure sandbox. Files are processed entirely in memory without network transmission.
+                                </div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-primary">speed</span>
+<div>
+<strong class="text-on-surface block">Near-Native Execution</strong>
+                                    Compiled C/C++ libraries (FFmpeg, ImageMagick) execute as WebAssembly, delivering workstation-grade performance in-browser.
+                                </div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[16px] mt-1 text-primary">delete_forever</span>
+<div>
+<strong class="text-on-surface block">Ephemeral Memory</strong>
+                                    Data resides only in ArrayBuffers. When the browser tab closes, memory is freed immediately. No remote caching exists.
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Technical Pillars (100vh) -->
+<section class="min-h-screen p-margin-mobile lg:p-margin-desktop flex flex-col justify-center bg-surface-container-lowest">
+<div class="max-w-6xl mx-auto w-full">
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Technical Core Pillars</h2>
+<p class="font-mono-data text-mono-data text-on-surface-variant uppercase tracking-wider">System Specifications &amp; Architecture Constraints</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+<!-- Pillar 1 -->
+<div class="bento-cell p-6 flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-primary text-[32px]">sync_disabled</span>
+<span class="font-mono-data text-mono-data text-outline">PLR_01</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-3">Zero Server Transmission</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">
+                            Media streams and document buffers are allocated locally via JavaScript <code>ArrayBuffer</code> APIs. We mathematically guarantee zero byte transmission outside the client execution context.
+                        </p>
+</div>
+<!-- Pillar 2 -->
+<div class="bento-cell p-6 flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-primary text-[32px]">developer_board</span>
+<span class="font-mono-data text-mono-data text-outline">PLR_02</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-3">Hardware Acceleration</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">
+                            Compute-heavy workloads are distributed across background threads utilizing <code>Web Workers</code>, while parallel processing tasks tap into local GPU resources via WebGPU where available.
+                        </p>
+</div>
+<!-- Pillar 3 -->
+<div class="bento-cell p-6 flex flex-col">
+<div class="flex justify-between items-start mb-8">
+<span class="material-symbols-outlined text-primary text-[32px]">wifi_off</span>
+<span class="font-mono-data text-mono-data text-outline">PLR_03</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-3">Offline Capable</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">
+                            Service workers cache the core WebAssembly binaries upon initial load. Once initialized, the entire suite of tools functions flawlessly without an active internet connection.
+                        </p>
+</div>
+</div>
+<!-- Support Banner -->
+<div class="bento-cell p-8 bg-surface-container flex flex-col md:flex-row items-center justify-between">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Audit Our Architecture</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
+                            We encourage rigorous security auditing of our client-side execution model. For enterprise inquiries, architectural deep-dives, or compliance documentation, connect with our engineering team.
+                        </p>
+</div>
+<div class="mt-6 md:mt-0">
+<a class="inline-flex items-center justify-center px-6 py-3 bg-primary text-on-primary font-mono-label text-mono-label rounded-DEFAULT hover:shadow-[0_0_8px_rgba(0,82,204,0.5)] transition-all" href="#">
+                            Contact Engineering
+                            <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant lg:ml-64 lg:w-[calc(100%-256px)] flex justify-between items-center px-4 py-1">
+<span class="text-on-tertiary-fixed-variant">NovaTools Privacy-First Productivity</span>
+<div class="flex gap-6">
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">WASM_v1.2.4-STABLE</span>
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">Build:2023.10.12</span>
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">Privacy Policy</span>
+</div>
+</footer>
+</body></html>
+
+<!-- Privacy Manifesto & Compliance -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Privacy Policy - NovaTools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#fed65b",
+                        "error": "#ba1a1a",
+                        "primary": "#003d9b",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1c1b1d",
+                        "surface": "#fcf8fb",
+                        "on-surface-variant": "#434654",
+                        "on-secondary-fixed": "#241a00",
+                        "inverse-primary": "#b2c5ff",
+                        "outline": "#737685",
+                        "surface-tint": "#0c56d0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "background": "#fcf8fb",
+                        "on-tertiary-container": "#d2d3d3",
+                        "tertiary": "#424444",
+                        "surface-dim": "#dcd9dc",
+                        "tertiary-container": "#595b5b",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface-container": "#f0edf0",
+                        "outline-variant": "#c3c6d6",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "primary-container": "#0052cc",
+                        "on-primary-container": "#c4d2ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-container": "#745c00",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "secondary-fixed": "#ffe088",
+                        "surface-container-highest": "#e5e1e4",
+                        "surface-container-low": "#f6f2f5",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#dae2ff",
+                        "secondary-fixed-dim": "#e9c349",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-background": "#1c1b1d",
+                        "inverse-on-surface": "#f3f0f2",
+                        "secondary": "#735c00",
+                        "surface-bright": "#fcf8fb",
+                        "inverse-surface": "#313032",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-variant": "#e5e1e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "workbench-gap": "1px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .laser-divider {
+            position: relative;
+            height: 1px;
+            background-color: #c3c6d6; /* outline-variant */
+            width: 100%;
+        }
+        .laser-divider-active {
+            background-color: #0052cc; /* primary-container */
+            box-shadow: 0 0 2px #0052cc;
+        }
+        .workbench-cell {
+            border: 1px solid #c3c6d6;
+            background-color: #ffffff; /* surface-container-lowest */
+        }
+        .workbench-cell:hover {
+            border-color: #0052cc;
+            box-shadow: inset 0 0 0 1px #0052cc;
+        }
+        /* Custom scrollbar for data density feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0edf0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c3c6d6;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #737685;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) - Suppressed because this is a Privacy Policy content page -->
+<main class="flex-1 overflow-y-auto">
+<!-- Section 1: Zero-Data-Collection Manifesto -->
+<section class="min-h-screen flex flex-col justify-center px-margin-mobile md:px-margin-desktop py-16 bg-surface-container-lowest relative overflow-hidden">
+<!-- Background Texture -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#003d9b 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="max-w-4xl mx-auto w-full z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-workbench-gap bg-outline-variant p-[1px]">
+<!-- Main Content Area -->
+<div class="md:col-span-8 bg-surface-container-lowest p-8 flex flex-col justify-center h-full">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-mono-label text-mono-label text-primary-container uppercase">Section 01</span>
+</div>
+<h1 class="font-display text-display text-primary mb-6">Zero-Data-Collection Manifesto</h1>
+<p class="font-body-lg text-body-lg text-on-surface mb-6 leading-relaxed">
+                        NovaTools operates on a fundamental principle of absolute privacy. We guarantee that <strong>no user files, raw data, or unencrypted operational inputs are ever transmitted</strong> to our servers. Your environment is self-contained.
+                    </p>
+<div class="laser-divider my-8"></div>
+<div class="grid grid-cols-1 gap-6">
+<div class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-outline mt-1" style="font-variation-settings: 'FILL' 0;">memory</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">WebAssembly (WASM) Architecture</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    Our core logic is compiled to WASM and executed entirely within your browser's sandbox. Processing happens on your hardware, eliminating the need for server-side computation of your sensitive data.
+                                </p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<span class="material-symbols-outlined text-outline mt-1" style="font-variation-settings: 'FILL' 0;">sd_storage</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Ephemeral Local Caching</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    Session states are maintained via ephemeral IndexedDB storage. This cache is strictly isolated to your local machine and can be purged instantly. We have zero backend access to this ledger.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Ledger -->
+<div class="md:col-span-4 bg-surface-container-low p-6 flex flex-col border-l border-outline-variant">
+<div class="flex justify-between items-center mb-6 border-b border-outline-variant pb-2">
+<span class="font-mono-label text-mono-label text-on-surface-variant">SYS_LOG</span>
+<span class="bg-primary-container text-on-primary-container px-2 py-1 font-mono-label text-mono-label rounded">[ ISOLATED ]</span>
+</div>
+<ul class="space-y-4 font-mono-data text-mono-data text-on-surface-variant">
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span class="text-primary-container">DATA_TRANSMIT: FALSE</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>LOCAL_EXECUTION: TRUE</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>WASM_ISOLATION: ACTIVE</span>
+</li>
+<li class="flex items-center gap-2 pt-4 border-t border-outline-variant border-dashed">
+<span class="material-symbols-outlined text-outline text-[16px]">verified</span>
+<span>MANIFESTO_VERIFIED</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Divider -->
+<div class="w-full h-1 bg-surface-variant"></div>
+<!-- Section 2: Analytics, Cookies & Compliance -->
+<section class="min-h-screen flex flex-col justify-center px-margin-mobile md:px-margin-desktop py-16 bg-surface-container-low">
+<div class="max-w-4xl mx-auto w-full">
+<div class="flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-on-surface-variant">policy</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Section 02</span>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-8">Analytics, Cookies &amp; Compliance</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Analytics Cell -->
+<div class="workbench-cell p-6 transition-all duration-200">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md text-primary">Telemetry</h3>
+<span class="font-mono-label text-mono-label text-outline">DOC_A1</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+                            We utilize privacy-preserving, aggregated telemetry strictly for application stability monitoring (e.g., crash reports, WASM execution failures). This data contains no personally identifiable information (PII) or user payload fragments.
+                        </p>
+<div class="laser-divider mb-4"></div>
+<div class="font-mono-data text-mono-data text-on-surface-variant">
+<code>Status: MINIMAL_COLLECTION</code>
+</div>
+</div>
+<!-- Cookies Cell -->
+<div class="workbench-cell p-6 transition-all duration-200">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md text-primary">Cookies</h3>
+<span class="font-mono-label text-mono-label text-outline">DOC_A2</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+                            NovaTools relies on standard functional cookies exclusively for maintaining secure session states and user-defined preferences (e.g., theme settings). We deploy zero third-party tracking or advertising cookies.
+                        </p>
+<div class="laser-divider mb-4"></div>
+<div class="font-mono-data text-mono-data text-on-surface-variant">
+<code>Status: FUNCTIONAL_ONLY</code>
+</div>
+</div>
+<!-- Compliance Cell (Full Width) -->
+<div class="workbench-cell p-6 md:col-span-2 transition-all duration-200 border-t-4 border-t-primary-container">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Regulatory Compliance</h3>
+<span class="font-mono-label text-mono-label text-outline">DOC_A3</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface-variant text-[16px] mb-2">GDPR Readiness</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    By design, the decentralized, local-first architecture inherently complies with GDPR minimization principles. You retain absolute control over your data residency.
+                                </p>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface-variant text-[16px] mb-2">HIPAA Context</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    For healthcare professionals utilizing NovaTools, Protected Health Information (PHI) processed within our WASM modules remains on your secure workstation, avoiding external transmission.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data font-headline-md text-headline-md text-primary fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant cursor-default flex justify-between items-center px-4 py-1 w-full bg-surface-container-low">
+<div>NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors">WASM_v1.2.4-STABLE</span>
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors">Build:2023.10.12</span>
+<span class="text-primary font-bold">Privacy Policy</span>
+</div>
+</footer>
+<script>
+        // Micro-interaction for laser dividers
+        document.querySelectorAll('.workbench-cell').forEach(cell => {
+            cell.addEventListener('mouseenter', () => {
+                const divider = cell.querySelector('.laser-divider');
+                if (divider) divider.classList.add('laser-divider-active');
+            });
+            cell.addEventListener('mouseleave', () => {
+                const divider = cell.querySelector('.laser-divider');
+                if (divider) divider.classList.remove('laser-divider-active');
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Contact & Support Hub -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact &amp; Community Support | NovaTools</title>
+<!-- Fonts and Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#fed65b",
+                    "error": "#ba1a1a",
+                    "primary": "#003d9b",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1c1b1d",
+                    "surface": "#fcf8fb",
+                    "on-surface-variant": "#434654",
+                    "on-secondary-fixed": "#241a00",
+                    "inverse-primary": "#b2c5ff",
+                    "outline": "#737685",
+                    "surface-tint": "#0c56d0",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "background": "#fcf8fb",
+                    "on-tertiary-container": "#d2d3d3",
+                    "tertiary": "#424444",
+                    "surface-dim": "#dcd9dc",
+                    "tertiary-container": "#595b5b",
+                    "on-secondary-fixed-variant": "#574500",
+                    "surface-container": "#f0edf0",
+                    "outline-variant": "#c3c6d6",
+                    "on-primary-fixed-variant": "#0040a2",
+                    "primary-container": "#0052cc",
+                    "on-primary-container": "#c4d2ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae7ea",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#001848",
+                    "on-secondary-container": "#745c00",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "secondary-fixed": "#ffe088",
+                    "surface-container-highest": "#e5e1e4",
+                    "surface-container-low": "#f6f2f5",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dae2ff",
+                    "secondary-fixed-dim": "#e9c349",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-background": "#1c1b1d",
+                    "inverse-on-surface": "#f3f0f2",
+                    "secondary": "#735c00",
+                    "surface-bright": "#fcf8fb",
+                    "inverse-surface": "#313032",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "primary-fixed-dim": "#b2c5ff",
+                    "surface-variant": "#e5e1e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-desktop": "32px",
+                    "workbench-gap": "1px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "mono-label": [
+                            "JetBrains Mono"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "mono-data": [
+                            "JetBrains Mono"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "mono-label": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "mono-data": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fcf8fb; /* background color */
+            color: #1c1b1d; /* on-background */
+        }
+        
+        .bg-honeycomb {
+            background-image: url("data:image/svg+xml,%3Csvg width='24' height='40' viewBox='0 0 24 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c5.523 0 10-4.477 10-10 0-5.522-4.477-10-10-10v20zm24 0c-5.523 0-10-4.477-10-10 0-5.522 4.477-10 10-10v20zM0 20c5.523 0 10-4.477 10-10 0-5.522-4.477-10-10-10v20zm24 0c-5.523 0-10-4.477-10-10 0-5.522 4.477-10 10-10v20z' fill='%23c3c6d6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .laser-divider {
+            border-bottom: 1px solid #e4e4e7;
+        }
+        
+        .laser-divider-active {
+            border-bottom: 1px solid #0052cc;
+            box-shadow: 0 1px 2px rgba(0, 82, 204, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-lg text-body-lg bg-surface">
+<!-- TopNavBar (Shared Component) -->
+<nav class="bg-surface dark:bg-background text-primary dark:text-primary-fixed font-body-lg text-body-lg font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed fixed top-0 w-full h-16 z-50 border-b border-outline-variant dark:border-outline flat no shadows flex justify-between items-center px-6 w-full max-w-[1920px] mx-auto hidden md:flex cursor-pointer active:scale-95 duration-150">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold">NovaTools</span>
+<!-- Search bar on left logic simulated -->
+<div class="ml-4 flex items-center bg-surface-container-low px-3 py-1 rounded border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2" data-icon="search">search</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">CTRL+K</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 font-body-lg text-body-lg">
+<!-- Active logic: Contact/Support isn't here, so all are inactive -->
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-2 py-1 rounded" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-2 py-1 rounded" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-2 py-1 rounded" href="#">Security</a>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors p-1 rounded" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors p-1 rounded" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-primary font-bold border-b-2 border-primary pb-1 p-1 rounded" data-icon="help">help</span> <!-- Set Help active -->
+</div>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A detailed headshot of a professional user profile placeholder image, minimalist style, clean white background, simple corporate avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSeH4RKh7xU_EogBd6Y7nm3bgzdMAHugILCSpzCyg1ybfpIRAIs2xcjZT3lXHcnYQeYPyx2805l3JWOTv_vNyFGQyKszTr-EcWwEzR9Q27LhTeL6hrbaNl2BpIS-vqonZrAwcxRcNfws6k8wZFx3q6l7flxRuqGcIbS8SFBqQMIRLjMRDIVSvvNq9RpXtNMkgvNnJPgGeRzU1IKOUnelEd-wMVgC2pz0_gNdc6_A1yJfqvQoRIoS7s"/>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<!-- Suppressed SideNavBar based on logic: Support/Contact is arguably a task-focused or global utility page, but let's include it for workbench layout feel as requested by "workbench look" -->
+<aside class="bg-surface-container-low dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-mono-label text-mono-label font-headline-md text-headline-md text-primary fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant dark:border-outline flat no shadows flex flex-col py-4 gap-4 hidden md:flex duration-200 ease-in-out">
+<div class="px-4 py-2 border-b border-outline-variant pb-4 mb-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center text-on-primary-container font-headline-md">
+                N1
+            </div>
+<div>
+<div class="font-bold text-on-surface">NODE_01</div>
+<div class="text-xs text-on-surface-variant">[ ENCRYPTED ]</div>
+</div>
+</div>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary-container text-on-primary-container py-2 rounded font-mono-label hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> New Project
+            </button>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span> Tools
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span> Workspaces
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span> Vault
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span> Logs
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span> System
+            </a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 px-2 pb-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all border-t border-outline-variant pt-4 mt-2" href="#">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span> Status
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span> Version
+            </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 pt-16 md:pl-64 flex flex-col relative h-[100vh] bg-honeycomb overflow-hidden">
+<!-- Main Content Area: Workbench Layout -->
+<div class="flex-1 p-margin-mobile md:p-margin-desktop flex flex-col h-full max-w-[1600px] mx-auto w-full">
+<!-- Header Section -->
+<header class="mb-8 flex justify-between items-end border-b border-outline-variant pb-4">
+<div>
+<h1 class="font-display text-display text-on-surface mb-2 tracking-tight">Get in Touch</h1>
+<p class="font-mono-data text-mono-data text-on-surface-variant uppercase tracking-widest">Support Desk &amp; Inquiry Form</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-1.5 rounded-sm">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-mono-label text-mono-label text-on-surface-variant">SYS_OK</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-1.5 rounded-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="timer">timer</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant">SLA: &lt; 2HR</span>
+</div>
+</div>
+</header>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-workbench-gap flex-1 min-h-0 bg-outline-variant border border-outline-variant p-[1px]">
+<!-- Left: Interactive Form (Bento Cell) -->
+<div class="lg:col-span-8 bg-surface-container-lowest p-6 flex flex-col overflow-y-auto">
+<div class="flex justify-between items-center mb-6 laser-divider pb-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Transmission Request</h2>
+<span class="font-mono-label text-mono-label text-outline">FORM_01</span>
+</div>
+<form class="flex-1 flex flex-col gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-mono-label text-mono-label text-on-surface-variant" for="name">OPERATOR_NAME</label>
+<input class="bg-surface-container-low border border-outline-variant rounded-sm px-4 py-2 font-mono-data text-mono-data focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all" id="name" placeholder="Enter name..." type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-mono-label text-mono-label text-on-surface-variant" for="email">CONTACT_VECTOR (EMAIL)</label>
+<input class="bg-surface-container-low border border-outline-variant rounded-sm px-4 py-2 font-mono-data text-mono-data focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all" id="email" placeholder="operator@domain.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-mono-label text-mono-label text-on-surface-variant" for="subject">INQUIRY_CLASSIFICATION</label>
+<select class="bg-surface-container-low border border-outline-variant rounded-sm px-4 py-2 font-mono-data text-mono-data focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all appearance-none" id="subject">
+<option value="bug">ISSUE: Bug Report</option>
+<option value="feature">REQ: Feature Enhancement</option>
+<option value="enterprise">COM: Enterprise Inquiry</option>
+</select>
+</div>
+<div class="flex flex-col gap-2 flex-1 min-h-[200px]">
+<label class="font-mono-label text-mono-label text-on-surface-variant" for="message">PAYLOAD_DATA</label>
+<textarea class="bg-surface-container-low border border-outline-variant rounded-sm px-4 py-3 font-mono-data text-mono-data focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all flex-1 resize-none font-mono" id="message" placeholder="&gt; Input transmission data here..."></textarea>
+</div>
+<div class="flex justify-end pt-4 laser-divider">
+<button class="bg-primary-container text-on-primary-container font-mono-label text-mono-label px-6 py-2 rounded-sm hover:border-primary border border-transparent transition-all shadow-sm active:scale-95 flex items-center gap-2 group" type="button">
+                                INIT_TRANSMISSION
+                                <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="send">send</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Right: Sidebar Channels (Bento Cell) -->
+<div class="lg:col-span-4 bg-surface-container-lowest p-6 flex flex-col border-t lg:border-t-0 lg:border-l border-outline-variant">
+<div class="flex justify-between items-center mb-6 laser-divider pb-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Comms Nodes</h2>
+<span class="font-mono-label text-mono-label text-outline">NET_02</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Community Links -->
+<a class="group block bg-surface-container-low border border-outline-variant p-4 rounded-sm hover:border-primary transition-colors" href="#">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-headline-md text-body-lg font-semibold">GitHub Repository</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Open source codebase, issue tracker, and pull requests.</p>
+</a>
+<a class="group block bg-surface-container-low border border-outline-variant p-4 rounded-sm hover:border-primary transition-colors" href="#">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-headline-md text-body-lg font-semibold">Discord Server</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time community chat, support channels, and announcements.</p>
+</a>
+<!-- Security Reporting -->
+<div class="mt-6 border border-error/30 bg-error-container/10 p-4 rounded-sm">
+<div class="flex items-center gap-2 text-error mb-2">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-mono-label text-mono-label font-semibold">SECURITY_PROTOCOL</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">For responsible disclosure of vulnerabilities, bypass standard channels.</p>
+<a class="inline-flex items-center gap-2 font-mono-label text-mono-label text-error hover:underline" href="#">
+                                INIT_SECURE_COMMS
+                                <span class="material-symbols-outlined text-[16px]" data-icon="lock">lock</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data font-headline-md text-headline-md text-primary fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant flat no shadows cursor-default flex justify-between items-center px-4 py-1 w-full bg-surface-container-low md:pl-64">
+<div class="text-on-tertiary-fixed-variant">NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">WASM_v1.2.4-STABLE</a>
+<span class="text-on-tertiary-fixed-variant">|</span>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Build:2023.10.12</a>
+<span class="text-on-tertiary-fixed-variant">|</span>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- Terms of Service & Usage -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Terms of Service - NovaTools</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#fed65b",
+                    "error": "#ba1a1a",
+                    "primary": "#003d9b",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1c1b1d",
+                    "surface": "#fcf8fb",
+                    "on-surface-variant": "#434654",
+                    "on-secondary-fixed": "#241a00",
+                    "inverse-primary": "#b2c5ff",
+                    "outline": "#737685",
+                    "surface-tint": "#0c56d0",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "background": "#fcf8fb",
+                    "on-tertiary-container": "#d2d3d3",
+                    "tertiary": "#424444",
+                    "surface-dim": "#dcd9dc",
+                    "tertiary-container": "#595b5b",
+                    "on-secondary-fixed-variant": "#574500",
+                    "surface-container": "#f0edf0",
+                    "outline-variant": "#c3c6d6",
+                    "on-primary-fixed-variant": "#0040a2",
+                    "primary-container": "#0052cc",
+                    "on-primary-container": "#c4d2ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae7ea",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#001848",
+                    "on-secondary-container": "#745c00",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "secondary-fixed": "#ffe088",
+                    "surface-container-highest": "#e5e1e4",
+                    "surface-container-low": "#f6f2f5",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dae2ff",
+                    "secondary-fixed-dim": "#e9c349",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-background": "#1c1b1d",
+                    "inverse-on-surface": "#f3f0f2",
+                    "secondary": "#735c00",
+                    "surface-bright": "#fcf8fb",
+                    "inverse-surface": "#313032",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "primary-fixed-dim": "#b2c5ff",
+                    "surface-variant": "#e5e1e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-desktop": "32px",
+                    "workbench-gap": "1px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "mono-label": ["JetBrains Mono"],
+                    "body-sm": ["Inter"],
+                    "mono-data": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "display": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Industrial Hex/Grid Pattern */
+        .bg-industrial-pattern {
+            background-image: 
+                linear-gradient(to right, #e5e1e4 1px, transparent 1px),
+                linear-gradient(to bottom, #e5e1e4 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-position: center center;
+        }
+        
+        .laser-divider {
+            position: relative;
+        }
+        .laser-divider::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #0052cc;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .laser-divider:hover::after {
+            opacity: 1;
+            box-shadow: 0 0 4px #0052cc;
+        }
+        
+        /* Smooth Scrolling */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared Component: TopNavBar -->
+<!-- Suppression logic applied: Navigation links kept inactive as this is a legal sub-page -->
+<nav class="bg-surface fixed top-0 w-full h-16 z-50 border-b border-outline-variant flex justify-between items-center px-6 mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary cursor-pointer">NovaTools</span>
+</div>
+<!-- Navigation Links (Hidden on mobile for shell logic, active state suppressed) -->
+<div class="hidden md:flex items-center gap-8 font-body-lg text-body-lg">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 px-2 py-1 rounded" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 px-2 py-1 rounded" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 px-2 py-1 rounded" href="#">Security</a>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low transition-colors rounded p-1" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low transition-colors rounded p-1" data-icon="settings">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low transition-colors rounded p-1" data-icon="help">help</span>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden ml-2 cursor-pointer">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="w-full">
+<!-- SECTION 1: Usage Terms & Intellectual Property -->
+<section class="min-h-screen w-full pt-24 pb-12 px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center relative overflow-hidden bg-surface-bright" id="section-1">
+<!-- Atmospheric Hex/Grid Accent -->
+<div class="absolute inset-0 bg-industrial-pattern opacity-[0.4] pointer-events-none"></div>
+<div class="w-full max-w-6xl relative z-10">
+<!-- Section Header -->
+<div class="mb-12 border-l-2 border-primary pl-4">
+<span class="font-mono-label text-mono-label text-primary uppercase tracking-widest block mb-2">[ SEC_01 : LEDGER_ENTRY ]</span>
+<h1 class="font-display text-display text-on-background mb-4">Usage Terms &amp; Intellectual Property</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Immutable guidelines defining the operational boundaries and asset ownership rights within the NovaTools ecosystem.
+                    </p>
+</div>
+<!-- Bento Grid Layout for Legal Clauses -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-unit bg-outline-variant p-unit">
+<!-- Clause 1.1 -->
+<div class="col-span-1 md:col-span-8 bg-surface p-6 h-full border-b md:border-b-0 border-outline-variant hover:bg-surface-container-lowest transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<h2 class="font-headline-md text-headline-md text-on-background group-hover:text-primary transition-colors">1.1 Permitted Usage</h2>
+<span class="font-mono-label text-mono-label text-outline bg-surface-container-high px-2 py-1 rounded">ID: PRM-USG-01</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                            Access to the NovaTools workstation is granted on a limited, non-exclusive basis strictly for authorized operational workflows. Users must maintain secure terminal protocols and prohibit unauthorized proxy access. Automated scraping, reverse engineering of the WebAssembly modules, or bypassing API rate limits will result in immediate protocol termination.
+                        </p>
+</div>
+<!-- Clause 1.2 (Stats/Info Cell) -->
+<div class="col-span-1 md:col-span-4 bg-surface-container-low p-6 h-full flex flex-col justify-between group border-l md:border-l-0 border-outline-variant">
+<div>
+<span class="material-symbols-outlined text-primary mb-4 block" data-icon="shield">shield</span>
+<h3 class="font-mono-label text-mono-label text-on-background uppercase mb-2">Security Posture</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Continuous monitoring enabled. Unauthorized access vectors are logged immutably.</p>
+</div>
+<div class="mt-8 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-mono-data text-mono-data text-primary">SYSTEM: ACTIVE</span>
+</div>
+</div>
+<!-- Clause 1.3 -->
+<div class="col-span-1 md:col-span-12 bg-surface p-6 h-full laser-divider group">
+<div class="flex justify-between items-center mb-6 border-b border-outline-variant pb-2">
+<h2 class="font-headline-md text-headline-md text-on-background">1.2 Intellectual Property &amp; Output Ownership</h2>
+<span class="font-mono-label text-mono-label text-outline bg-surface-container-high px-2 py-1 rounded">ID: IP-OWN-02</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<h3 class="font-mono-label text-mono-label text-on-background uppercase mb-2 text-primary">User Artifacts</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    All structural outputs, code compilations, and schematic designs generated by the User utilizing NovaTools remain the exclusive intellectual property of the User. NovaTools claims zero residual rights over terminal outputs.
+                                </p>
+</div>
+<div>
+<h3 class="font-mono-label text-mono-label text-on-background uppercase mb-2 text-primary">System Core</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    The underlying algorithms, UI schematics, shared components, and proprietary infrastructure remain the exclusive property of NovaTools. Grant of access does not constitute a transfer of structural IP.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-50">
+<span class="font-mono-label text-mono-label text-on-surface-variant mb-2 uppercase">Scroll Down</span>
+<span class="material-symbols-outlined text-on-surface-variant animate-bounce" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+</section>
+<!-- SECTION 2: Warranties, Limitations & Governing Law -->
+<section class="min-h-screen w-full pt-24 pb-32 px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center relative bg-surface" id="section-2">
+<div class="w-full max-w-6xl relative z-10">
+<!-- Section Header -->
+<div class="mb-12 border-l-2 border-error pl-4">
+<span class="font-mono-label text-mono-label text-error uppercase tracking-widest block mb-2">[ SEC_02 : DISCLAIMERS ]</span>
+<h1 class="font-display text-display text-on-background mb-4">Warranties &amp; Limitations</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Critical legal boundaries regarding system uptime, liability caps, and jurisdictional routing.
+                    </p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-unit bg-outline-variant p-unit">
+<!-- Warranty Disclaimer -->
+<div class="col-span-1 md:col-span-2 bg-surface-bright p-8 group">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="gavel">gavel</span>
+<h2 class="font-headline-md text-headline-md text-on-background">2.1 "As-Is" Provision</h2>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed font-mono-data">
+                            &gt; SYSTEM OPERATION PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS.<br/>
+                            &gt; NOVATOOLS EXPRESSLY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+                        </p>
+</div>
+<!-- Jurisdiction -->
+<div class="col-span-1 bg-surface-container-highest p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-outline-variant">
+<div>
+<span class="material-symbols-outlined text-primary mb-4 block" data-icon="public">public</span>
+<h3 class="font-mono-label text-mono-label text-on-background uppercase mb-2">Governing Law</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Jurisdiction is exclusively routed through the courts of the State of Delaware, United States.</p>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant">
+<span class="font-mono-label text-mono-label text-outline block">NODE: US-EAST-1</span>
+</div>
+</div>
+<!-- Limitation of Liability -->
+<div class="col-span-1 md:col-span-3 bg-surface p-8 laser-divider">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-on-background">2.2 Limitation of Liability</h2>
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-DEFAULT border border-outline-variant">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                IN NO EVENT SHALL NOVATOOLS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (A) YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SERVICES; (B) ANY CONDUCT OR CONTENT OF ANY THIRD PARTY ON THE SERVICES.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Shared Component: Footer -->
+<footer class="bg-surface-container-low fixed bottom-0 w-full z-50 border-t border-primary/20 flex justify-between items-center px-4 py-1">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-primary">NovaTools</span>
+<span class="font-mono-data text-mono-data text-on-tertiary-fixed-variant ml-2">NovaTools Privacy-First Productivity</span>
+</div>
+<div class="flex gap-6 font-mono-data text-mono-data text-on-tertiary-fixed-variant">
+<a class="hover:text-primary transition-colors cursor-default" href="#">WASM_v1.2.4-STABLE</a>
+<a class="hover:text-primary transition-colors cursor-default" href="#">Build:2023.10.12</a>
+<!-- Active state conceptually applied to Privacy Policy/Terms link family, but since this is exactly Terms, not Privacy Policy, we keep it standard based on JSON strictness -->
+<a class="hover:text-primary transition-colors cursor-default" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>

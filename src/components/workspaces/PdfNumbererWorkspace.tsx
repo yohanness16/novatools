@@ -140,7 +140,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
             Drop PDF to stamp page numbers, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Vector page numbering and Roman numerals across 6 alignment anchors. 100% local WASM.
+            Vector page numbering and Roman numerals across 6 alignment anchors. 100% local processing.
           </p>
         </div>
       ) : (

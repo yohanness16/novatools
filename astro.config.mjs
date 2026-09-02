@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://novatools.app',
+  site: 'https://toolboxs.tech',
   integrations: [
     react(),
     tailwind({

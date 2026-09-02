@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NovaTools - High Performance In-Browser Tools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0052cc",
+                        "tertiary": "#424444",
+                        "outline-variant": "#c3c6d6",
+                        "surface-container": "#f0edf0",
+                        "surface-bright": "#fcf8fb",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f6f2f5",
+                        "secondary-fixed-dim": "#e9c349",
+                        "background": "#fcf8fb",
+                        "tertiary-fixed": "#e2e2e2",
+                        "inverse-primary": "#b2c5ff",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-primary-container": "#c4d2ff",
+                        "outline": "#737685",
+                        "primary": "#003d9b",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface-tint": "#0c56d0",
+                        "on-surface": "#1c1b1d",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#001848",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface": "#fcf8fb",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#313032",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-variant": "#e5e1e4",
+                        "secondary-container": "#fed65b",
+                        "primary-fixed": "#dae2ff",
+                        "on-surface-variant": "#434654",
+                        "on-secondary-fixed": "#241a00",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "secondary": "#735c00",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#d2d3d3",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#745c00",
+                        "surface-dim": "#dcd9dc",
+                        "secondary-fixed": "#ffe088",
+                        "tertiary-container": "#595b5b",
+                        "on-background": "#1c1b1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "workbench-gap": "1px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "mono-label": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .laser-divider {
+            position: relative;
+            height: 1px;
+            background: theme('colors.outline-variant');
+        }
+        .laser-divider.active {
+            background: theme('colors.primary-container');
+            box-shadow: 0 0 2px 1px theme('colors.primary-container');
+        }
+        .honeycomb-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23e5e1e4' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .typewriter-cursor {
+            border-right: 2px solid theme('colors.primary-container');
+            animation: blink 0.75s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: theme('colors.primary-container'); }
+        }
+        .bento-cell {
+            border: 1px solid theme('colors.outline-variant');
+            background: theme('colors.surface-container-lowest');
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: theme('colors.primary-container');
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 82, 204, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 82, 204, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 82, 204, 0); }
+        }
+    </style>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-lg min-h-screen flex flex-col pt-16">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full h-16 z-50 bg-surface border-b border-outline-variant flat no shadows flex justify-between items-center px-6 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-primary">NovaTools</span>
+<div class="hidden md:flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-1.5 w-64 ml-4">
+<span class="material-symbols-outlined text-outline-variant text-sm mr-2">search</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant flex-1">Cmd + K</span>
+</div>
+</div>
+<div class="hidden md:flex gap-6 items-center">
+<div class="inline-flex items-center gap-1.5 bg-surface-container-low border border-outline-variant px-2.5 py-1 rounded-full mr-4">
+<span class="material-symbols-outlined text-primary-container text-sm">verified_user</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant">100% PRIVATE</span>
+</div>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Security</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="help">help</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A small, circular user profile picture featuring an abstract, low-poly geometric rendering of a human face in shades of cool grey and subtle industrial blue. The style is clean, modern, and professional, sitting on a stark white background to match a high-performance web console interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQcmRMq5EW2As4eIMByS_bL5eJLfzppREJ9ThqYmLouQ3cWPK3aVQpFzZvO_vgSBv-SH9miifqch9Q1xExyH0Sl012vPVhWBXijV5g4WP1xU6eU7dXMnb8eR7p8XXRLSouRcDjomqzYEH3mjt84WsStb84UtQYGq_AmId4pT9_Lt6NzOpQRcPwxZoUlkVMnW2F9JfC231fs_wjkajH_MjjAypzdbfFbZBp13M_Ltuwx5srCH4qV1w4"/>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col w-full max-w-[1920px] mx-auto relative">
+<!-- Section 1.1: Hero & Live Workbench -->
+<section class="relative min-h-[100vh] flex flex-col justify-center px-gutter md:px-margin-desktop py-12 honeycomb-bg border-b border-outline-variant">
+<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<!-- Left: Typography -->
+<div class="flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-1 rounded w-fit">
+<div class="pulse-dot"></div>
+<span class="font-mono-label text-mono-label text-on-surface-variant">[ ENCRYPTED_SESSION_ACTIVE ]</span>
+</div>
+<h1 class="font-display text-display text-on-surface">
+                        Create, Convert &amp; Edit with <br/>
+<span class="text-primary-container">NovaTools</span>
+</h1>
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface-variant h-[40px] flex items-center">
+<span class="typewriter-cursor" id="typewriter-text">PDF Manipulation</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mt-4">
+                        Industrial-grade processing running entirely within your browser. Native speeds, zero server uploads, complete data privacy.
+                    </p>
+<div class="flex gap-4 mt-6">
+<button class="bg-primary-container text-on-primary font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:ring-2 hover:ring-primary-container hover:ring-offset-2 hover:ring-offset-surface-bright transition-all active:scale-95 border border-transparent">
+                            Launch Workbench
+                        </button>
+<button class="bg-transparent border border-outline-variant text-on-surface font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:bg-surface-container-low transition-colors active:scale-95">
+                            Read Specs
+                        </button>
+</div>
+</div>
+<!-- Right: Action Graphic -->
+<div class="relative h-[450px] w-full bento-cell rounded-lg p-4 flex flex-col shadow-sm">
+<div class="flex justify-between items-center mb-4 border-b border-outline-variant pb-2">
+<span class="font-mono-label text-mono-label text-on-surface-variant">ENV_01 / WORKSPACE</span>
+<div class="flex gap-2">
+<button class="text-xs px-2 py-1 bg-surface-container-high rounded border border-outline-variant text-on-surface">PDF</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">IMAGE</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">AUDIO</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">VIDEO</button>
+<span class="material-symbols-outlined text-outline-variant text-sm ml-2 self-center cursor-pointer">fullscreen</span>
+</div>
+</div>
+<div class="flex-1 relative overflow-hidden bg-surface-container-low rounded border border-outline-variant flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent"></div>
+<!-- Mock Floating PDF Cards -->
+<div class="relative w-full h-full max-w-sm mx-auto flex items-center justify-center">
+<div class="absolute transform -rotate-12 translate-x-[-40px] w-32 h-40 bg-surface-container-lowest border border-outline-variant rounded shadow-sm p-2 flex flex-col gap-2">
+<div class="w-full h-4 bg-surface-variant rounded-sm"></div>
+<div class="w-3/4 h-2 bg-surface-variant rounded-sm"></div>
+<div class="w-full h-2 bg-surface-variant rounded-sm"></div>
+</div>
+<div class="absolute transform rotate-6 translate-x-[40px] translate-y-[20px] w-32 h-40 bg-surface-container-lowest border border-outline-variant rounded shadow-sm p-2 flex flex-col gap-2 z-10">
+<div class="w-full h-24 bg-surface-variant rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl">image</span>
+</div>
+</div>
+<div class="absolute w-40 h-48 bg-surface-container-lowest border-2 border-primary-container rounded shadow-md p-4 z-20 flex flex-col items-center justify-center gap-3">
+<div class="pulse-dot w-12 h-12 flex items-center justify-center bg-primary-container/20 rounded-full">
+<span class="material-symbols-outlined text-primary-container text-2xl">auto_fix_high</span>
+</div>
+<span class="font-mono-label text-mono-label text-primary-container text-center">PROCESSING...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Metrics Bar -->
+<div class="absolute bottom-0 left-0 w-full border-t border-outline-variant bg-surface-container-lowest py-3 px-6 flex flex-wrap gap-8 justify-center items-center z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">cloud_off</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Zero Uploads</span>
+</div>
+<div class="w-1 h-4 border-l border-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">speed</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Instant Speed</span>
+</div>
+<div class="w-1 h-4 border-l border-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">shield_lock</span>
+<span class="font-mono-data text-mono-data text-on-surface font-medium">Private by Design</span>
+</div>
+</div>
+</section>
+<!-- Section 1.2: About & Architecture -->
+<section class="min-h-[100vh] flex flex-col justify-center px-gutter md:px-margin-desktop py-24 bg-surface relative">
+<div class="max-w-6xl mx-auto w-full flex flex-col gap-32 relative">
+<!-- Zig-Zag Block 1 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative h-[350px] bento-cell rounded-lg p-6 shadow-sm overflow-hidden flex flex-col">
+<div class="font-mono-label text-mono-label text-on-surface-variant mb-4 border-b border-outline-variant pb-2">DATA_FLOW.LOG</div>
+<div class="flex-1 bg-surface-container-low rounded border border-outline-variant p-4 font-mono-data text-sm flex flex-col justify-center items-center relative">
+<div class="flex justify-between w-full max-w-sm px-4">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-3xl text-on-surface">computer</span>
+<span class="font-bold">Local Device</span>
+</div>
+<div class="flex-1 flex items-center justify-center px-4 relative">
+<div class="w-full h-px border-t-2 border-dashed border-outline-variant relative">
+<div class="absolute right-[-6px] top-[-5px] w-2 h-2 border-r-2 border-b-2 border-outline-variant transform -rotate-45"></div>
+</div>
+<div class="absolute px-2 bg-surface-container-low text-error font-bold top-[-10px]">BLOCKED</div>
+</div>
+<div class="flex flex-col items-center gap-2 opacity-50">
+<span class="material-symbols-outlined text-3xl text-tertiary">cloud</span>
+<span class="font-bold">Cloud Server</span>
+</div>
+</div>
+<div class="mt-8 text-center text-on-surface-variant max-w-xs">
+                                All processing executed via WebAssembly directly within current browser context.
+                            </div>
+</div>
+</div>
+<div class="order-1 lg:order-2 flex flex-col gap-4">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Your Files Never Touch a Cloud Server</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Traditional web tools upload your sensitive documents to remote servers, process them, and force you to download the result. This exposes your data to third-party risks, network latency, and server downtime.</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">NovaTools operates differently. By leveraging WebAssembly and modern browser APIs, we bring the processing engine directly to your machine. No uploads. No limits. Total privacy.</p>
+<div class="mt-2 inline-flex items-center gap-2 text-primary-container font-medium hover:underline cursor-pointer">
+<span>Read Architecture Specs</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Laser Divider -->
+<div class="w-full flex justify-center items-center my-[-2rem] relative z-10">
+<div class="laser-divider active w-full max-w-3xl"></div>
+<div class="absolute w-8 h-8 rounded-full bg-surface border-2 border-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-sm">compare_arrows</span>
+</div>
+</div>
+<!-- Zig-Zag Block 2 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-1 flex flex-col gap-4">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Native Speed Without Artificial Limits</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Stop waiting in server queues or paying for premium tiers just to process larger files. NovaTools utilizes your device's native CPU and GPU power.</p>
+<ul class="flex flex-col gap-3 mt-2">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">Bypass standard file size restrictions</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">Utilize WebGL for accelerated rendering</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container">check_circle</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">Zero network bottlenecking</span>
+</li>
+</ul>
+</div>
+<div class="order-2 relative h-[350px] bento-cell rounded-lg p-6 shadow-sm overflow-hidden flex flex-col">
+<div class="font-mono-label text-mono-label text-on-surface-variant mb-4 border-b border-outline-variant pb-2">PERFORMANCE_BENCHMARK</div>
+<div class="flex-1 bg-surface-container-low rounded border border-outline-variant p-4 flex flex-col justify-center gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-on-surface">Cloud-based Processing</span>
+<span class="font-mono-label text-tertiary">14.2s</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="font-medium text-primary-container">NovaTools (Client-side)</span>
+<span class="font-mono-label text-primary-container">1.8s</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-primary-container h-2 rounded-full relative" style="width: 15%">
+<div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-primary-container rounded-full shadow-[0_0_8px_rgba(0,82,204,0.8)] pulse-dot"></div>
+</div>
+</div>
+</div>
+<div class="mt-4 p-3 bg-surface border border-outline-variant rounded text-center font-mono-label text-xs text-on-surface-variant">
+                                * Based on standard 50MB PDF compression test
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 1.3: Bento Services Grid -->
+<section class="min-h-[100vh] flex flex-col justify-center px-gutter md:px-margin-desktop py-24 bg-surface-bright border-y border-outline-variant honeycomb-bg">
+<div class="max-w-7xl mx-auto w-full">
+<div class="text-center mb-12 flex flex-col items-center">
+<div class="inline-flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-1 rounded w-fit mb-4">
+<span class="font-mono-label text-mono-label text-on-surface-variant">TOOL_SUITE_V2</span>
+</div>
+<h2 class="font-display text-display text-on-surface mb-4">Comprehensive Utility Grid</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl text-center">Five specialized engines engineered for precision client-side execution.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]">
+<!-- Card 1: PDF (Tall) -->
+<div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group lg:row-span-2 col-span-1">
+<div class="absolute inset-0 bg-gradient-to-b from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-6 relative z-10">
+<div class="w-10 h-10 rounded bg-primary-container/10 flex items-center justify-center border border-primary-container/20">
+<span class="material-symbols-outlined text-primary-container">picture_as_pdf</span>
+</div>
+<span class="font-mono-label text-mono-label text-outline-variant border border-outline-variant px-2 py-1 rounded">ENGINE_01</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">PDF Manipulation</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 relative z-10">Merge, split, compress, and annotate documents instantly.</p>
+<div class="flex-1 relative mt-4 flex items-center justify-center">
+<div class="absolute w-24 h-32 bg-surface border border-outline-variant rounded shadow-sm transform -rotate-12 translate-x-[-20px] transition-transform group-hover:-rotate-24 group-hover:translate-x-[-30px]"></div>
+<div class="absolute w-24 h-32 bg-surface border border-outline-variant rounded shadow-sm transform rotate-12 translate-x-[20px] transition-transform group-hover:rotate-24 group-hover:translate-x-[30px]"></div>
+<div class="absolute w-24 h-32 bg-surface border-2 border-primary-container rounded shadow-md z-10 transition-transform group-hover:-translate-y-2 flex flex-col justify-center items-center">
+<span class="material-symbols-outlined text-primary-container">merge</span>
+</div>
+</div>
+</div>
+<!-- Card 2: AI Background Remover -->
+<div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group col-span-1 md:col-span-2 lg:col-span-1">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">imagesmode</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">AI Background Removal</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 relative z-10">Local neural network processing.</p>
+<div class="flex-1 relative bg-surface-container-lowest rounded border border-outline-variant overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'10\' height=\'10\' fill=\'%23f0edf0\'/%3E%3Crect x=\'10\' y=\'10\' width=\'10\' height=\'10\' fill=\'%23f0edf0\'/%3E%3C/svg%3E')]"></div>
+<div class="w-16 h-16 rounded-full bg-primary-container/20 border-2 border-primary-container z-10 flex items-center justify-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-[2px] bg-primary-container shadow-[0_0_8px_rgba(0,82,204,1)] animate-[scan_2s_ease-in-out_infinite_alternate]"></div>
+<span class="material-symbols-outlined text-primary-container">person</span>
+</div>
+<style>
+                                @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+                            </style>
+</div>
+</div>
+<!-- Card 3: Security Metrics -->
+<div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group col-span-1">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">security</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">Metadata Purge</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 relative z-10">Strip EXIF and tracking data securely.</p>
+<div class="flex-1 flex flex-col gap-2 justify-center font-mono-data text-xs text-on-surface-variant">
+<div class="flex justify-between items-center border-b border-outline-variant pb-1">
+<span>Author_Tag</span>
+<span class="text-error line-through decoration-error">Removed</span>
+</div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-1">
+<span>GPS_Coords</span>
+<span class="text-error line-through decoration-error">Purged</span>
+</div>
+<div class="flex justify-between items-center">
+<span>Creation_Date</span>
+<span class="text-error line-through decoration-error">Scrubbed</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Audio Engine (Wide) -->
+<div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group col-span-1 md:col-span-2">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">graphic_eq</span>
+</div>
+<span class="font-mono-label text-mono-label text-outline-variant border border-outline-variant px-2 py-1 rounded">ENGINE_04</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Audio Engineering</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Trim, convert formats, and normalize volume.</p>
+</div>
+<div class="flex items-center justify-center h-20 md:h-full gap-1">
+<div class="w-2 bg-primary-container/40 rounded-t h-[30%] group-hover:h-[60%] transition-all duration-300"></div>
+<div class="w-2 bg-primary-container/60 rounded-t h-[70%] group-hover:h-[40%] transition-all duration-300 delay-75"></div>
+<div class="w-2 bg-primary-container rounded-t h-[100%] group-hover:h-[80%] transition-all duration-300 delay-150"></div>
+<div class="w-2 bg-primary-container/80 rounded-t h-[60%] group-hover:h-[90%] transition-all duration-300 delay-75"></div>
+<div class="w-2 bg-primary-container/50 rounded-t h-[40%] group-hover:h-[20%] transition-all duration-300"></div>
+<div class="w-2 bg-primary-container/30 rounded-t h-[80%] group-hover:h-[50%] transition-all duration-300 delay-150"></div>
+<div class="w-2 bg-primary-container/70 rounded-t h-[50%] group-hover:h-[70%] transition-all duration-300 delay-75"></div>
+</div>
+</div>
+</div>
+<!-- Card 5: Video Precision -->
+<div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group col-span-1">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">movie_edit</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">Video Precision</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 relative z-10">Client-side FFmpeg extraction.</p>
+<div class="flex-1 relative bg-surface-container-low rounded border border-outline-variant p-2 flex flex-col justify-end">
+<div class="w-full h-8 bg-surface-variant rounded border border-outline-variant relative overflow-hidden flex items-center px-1 gap-1">
+<div class="w-full h-1 bg-outline-variant rounded absolute top-1/2 transform -translate-y-1/2 left-0"></div>
+<div class="absolute w-2 h-full bg-primary-container left-1/3 border border-surface-bright cursor-ew-resize"></div>
+<div class="absolute h-full w-[30%] bg-primary-container/20 left-1/3"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 1.4: Security Ledger & Footer -->
+<section class="min-h-[100vh] flex flex-col pt-24 bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex-1 max-w-5xl mx-auto w-full px-gutter md:px-margin-desktop mb-24">
+<div class="bento-cell rounded-xl p-8 border-2 border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-9xl">verified_user</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-1 rounded w-fit mb-8 relative z-10">
+<span class="font-mono-label text-mono-label text-on-surface-variant">SECURITY_LEDGER</span>
+</div>
+<h2 class="font-display text-3xl md:text-4xl text-on-surface mb-12 relative z-10">Architecture &amp; Security Guarantee</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+<div class="flex flex-col gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">public_off</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Stateless by Default</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">We maintain no databases of user files. The application runs entirely from static assets loaded into your browser cache.</p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">code</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Client-Side Only</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">All algorithms, from PDF manipulation to AI inference, execute via WebAssembly directly on your local CPU/GPU.</p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface">verified</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Open Verification</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Inspect network activity via DevTools. You will verify zero outbound requests transmitting payload data.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Expanded Global Footer -->
+<footer class="w-full bg-surface border-t border-outline-variant pt-16 pb-8">
+<div class="max-w-7xl mx-auto px-gutter md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div class="lg:col-span-2 flex flex-col gap-6">
+<span class="font-headline-md text-headline-md text-primary font-bold">NovaTools</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm">Privacy-first productivity tools engineered for modern web browsers. No uploads, native speeds.</p>
+<div class="inline-flex items-center gap-2 bg-surface-container-lowest border border-outline-variant px-3 py-2 rounded w-fit font-mono-data text-xs text-on-surface-variant mt-4">
+<span class="material-symbols-outlined text-primary-container text-sm">lock</span>
+<span>Valid Client-Side Security Certificate</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-mono-label text-mono-label text-on-surface font-bold">DOCUMENT SUITE</span>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">PDF Merger</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">PDF Splitter</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Compressor</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">OCR Engine</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-mono-label text-mono-label text-on-surface font-bold">MEDIA ENGINE</span>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Image Converter</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Background AI</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Video Trimmer</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Audio Normalize</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-mono-label text-mono-label text-on-surface font-bold">RESOURCES</span>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Architecture Spec</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">GitHub</a>
+</div>
+</div>
+<div class="w-full border-t border-outline-variant pt-6 px-gutter md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 font-mono-data text-mono-data">
+<div class="flex items-center gap-4 flex-wrap">
+<span class="text-primary font-bold">WASM_v1.2.4-STABLE</span>
+<span class="text-on-tertiary-fixed-variant">Build:2023.10.12</span>
+<span class="text-on-tertiary-fixed-variant">Privacy Policy</span>
+</div>
+<div>
+<span class="text-on-tertiary-fixed-variant">© 2023 NovaTools Privacy-First Productivity</span>
+</div>
+</div>
+</footer>
+</section>
+</main>
+<script>
+        // Simple typewriter effect
+        const words = ['PDF Manipulation', 'AI Background Removal', 'Video Trimming', 'Secure Conversion'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const textElement = document.getElementById('typewriter-text');
+
+        function type() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                textElement.innerText = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.innerText = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = 100;
+            if (isDeleting) typeSpeed /= 2;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typeSpeed = 2000; // Pause at end
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 500; // Pause before new word
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        setTimeout(type, 1000);
+    </script>
+</body></html>

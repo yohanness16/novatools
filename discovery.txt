@@ -1,0 +1,600 @@
+================================================================================
+                       NOVATOOLS — COMPREHENSIVE DISCOVERY &
+                     PAGE-BY-PAGE SPECIFICATION & UI ESTIMATION
+================================================================================
+
+PROJECT NAME: NovaTools
+TYPE: 100% Client-Side Private Media, Video, Audio, Document & AI Utility Suite
+ARCHITECTURE: Static Site Generation (Astro 5) + React 19 Interactive Workspaces
+COMPUTATION ENGINE: WebAssembly (WASM), Web Workers, WebCodecs, Web Audio API,
+                    HTML5 Canvas, ONNX WebAssembly Runtime (@xenova/transformers),
+                    Kokoro-82M TTS Neural Engine, pdf-lib, pdfjs-dist, svgo,
+                    OpenXML (docx, pptxgenjs, xlsx), Mermaid.js
+PRIVACY CORE: 0 Bytes Uploaded to Any Server · Local CPU/GPU Execution · Zero Limits
+
+
+================================================================================
+1. EXECUTIVE PROJECT OVERVIEW
+================================================================================
+
+NovaTools is an industrial-grade, privacy-first web productivity suite that delivers
+instant document, image, video, audio, and architectural diagram transformations directly
+inside the user's browser. 
+
+Unlike traditional online conversion websites (which upload sensitive personal documents,
+legal contracts, medical scans, or audio recordings to remote cloud servers), NovaTools 
+performs 100% of all processing locally in volatile browser memory.
+
+KEY VALUE PROPOSITIONS:
+1. Absolute Data Sovereignty & Privacy: Zero network transmission of file binaries.
+   Files exist strictly in local RAM and vanish on tab close.
+2. Zero Latency / Native Speeds: Eliminates multi-gigabyte upload and download waiting
+   times by utilizing client CPU/GPU threads directly.
+3. Uncapped & Free: No subscription paywalls, no artificial file-size caps, and no daily
+   conversion limits.
+4. Offline Capable: Can execute on airplanes, offline workstations, or air-gapped secure labs.
+5. Modern "Console/Workbench" Aesthetic: High-density, professional UI styled after
+   Linear, Vercel, and enterprise cloud consoles (AWS/Azure/GCP) with signature privacy
+   ledger strips and real-time visual workbenches.
+
+
+================================================================================
+2. PAGE-BY-PAGE DETAILED BREAKDOWN & SECTION MAPPING (100vh / SCREEN VIEWS)
+================================================================================
+
+Note: In this specification, one screen view / 100vh fold represents one full-height 
+visual section block on a standard viewport (1920x1080 desktop / standard responsive display).
+
+--------------------------------------------------------------------------------
+PAGE 1: LANDING PAGE / HOMEPAGE (`/`)
+Estimated Total UI Sections: 4 Sections (4 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+
+• SECTION 1.1 (Screen View 1 / 100vh): DYNAMIC INTERACTIVE HERO & LIVE WORKBENCH SHOWCASE
+  - Top Floating Navigation Header: Logo mark, Suite Switchers, Command Palette trigger (Cmd+K),
+    Theme Toggle (Dark/Light Console), and "100% Private" status badge.
+  - Left Hero Column:
+    * Adaptive brand typography ("Create, Convert & Edit with NovaTools") featuring custom gold-grey tones.
+    * Dynamic Typewriter Engine cycling through core platform capabilities with glowing cursor.
+    * High-contrast "Explore Catalog" CTA button leading directly to tool suites.
+  - Right Hero Column (Interactive 4-in-1 Action Graphic):
+    * Showcase 1: PDF Merging Animation (Floating multi-page vector cards fusing together).
+    * Showcase 2: AI Background Removal (Alpha checkerboard mask with glowing scan pulse).
+    * Showcase 3: Audio/Video Dynamic Waveform (Multi-band audio visualizer with trim bounds).
+    * Showcase 4: AI Subtitle & Speech Wave (Simulated speech transcription stream).
+    * Interactive dot pagination controls for manual or auto-rotation.
+  - Bottom Trust Bar: Three persistent value metrics with icon badges: "Zero Uploads", 
+    "Instant Speed", and "Private by Design".
+
+• SECTION 1.2 (Screen View 2 / 100vh): ABOUT US & ZERO-CLOUD ARCHITECTURAL NARRATIVE
+  - Section Header: Clean, high-impact "About Us" title.
+  - Story Block 1 (Zig-Zag Left Image, Right Text):
+    * Left: High-fidelity application mockup screenshot inside a macOS/console browser frame.
+    * Right: "Your Files Never Touch a Cloud Server" narrative detailing the dangers of cloud 
+      converters (server caching, data harvesting) vs. NovaTools' local RAM model.
+    * Verification checkmarks: Zero Data Retention & Offline Capable.
+  - Architectural Separator: Glowing laser divider beam.
+  - Story Block 2 (Zig-Zag Left Text, Right Image):
+    * Left: "Native Speed Without Artificial Limits" narrative contrasting free-tier cloud limits
+      (10MB caps, queue wait times) with local GPU/CPU hardware acceleration.
+    * Verification checkmarks: No Upload Delays & Free & Unbounded Access.
+    * Right: Live AI Background Remover visual diff split screenshot.
+
+• SECTION 1.3 (Screen View 3 / 100vh): INTERACTIVE BENTO GRID SERVICES DIRECTORY
+  - Section Header: "Services" with subtle ambient background glow mesh.
+  - 5 High-Density Interactive Bento Cards:
+    1. Bento Hero Card (PDF Manipulation & Fusion - 7 cols): Fanning document cards (P.01, P.02, P.03),
+       status bar displaying ready state, describing merge, split, encrypt, and redact features.
+    2. Bento Studio Card (AI Background Removal - 5 cols): Checkerboard transparency viewport with 
+       animated vertical laser scanning beam and "0.04s Local" micro-badge.
+    3. Bento Engine Card (Soundtrack & Volume Boost - 4 cols): Live 16-bar audio equalizer with 
+       +12dB gain active readout and 48kHz lossless indicator.
+    4. Bento Precision Card (Video Trimming & Transcoding - 4 cols): Video timeline scrubber with dual
+       trim handles (00:03.20 to 00:15.00) and WebCodecs acceleration badge.
+    5. Bento Security Card (SVG Clean & Metadata Purge - 4 cols): Live metric readouts showing GPS 
+       Coordinates REMOVED, Camera Model PURGED, and Vector Size reduced by -64.2%.
+
+• SECTION 1.4 (Screen View 4 / 100vh): SECURITY ARCHITECTURE LEDGER & GLOBAL CONSOLE FOOTER
+  - Architecture & Security Ledger Card:
+    * Three-column structural guarantee: Zero Server Uploads (in-memory execution), Instant 
+      Processing (no network latency), and No Limits or Quotas (device memory bound).
+  - Global Console Footer:
+    * Brand summary and "100% Client-Side" security certificate.
+    * Directory columns categorized by suite: PDF Suite, Image Suite, Video Suite, Document Suite,
+      Diagram Suite, SVG Tools, Company (About, Contact, Privacy, Terms).
+    * Legal copyright notice, WASM build version stamp, and theme indicator.
+
+
+--------------------------------------------------------------------------------
+PAGE 2: ABOUT US & ARCHITECTURAL PHILOSOPHY (`/about`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+
+• SECTION 2.1 (Screen View 1 / 100vh): LOCAL-FIRST PHILOSOPHY & CLOUD COMPARISON
+  - Header: Local-First Engineering Architecture badge and "High-Performance Media & Document Runtime" title.
+  - The Cloud Problem vs. The WASM Solution Grid:
+    * Left Card: "The Cloud Converter Problem" (network vulnerability, persistent disk caching, privacy leaks).
+    * Right Card: "The WebAssembly Solution" (sandboxed client-side runtime, zero byte transit).
+
+• SECTION 2.2 (Screen View 2 / 100vh): TECHNICAL CORE PILLARS & SUPPORT CHANNELS
+  - Core Architectural Pillars Panel:
+    * Pillar 1: Zero Server Transmission (Typed ArrayBuffers in browser memory).
+    * Pillar 2: Direct Hardware Acceleration (Multithreaded CPU Web Workers & WebGPU).
+    * Pillar 3: Offline Capable & Sovereign (Operates completely disconnected from the internet).
+  - Support & Issue Tracker Link leading to `/contact`.
+
+
+--------------------------------------------------------------------------------
+PAGE 3: CONTACT & COMMUNITY SUPPORT (`/contact`)
+Estimated Total UI Sections: 1 Section (1 x 100vh Screen View)
+--------------------------------------------------------------------------------
+
+• SECTION 3.1 (Screen View 1 / 100vh): SUPPORT DESK & INQUIRY FORM
+  - Header: "Get in Touch" with response time SLA indicators.
+  - Interactive Contact Form: Full Name, Email Address, Subject Category (Bug Report, Feature Request,
+    Enterprise Deployment, General Feedback), and Message textarea.
+  - Direct Channels Sidebar: GitHub Repository issues, Discord Community, and Security vulnerability reporting.
+
+
+--------------------------------------------------------------------------------
+PAGE 4: PRIVACY POLICY (`/privacy`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+
+• SECTION 4.1 (Screen View 1 / 100vh): ZERO-DATA-COLLECTION MANIFESTO
+  - Legal & Architectural Guarantee: Detailed explanation that no document, image, audio, or video
+    payload is ever transmitted to, inspected by, or stored on NovaTools servers.
+  - In-Browser Processing Disclosure: Technical explanation of WebAssembly, Web Workers, and IndexedDB local caching.
+
+• SECTION 4.2 (Screen View 2 / 100vh): ANALYTICS, COOKIES & COMPLIANCE
+  - Telemetry & Analytics policy (privacy-preserving, zero personal identifiable data).
+  - GDPR, CCPA, and HIPAA compliance alignment due to client-side data sovereignty.
+
+
+--------------------------------------------------------------------------------
+PAGE 5: TERMS OF SERVICE (`/terms`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+
+• SECTION 5.1 (Screen View 1 / 100vh): USAGE TERMS & INTELLECTUAL PROPERTY
+  - Permitted use cases, free tier open-access terms, user ownership of all processed outputs.
+  - Disclaimer on client hardware constraints (memory consumption during gigabyte processing).
+
+• SECTION 5.2 (Screen View 2 / 100vh): WARRANTIES, LIMITATIONS & GOVERNING LAW
+  - As-is software provision, limitation of liability, and jurisdiction terms.
+
+
+================================================================================
+3. SUITE HUB / CATALOG INDEX PAGES (6 SUITES)
+================================================================================
+
+Each Suite Hub page acts as a category workbench index containing a suite hero, 
+a catalog grid of all tools in that category, and an architectural deep dive.
+
+--------------------------------------------------------------------------------
+PAGE 6: PDF SUITE HUB (`/pdf`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 6.1 (Screen View 1 / 100vh): SUITE HERO & TOOLS CATALOG GRID
+  - Suite Header: Vector PDF engine badge, suite summary, and quick launch button.
+  - Tools Grid (10 PDF Tools): Cards with dedicated Lucide icons, descriptive tags, and quick-launch links.
+• SECTION 6.2 (Screen View 2 / 100vh): PDF VECTOR ENGINE DEEP DIVE & ARCHITECTURE
+  - Technical analysis of `pdf-lib` & `pdfjs-dist` integration, in-browser font subsetting, 
+    AES password encryption, and vector coordinate matrix preservation.
+
+--------------------------------------------------------------------------------
+PAGE 7: IMAGE SUITE HUB (`/image`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 7.1 (Screen View 1 / 100vh): SUITE HERO & IMAGE TOOLS GRID
+  - Suite Header: Neural vision & Canvas engine overview.
+  - Tools Grid (6 Image Tools): AI Background Remover, Converter, Smart Compressor, Resizer,
+    EXIF Scrubber, SVG Optimizer.
+• SECTION 7.2 (Screen View 2 / 100vh): IN-BROWSER VISION & CODEC ARCHITECTURE
+  - Technical overview of HTML5 Canvas 2D/WebGL rendering, ONNX neural segmentation, and modern codecs (WebP, AVIF).
+
+--------------------------------------------------------------------------------
+PAGE 8: VIDEO & AUDIO SUITE HUB (`/video`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 8.1 (Screen View 1 / 100vh): SUITE HERO & MULTIMEDIA TOOLS GRID
+  - Suite Header: WebCodecs, Web Audio API, and Kokoro-82M AI Voice overview.
+  - Tools Grid (9 Video & Audio Tools): Video Compressor, Trimmer, Audio Extractor, Video Muter,
+    AI Subtitles, Volume Booster, Video to GIF, Lyrics Video Studio, Text-to-Speech Studio.
+• SECTION 8.2 (Screen View 2 / 100vh): DSP & NEURAL TRANSCRIPTION ARCHITECTURE
+  - Technical breakdown of Web Audio API node graphs (`DynamicsCompressorNode`, `BiquadFilterNode`),
+    and local Whisper/Kokoro inference via WebGPU/WASM.
+
+--------------------------------------------------------------------------------
+PAGE 9: DOCUMENT & AI SUITE HUB (`/document`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 9.1 (Screen View 1 / 100vh): SUITE HERO & DOCUMENT TOOLS GRID
+  - Suite Header: OpenXML, AST transformations, and generative document AI overview.
+  - Tools Grid (6 Document Tools): Universal Document Studio, Markdown to PDF, Markdown to Word (DOCX),
+    Document to Slides (PPTX), Document to Excel (XLSX), Word & Doc to PDF.
+• SECTION 9.2 (Screen View 2 / 100vh): OPENXML & AST COMPILATION ARCHITECTURE
+  - Explanation of client-side Abstract Syntax Tree parsing and OpenXML packaging for MS Office deliverables.
+
+--------------------------------------------------------------------------------
+PAGE 10: DIAGRAM & VISUALIZER SUITE HUB (`/diagram`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 10.1 (Screen View 1 / 100vh): SUITE HERO & DIAGRAM TOOLS GRID
+  - Suite Header: AI schema-to-diagram synthesis engine.
+  - Tools Grid (4 Diagram Tools): AI Document-to-Diagram Studio, Document to Flowchart, 
+    Document to Database ERD, Document to Architecture Map.
+• SECTION 10.2 (Screen View 2 / 100vh): MERMAID.JS & VECTOR RENDERING PIPELINE
+  - Technical architecture for extracting entities, relations, and decision trees from unstructured text into vector SVGs.
+
+--------------------------------------------------------------------------------
+PAGE 11: SVG SUITE HUB (`/svg` / `/image/svg-optimizer`)
+Estimated Total UI Sections: 2 Sections (2 x 100vh Screen Views)
+--------------------------------------------------------------------------------
+• SECTION 11.1 (Screen View 1 / 100vh): SVG CLEANER & REACT EXPORTER WORKBENCH
+  - Dual-pane AST optimization studio and live React/JSX component generator.
+• SECTION 11.2 (Screen View 2 / 100vh): SVGO AST PARSING SPECIFICATION
+  - Details on XML sanitization, unused ID purging, and JSX transform conventions.
+
+
+================================================================================
+4. COMPLETE CATALOG OF ALL 27 TOOLS ACROSS ALL 6 SUITES
+   (Detailed Functionality, Workspaces & Section Breakdown)
+================================================================================
+
+All individual tool pages share the high-performance `ToolPageLayout` framework:
+- Top Left Console Rail (collapsible suite and tool navigation tree)
+- Top Breadcrumb Bar with live "Privacy Ledger Strip" (`0 bytes uploaded · WASM Local Engine`)
+- Section 1 (Top 100vh Fold): Educational/Technical Overview + Interactive Live Workspace
+- Section 2 (Bottom 100vh Fold): Execution Steps Guide + Key Architecture Features + Use Cases + FAQs
+- Each tool page therefore averages exactly 2 UI Screen Sections (2 x 100vh).
+
+--------------------------------------------------------------------------------
+SUITE 1: PDF SUITE (10 TOOLS)
+--------------------------------------------------------------------------------
+
+1. MERGE PDF (`/pdf/merge`)
+   - What It Does: Combines multiple PDF files into one clean, unified document in seconds.
+   - Key Capabilities: Drag-and-drop file reordering, preserves bookmarks, clickable hyperlinks,
+     vector typography, and form fields without degradation.
+   - UI Workspace: Multi-file dropzone, reorderable thumbnail cards with delete/move handles,
+     output file naming input, and instant "Merge PDFs" trigger.
+   - UI Sections: 2 Sections (100vh x 2)
+
+2. SPLIT & EXTRACT PDF (`/pdf/split`)
+   - What It Does: Separates a PDF into individual page files or extracts custom page intervals.
+   - Key Capabilities: Custom page syntax (e.g. `1-4, 7, 9-15`), Burst Mode to extract every page
+     into a downloadable ZIP archive, visual thumbnail selector.
+   - UI Workspace: Interactive page grid where users click pages to select/deselect ranges,
+     text range parser input, and single-click download.
+   - UI Sections: 2 Sections (100vh x 2)
+
+3. ROTATE PDF PAGES (`/pdf/rotate`)
+   - What It Does: Fixes sideways or upside-down scanned pages with permanent 90°, 180°, or 270° rotations.
+   - Key Capabilities: Individual page rotation controls or global "Rotate All" controls; modifies 
+     the internal PDF rotation matrix losslessly without rasterizing vector text.
+   - UI Workspace: Visual page thumbnail grid with quick-turn hover buttons (↺ 90° / ↻ 90°) on every page.
+   - UI Sections: 2 Sections (100vh x 2)
+
+4. PASSWORD PROTECT PDF (`/pdf/protect`)
+   - What It Does: Encrypts PDF files with user passwords to prevent unauthorized access or printing.
+   - Key Capabilities: Standard AES encryption compatible with Adobe Acrobat, Apple Preview, and 
+     mobile readers; client-side key generation with zero network transit.
+   - UI Workspace: Security lock well, password strength estimator, password confirmation inputs,
+     and "Encrypt Document" action button.
+   - UI Sections: 2 Sections (100vh x 2)
+
+5. REDACT & FLATTEN PDF (`/pdf/redact-flatten`)
+   - What It Does: Flattens interactive form fields, annotations, and comments into static vector graphics.
+   - Key Capabilities: Prevents post-signature tampering, disables form field editing, merges vector layers.
+   - UI Workspace: Layer inspection viewer, flattening mode toggles (Forms, Annotations, All Layers),
+     and "Flatten & Secure" export button.
+   - UI Sections: 2 Sections (100vh x 2)
+
+6. PDF TO IMAGES (`/pdf/pdf-to-images`)
+   - What It Does: Converts PDF pages into high-resolution PNG or JPEG image graphics.
+   - Key Capabilities: 1x, 2x, or 3x high-DPI rasterization; batch page rendering; single-page 
+     downloads or complete ZIP package export.
+   - UI Workspace: Resolution DPI selector, format toggle (PNG Lossless vs. JPEG Compact),
+     and rendered page thumbnail preview carousel.
+   - UI Sections: 2 Sections (100vh x 2)
+
+7. IMAGES TO PDF (`/pdf/images-to-pdf`)
+   - What It Does: Compiles JPG, PNG, WebP, BMP, and GIF image collections into a paginated PDF.
+   - Key Capabilities: Configurable page sizes (A4, US Letter, Auto-Fit to Image), customizable 
+     margins (None, Small, Normal), drag-and-drop image reordering.
+   - UI Workspace: Multi-image upload dropzone, thumbnail ordering gallery, page orientation switcher,
+     and "Compile PDF" export button.
+   - UI Sections: 2 Sections (100vh x 2)
+
+8. PDF PAGE NUMBERER & STAMPER (`/pdf/page-numberer`)
+   - What It Does: Adds vector page numbers, Roman numerals, and header/footer stamps to PDF pages.
+   - Key Capabilities: 6-point alignment grid (Top/Bottom x Left/Center/Right), dynamic formatting 
+     ("Page 1 of 10", "- 1 -", "i, ii, iii"), custom font size/color, and "Skip Cover Pages" option.
+   - UI Workspace: Interactive 6-point positioning matrix, template dropdown, margin sliders,
+     and live visual page preview simulator.
+   - UI Sections: 2 Sections (100vh x 2)
+
+9. PDF TO WORD (DOCX) (`/pdf/pdf-to-doc`)
+   - What It Does: Extracts structured text, headings, and tables from PDFs into editable Microsoft Word (.docx).
+   - Key Capabilities: Semantic typography reconstruction, font-weight heading detection, Markdown & DOCX export.
+   - UI Workspace: Extracted document preview pane, format switcher (.docx / .md / .txt), and 1-click download.
+   - UI Sections: 2 Sections (100vh x 2)
+
+10. WORD & DOC TO PDF (`/pdf/doc-to-pdf`)
+    - What It Does: Converts Word (.docx) and Markdown files into publication-grade vector PDFs.
+    - Key Capabilities: CSS Paged Media layout, table border styling, syntax highlighted code blocks.
+    - UI Workspace: Split preview pane showing source document vs. rendered vector PDF pages.
+    - UI Sections: 2 Sections (100vh x 2)
+
+
+--------------------------------------------------------------------------------
+SUITE 2: IMAGE SUITE (6 TOOLS)
+--------------------------------------------------------------------------------
+
+11. AI BACKGROUND REMOVER (`/image/background-remover`)
+    - What It Does: Erases photo backgrounds in 1 click and produces clean transparent cutouts.
+    - Key Capabilities: In-browser neural subject segmentation, interactive split-screen diff slider,
+      backdrop replacer (Transparent Alpha, Studio Solid Colors, Blur), HD PNG export.
+    - UI Workspace: Interactive dual-slider comparison canvas, color swatch picker, and HD export dock.
+    - UI Sections: 2 Sections (100vh x 2)
+
+12. IMAGE CONVERTER (`/image/converter`)
+    - What It Does: Converts images in bulk between modern and traditional graphic formats.
+    - Key Capabilities: Supports WebP, AVIF, PNG, JPEG, BMP, and ICO; per-format quality tuning; batch ZIP export.
+    - UI Workspace: Batch file upload list, global format selector, individual quality sliders, and "Convert All" CTA.
+    - UI Sections: 2 Sections (100vh x 2)
+
+13. SMART IMAGE COMPRESSOR (`/image/compressor`)
+    - What It Does: Compresses image files by up to 80% with real-time visual fidelity comparison.
+    - Key Capabilities: Interactive side-by-side split comparison slider, live byte savings counter (-75%),
+      max width/height constraint controls.
+    - UI Workspace: Split comparison viewport with drag handle, live size meter before/after, and download button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+14. IMAGE RESIZER (`/image/resizer`)
+    - What It Does: Scales image dimensions by exact pixels or percentage while locking aspect ratios.
+    - Key Capabilities: Aspect ratio lock, percentage scale presets (25%, 50%, 75%, 150%, 200%),
+      social media dimension presets (Instagram Post/Story, YouTube Thumbnail, Twitter Header).
+    - UI Workspace: Pixel dimension inputs with link/unlink ratio toggle, social preset buttons, and instant scaler.
+    - UI Sections: 2 Sections (100vh x 2)
+
+15. EXIF & METADATA SCRUBBER (`/image/exif-scrubber`)
+    - What It Does: Inspects and permanently strips GPS location tags, camera models, and serial numbers.
+    - Key Capabilities: Deep EXIF tag inspector (latitude/longitude coordinates, device name, exposure, date),
+      1-click metadata sanitation to protect location privacy.
+    - UI Workspace: Metadata inspector table displaying all extracted tags with a red "Sanitize & Download" action.
+    - UI Sections: 2 Sections (100vh x 2)
+
+16. SVG CLEANER & REACT EXPORTER (`/image/svg-optimizer` / `/svg`)
+    - What It Does: Optimizes vector SVG markup and transforms it into clean, typed React/JSX components.
+    - Key Capabilities: SVGO AST optimization, removes editor metadata (Figma/Illustrator junk),
+      converts attributes to camelCase JSX, live code preview.
+    - UI Workspace: Split code editor (Raw SVG vs. Optimized SVG / React JSX), byte savings pill, copy button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+
+--------------------------------------------------------------------------------
+SUITE 3: VIDEO & AUDIO SUITE (9 TOOLS)
+--------------------------------------------------------------------------------
+
+17. VIDEO COMPRESSOR (`/video/compressor`)
+    - What It Does: Reduces video file sizes directly in browser without uploading large video clips.
+    - Key Capabilities: Hardware-accelerated Canvas & WebCodecs pipeline, resolution presets (1080p, 720p, 480p),
+      target bitrate and CRF compression sliders.
+    - UI Workspace: Video player preview, quality preset radio cards, progress bar with speed readouts, and download button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+18. VIDEO TRIMMER & CUTTER (`/video/trimmer`)
+    - What It Does: Cuts specific clip intervals from video files with millisecond precision.
+    - Key Capabilities: Dual-handle visual timeline range slider, live video preview synchronized to playhead,
+      audio mute checkbox on export.
+    - UI Workspace: Full-width video preview, interactive timeline scrubber with start/end markers, timecode inputs.
+    - UI Sections: 2 Sections (100vh x 2)
+
+19. EXTRACT AUDIO FROM VIDEO (`/video/audio-extractor`)
+    - What It Does: Pulls crystal-clear soundtrack and speech audio tracks out of video files.
+    - Key Capabilities: Export as lossless WAV or compressed MP3/AAC, animated waveform visualization.
+    - UI Workspace: Video dropzone, audio format selector, audio waveform visualizer, and "Extract Soundtrack" button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+20. VIDEO AUDIO REMOVER (MUTER) (`/video/muter`)
+    - What It Does: Strips unwanted audio tracks, background noise, or copyrighted music from videos in 1 second.
+    - Key Capabilities: Completely removes audio channels while keeping original video visual streams 100% intact.
+    - UI Workspace: Video player with before/after audio status, 1-click "Strip Audio" action, instant download.
+    - UI Sections: 2 Sections (100vh x 2)
+
+21. AI SUBTITLE GENERATOR & STUDIO (`/video/subtitle-generator`)
+    - What It Does: Transcribes spoken speech from audio/video into synchronized subtitles with a studio editor.
+    - Key Capabilities: 100+ language support via in-browser Whisper ASR, 1-click translation, multi-track
+      studio editor with live video overlay, export to `.SRT`, `.VTT`, `.TXT`, `.JSON`, or `.ZIP`.
+    - UI Workspace: Synchronized video player with on-screen subtitle captions, cue list editor with timestamp
+      nudging (+/- 100ms), search & replace bar, and multi-format export dock.
+    - UI Sections: 2 Sections (100vh x 2)
+
+22. AUDIO VOLUME BOOSTER & NORMALIZER (`/video/audio-booster`)
+    - What It Does: Amplifies low-volume audio/video up to 300% (+12 dB) with an anti-clipping limiter.
+    - Key Capabilities: Precision gain amplification slider, soft-knee dynamics limiter to eliminate distortion,
+      EBU peak normalization, presets (*Speech Boost, Podcast Normalizer, Max Loudness*), live A/B comparison.
+    - UI Workspace: Live 16-bar audio visualizer, gain multiplier knob/slider, preset picker, A/B toggle switch.
+    - UI Sections: 2 Sections (100vh x 2)
+
+23. VIDEO TO GIF MAKER & OPTIMIZER (`/video/video-to-gif`)
+    - What It Does: Converts video clips into smooth animated GIFs with custom scaling and trimming.
+    - Key Capabilities: Timeline trimming, customizable frame rate (10, 15, 20, 24, 30 FPS), width scaling
+      (320px, 480px, 640px), 256-color palette quantization, and LZW byte encoding.
+    - UI Workspace: Interactive video trimmer, FPS and width controls, animated GIF preview window, download button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+24. ANIMATED LYRICS VIDEO GENERATOR (`/video/lyrics-video-generator`)
+    - What It Does: Creates synchronized animated lyric videos with custom backgrounds, karaoke effects,
+      and floating musical note accents.
+    - Key Capabilities: AI lyrics recognition with timestamp sync, flexible lyric positioning (Top, Center, Bottom),
+      transitions (*Karaoke Word Fill, Kinetic Pop, Cinematic Fade, Neon Flash*), floating musical notes (♪ ♫ ♩ ♬),
+      procedural background visualizers, 16:9 Landscape / 9:16 Shorts/TikTok / 1:1 Square export.
+    - UI Workspace: Multi-track timeline, visual background selector, typography style drawer, live canvas player.
+    - UI Sections: 2 Sections (100vh x 2)
+
+25. AI VOICE STUDIO & TEXT-TO-SPEECH (`/video/text-to-speech`)
+    - What It Does: Synthesizes studio-quality, natural human voiceovers using open-weight Kokoro-82M AI.
+    - Key Capabilities: 50+ diverse voices across global accents, dual-voice blender for creating custom timbres,
+      humanic expressions & interjections (*ugh, sigh, cough, hmm, whoa*), speed/pause controls, 24kHz WAV & SRT export.
+    - UI Workspace: Script text editor with one-click expression insertion tags, Voice Selector drawer,
+      Voice Blender interpolation slider, interactive waveform visualizer, and export dock.
+    - UI Sections: 2 Sections (100vh x 2)
+
+
+--------------------------------------------------------------------------------
+SUITE 4: DOCUMENT & AI SUITE (6 TOOLS)
+--------------------------------------------------------------------------------
+
+26. UNIVERSAL DOCUMENT STUDIO (`/document/studio`)
+    - What It Does: 100% client-side multi-format document editor with AI slide, sheet, and PDF generators.
+    - Key Capabilities: Real-time Markdown & DOCX editor, in-browser AI document assistant, 1-click export
+      to PDF, Word (.docx), PowerPoint (.pptx), and Excel (.xlsx).
+    - UI Workspace: Split Markdown/WYSIWYG editor pane, AI enhancement drawer, real-time preview tab,
+      and multi-format export dropdown.
+    - UI Sections: 2 Sections (100vh x 2)
+
+27. MARKDOWN TO PDF (`/document/md-to-pdf`)
+    - What It Does: Converts Markdown notes into publication-grade vector PDFs with CSS Paged Media.
+    - Key Capabilities: Full GFM table rendering, syntax-highlighted code blocks, math equations, custom margins.
+    - UI Workspace: Markdown text editor on the left, live vector PDF pagination viewer on the right.
+    - UI Sections: 2 Sections (100vh x 2)
+
+28. MARKDOWN TO WORD (DOCX) (`/document/md-to-docx`)
+    - What It Does: Converts Markdown or edits DOCX files into native Microsoft Word (.docx) documents.
+    - Key Capabilities: Native OpenXML compilation, ingests uploaded .docx into Markdown, formats Word tables.
+    - UI Workspace: Document upload area, live formatting preview, and "Download .docx" action.
+    - UI Sections: 2 Sections (100vh x 2)
+
+29. DOCUMENT TO SLIDES (PPTX) (`/document/doc-to-slides`)
+    - What It Does: Transforms documents and notes into 16:9 widescreen PowerPoint presentation decks.
+    - Key Capabilities: AI-powered semantic slide chunking, 4 designer color themes, metric statistic cards,
+      speaker notes generation, native editable PPTX export.
+    - UI Workspace: Document source input, theme selector cards, slide deck carousel preview, PPTX download button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+30. DOCUMENT TO EXCEL (XLSX) (`/document/doc-to-excel`)
+    - What It Does: Scans documents and text for tables and synthesizes structured Excel (.xlsx) workbooks.
+    - Key Capabilities: Auto-detects numbers/currencies, extracts GFM and HTML tables, multi-sheet workbook export.
+    - UI Workspace: Raw text/table input, interactive spreadsheet data grid with column sorting, XLSX export button.
+    - UI Sections: 2 Sections (100vh x 2)
+
+31. WORD & DOC TO PDF (`/document/doc-to-pdf`)
+    - What It Does: Ingests Word (.docx) and Markdown files and renders vector PDFs with custom typography.
+    - Key Capabilities: Client-side OpenXML parser, preserves formatting and tables, zero cloud upload.
+    - UI Workspace: File dropzone, layout settings drawer, and live rendered vector document previewer.
+    - UI Sections: 2 Sections (100vh x 2)
+
+
+--------------------------------------------------------------------------------
+SUITE 5: DIAGRAM & VISUALIZER SUITE (4 TOOLS)
+--------------------------------------------------------------------------------
+
+32. AI DOCUMENT-TO-DIAGRAM STUDIO (`/diagram/studio`)
+    - What It Does: Ingests text, PDF, or DOCX and synthesizes interactive Mermaid.js diagrams.
+    - Key Capabilities: Generates Flowcharts, Database ERDs, Sequence Diagrams, Software Architecture Maps,
+      and Mindmaps; interactive pan/zoom canvas; export to Vector SVG, 4K PNG, and Mermaid code.
+    - UI Workspace: Split screen with text specification editor on left and interactive pan/zoom canvas on right,
+      diagram type switcher, theme palette picker, and export dock.
+    - UI Sections: 2 Sections (100vh x 2)
+
+33. DOCUMENT TO FLOWCHART (`/diagram/doc-to-flowchart`)
+    - What It Does: Decomposes business processes and algorithms into structured decision flowcharts.
+    - Key Capabilities: Decision diamond detection, Top-Down (TD) and Left-to-Right (LR) layouts, SVG export.
+    - UI Workspace: Step-by-step SOP input box, layout direction toggle, interactive flowchart canvas.
+    - UI Sections: 2 Sections (100vh x 2)
+
+34. DOCUMENT TO DATABASE ERD (`/diagram/doc-to-erd`)
+    - What It Does: Scans database documentation and SQL schemas into Entity-Relationship diagrams.
+    - Key Capabilities: Extracts tables, primary/foreign keys, attributes, and 1:N / M:N cardinalities.
+    - UI Workspace: SQL schema / table text area, relationship visualizer canvas, and SVG/PNG exporter.
+    - UI Sections: 2 Sections (100vh x 2)
+
+35. DOCUMENT TO ARCHITECTURE MAP (`/diagram/doc-to-architecture`)
+    - What It Does: Visualizes cloud infrastructure, microservice relationships, and system tiers.
+    - Key Capabilities: Subgraph grouping (Client, API Gateway, Services, DBs), dependency flow arrows.
+    - UI Workspace: Architecture spec editor, multi-tier system graph visualizer, and 4K PNG exporter.
+    - UI Sections: 2 Sections (100vh x 2)
+
+
+================================================================================
+5. COMPREHENSIVE UI DESIGN PAGE & SECTION ESTIMATION SUMMARY
+================================================================================
+
+For UI/UX Designers creating Figma, Sketch, or Adobe XD artboards:
+Each section is defined as a distinct 100vh full-screen view / fold block.
+
+┌──────────────────────────────────────────────┬───────────────┬─────────────────┐
+│ Page Category / Type                         │ Total Pages   │ Estimated       │
+│                                              │               │ Screen Sections │
+│                                              │               │ (100vh Folds)   │
+├──────────────────────────────────────────────┼───────────────┼─────────────────┤
+│ 1. Core Landing Page (`/`)                   │ 1 Page        │ 4 Sections      │
+│ 2. Institutional Pages (About, Contact, etc) │ 4 Pages       │ 7 Sections      │
+│ 3. Suite Hub Index Pages (PDF, Img, Vid, etc)│ 6 Pages       │ 12 Sections     │
+│ 4. PDF Suite Tool Pages                      │ 10 Pages      │ 20 Sections     │
+│ 5. Image Suite Tool Pages                    │ 6 Pages       │ 12 Sections     │
+│ 6. Video & Audio Suite Tool Pages            │ 9 Pages       │ 18 Sections     │
+│ 7. Document & AI Suite Tool Pages            │ 6 Pages       │ 12 Sections     │
+│ 8. Diagram Suite Tool Pages                  │ 4 Pages       │ 8 Sections      │
+├──────────────────────────────────────────────┼───────────────┼─────────────────┤
+│ TOTAL UNIQUE SCREENS / ROUTES                │ 46 Pages      │ 93 Sections     │
+│ (Unique Pages + Specialized Workspaces)      │               │ (100vh views)   │
+└──────────────────────────────────────────────┴───────────────┴─────────────────┘
+
+DETAILED PAGE & SECTION BREAKDOWN TABLE:
+
+1.  Landing Page (`/`)                                  : 4 Sections (Hero, Story, Services, Ledger/Footer)
+2.  About Page (`/about`)                              : 2 Sections (Philosophy, Core Pillars)
+3.  Contact Page (`/contact`)                          : 1 Section  (Contact Form & Support Channels)
+4.  Privacy Policy (`/privacy`)                        : 2 Sections (Zero-Data Guarantee, Compliance)
+5.  Terms of Service (`/terms`)                        : 2 Sections (Terms of Use, Liability)
+6.  PDF Suite Hub (`/pdf`)                             : 2 Sections (Catalog Grid, Vector Engine Deep Dive)
+7.  Image Suite Hub (`/image`)                         : 2 Sections (Catalog Grid, Neural/Canvas Engine)
+8.  Video & Audio Suite Hub (`/video`)                 : 2 Sections (Catalog Grid, WebCodecs/Audio Engine)
+9.  Document Suite Hub (`/document`)                   : 2 Sections (Catalog Grid, OpenXML/AST Pipeline)
+10. Diagram Suite Hub (`/diagram`)                     : 2 Sections (Catalog Grid, Mermaid Pipeline)
+11. SVG Suite Hub (`/svg`)                             : 2 Sections (Catalog Grid, SVGO Pipeline)
+12. Merge PDF (`/pdf/merge`)                           : 2 Sections (Workspace, Specs & Guides)
+13. Split PDF (`/pdf/split`)                           : 2 Sections (Workspace, Specs & Guides)
+14. Rotate PDF (`/pdf/rotate`)                         : 2 Sections (Workspace, Specs & Guides)
+15. Protect PDF (`/pdf/protect`)                       : 2 Sections (Workspace, Specs & Guides)
+16. Redact & Flatten PDF (`/pdf/redact-flatten`)       : 2 Sections (Workspace, Specs & Guides)
+17. PDF to Images (`/pdf/pdf-to-images`)               : 2 Sections (Workspace, Specs & Guides)
+18. Images to PDF (`/pdf/images-to-pdf`)               : 2 Sections (Workspace, Specs & Guides)
+19. PDF Page Numberer (`/pdf/page-numberer`)           : 2 Sections (Workspace, Specs & Guides)
+20. PDF to DOCX (`/pdf/pdf-to-doc`)                    : 2 Sections (Workspace, Specs & Guides)
+21. Doc to PDF (`/pdf/doc-to-pdf`)                     : 2 Sections (Workspace, Specs & Guides)
+22. AI Background Remover (`/image/background-remover`): 2 Sections (Workspace, Specs & Guides)
+23. Image Converter (`/image/converter`)               : 2 Sections (Workspace, Specs & Guides)
+24. Smart Image Compressor (`/image/compressor`)       : 2 Sections (Workspace, Specs & Guides)
+25. Image Resizer (`/image/resizer`)                   : 2 Sections (Workspace, Specs & Guides)
+26. EXIF Scrubber (`/image/exif-scrubber`)             : 2 Sections (Workspace, Specs & Guides)
+27. SVG Optimizer (`/image/svg-optimizer`)             : 2 Sections (Workspace, Specs & Guides)
+28. Video Compressor (`/video/compressor`)             : 2 Sections (Workspace, Specs & Guides)
+29. Video Trimmer (`/video/trimmer`)                   : 2 Sections (Workspace, Specs & Guides)
+30. Audio Extractor (`/video/audio-extractor`)         : 2 Sections (Workspace, Specs & Guides)
+31. Video Muter (`/video/muter`)                       : 2 Sections (Workspace, Specs & Guides)
+32. AI Subtitle Generator (`/video/subtitle-generator`): 2 Sections (Workspace, Specs & Guides)
+33. Audio Booster (`/video/audio-booster`)             : 2 Sections (Workspace, Specs & Guides)
+34. Video to GIF (`/video/video-to-gif`)               : 2 Sections (Workspace, Specs & Guides)
+35. Lyrics Video Generator (`/video/lyrics-video-generator`): 2 Sections (Workspace, Specs & Guides)
+36. Text-to-Speech Studio (`/video/text-to-speech`)    : 2 Sections (Workspace, Specs & Guides)
+37. Universal Document Studio (`/document/studio`)     : 2 Sections (Workspace, Specs & Guides)
+38. Markdown to PDF (`/document/md-to-pdf`)            : 2 Sections (Workspace, Specs & Guides)
+39. Markdown to DOCX (`/document/md-to-docx`)          : 2 Sections (Workspace, Specs & Guides)
+40. Document to Slides (`/document/doc-to-slides`)     : 2 Sections (Workspace, Specs & Guides)
+41. Document to Excel (`/document/doc-to-excel`)       : 2 Sections (Workspace, Specs & Guides)
+42. Doc to PDF (`/document/doc-to-pdf`)                : 2 Sections (Workspace, Specs & Guides)
+43. AI Diagram Studio (`/diagram/studio`)              : 2 Sections (Workspace, Specs & Guides)
+44. Document to Flowchart (`/diagram/doc-to-flowchart`): 2 Sections (Workspace, Specs & Guides)
+45. Document to ERD (`/diagram/doc-to-erd`)            : 2 Sections (Workspace, Specs & Guides)
+46. Document to Architecture (`/diagram/doc-to-architecture`): 2 Sections (Workspace, Specs & Guides)
+
+GRAND TOTAL: 46 Unique Application Pages | 93 UI Design Screen Sections (100vh)
+
+================================================================================
+END OF DISCOVERY SPECIFICATION
+================================================================================

@@ -125,7 +125,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
             Drop PDF to convert to images, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Render high-DPI vector pages into crisp PNG or JPEG images. 100% local WASM.
+            Render high-DPI vector pages into crisp PNG or JPEG images. 100% local processing.
           </p>
         </div>
       ) : (

@@ -1,0 +1,2444 @@
+<!-- PDF Suite Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PDF Suite Hub - NovaTools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f6f2f5",
+                        "outline-variant": "#c3c6d6",
+                        "on-surface-variant": "#434654",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-background": "#1c1b1d",
+                        "tertiary-container": "#595b5b",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fb",
+                        "secondary": "#735c00",
+                        "surface-dim": "#dcd9dc",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "background": "#fcf8fb",
+                        "surface-tint": "#0c56d0",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#574500",
+                        "secondary-container": "#fed65b",
+                        "primary-container": "#0052cc",
+                        "surface-container": "#f0edf0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "secondary-fixed-dim": "#e9c349",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "inverse-surface": "#313032",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-tertiary-container": "#d2d3d3",
+                        "primary": "#003d9b",
+                        "inverse-primary": "#b2c5ff",
+                        "on-surface": "#1c1b1d",
+                        "tertiary": "#424444",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-secondary-container": "#745c00",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-variant": "#e5e1e4",
+                        "surface-bright": "#fcf8fb",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#c4d2ff",
+                        "outline": "#737685",
+                        "secondary-fixed": "#ffe088"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "workbench-gap": "1px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "display": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .honeycomb-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='24' height='40' viewBox='0 0 24 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c5.523 0 10-4.477 10-10V10C10 4.477 5.523 0 0 0h24c-5.523 0-10 4.477-10 10v20c0 5.523 5.523 10 10 10H0z' fill='%23e5e1e4' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .laser-divider {
+            border-bottom: 1px solid theme('colors.outline-variant');
+        }
+        .laser-hover:hover {
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 4px theme('colors.primary-fixed');
+        }
+        .bento-grid {
+            display: grid;
+            gap: theme('spacing.workbench-gap');
+            background-color: theme('colors.outline-variant');
+            border: 1px solid theme('colors.outline-variant');
+        }
+        .bento-cell {
+            background-color: theme('colors.surface');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen pt-16 pb-12 flex flex-col md:flex-row">
+<!-- TopNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface dark:bg-background text-primary dark:text-primary-fixed font-body-lg text-body-lg fixed top-0 w-full h-16 z-50 border-b border-outline-variant dark:border-outline flex justify-between items-center px-6 mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">NovaTools</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150" data-icon="settings">settings</span>
+<span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150" data-icon="help">help</span>
+</div>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col py-4 gap-4 bg-surface-container-low dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-mono-label text-mono-label fixed left-0 top-0 h-screen w-64 z-40 border-r border-outline-variant dark:border-outline">
+<div class="px-6 mb-8 mt-4">
+<h1 class="font-headline-md text-headline-md text-primary mb-1">NODE_01</h1>
+<span class="text-on-surface-variant opacity-70">[ ENCRYPTED ]</span>
+</div>
+<nav class="flex-1 px-4 flex flex-col gap-2">
+<a class="bg-primary-container text-on-primary-container border-l-4 border-primary px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+                Tools
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all px-4 py-3 flex items-center gap-3 border-l-4 border-transparent duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+                Workspaces
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all px-4 py-3 flex items-center gap-3 border-l-4 border-transparent duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+                Vault
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all px-4 py-3 flex items-center gap-3 border-l-4 border-transparent duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                Logs
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all px-4 py-3 flex items-center gap-3 border-l-4 border-transparent duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+                System
+            </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-on-primary py-2 rounded-DEFAULT font-mono-label border border-primary hover:bg-primary/90 duration-200 mb-6">
+                New Project
+            </button>
+<div class="flex flex-col gap-2 border-t border-outline-variant pt-4">
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-highest transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="monitor_heart">monitor_heart</span>
+                    Status
+                </div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-highest transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" data-icon="code">code</span>
+                    Version
+                </div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop honeycomb-pattern bg-repeat flex flex-col gap-12 max-w-[1400px]">
+<!-- Section 1: Hero & Catalog Grid -->
+<section class="flex flex-col gap-8">
+<header class="flex flex-col gap-4 max-w-2xl">
+<div class="inline-flex items-center self-start gap-2 bg-surface-container-highest border border-outline-variant px-3 py-1 rounded-DEFAULT">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-mono-label text-mono-label text-on-surface-variant tracking-wider uppercase">Vector PDF Engine</span>
+</div>
+<h2 class="font-display text-display text-on-surface">Industrial PDF Manipulation</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">High-performance client-side PDF processing. Secure, fast, and entirely localized in your browser workspace.</p>
+<button class="self-start bg-primary text-on-primary font-mono-label px-6 py-3 rounded-DEFAULT hover:shadow-[0_0_8px_rgba(0,82,204,0.5)] transition-shadow duration-200 border border-transparent hover:border-primary-fixed">
+                    Launch Engine
+                </button>
+</header>
+<div class="bento-grid grid-cols-2 md:grid-cols-5">
+<!-- Tool 1: Merge -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_01</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="library_add">library_add</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Merge</h3>
+</div>
+<!-- Tool 2: Split -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_02</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="call_split">call_split</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Split</h3>
+</div>
+<!-- Tool 3: Rotate -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_03</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="rotate_right">rotate_right</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Rotate</h3>
+</div>
+<!-- Tool 4: Protect -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_04</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="enhanced_encryption">enhanced_encryption</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Protect</h3>
+</div>
+<!-- Tool 5: Redact -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_05</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="ink_eraser">ink_eraser</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Redact</h3>
+</div>
+<!-- Tool 6: PDF to Image -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_06</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="image">image</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">PDF to Image</h3>
+</div>
+<!-- Tool 7: Image to PDF -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_07</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="picture_as_pdf">picture_as_pdf</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Image to PDF</h3>
+</div>
+<!-- Tool 8: Numbering -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_08</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="format_list_numbered">format_list_numbered</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Numbering</h3>
+</div>
+<!-- Tool 9: PDF to Word -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_09</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="description">description</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">PDF to Word</h3>
+</div>
+<!-- Tool 10: Word to PDF -->
+<div class="bento-cell p-4 hover:bg-surface-container-low transition-colors cursor-pointer group flex flex-col relative h-32">
+<span class="font-mono-label text-[10px] text-outline absolute top-2 right-2">T_10</span>
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 duration-200" data-icon="sync_alt">sync_alt</span>
+<h3 class="font-headline-md text-body-lg font-semibold mt-auto">Word to PDF</h3>
+</div>
+</div>
+</section>
+<!-- Section 2: Technical Deep Dive -->
+<section class="flex flex-col gap-6 mt-8 border-t border-outline-variant pt-12">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="memory">memory</span>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Architecture Overview</h3>
+</div>
+<div class="bento-grid grid-cols-1 md:grid-cols-3">
+<!-- Code Snippet Cell -->
+<div class="bento-cell p-6 col-span-1 md:col-span-2 flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-mono-label text-on-surface-variant">pdf-lib integration</span>
+<span class="font-mono-label text-[10px] text-outline">SYS_CORE</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-DEFAULT border border-outline-variant overflow-x-auto">
+<pre class="font-mono-data text-mono-data text-on-surface"><code class="language-javascript"><span class="text-primary">import</span> { PDFDocument } <span class="text-primary">from</span> 'pdf-lib';
+
+<span class="text-tertiary">async function</span> <span class="text-primary">encryptDocument</span>(pdfBytes) {
+  <span class="text-primary">const</span> pdfDoc = <span class="text-tertiary">await</span> PDFDocument.load(pdfBytes);
+  
+  <span class="text-on-surface-variant">// AES-256 Encryption routine</span>
+  pdfDoc.encrypt({
+    userPassword: <span class="text-secondary">'secure_pass'</span>,
+    permissions: {
+      printing: <span class="text-secondary">'highResolution'</span>,
+      modifying: <span class="text-primary">false</span>
+    }
+  });
+
+  <span class="text-tertiary">return await</span> pdfDoc.save();
+}</code></pre>
+</div>
+</div>
+<!-- Specs Cell -->
+<div class="bento-cell p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<span class="font-mono-label text-on-surface-variant">Capabilities</span>
+<span class="font-mono-label text-[10px] text-outline">SPECS</span>
+</div>
+<ul class="flex flex-col gap-3 font-body-sm text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="check_circle">check_circle</span>
+<strong>Font Subsetting:</strong> Embedded fonts are stripped of unused glyphs to drastically reduce final payload size.
+                        </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="check_circle">check_circle</span>
+<strong>AES Encryption:</strong> High-grade cryptographic protection applied natively before transmission.
+                        </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="check_circle">check_circle</span>
+<strong>Vector Preservation:</strong> Path data remains intact during split/merge operations.
+                        </li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data border-t border-primary/20 dark:border-outline-variant flex justify-between items-center px-4 py-1 bg-surface-container-low cursor-default">
+<span>NovaTools Privacy-First Productivity</span>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">WASM_v1.2.4-STABLE</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Build:2023.10.12</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- Document & AI Suite Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Document &amp; AI Suite Hub - NovaTools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "error-container": "#ffdad6",
+                  "surface-container-low": "#f6f2f5",
+                  "outline-variant": "#c3c6d6",
+                  "on-surface-variant": "#434654",
+                  "on-primary": "#ffffff",
+                  "inverse-on-surface": "#f3f0f2",
+                  "on-background": "#1c1b1d",
+                  "tertiary-container": "#595b5b",
+                  "surface-container-highest": "#e5e1e4",
+                  "on-error": "#ffffff",
+                  "surface": "#fcf8fb",
+                  "secondary": "#735c00",
+                  "surface-dim": "#dcd9dc",
+                  "on-secondary": "#ffffff",
+                  "on-primary-fixed-variant": "#0040a2",
+                  "background": "#fcf8fb",
+                  "surface-tint": "#0c56d0",
+                  "on-tertiary-fixed": "#1a1c1c",
+                  "on-secondary-fixed-variant": "#574500",
+                  "secondary-container": "#fed65b",
+                  "primary-container": "#0052cc",
+                  "surface-container": "#f0edf0",
+                  "tertiary-fixed-dim": "#c6c6c7",
+                  "secondary-fixed-dim": "#e9c349",
+                  "tertiary-fixed": "#e2e2e2",
+                  "on-tertiary": "#ffffff",
+                  "surface-container-high": "#eae7ea",
+                  "inverse-surface": "#313032",
+                  "primary-fixed": "#dae2ff",
+                  "on-tertiary-fixed-variant": "#454747",
+                  "on-tertiary-container": "#d2d3d3",
+                  "primary": "#003d9b",
+                  "inverse-primary": "#b2c5ff",
+                  "on-surface": "#1c1b1d",
+                  "tertiary": "#424444",
+                  "primary-fixed-dim": "#b2c5ff",
+                  "on-secondary-container": "#745c00",
+                  "on-primary-fixed": "#001848",
+                  "on-secondary-fixed": "#241a00",
+                  "surface-variant": "#e5e1e4",
+                  "surface-bright": "#fcf8fb",
+                  "surface-container-lowest": "#ffffff",
+                  "error": "#ba1a1a",
+                  "on-error-container": "#93000a",
+                  "on-primary-container": "#c4d2ff",
+                  "outline": "#737685",
+                  "secondary-fixed": "#ffe088"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "unit": "4px",
+                  "gutter": "16px",
+                  "margin-desktop": "32px",
+                  "margin-mobile": "16px",
+                  "workbench-gap": "1px"
+          },
+          "fontFamily": {
+                  "body-sm": ["Inter"],
+                  "headline-lg-mobile": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "mono-label": ["JetBrains Mono"],
+                  "display": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "mono-data": ["JetBrains Mono"]
+          },
+          "fontSize": {
+                  "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                  "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                  "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                  "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                  "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+          }
+        },
+      }
+    }
+  </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .icon-fill { font-variation-settings: 'FILL' 1; }
+    
+    /* Honeycomb Pattern */
+    .bg-honeycomb {
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='40' viewBox='0 0 24 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c5.523 0 10-4.477 10-10 0-5.523-4.477-10-10-10v20zm0-40c5.523 0 10 4.477 10 10 0 5.523-4.477 10 10 10V0zM24 20c-5.523 0-10-4.477-10-10 0-5.523 4.477-10 10-10v20zm0 40c-5.523 0-10-4.477-10-10 0-5.523 4.477-10 10-10v20z' fill='%23c3c6d6' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    
+    .laser-border {
+      border: 1px solid theme('colors.outline-variant');
+    }
+    .laser-border:hover {
+      border-color: theme('colors.primary-container');
+      box-shadow: 0 0 4px theme('colors.primary-container');
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary font-body-sm pt-16 pb-12">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full h-16 z-50 bg-surface text-primary border-b border-outline-variant flex justify-between items-center px-6 max-w-[1920px] mx-auto hidden md:flex">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-primary">NovaTools</span>
+<div class="flex items-center bg-surface-container-low px-3 py-1.5 rounded border border-outline-variant ml-4">
+<span class="material-symbols-outlined text-outline text-sm mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm w-48 placeholder:text-outline p-0" placeholder="Search tools..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<a class="text-on-surface-variant font-medium pb-1 font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium pb-1 font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium pb-1 font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Security</a>
+</div>
+<div class="flex items-center gap-3 border-l border-outline-variant pl-6">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-1 rounded transition-colors active:scale-95 duration-150" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-1 rounded transition-colors active:scale-95 duration-150" data-icon="settings">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-1 rounded transition-colors active:scale-95 duration-150" data-icon="help">help</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-2" data-alt="A small, professional portrait of a tech user in an industrial setting, soft lighting, sharp focus, neutral background, realistic rendering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmmoGVJqjcJOr9AxEL9bFY5pnJdEw3nat4lvb2evHI30sb6P_vFCxadpklWQgPAROmMDqq5Q1LKZ59yKiRSUJJMkqfnVu4ZyFuRxVJ7Cp-PNsynQe6ohFpuLZIbw2q6gs0u4s9VZs4Lo0ZoGzjvaY9ckiYSvBqt895dkDg_L_PrGUrlx6NvtJxBIP228gteluYy1U4rZjvpeddj9RycOhli3wuL0ombJ8_9xLidq6SDG5yizeY4ybk"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 bg-surface-container-low text-primary border-r border-outline-variant flex flex-col py-4 gap-4 hidden lg:flex">
+<div class="px-4 pb-4 border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined icon-fill text-primary" data-icon="dns">dns</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-primary">NODE_01</div>
+<div class="font-mono-label text-mono-label text-tertiary-container">[ ENCRYPTED ]</div>
+</div>
+</div>
+</div>
+<div class="px-4">
+<button class="w-full bg-primary-container text-on-primary font-mono-label text-mono-label py-2 rounded flex items-center justify-center gap-2 hover:bg-primary transition-colors active:scale-95 duration-150 border border-transparent">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span> New Project
+      </button>
+</div>
+<nav class="flex-1 overflow-y-auto px-2 space-y-1">
+<a class="bg-primary-container text-on-primary-container border-l-4 border-primary px-3 py-2 flex items-center gap-3 hover:bg-surface-container-highest transition-all duration-200 ease-in-out font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span> Tools
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:border-outline-variant transition-all duration-200 ease-in-out font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span> Workspaces
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:border-outline-variant transition-all duration-200 ease-in-out font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="lock">lock</span> Vault
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:border-outline-variant transition-all duration-200 ease-in-out font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span> Logs
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:border-outline-variant transition-all duration-200 ease-in-out font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span> System
+      </a>
+</nav>
+<div class="px-2 pt-4 border-t border-outline-variant space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 rounded transition-all duration-200 font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="monitor_heart">monitor_heart</span> Status
+      </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 rounded transition-all duration-200 font-mono-label text-mono-label" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span> Version
+      </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 p-4 md:p-8 min-h-screen">
+<!-- Hero Section -->
+<section class="relative w-full bg-surface-container-low border border-outline-variant rounded-DEFAULT mb-6 overflow-hidden bg-honeycomb">
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-surface-container-low/80 to-transparent"></div>
+<div class="relative z-10 p-6 md:p-12 flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1 space-y-4">
+<div class="flex items-center gap-2">
+<span class="font-mono-label text-mono-label bg-primary-container text-on-primary px-2 py-0.5 rounded-sm uppercase">Document Hub</span>
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+</div>
+<h1 class="font-display text-display text-on-surface hidden md:block">OpenXML &amp; AST Pipeline</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface md:hidden">OpenXML &amp; AST Pipeline</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            Industrial-grade document processing suite. Leverage Abstract Syntax Tree parsing and raw OpenXML manipulation for high-fidelity format conversion and automated document generation.
+          </p>
+<div class="pt-4 flex gap-4">
+<button class="bg-primary-container text-on-primary px-6 py-2 rounded-sm font-mono-label text-mono-label hover:bg-primary transition-colors flex items-center gap-2 laser-border border-primary-container">
+<span class="material-symbols-outlined text-sm" data-icon="rocket_launch">rocket_launch</span> Initialize Pipeline
+             </button>
+<button class="bg-transparent text-on-surface border border-outline-variant px-6 py-2 rounded-sm font-mono-label text-mono-label hover:bg-surface-container-highest transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="docs">docs</span> API Docs
+             </button>
+</div>
+</div>
+<div class="w-full md:w-1/3 aspect-square max-w-[300px] border border-outline-variant bg-surface rounded p-4 relative hidden sm:block">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-tertiary">SYS_VIS_01</div>
+<div class="w-full h-full bg-cover bg-center opacity-80 filter grayscale" data-alt="A highly technical, futuristic wireframe visualization of a document tree structure, clinical white and deep blue tones, precise geometric lines, soft ambient glow, macro focus." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyQ94JTMoYllVMhuV4_sZhFmWjDKENvjNqtC5h8b5amL8bVpJ0UD6YFrloeoD0iM01tYJy2bvSEH5gynKVHqTZTdX-qBPH4DyCahnloN4WFKBrZYRM3U5HBoCvhCIk1KaO59gA10ab2whskexLC-Ua2zLZ2LhW63JPVkvyCX_yYilMlyAI9pEDS1ku6HcERJv-e644vXqoScuBtgpmo3qfckX1ctzQH9-XOiTxt85JMmcbQ9vM_2Tr')"></div>
+</div>
+</div>
+</section>
+<!-- Catalog Grid -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-2">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="category">category</span> Core Conversion Tools
+        </h2>
+<span class="font-mono-label text-mono-label text-tertiary">GRID_VIEW_6X</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-workbench-gap bg-outline-variant border border-outline-variant rounded-sm overflow-hidden">
+<!-- Tool 1: Universal Studio -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_UNIV</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Universal Studio</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Centralized workbench for orchestrating complex multi-format document pipelines and cross-compilation workflows.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Tool 2: Markdown to PDF -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_MDPDF</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Markdown to PDF</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">High-fidelity typesetting engine converting standard markdown into print-ready, vectorized PDF documents.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Tool 3: Markdown to Word -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_MDDOCX</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Markdown to Word</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Direct AST mapping to OpenXML docx structures, preserving semantic hierarchies and custom styles.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Tool 4: Doc to Slides -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="co_present">co_present</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_DOCPPT</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Doc to Slides</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Automated pagination and layout extraction to generate presentation decks from structured documents.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Tool 5: Doc to Excel -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="table_view">table_view</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_DOCXLS</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Doc to Excel</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Extract table arrays and structured lists into formatted spreadsheets for data analysis workflows.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Tool 6: Doc to PDF -->
+<div class="bg-surface p-5 hover:bg-surface-container-low transition-colors laser-border group cursor-pointer h-full flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center border border-outline-variant group-hover:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<span class="font-mono-label text-mono-label text-tertiary bg-surface-container-highest px-1.5 py-0.5 rounded-sm">TL_DOCPDF</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 font-semibold">Doc to PDF</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Direct rendering engine for converting OpenXML structures into locked, portable PDF formats.</p>
+<div class="mt-4 flex items-center text-primary font-mono-label text-mono-label group-hover:underline">
+            Launch Tool <span class="material-symbols-outlined text-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Deep Dive Section -->
+<section>
+<div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-2">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="account_tree">account_tree</span> System Architecture: AST &amp; OpenXML
+        </h2>
+</div>
+<div class="grid md:grid-cols-2 gap-4">
+<!-- AST Card -->
+<div class="bg-surface border border-outline-variant rounded-sm p-6 relative overflow-hidden">
+<div class="absolute -right-12 -top-12 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="account_tree">account_tree</span>
+</div>
+<div class="relative z-10">
+<div class="font-mono-label text-mono-label text-primary mb-2">[ LAYER 01 ]</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-3 hidden md:block">AST Parsing Engine</h3>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-3 md:hidden">AST Parsing Engine</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+              Our abstract syntax tree implementation tokenizes incoming documents into a strict, programmatic schema. This intermediate representation guarantees semantic fidelity across all conversion targets, stripping away platform-specific styling artifacts.
+            </p>
+<div class="bg-surface-container-low border border-outline-variant p-3 rounded-sm font-mono-data text-mono-data text-on-surface-variant overflow-x-auto">
+<code>
+<span class="text-primary">function</span> <span class="text-secondary">parseNode</span>(node) {<br/>
+  <span class="text-primary">if</span> (node.type === <span class="text-secondary-container">"heading"</span>) {<br/>
+    <span class="text-primary">return</span> createHeadingNode(node.depth, node.text);<br/>
+  }<br/>
+  <span class="text-tertiary">// ...</span><br/>
+}
+              </code>
+</div>
+</div>
+</div>
+<!-- OpenXML Card -->
+<div class="bg-surface border border-outline-variant rounded-sm p-6 relative overflow-hidden">
+<div class="absolute -right-12 -bottom-12 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="archive">archive</span>
+</div>
+<div class="relative z-10">
+<div class="font-mono-label text-mono-label text-primary mb-2">[ LAYER 02 ]</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-3 hidden md:block">OpenXML Packaging</h3>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-3 md:hidden">OpenXML Packaging</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+              Direct manipulation of the ISO/IEC 29500 standard. The packaging engine constructs the required relationships, content types, and XML sub-documents directly from the AST, avoiding bulky third-party abstraction layers for maximum throughput.
+            </p>
+<ul class="space-y-2 font-mono-data text-mono-data text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary" data-icon="check_circle">check_circle</span> Strict schema validation</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary" data-icon="check_circle">check_circle</span> Optimized archive compression</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary" data-icon="check_circle">check_circle</span> Memory-efficient streaming API</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface-container-low border-t border-primary/20 flex justify-between items-center px-4 py-1 font-mono-data text-mono-data text-primary">
+<div class="text-primary font-bold">NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">WASM_v1.2.4-STABLE</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Build:2023.10.12</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- Image Suite Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Image Suite Hub - NovaTools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f6f2f5",
+                      "outline-variant": "#c3c6d6",
+                      "on-surface-variant": "#434654",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f3f0f2",
+                      "on-background": "#1c1b1d",
+                      "tertiary-container": "#595b5b",
+                      "surface-container-highest": "#e5e1e4",
+                      "on-error": "#ffffff",
+                      "surface": "#fcf8fb",
+                      "secondary": "#735c00",
+                      "surface-dim": "#dcd9dc",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#0040a2",
+                      "background": "#fcf8fb",
+                      "surface-tint": "#0c56d0",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-secondary-fixed-variant": "#574500",
+                      "secondary-container": "#fed65b",
+                      "primary-container": "#0052cc",
+                      "surface-container": "#f0edf0",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "secondary-fixed-dim": "#e9c349",
+                      "tertiary-fixed": "#e2e2e2",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#eae7ea",
+                      "inverse-surface": "#313032",
+                      "primary-fixed": "#dae2ff",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-tertiary-container": "#d2d3d3",
+                      "primary": "#003d9b",
+                      "inverse-primary": "#b2c5ff",
+                      "on-surface": "#1c1b1d",
+                      "tertiary": "#424444",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "on-secondary-container": "#745c00",
+                      "on-primary-fixed": "#001848",
+                      "on-secondary-fixed": "#241a00",
+                      "surface-variant": "#e5e1e4",
+                      "surface-bright": "#fcf8fb",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#c4d2ff",
+                      "outline": "#737685",
+                      "secondary-fixed": "#ffe088"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px",
+                      "workbench-gap": "1px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "mono-label": [
+                              "JetBrains Mono"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-label": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .honeycomb-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='69.28203230275509' viewBox='0 0 40 69.28203230275509' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 11.547v23.094L20 46.188 0 34.641V11.547L20 0zm0 69.282l20-11.547V34.641l-20-11.547-20 11.547v23.094l20 11.547z' fill='%23c3c6d6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .laser-divider {
+            border-bottom: 1px solid theme('colors.outline-variant');
+        }
+        .laser-divider-active {
+            border-bottom: 1px solid theme('colors.primary-container');
+            box-shadow: 0 2px 4px rgba(0, 82, 204, 0.2);
+        }
+        .bento-hover:hover {
+            border-color: theme('colors.primary-container');
+            box-shadow: 0 0 0 1px theme('colors.primary-container');
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-background text-primary dark:text-primary-fixed font-body-lg text-body-lg fixed top-0 w-full h-16 z-50 border-b border-outline-variant dark:border-outline flat no shadows flex justify-between items-center px-6 w-full max-w-[1920px] mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">widgets</span>
+            NovaTools
+        </div>
+<div class="flex items-center gap-6 hidden md:flex">
+<nav class="flex gap-4">
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-1 rounded cursor-pointer active:scale-95 duration-150" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-1 rounded cursor-pointer active:scale-95 duration-150" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors px-3 py-1 rounded cursor-pointer active:scale-95 duration-150" href="#">Security</a>
+<!-- Adding Tool Hubs conceptually -->
+<a class="text-primary font-bold border-b-2 border-primary pb-1 px-3 py-1 rounded cursor-pointer active:scale-95 duration-150" href="#">Image Suite</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors active:scale-95 duration-150">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors active:scale-95 duration-150">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors active:scale-95 duration-150">help</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A small, professional user profile avatar in a clinical, light-mode setting. The avatar features a minimalist, geometric user icon in deep blue against a crisp white background. The image style is clean, modern, and aligned with industrial minimalist web design, conveying security and precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCirFwAHcVUYVDH_5NDPCYPfLENLcmHjLxRv3DVlH87dBQ03K3_1oPO_yj9jXWeAm2EoR1zlNRyuBvshFVJDyDTcIbzKiPZCiAcs439s3RRa9k_5ocml3A-T8Kjb01Vec5Q-TDUt9hd47a2EmvbMhb5jZoxcO9vTDE3LWN7rwUpeKmYigvlWGoZBxgER82lO8q_2oZvBglT8EMkpFZcyA_fjWXQ4YaCcuS5Yxn2WREUVw35BsjmaYl9"/>
+</div>
+</header>
+<div class="flex flex-1 pt-16">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-mono-label text-mono-label fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant dark:border-outline flat no shadows flex flex-col py-4 gap-4 hidden md:flex">
+<div class="px-4 mb-4">
+<div class="flex items-center gap-3 mb-2">
+<img alt="System Node" class="w-10 h-10 rounded border border-outline-variant object-cover" data-alt="A stylized, technical avatar representing a system node. The image features abstract, wireframe-like geometric shapes in precise blue lines over a very light grey surface, echoing a high-tech, industrial workstation aesthetic. The mood is secure, analytical, and highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBWmZdIlHGogxToW-pmX947K0vf7ewQwXjvytthdXLtB_Tmp5QpxujdT6soZ0e_pSr2orgkQyz5j49xiOEQc9nkAzqw4sadt3FP_Vo1uWShf4EvJkFYHkM2Qa592pa4Yyg47_pEpu-zTKOFPSjlVkwy9ND2cqukjFq_ECNBPg5ypyN6Z3zmM1xBiX2WZiM6qT6DTnQtcqL6811iEywjCAnHICHbekJZPBxeMC3175Qdk955MJD7PUK"/>
+<div>
+<div class="font-headline-md text-headline-md text-primary">NODE_01</div>
+<div class="text-on-surface-variant opacity-75">[ ENCRYPTED ]</div>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary py-2 rounded-DEFAULT font-bold flex items-center justify-center gap-2 hover:bg-primary transition-colors border border-transparent hover:border-outline-variant">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    New Project
+                </button>
+</div>
+<nav class="flex-1 px-2 flex flex-col gap-1">
+<a class="bg-primary-container text-on-primary-container border-l-4 border-primary px-3 py-2 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">build</span>
+                    Tools
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+                    Workspaces
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+                    Vault
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                    Logs
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">settings_input_component</span>
+                    System
+                </a>
+</nav>
+<div class="mt-auto px-2 border-t border-outline-variant pt-4 flex flex-col gap-1">
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">monitor_heart</span>
+                    Status
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high px-3 py-2 flex items-center gap-3 border-l-4 border-transparent hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[18px]">code</span>
+                    Version
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-surface p-margin-mobile md:p-margin-desktop mb-10 overflow-y-auto">
+<!-- Section 1: Hero & Tool Grid -->
+<section class="mb-12">
+<div class="relative rounded-xl border border-outline-variant bg-surface-container-low overflow-hidden mb-8 honeycomb-pattern flex flex-col md:flex-row min-h-[300px]">
+<div class="p-8 md:w-1/2 flex flex-col justify-center relative z-10">
+<div class="font-mono-label text-mono-label text-primary mb-2 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            [ LIVE ] SYSTEM.VISION
+                        </div>
+<h1 class="font-display text-display text-on-surface mb-4 tracking-tight">Neural Vision &amp; Canvas Engine</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6 max-w-lg">
+                            Industrial-grade image processing pipeline. Leverage local ONNX models for segmentation and high-performance WebGL rendering for instant manipulation.
+                        </p>
+<div class="flex gap-4">
+<button class="bg-primary-container text-on-primary px-6 py-2 rounded-DEFAULT font-body-sm font-bold flex items-center gap-2 hover:shadow-[0_0_0_1px_theme('colors.primary-container')] transition-all">
+<span class="material-symbols-outlined text-[18px]">precision_manufacturing</span>
+                                Initialize Pipeline
+                            </button>
+<button class="bg-transparent border border-outline-variant text-on-surface px-6 py-2 rounded-DEFAULT font-body-sm font-bold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+                                View Docs
+                            </button>
+</div>
+</div>
+<div class="md:w-1/2 relative bg-surface-container-highest/50 border-l border-outline-variant flex items-center justify-center p-8">
+<img alt="Vision Engine Visualization" class="w-full h-full object-contain rounded-lg border border-outline-variant bg-surface" data-alt="A highly technical, abstract visualization of an image processing pipeline. The scene features glowing wireframe representations of neural networks and geometric shapes intersecting in a bright, clean, industrial workspace setting. Colors are primarily pristine whites, light greys, and vibrant laser blue accents. The mood is precise, instantaneous, and computational." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkxjMHPD6vEVTrQycjm9mul7sdjY4BLO-UVkj46IDBRWyUahFGbpqCi7UrIqg6vZ8y5LDUZg_YsYiQjzZOI-kfDAidSitf2_yIp9as_xIZlFg847LGxdVOiA0AQs_2iMsuJt-ETpkzGazhcoeWHaMUBMHC6GNDRej6RHKpy9Ub4eZ3wCxtIl_k4m7nwKNI6aLXFXw4GImaMAqQRMbz78o24DcKKaWqHk2p5dsobPoPxUmt5JMkuUu1"/>
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant">
+                            ENG_v2.4
+                        </div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-unit">
+<!-- Bento Cell 1 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_01</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_remove</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">AI Background Remover</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Semantic segmentation using optimized ONNX models for instantaneous foreground extraction.</p>
+</div>
+</div>
+<!-- Bento Cell 2 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_02</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">transform</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Format Converter</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lossless and lossy conversion between modern codecs including WebP, AVIF, and JPEG XL.</p>
+</div>
+</div>
+<!-- Bento Cell 3 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_03</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">compress</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Smart Compressor</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Perceptual quantization engine to minimize payload while maintaining structural integrity.</p>
+</div>
+</div>
+<!-- Bento Cell 4 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_04</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">aspect_ratio</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Aspect Resizer</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Content-aware scaling and precise dimensional constraints for layout-critical assets.</p>
+</div>
+</div>
+<!-- Bento Cell 5 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_05</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">EXIF Scrubber</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Privacy-first metadata sanitization. Strips telemetry, geolocation, and device fingerprints.</p>
+</div>
+</div>
+<!-- Bento Cell 6 -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-4 flex flex-col gap-4 bento-hover transition-colors relative group">
+<div class="absolute top-2 right-2 font-mono-label text-mono-label text-outline-variant group-hover:text-primary transition-colors">TOOL_06</div>
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center border border-outline-variant text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">polyline</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">SVG Optimizer</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AST-based vector minification. Reduces DOM bloat and optimizes path rendering precision.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Deep Dive Data Grid -->
+<section class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<div class="bg-surface-container-low p-4 border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">memory</span>
+                        Engine Architecture
+                    </h2>
+<div class="font-mono-label text-mono-label text-on-surface-variant bg-surface px-2 py-1 rounded border border-outline-variant">
+                        SYS_METRICS_LIVE
+                    </div>
+</div>
+<div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="flex flex-col gap-4">
+<div class="border-b border-outline-variant pb-2 flex justify-between items-end">
+<span class="font-mono-label text-mono-label text-on-surface-variant">COMPONENT</span>
+<span class="font-mono-label text-mono-label text-primary">WebGL Renderer</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Utilizes GPU acceleration via WebGL 2.0 context for matrix transformations and pixel-level shader operations, ensuring sub-millisecond latency during active manipulation.
+                        </p>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-3 font-mono-data text-mono-data text-on-surface h-24 overflow-y-auto">
+                            &gt; init_gl_context(canvas_id)<br/>
+                            [OK] Context established<br/>
+                            &gt; load_shader_program(VERT_01, FRAG_01)<br/>
+                            [OK] Shaders compiled<br/>
+                            &gt; bind_texture2D(img_data)
+                        </div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="border-b border-outline-variant pb-2 flex justify-between items-end">
+<span class="font-mono-label text-mono-label text-on-surface-variant">COMPONENT</span>
+<span class="font-mono-label text-mono-label text-primary">ONNX Runtime</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Client-side inference using WebAssembly and WebGPU backends. Segmentation models operate entirely within the local sandbox, upholding strict privacy protocols.
+                        </p>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-3 font-mono-data text-mono-data text-on-surface h-24 overflow-y-auto">
+                            &gt; load_model("u2net_opt.onnx")<br/>
+                            [OK] Weights loaded (4.2MB)<br/>
+                            &gt; run_inference(tensor_input)<br/>
+                            [METRIC] Latency: 124ms<br/>
+                            &gt; generate_mask()
+                        </div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="border-b border-outline-variant pb-2 flex justify-between items-end">
+<span class="font-mono-label text-mono-label text-on-surface-variant">COMPONENT</span>
+<span class="font-mono-label text-mono-label text-primary">Codec IO</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Advanced encoding streams for modern web delivery. Prioritizes structural similarity (SSIM) scoring to balance payload reduction with visual fidelity in WebP/AVIF output.
+                        </p>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-3 font-mono-data text-mono-data text-on-surface h-24 overflow-y-auto">
+                            &gt; encode_avif(q=85, effort=6)<br/>
+                            [PROCESS] Quantizing...<br/>
+                            [OK] Original: 2.4MB<br/>
+                            [OK] Compressed: 340KB<br/>
+                            [METRIC] SSIM: 0.988
+                        </div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant flat no shadows flex justify-between items-center px-4 py-1 w-full bg-surface-container-low cursor-default">
+<div>NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">WASM_v1.2.4-STABLE</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Build:2023.10.12</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- SVG Suite Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SVG Suite Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f6f2f5",
+                        "outline-variant": "#c3c6d6",
+                        "on-surface-variant": "#434654",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-background": "#1c1b1d",
+                        "tertiary-container": "#595b5b",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fb",
+                        "secondary": "#735c00",
+                        "surface-dim": "#dcd9dc",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "background": "#fcf8fb",
+                        "surface-tint": "#0c56d0",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#574500",
+                        "secondary-container": "#fed65b",
+                        "primary-container": "#0052cc",
+                        "surface-container": "#f0edf0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "secondary-fixed-dim": "#e9c349",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "inverse-surface": "#313032",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-tertiary-container": "#d2d3d3",
+                        "primary": "#003d9b",
+                        "inverse-primary": "#b2c5ff",
+                        "on-surface": "#1c1b1d",
+                        "tertiary": "#424444",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-secondary-container": "#745c00",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-variant": "#e5e1e4",
+                        "surface-bright": "#fcf8fb",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#c4d2ff",
+                        "outline": "#737685",
+                        "secondary-fixed": "#ffe088"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "workbench-gap": "1px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "display": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .laser-divider {
+            border-bottom: 1px solid #E4E4E7;
+            position: relative;
+        }
+        .laser-divider.active {
+            border-bottom-color: #0052CC;
+            box-shadow: 0 2px 4px rgba(0, 82, 204, 0.2);
+        }
+        .honeycomb-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 10v20L20 40 0 30V10z' fill-rule='evenodd' stroke='%23e5e1e4' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+        }
+        
+        /* Specific Component Styles from JSON */
+        .top-nav-active {
+            @apply text-primary font-bold border-b-2 border-primary pb-1;
+        }
+        .top-nav-inactive {
+            @apply text-on-surface-variant font-medium;
+        }
+        .side-nav-active {
+            @apply bg-primary-container text-on-primary-container border-l-4 border-primary;
+        }
+        .side-nav-inactive {
+            @apply text-on-surface-variant hover:bg-surface-container-high;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-lg min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-16 z-50 bg-surface dark:bg-background border-b border-outline-variant dark:border-outline flex justify-between items-center px-6 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-6">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">NovaTools</div>
+<nav class="hidden md:flex gap-4">
+<a class="top-nav-inactive font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer active:scale-95 duration-150" href="#">Dashboard</a>
+<a class="top-nav-inactive font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer active:scale-95 duration-150" href="#">Analytics</a>
+<a class="top-nav-inactive font-body-lg text-body-lg hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer active:scale-95 duration-150" href="#">Security</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:bg-surface-container-low p-2 rounded cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+<button class="text-primary hover:bg-surface-container-low p-2 rounded cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="text-primary hover:bg-surface-container-low p-2 rounded cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="A clinical, highly detailed headshot of a female software engineer in a well-lit, minimalist workstation environment. She wears a simple navy shirt, looking neutrally at the camera. The background is slightly blurred, showing monitors with raw code. The lighting is bright, white, and crisp, emphasizing a professional, sterile, and privacy-focused technology aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxIiUKkZhkZbi4l8uExrOV9rnUyafAwboXN8iKmaJvO4AiUg71ies1ELuZypcuSH-tdyaYO-WnjJW7wG1m9eRazjekAh9Fpkg4ieiqXNKGBCBG1HILm4S_ccYf1pVWWvYIMz9XWwlwPTRFZop6pXJDK7m-gG2-rzH3zR5O_jakH5T9L3v3bfBYQ49WC_Q5Gg8cPoSRoXBvWUVPMt0inui5bfCQv1oNIl7yykMJOEt4ENrxnU7kQ0iP"/>
+</div>
+</header>
+<!-- SideNavBar & Main Content Wrapper -->
+<div class="flex flex-1 pt-16 h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline flex-col py-4 gap-4">
+<div class="px-4 mb-4">
+<div class="flex items-center gap-3 mb-2">
+<img alt="System Node" class="w-10 h-10 rounded border border-outline-variant" data-alt="A stylized, geometric icon representing a system node. It features sharp, angular lines forming a glowing blue cube over a pristine white background. The aesthetic is industrial, precise, and tech-forward, matching the clinical privacy-first vibe of the platform. High-contrast, sharp edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnhF6gj4wq1E_QOHx8GNRH9L3UDiXMror7KXYAAKn_eYJFt9fACvxtY_IE0KHxI9Q8ILqQf_2n7H_COQ2x7SSuxI47c2pg-G2MREUX72kUJh931gxRGjCMSpBCvrQWzTCITS-mh_3sm_VUSwknw3wvPt56j5EEukf9hozPoBpkVt7RXdwQXd-nM4S3nqmk8ubVLnhJB4FHHEiUyQHlUBtx8UCc2Zd57NaD-z7WJX-DMcgXfq7-MKD2"/>
+<div>
+<div class="font-headline-md text-headline-md text-primary">NODE_01</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant">[ ENCRYPTED ]</div>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary font-body-sm py-2 rounded hover:bg-primary transition-colors cursor-pointer border border-primary hover:shadow-[0_0_8px_rgba(0,82,204,0.4)]">New Project</button>
+</div>
+<nav class="flex flex-col gap-1 px-2 flex-1">
+<a class="side-nav-active font-mono-label text-mono-label hover:bg-surface-container-highest transition-all duration-200 ease-in-out py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="build">build</span> Tools
+                </a>
+<a class="side-nav-inactive font-mono-label text-mono-label hover:bg-surface-container-highest transition-all duration-200 ease-in-out py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="grid_view">grid_view</span> Workspaces
+                </a>
+<a class="side-nav-inactive font-mono-label text-mono-label hover:bg-surface-container-highest transition-all duration-200 ease-in-out py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock">lock</span> Vault
+                </a>
+<a class="side-nav-inactive font-mono-label text-mono-label hover:bg-surface-container-highest transition-all duration-200 ease-in-out py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span> Logs
+                </a>
+<a class="side-nav-inactive font-mono-label text-mono-label hover:bg-surface-container-highest transition-all duration-200 ease-in-out py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings_input_component">settings_input_component</span> System
+                </a>
+</nav>
+<div class="mt-auto px-2 pt-4 border-t border-outline-variant mx-2">
+<a class="side-nav-inactive font-mono-label text-mono-label py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="monitor_heart">monitor_heart</span> Status
+                </a>
+<a class="side-nav-inactive font-mono-label text-mono-label py-2 px-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="code">code</span> Version
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 lg:ml-64 bg-surface relative overflow-y-auto overflow-x-hidden p-gutter md:p-margin-desktop pb-24">
+<div class="absolute inset-0 honeycomb-pattern pointer-events-none z-0"></div>
+<div class="relative z-10 max-w-7xl mx-auto space-y-12">
+<!-- Header -->
+<header class="flex items-baseline justify-between border-b border-outline-variant pb-4 mb-8">
+<div>
+<h1 class="font-display text-display text-on-surface">SVG Suite Hub</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Dual-pane AST optimization &amp; React Exporter</p>
+</div>
+<div class="font-mono-data text-mono-data bg-surface-container-low px-2 py-1 rounded border border-outline-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                        [ LIVE ]
+                    </div>
+</header>
+<!-- Section 1: Dual Pane Studio -->
+<section class="grid grid-cols-1 xl:grid-cols-2 gap-workbench-gap bg-outline-variant border border-outline-variant rounded">
+<!-- SVG Cleaner Panel -->
+<div class="bg-surface-container-lowest p-6 flex flex-col h-[600px]">
+<div class="flex justify-between items-center border-b border-outline-variant pb-3 mb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">cleaning_services</span>
+                                SVG Cleaner
+                            </h2>
+<span class="font-mono-label text-mono-label text-on-surface-variant">TOOL_01</span>
+</div>
+<div class="flex-1 flex flex-col gap-4">
+<div class="flex-1 bg-surface-container-low border border-outline-variant rounded p-4 font-mono-data text-mono-data text-on-surface-variant overflow-auto relative">
+<div class="absolute top-2 right-2 flex gap-2">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+</div>
+<pre><code>&lt;svg viewBox="0 0 24 24"&gt;
+  &lt;!-- Unoptimized path data --&gt;
+  &lt;path d="M 2 2 L 2 22 L 22 22 L 22 2 Z" /&gt;
+&lt;/svg&gt;</code></pre>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 font-mono-label text-mono-label cursor-pointer p-2 hover:bg-surface-container-high rounded transition-colors">
+<input checked="" class="form-checkbox text-primary-container rounded-sm border-outline" type="checkbox"/>
+                                    Remove XMLNS
+                                </label>
+<label class="flex items-center gap-2 font-mono-label text-mono-label cursor-pointer p-2 hover:bg-surface-container-high rounded transition-colors">
+<input checked="" class="form-checkbox text-primary-container rounded-sm border-outline" type="checkbox"/>
+                                    Minify Colors
+                                </label>
+</div>
+<button class="w-full bg-surface text-primary border border-primary font-body-sm py-2 rounded hover:bg-primary-container hover:text-on-primary transition-all shadow-sm">
+                                Optimize AST
+                            </button>
+</div>
+</div>
+<!-- React/JSX Generator Panel -->
+<div class="bg-surface-container-lowest p-6 flex flex-col h-[600px]">
+<div class="flex justify-between items-center border-b border-outline-variant pb-3 mb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">code</span>
+                                React/JSX Exporter
+                            </h2>
+<span class="font-mono-label text-mono-label text-on-surface-variant">TOOL_02</span>
+</div>
+<div class="flex-1 flex flex-col gap-4">
+<div class="flex-1 bg-[#1E1E1E] border border-outline-variant rounded p-4 font-mono-data text-mono-data text-[#D4D4D4] overflow-auto relative">
+<div class="absolute top-2 right-2 flex gap-2">
+<button class="text-outline hover:text-primary-fixed"><span class="material-symbols-outlined text-[16px]">download</span></button>
+</div>
+<pre><code class="language-jsx"><span class="text-[#569CD6]">const</span> <span class="text-[#4FC1FF]">OptimizedIcon</span> = (<span class="text-[#9CDCFE]">props</span>) <span class="text-[#569CD6]">=&gt;</span> (
+  &lt;<span class="text-[#569CD6]">svg</span> <span class="text-[#9CDCFE]">viewBox</span>=<span class="text-[#CE9178]">"0 0 24 24"</span> {...<span class="text-[#9CDCFE]">props</span>}&gt;
+    &lt;<span class="text-[#569CD6]">path</span> <span class="text-[#9CDCFE]">d</span>=<span class="text-[#CE9178]">"M2 2v20h20V2z"</span> /&gt;
+  &lt;/<span class="text-[#569CD6]">svg</span>&gt;
+);
+<span class="text-[#C586C0]">export</span> <span class="text-[#C586C0]">default</span> <span class="text-[#4FC1FF]">OptimizedIcon</span>;</code></pre>
+</div>
+<div class="flex gap-2">
+<select class="form-select flex-1 bg-surface border-outline-variant rounded font-mono-label text-mono-label text-on-surface py-2">
+<option>React (JSX)</option>
+<option>React Native</option>
+<option>SolidJS</option>
+</select>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Deep Dive Data Grid -->
+<section>
+<div class="flex items-baseline justify-between border-b border-outline-variant pb-2 mb-4">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">AST Parsing Specs</h2>
+<span class="font-mono-label text-mono-label text-on-surface-variant">SVGO Core Engine v3.0.2</span>
+</div>
+<div class="border border-outline-variant rounded bg-surface-container-lowest overflow-hidden">
+<table class="w-full text-left font-mono-data text-mono-data">
+<thead class="bg-surface-container-low border-b border-outline-variant text-on-surface-variant">
+<tr>
+<th class="p-3 font-medium">Plugin / Operation</th>
+<th class="p-3 font-medium">Status</th>
+<th class="p-3 font-medium">Latency (ms)</th>
+<th class="p-3 font-medium">Bytes Saved</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-3 text-on-surface">cleanupAttrs</td>
+<td class="p-3"><span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">Active</span></td>
+<td class="p-3 text-on-surface-variant">0.12</td>
+<td class="p-3 text-secondary-container">124 B</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-high transition-colors">
+<td class="p-3 text-on-surface">removeDoctype</td>
+<td class="p-3"><span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">Active</span></td>
+<td class="p-3 text-on-surface-variant">0.05</td>
+<td class="p-3 text-secondary-container">45 B</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="p-3 text-on-surface">convertPathData</td>
+<td class="p-3"><span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">Disabled</span></td>
+<td class="p-3 text-on-surface-variant">--</td>
+<td class="p-3 text-on-surface-variant">--</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-high transition-colors">
+<td class="p-3 text-on-surface">mergePaths</td>
+<td class="p-3"><span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">Active</span></td>
+<td class="p-3 text-on-surface-variant">0.89</td>
+<td class="p-3 text-secondary-container">1024 B</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-background border-t border-primary/20 dark:border-outline-variant flex justify-between items-center px-4 py-1 bg-surface-container-low font-mono-data text-mono-data text-primary dark:text-primary-fixed cursor-default">
+<div>NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">WASM_v1.2.4-STABLE</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Build:2023.10.12</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- NovaTools Master Tool Template (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NovaTools - Tool Page Layout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#434654",
+                        "surface-dim": "#dcd9dc",
+                        "on-surface": "#1c1b1d",
+                        "outline": "#737685",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-primary-fixed": "#001848",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "on-error": "#ffffff",
+                        "primary-container": "#0052cc",
+                        "on-background": "#1c1b1d",
+                        "secondary-fixed-dim": "#e9c349",
+                        "inverse-primary": "#b2c5ff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#745c00",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf8fb",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "secondary": "#735c00",
+                        "background": "#fcf8fb",
+                        "on-tertiary-container": "#d2d3d3",
+                        "primary": "#003d9b",
+                        "secondary-container": "#fed65b",
+                        "secondary-fixed": "#ffe088",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "outline-variant": "#c3c6d6",
+                        "surface-variant": "#e5e1e4",
+                        "surface": "#fcf8fb",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary": "#424444",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-primary-container": "#c4d2ff",
+                        "tertiary-container": "#595b5b",
+                        "inverse-surface": "#313032",
+                        "surface-container": "#f0edf0",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-low": "#f6f2f5",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface-container-high": "#eae7ea",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface-tint": "#0c56d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "workbench-gap": "1px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "display": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-honeycomb {
+            background-image: url("data:image/svg+xml,%3Csvg width='24' height='40' viewBox='0 0 24 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c5.523 0 10-4.477 10-10 0-5.522-4.477-10-10-10v20zm24 0c-5.523 0-10-4.477-10-10 0-5.522 4.477-10 10-10v20zM0 0c5.523 0 10 4.477 10 10 0 5.522-4.477 10-10 10V0zm24 0c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10V0z' fill='%23c3c6d6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .laser-divider {
+            position: relative;
+        }
+        .laser-divider::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #E4E4E7;
+            transition: all 0.3s ease;
+        }
+        .laser-divider:hover::after {
+            background-color: #0052CC;
+            box-shadow: 0 0 4px #0052CC;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-background text-primary dark:text-primary-fixed font-body-lg text-body-lg fixed top-0 w-full h-16 z-50 border-b border-outline-variant dark:border-outline flat no shadows flex justify-between items-center px-6 max-w-[1920px] mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">NovaTools</span>
+<!-- Search Bar (on_left) -->
+<div class="relative hidden md:block ml-4">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="pl-8 pr-4 py-1 bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:border-primary-container text-sm font-mono-data text-mono-data w-48" placeholder="Search..." type="text"/>
+</div>
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 duration-150" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer active:scale-95 duration-150 px-2 rounded" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer active:scale-95 duration-150 px-2 rounded" href="#">Security</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer active:scale-95 duration-150 p-2 rounded">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer active:scale-95 duration-150 p-2 rounded">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors cursor-pointer active:scale-95 duration-150 p-2 rounded">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A clinical, professional user profile avatar placeholder. Solid grey background with a minimal white silhouette outline of a person. High-resolution, crisp edges, conveying corporate security and privacy focus in a sleek modern application interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6qOP8xlJIwo8lnamTd6fnoxMT5-J_SBmgtSnA3vv_AU6cxjH-cqgl3bdYbUWsgIifcnd_X9BWCc5zYR9JNcbyBc9KuGPDeApl-GmtbQH65Es_wQ6ZkjMMweSgnIyWEb_v8eVVOyck3BFTgpzD7l0tnEAO96ic6hje_PyIjsffGaNUcLEPwEHqHE8eMLphgbqOGSjoVbIOvpz2iNHBuxxBQ9YDzmdv5eUgxM1iUjmAPcf3OC_lu8QX"/>
+</div>
+</header>
+<div class="flex flex-1 pt-16">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-mono-label text-mono-label fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant dark:border-outline flat no shadows flex flex-col py-4 gap-4 hidden md:flex">
+<div class="px-4 pb-4 border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<img alt="System Node" class="w-10 h-10 rounded border border-outline" data-alt="A highly geometric and abstract avatar icon for a System Node. Composed of sharp intersecting lines and hexagonal shapes in shades of deep blue and crisp white. Rendered with precision to suggest artificial intelligence or backend server architecture in a high-tech console." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClrV5qTu63BaSTgNTbgWmDdB5buav0ZR-nLNopwM_pJETpxUsOoBHRuc6Cb-MImBcOfwXbc1-fcMZCKJKPUV9gAr4z8g1PKzrZKNuiXopqPqze2VdtVpA7-oKFim9ksQsYYbrg_uxhl__GFuQSXo6u2yAl7TXrPHyg4oCsV3L5l9khy0eRdeyJCXlP5YPSqteud-IM344v1-dM7DF7lKN-WiBfwWha3emIeqikRUEaRMUrLj4Ry4c3"/>
+<div>
+<div class="font-headline-md text-headline-md text-primary">NODE_01</div>
+<div class="text-on-surface-variant text-[10px] tracking-widest">[ ENCRYPTED ]</div>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary-container text-on-primary py-2 rounded text-center hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> New Project
+                </button>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2">
+<a class="bg-primary-container text-on-primary-container border-l-4 border-primary hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2" href="#">
+<span class="material-symbols-outlined">build</span> Tools
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">grid_view</span> Workspaces
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">lock</span> Vault
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Logs
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">settings_input_component</span> System
+                </a>
+</nav>
+<div class="px-2 pt-4 border-t border-outline-variant">
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[16px]">monitor_heart</span> Status
+                </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out flex items-center gap-3 px-3 py-2 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined text-[16px]">code</span> Version
+                </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-[calc(200vh-64px)]">
+<!-- SECTION 1 (Interactive Workspace) -->
+<section class="h-[calc(100vh-64px)] flex flex-col bg-surface bg-honeycomb">
+<!-- Breadcrumb Bar -->
+<div class="h-10 border-b border-outline-variant bg-surface-container-lowest flex items-center justify-between px-6 font-mono-data text-mono-data text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="text-primary hover:underline cursor-pointer">Tools</span>
+<span>/</span>
+<span class="text-primary hover:underline cursor-pointer">PDF Suite</span>
+<span>/</span>
+<span class="text-on-surface font-medium">Merge PDF</span>
+</div>
+<div class="flex items-center gap-2 text-[11px] bg-surface-container py-1 px-3 rounded border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+<span>0 bytes uploaded · WASM Local Engine</span>
+</div>
+</div>
+<!-- Main Workspace (PDF Merge Mockup) -->
+<div class="flex-1 p-margin-desktop flex flex-col items-center justify-center">
+<div class="w-full max-w-4xl bg-surface-container-lowest border border-outline-variant rounded-lg p-6 shadow-sm flex flex-col gap-6 relative">
+<!-- Privacy Indicator -->
+<div class="absolute top-4 right-4 flex items-center gap-1 text-mono-data text-mono-data text-outline">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span class="text-[10px]">TOOL_01</span>
+</div>
+<div class="text-center mb-4">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Merge PDF Files</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Combine multiple PDFs into a single document securely.</p>
+</div>
+<!-- Dropzone -->
+<div class="border-2 border-dashed border-outline-variant hover:border-primary-container bg-surface-container-low rounded p-10 flex flex-col items-center justify-center cursor-pointer transition-colors laser-divider">
+<span class="material-symbols-outlined text-display text-outline mb-4">upload_file</span>
+<p class="font-body-lg text-body-lg text-on-surface font-medium mb-1">Drag &amp; Drop files here</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">or click to browse local files</p>
+</div>
+<!-- Thumbnail Cards -->
+<div class="flex gap-4 overflow-x-auto pb-2">
+<div class="flex-none w-48 bg-surface border border-outline-variant rounded p-3 flex flex-col gap-2 hover:border-primary-container transition-colors cursor-grab relative">
+<span class="material-symbols-outlined absolute top-2 right-2 text-outline hover:text-error cursor-pointer text-[16px]">close</span>
+<div class="h-32 bg-surface-container-highest border border-outline-variant flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-headline-lg text-outline">description</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface truncate">File_01.pdf</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant">1.2 MB</span>
+</div>
+<div class="flex-none w-48 bg-surface border border-outline-variant rounded p-3 flex flex-col gap-2 hover:border-primary-container transition-colors cursor-grab relative">
+<span class="material-symbols-outlined absolute top-2 right-2 text-outline hover:text-error cursor-pointer text-[16px]">close</span>
+<div class="h-32 bg-surface-container-highest border border-outline-variant flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-headline-lg text-outline">description</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface truncate">File_02.pdf</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant">0.8 MB</span>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex items-end gap-4 mt-4 pt-6 border-t border-outline-variant">
+<div class="flex-1 flex flex-col gap-2">
+<label class="font-mono-label text-mono-label text-on-surface-variant">Output Filename</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded px-3 py-2 font-mono-data text-mono-data focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" type="text" value="Merged_Document.pdf"/>
+</div>
+<button class="bg-primary-container hover:bg-primary text-on-primary font-body-lg text-body-lg font-medium px-8 py-2 rounded h-10 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[20px]">call_merge</span>
+                                Merge PDFs
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2 (Technical Deep Dive) -->
+<section class="h-[calc(100vh-32px)] bg-surface-container-lowest border-t border-outline-variant flex flex-col p-margin-desktop gap-12">
+<div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Left Col -->
+<div class="flex flex-col gap-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-outline-variant pb-2">Execution Steps</h2>
+<div class="flex flex-col gap-4">
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center font-mono-label text-mono-label text-primary font-bold border border-outline-variant">01</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-bold text-on-surface">Upload</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Files are read securely into local memory. No network transmission occurs.</p>
+</div>
+</div>
+<div class="w-0.5 h-6 bg-outline-variant ml-4"></div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center font-mono-label text-mono-label text-primary font-bold border border-outline-variant">02</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-bold text-on-surface">Process</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">WASM engine manipulates PDF byte structures locally.</p>
+</div>
+</div>
+<div class="w-0.5 h-6 bg-outline-variant ml-4"></div>
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center font-mono-label text-mono-label text-primary font-bold border border-outline-variant">03</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-bold text-on-surface">Download</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Output generated instantly from local cache.</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-outline-variant pb-2">Architecture Features</h2>
+<div class="bg-surface-container-low border border-outline-variant rounded p-4 font-mono-data text-mono-data text-on-surface-variant flex flex-col gap-2">
+<div class="flex justify-between border-b border-outline-variant pb-1">
+<span>Engine:</span>
+<span class="text-primary">WASM Execution</span>
+</div>
+<div class="flex justify-between border-b border-outline-variant pb-1">
+<span>Processing:</span>
+<span class="text-primary">Local RAM</span>
+</div>
+<div class="flex justify-between pb-1">
+<span>Network Call:</span>
+<span class="text-error">0 (Zero)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Col -->
+<div class="flex flex-col gap-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-outline-variant pb-2">FAQ</h2>
+<div class="flex flex-col gap-4">
+<details class="bg-surface border border-outline-variant rounded p-4 cursor-pointer group">
+<summary class="font-body-lg text-body-lg font-medium text-on-surface outline-none">Are my files uploaded to a server?</summary>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 pt-2 border-t border-outline-variant">No. All processing happens locally within your browser using WebAssembly. Your data never leaves your device.</p>
+</details>
+<details class="bg-surface border border-outline-variant rounded p-4 cursor-pointer group">
+<summary class="font-body-lg text-body-lg font-medium text-on-surface outline-none">What is the file size limit?</summary>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 pt-2 border-t border-outline-variant">Limits are based on your device's available RAM, typically allowing for hundreds of megabytes safely.</p>
+</details>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-background text-primary dark:text-primary-fixed font-mono-data text-mono-data fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant flat no shadows flex justify-between items-center px-4 py-1 bg-surface-container-low max-w-[1920px] mx-auto">
+<div class="font-headline-md text-headline-md text-primary text-[14px]">NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">WASM_v1.2.4-STABLE</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Build:2023.10.12</a>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>
+
+<!-- Video & Audio Suite Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Video &amp; Audio Suite Hub - NovaTools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f6f2f5",
+                      "outline-variant": "#c3c6d6",
+                      "on-surface-variant": "#434654",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f3f0f2",
+                      "on-background": "#1c1b1d",
+                      "tertiary-container": "#595b5b",
+                      "surface-container-highest": "#e5e1e4",
+                      "on-error": "#ffffff",
+                      "surface": "#fcf8fb",
+                      "secondary": "#735c00",
+                      "surface-dim": "#dcd9dc",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#0040a2",
+                      "background": "#fcf8fb",
+                      "surface-tint": "#0c56d0",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-secondary-fixed-variant": "#574500",
+                      "secondary-container": "#fed65b",
+                      "primary-container": "#0052cc",
+                      "surface-container": "#f0edf0",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "secondary-fixed-dim": "#e9c349",
+                      "tertiary-fixed": "#e2e2e2",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#eae7ea",
+                      "inverse-surface": "#313032",
+                      "primary-fixed": "#dae2ff",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "on-tertiary-container": "#d2d3d3",
+                      "primary": "#003d9b",
+                      "inverse-primary": "#b2c5ff",
+                      "on-surface": "#1c1b1d",
+                      "tertiary": "#424444",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "on-secondary-container": "#745c00",
+                      "on-primary-fixed": "#001848",
+                      "on-secondary-fixed": "#241a00",
+                      "surface-variant": "#e5e1e4",
+                      "surface-bright": "#fcf8fb",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#c4d2ff",
+                      "outline": "#737685",
+                      "secondary-fixed": "#ffe088"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px",
+                      "workbench-gap": "1px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "mono-label": [
+                              "JetBrains Mono"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-label": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .bg-honeycomb {
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='34' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0l10 5.774v11.547L10 23.094 0 17.321V5.774zM0 34.641l10-5.774 10 5.774v11.547L10 51.962 0 46.188z' fill='%230052cc' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .laser-border {
+            border: 1px solid theme('colors.outline-variant');
+            transition: all 0.2s ease-in-out;
+        }
+        .laser-border:hover {
+            border-color: theme('colors.primary-container');
+            box-shadow: 0 0 4px theme('colors.primary-container');
+        }
+        .bento-cell {
+            background-color: theme('colors.surface-container-lowest');
+            border: 1px solid theme('colors.outline-variant');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased min-h-screen flex flex-col pt-16 pl-0 md:pl-64">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full h-16 z-50 border-b border-outline-variant bg-surface dark:bg-background text-primary dark:text-primary-fixed flex justify-between items-center px-6 mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">NovaTools</span>
+<div class="hidden md:flex gap-6 ml-8">
+<span class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 py-1 px-2 rounded">Dashboard</span>
+<span class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 py-1 px-2 rounded">Analytics</span>
+<span class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 duration-150 py-1 px-2">Tools</span>
+<span class="text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors cursor-pointer active:scale-95 duration-150 py-1 px-2 rounded">Security</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="settings">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors" data-icon="help">help</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover ml-2" data-alt="A clinical, minimalist user avatar placeholder image featuring a sharp, geometric profile silhouette rendered in stark white against a deep blue (#0052CC) background. The style is strictly industrial and professional, devoid of any playful elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcHrxEGpm1-tqkt7lqbW9jnymfV063dJtS4m-wkE4s7plYdl76U5A4NTiCtyMvFIX5Uj5-8YnzGoZYs3SpsFhzXfCf7WI-4tvqA5iSoRA4NgELPyporBDGCi-6wdsCBvQv-5AEunViBiduJaBZRd8YvPCBbJKlmBj-zbIqwm1r3ESZx8TyhRGrqwTTGVYRCgOom3tnQeaKR9-w8Vxs48w42wpYNFVRx6u5vbkD2SgxJumVxSUhhb59"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant bg-surface-container-low flex-col py-4 gap-4">
+<div class="px-6 pb-4 border-b border-outline-variant mb-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface rounded flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary" data-icon="memory">memory</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-primary">NODE_01</div>
+<div class="font-mono-label text-mono-label text-on-surface-variant mt-1">[ ENCRYPTED ]</div>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary-container text-on-primary border border-transparent rounded hover:border-primary-container hover:shadow-[0_0_4px_theme('colors.primary-container')] transition-all duration-200 py-2 font-mono-label text-mono-label flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                New Project
+            </button>
+</div>
+<div class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="build">build</span>
+                Tools
+            </div>
+<div class="flex items-center gap-3 px-3 py-2 rounded bg-primary-container text-on-primary-container border-l-4 border-primary transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="grid_view">grid_view</span>
+                Workspaces
+            </div>
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock">lock</span>
+                Vault
+            </div>
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+                Logs
+            </div>
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings_input_component">settings_input_component</span>
+                System
+            </div>
+</div>
+<div class="px-4 mt-auto border-t border-outline-variant pt-4 flex flex-col gap-1">
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="monitor_heart">monitor_heart</span>
+                Status
+            </div>
+<div class="flex items-center gap-3 px-3 py-2 rounded text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all duration-200 ease-in-out cursor-pointer font-mono-label text-mono-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="code">code</span>
+                Version
+            </div>
+</div>
+</nav>
+<main class="flex-1 w-full max-w-[1920px] mx-auto pb-16 flex flex-col">
+<!-- Section 1: Hero & Catalog Grid -->
+<section class="bg-honeycomb bg-surface border-b border-outline-variant relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface opacity-80 pointer-events-none"></div>
+<div class="px-margin-mobile md:px-margin-desktop py-12 md:py-16 relative z-10 flex flex-col items-center text-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-lowest border border-outline-variant rounded font-mono-label text-mono-label text-primary-container mb-6">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                    [ MEDIA_ENGINE_V2 ]
+                </div>
+<h1 class="font-display text-display text-on-background mb-4">WebCodecs &amp; Audio Engine</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">High-performance media processing suite operating entirely client-side. Leverage bare-metal browser APIs for zero-latency video encoding and audio manipulation.</p>
+</div>
+</section>
+<!-- Tool Grid -->
+<section class="px-margin-mobile md:px-margin-desktop py-8 flex-1 bg-surface-container-low">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-workbench-gap bg-outline-variant border border-outline-variant">
+<!-- Tool 1 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">V_CMP_01</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="compress">compress</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Video Compressor</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Client-side WebCodecs compression. Target specific bitrates or file sizes.</p>
+</div>
+<!-- Tool 2 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">V_TRM_02</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="cut">cut</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Trimmer</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Frame-accurate cutting without re-encoding using MP4Box.js.</p>
+</div>
+<!-- Tool 3 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">A_EXT_03</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="audio_file">audio_file</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Audio Extractor</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Demux audio streams from video containers directly in-browser.</p>
+</div>
+<!-- Tool 4 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">V_MTR_04</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="volume_off">volume_off</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Stream Muter</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Strip audio tracks from video files with zero quality loss to video.</p>
+</div>
+<!-- Tool 5 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">AI_SUB_05</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="subtitles">subtitles</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">AI Subtitles</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Generate VTT/SRT using local Whisper.cpp WASM inference.</p>
+</div>
+<!-- Tool 6 -->
+<div class="bento-cell p-6 hover:bg-surface-container transition-colors group cursor-pointer relative">
+<div class="absolute top-4 right-4 font-mono-label text-mono-label text-outline group-hover:text-primary-container transition-colors">A_BST_06</div>
+<div class="w-12 h-12 mb-4 bg-surface-container-high border border-outline-variant rounded flex items-center justify-center group-hover:border-primary-container group-hover:text-primary-container transition-all">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background mb-2">Volume Booster</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Web Audio API gain node manipulation with hard limiting.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 border-t border-primary/20 dark:border-outline-variant bg-surface-container-low text-primary dark:text-primary-fixed flex justify-between items-center px-4 py-1">
+<div class="font-mono-data text-mono-data text-on-tertiary-fixed-variant">NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4 font-mono-data text-mono-data">
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">WASM_v1.2.4-STABLE</span>
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">Build:2023.10.12</span>
+<span class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default">Privacy Policy</span>
+</div>
+</footer>
+</body></html>
+
+<!-- Diagram & Visualizer Hub (Workbench) -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NovaTools - Diagram &amp; Visualizer Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f6f2f5",
+                        "outline-variant": "#c3c6d6",
+                        "on-surface-variant": "#434654",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-background": "#1c1b1d",
+                        "tertiary-container": "#595b5b",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-error": "#ffffff",
+                        "surface": "#fcf8fb",
+                        "secondary": "#735c00",
+                        "surface-dim": "#dcd9dc",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "background": "#fcf8fb",
+                        "surface-tint": "#0c56d0",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#574500",
+                        "secondary-container": "#fed65b",
+                        "primary-container": "#0052cc",
+                        "surface-container": "#f0edf0",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "secondary-fixed-dim": "#e9c349",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eae7ea",
+                        "inverse-surface": "#313032",
+                        "primary-fixed": "#dae2ff",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-tertiary-container": "#d2d3d3",
+                        "primary": "#003d9b",
+                        "inverse-primary": "#b2c5ff",
+                        "on-surface": "#1c1b1d",
+                        "tertiary": "#424444",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-secondary-container": "#745c00",
+                        "on-primary-fixed": "#001848",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-variant": "#e5e1e4",
+                        "surface-bright": "#fcf8fb",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#c4d2ff",
+                        "outline": "#737685",
+                        "secondary-fixed": "#ffe088"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        "workbench-gap": "1px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "display": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "mono-label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .laser-divider {
+            border-bottom: 1px solid #E4E4E7;
+            transition: all 0.3s ease;
+        }
+        .laser-divider:hover {
+            border-bottom-color: #0052CC;
+            box-shadow: 0 2px 4px rgba(0, 82, 204, 0.2);
+        }
+        .bento-cell {
+            border: 1px solid #E4E4E7;
+            background-color: #F9F9F9;
+        }
+        .honeycomb-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='69.28203230275509' viewBox='0 0 40 69.28203230275509' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0 L40 11.547005383792515 L40 34.64101615137754 L20 46.18802153517006 L0 34.64101615137754 L0 11.547005383792515 Z M20 69.28203230275509 L40 57.735026918962575 L40 34.64101615137754 L20 46.18802153517006 L0 34.64101615137754 L0 57.735026918962575 Z' fill='none' stroke='%23e5e7eb' stroke-width='1' stroke-opacity='0.5'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-lg min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full h-16 z-50 bg-surface border-b border-outline-variant flat no shadows">
+<div class="flex justify-between items-center px-6 w-full max-w-[1920px] mx-auto h-full">
+<div class="flex items-center gap-gutter">
+<span class="font-headline-md text-headline-md font-bold text-primary">NovaTools</span>
+</div>
+<!-- Navigation Links for Desktop -->
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="h-full flex items-center text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors px-3" href="#">Dashboard</a>
+<a class="h-full flex items-center text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors px-3" href="#">Analytics</a>
+<a class="h-full flex items-center text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors px-3" href="#">Security</a>
+<!-- We consider Tools active for Diagram Hub as it's a tool suite -->
+<a class="h-full flex items-center text-primary font-bold border-b-2 border-primary pb-1" href="#">Tools</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A small, high-tech abstract avatar showing a geometric wireframe head in subtle blue and white tones against a dark grey background. Clinical, secure, and professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQvqbMuf_HhZYobVE1hsBk65qNcpbFg9qIydoOJ0fhBbMN9bECg1EYNEdYkeNdz9M-WgO4VtDa_fu4C_Q2AsjkuuzZPyJOibVbE5dQ367c_-63r_tmEhVtr7K1X8nBJVItKYLZdXQxXstMYlAVwX2jaFH7hfdhEKR99oQURDmbA3VB7VJgeg8RvyMYntK7jRbjkJHIXbl0qGM6PIzVMXKm-Ax-uPwYpuVKARN-uzN63e2RPc0xTGfG"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-16">
+<!-- Side Navigation Bar (Desktop) -->
+<aside class="hidden md:flex flex-col py-4 gap-4 bg-surface-container-low fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 border-r border-outline-variant flat no shadows font-mono-label text-mono-label">
+<div class="px-6 mb-4 flex items-center gap-3">
+<img alt="System Node" class="w-10 h-10 rounded border border-primary/30" data-alt="A small server node icon with glowing blue circuitry lines, representing a system node in a high-tech developer console. Industrial minimalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlSNLSjQsfDSFQ8Q2KPCswF0hKninULEqAoXURdtwKcZHTUeeSOq5DSg3LvhFD8IMkz63LHOWICrxnlLPSBj3ytgDEl19R0QW_dlio01t36nyVNgcCCN4VRBjd-qs5SpWzEK9y0w4dJEwfgENho2Z2dlSbxJVGOlRkwsZVBDUZowhMBTGk4o9Kio03zOXBDkMUvwJ8Dk7mu49sXEJac-iFGdwd6tVOpx604ogONzDn6ApbE5kUTXtv"/>
+<div>
+<div class="font-headline-md text-headline-md text-primary font-bold">NODE_01</div>
+<div class="text-[10px] text-tertiary">[ ENCRYPTED ]</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- 'Tools' is active based on the page context -->
+<a class="flex items-center gap-3 px-4 py-2 rounded bg-primary-container text-on-primary-container border-l-4 border-primary duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="build">build</span>
+                    Tools
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="grid_view">grid_view</span>
+                    Workspaces
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+                    Vault
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+                    Logs
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings_input_component">settings_input_component</span>
+                    System
+                </a>
+</nav>
+<div class="px-4 mt-auto space-y-4">
+<button class="w-full py-2 bg-primary text-on-primary rounded font-mono-label hover:bg-primary-fixed-variant transition-colors border border-primary hover:border-primary-container shadow-sm">
+                    New Project
+                </button>
+<div class="border-t border-outline-variant pt-4 space-y-2">
+<a class="flex items-center gap-3 px-2 py-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="monitor_heart">monitor_heart</span>
+                        Status
+                    </a>
+<a class="flex items-center gap-3 px-2 py-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="code">code</span>
+                        Version
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop bg-surface-container-lowest min-h-[calc(100vh-64px-32px)]">
+<!-- Section 1: Hero & Catalog Grid -->
+<section class="mb-12">
+<div class="relative rounded-lg overflow-hidden border border-outline-variant bento-cell p-8 mb-6 honeycomb-pattern">
+<div class="relative z-10 max-w-3xl">
+<div class="inline-block px-2 py-1 bg-surface-container-high text-on-surface-variant font-mono-label rounded text-[10px] mb-4 border border-outline-variant">
+                            SUITE_ID: VZ-88
+                        </div>
+<h1 class="font-display text-display text-primary mb-4 hidden md:block">DIAGRAM &amp; VISUALIZER SUITE</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-4 md:hidden">DIAGRAM &amp; VISUALIZER</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6 max-w-2xl">
+                            Instantaneous AI Schema-to-Diagram translation. Input raw data schemas, JSON logic, or natural language architectures and output high-fidelity, standardized visual models. Clinical precision for complex systems mapping.
+                        </p>
+<div class="flex gap-4">
+<button class="px-6 py-2 bg-primary text-on-primary rounded font-mono-label hover:bg-primary-fixed-variant transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span> INIT_STUDIO
+                            </button>
+<button class="px-6 py-2 bg-transparent text-on-surface border border-outline-variant rounded font-mono-label hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">upload</span> IMPORT_SCHEMA
+                            </button>
+</div>
+</div>
+<div class="absolute right-8 top-8 hidden lg:block opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary" style="font-variation-settings: 'FILL' 0, 'wght' 200;">account_tree</span>
+</div>
+</div>
+<!-- Bento Grid for 4 Tools -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-workbench-gap bg-outline-variant border border-outline-variant">
+<!-- Tool 1 -->
+<div class="bg-surface-container-lowest p-6 hover:bg-surface transition-colors cursor-pointer group flex flex-col h-full relative">
+<div class="absolute top-4 right-4 font-mono-label text-[10px] text-tertiary-fixed-dim">TOOL_01</div>
+<div class="mb-4 text-primary group-hover:scale-110 transition-transform origin-left">
+<span class="material-symbols-outlined text-[32px]">architecture</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Diagram Studio</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Full-featured canvas for manual adjustment and free-form topological mapping.</p>
+<div class="mt-4 laser-divider w-full"></div>
+</div>
+<!-- Tool 2 -->
+<div class="bg-surface-container-lowest p-6 hover:bg-surface transition-colors cursor-pointer group flex flex-col h-full relative">
+<div class="absolute top-4 right-4 font-mono-label text-[10px] text-tertiary-fixed-dim">TOOL_02</div>
+<div class="mb-4 text-primary group-hover:scale-110 transition-transform origin-left">
+<span class="material-symbols-outlined text-[32px]">account_tree</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Flowchart Engine</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Auto-layout logic flows from raw pseudo-code or step-by-step state definitions.</p>
+<div class="mt-4 laser-divider w-full"></div>
+</div>
+<!-- Tool 3 -->
+<div class="bg-surface-container-lowest p-6 hover:bg-surface transition-colors cursor-pointer group flex flex-col h-full relative">
+<div class="absolute top-4 right-4 font-mono-label text-[10px] text-tertiary-fixed-dim">TOOL_03</div>
+<div class="mb-4 text-primary group-hover:scale-110 transition-transform origin-left">
+<span class="material-symbols-outlined text-[32px]">dataset</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">ERD Generator</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Relational database visualization directly from SQL schemas or Prisma models.</p>
+<div class="mt-4 laser-divider w-full"></div>
+</div>
+<!-- Tool 4 -->
+<div class="bg-surface-container-lowest p-6 hover:bg-surface transition-colors cursor-pointer group flex flex-col h-full relative">
+<div class="absolute top-4 right-4 font-mono-label text-[10px] text-tertiary-fixed-dim">TOOL_04</div>
+<div class="mb-4 text-primary group-hover:scale-110 transition-transform origin-left">
+<span class="material-symbols-outlined text-[32px]">schema</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Architecture Map</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1">Cloud infrastructure mapping from Terraform or AWS CloudFormation templates.</p>
+<div class="mt-4 laser-divider w-full"></div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface-container-low border-t border-primary/20 flat no shadows font-mono-data text-mono-data flex justify-between items-center px-4 py-1">
+<div class="text-on-tertiary-fixed-variant">NovaTools Privacy-First Productivity</div>
+<div class="flex gap-4">
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">WASM_v1.2.4-STABLE</a>
+<span class="text-outline-variant">|</span>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Build:2023.10.12</a>
+<span class="text-outline-variant">|</span>
+<a class="text-on-tertiary-fixed-variant hover:text-primary transition-colors cursor-default" href="#">Privacy Policy</a>
+</div>
+</footer>
+</body></html>

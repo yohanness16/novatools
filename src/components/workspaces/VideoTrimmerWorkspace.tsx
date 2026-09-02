@@ -197,7 +197,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
           {isProcessing && (
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs text-[#8B8F98] font-mono">
-                <span>Rendering Video Segment in WASM...</span>
+                <span>Rendering Video Segment Locally...</span>
                 <span>{progress}%</span>
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded bg-[#1B1D22]">

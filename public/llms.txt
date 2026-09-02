@@ -1,0 +1,55 @@
+# NovaTools (toolboxs.tech)
+
+> NovaTools is a 100% client-side, privacy-first media, document, video, audio, and architectural diagram processing suite. All processing executes locally inside the user's browser using WebAssembly (WASM), Web Workers, WebCodecs, HTML5 Canvas, and neural on-device AI. Zero files are ever uploaded to remote servers.
+
+## Core Capabilities & Suites
+
+- [PDF Suite](https://toolboxs.tech/pdf): Merge, Split & Extract, Rotate, AES Password Protect, Redact & Flatten, PDF to Images, Images to PDF, Page Numberer & Stamper, PDF to DOCX, and Word to PDF.
+- [Image Suite](https://toolboxs.tech/image): AI Background Remover, Format Converter (WebP, AVIF, PNG, JPG, ICO), Smart Compressor with real-time visual diff, Resizer, EXIF Metadata Scrubber, and SVG Optimizer.
+- [Video & Audio Suite](https://toolboxs.tech/video): Video Compressor, Trimmer & Cutter, Audio Extractor, Video Muter, AI Subtitle Generator (Whisper ASR in 100+ languages), Audio Volume Booster (+12dB with limiter), Video to GIF Maker, Animated Lyrics Video Generator, and AI Voice Studio (Kokoro-82M TTS with human expressions).
+- [Document & AI Suite](https://toolboxs.tech/document): Universal Document Studio, Markdown to PDF, Markdown to Word (DOCX), Document to Slides (PPTX), Document to Excel (XLSX), and Word to PDF.
+- [Diagram & Visualizer Suite](https://toolboxs.tech/diagram): AI Document-to-Diagram Studio, Document to Flowchart, Document to Database ERD, and Document to Architecture Map.
+- [SVG Tools](https://toolboxs.tech/svg): AST-based SVG optimization and 1-click React/JSX component export.
+
+## Privacy & Security Architecture
+
+- **Zero Server Uploads**: File binaries are held exclusively in local RAM (`ArrayBuffer`) and never cross the network.
+- **Hardware Acceleration**: Computation executes across local CPU/GPU cores using WebGPU, WebCodecs, and multithreaded WASM.
+- **Offline Sovereignty**: Tools work without an active internet connection once loaded in the browser.
+
+## Full Directory of Tools
+
+- Merge PDF: https://toolboxs.tech/pdf/merge
+- Split & Extract PDF: https://toolboxs.tech/pdf/split
+- Rotate PDF: https://toolboxs.tech/pdf/rotate
+- Password Protect PDF: https://toolboxs.tech/pdf/protect
+- Redact & Flatten PDF: https://toolboxs.tech/pdf/redact-flatten
+- PDF to Images: https://toolboxs.tech/pdf/pdf-to-images
+- Images to PDF: https://toolboxs.tech/pdf/images-to-pdf
+- PDF Page Numberer: https://toolboxs.tech/pdf/page-numberer
+- PDF to Word: https://toolboxs.tech/pdf/pdf-to-doc
+- Doc to PDF: https://toolboxs.tech/pdf/doc-to-pdf
+- AI Background Remover: https://toolboxs.tech/image/background-remover
+- Image Converter: https://toolboxs.tech/image/converter
+- Smart Image Compressor: https://toolboxs.tech/image/compressor
+- Image Resizer: https://toolboxs.tech/image/resizer
+- EXIF & Metadata Scrubber: https://toolboxs.tech/image/exif-scrubber
+- SVG Optimizer & React Exporter: https://toolboxs.tech/image/svg-optimizer
+- Video Compressor: https://toolboxs.tech/video/compressor
+- Video Trimmer: https://toolboxs.tech/video/trimmer
+- Extract Audio: https://toolboxs.tech/video/audio-extractor
+- Video Muter: https://toolboxs.tech/video/muter
+- AI Subtitle Generator: https://toolboxs.tech/video/subtitle-generator
+- Audio Volume Booster: https://toolboxs.tech/video/audio-booster
+- Video to GIF: https://toolboxs.tech/video/video-to-gif
+- Lyrics Video Generator: https://toolboxs.tech/video/lyrics-video-generator
+- AI Voice Studio (Kokoro-82M TTS): https://toolboxs.tech/video/text-to-speech
+- Universal Document Studio: https://toolboxs.tech/document/studio
+- Markdown to PDF: https://toolboxs.tech/document/md-to-pdf
+- Markdown to Word: https://toolboxs.tech/document/md-to-docx
+- Document to Slides: https://toolboxs.tech/document/doc-to-slides
+- Document to Excel: https://toolboxs.tech/document/doc-to-excel
+- AI Diagram Studio: https://toolboxs.tech/diagram/studio
+- Document to Flowchart: https://toolboxs.tech/diagram/doc-to-flowchart
+- Document to Database ERD: https://toolboxs.tech/diagram/doc-to-erd
+- Document to Architecture: https://toolboxs.tech/diagram/doc-to-architecture

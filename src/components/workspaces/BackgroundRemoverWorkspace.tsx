@@ -138,7 +138,7 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
             Drop image to remove background, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Isolate subjects and export transparent PNGs in real-time. 100% local WASM.
+            Isolate subjects and export transparent PNGs in real-time. 100% local engine.
           </p>
         </div>
       ) : (

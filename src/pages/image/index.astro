@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
 import {
   Sparkles, Minimize2, Repeat, Maximize2, ShieldCheck, Code,
-  ArrowRight, Image as ImageIcon
+  ArrowRight, Image as ImageIcon, Wand2, Lock
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -17,34 +17,34 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
   title="Image Suite - 100% Private Client-Side Image Tools | NovaTools"
   description="Remove backgrounds with neural AI, compress PNG/JPEG/WebP, resize dimensions, and scrub EXIF metadata directly in your browser."
 >
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
     {/* Suite Hero Header */}
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/85 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-xl space-y-4">
-      {/* Ambient Glow */}
-      <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-teal-500/15 blur-3xl" />
-
-      <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 px-3.5 py-1 text-xs font-mono text-teal-600 dark:text-teal-300">
-        <ImageIcon class="h-3.5 w-3.5 text-teal-500 dark:text-teal-400" />
-        <span>IMAGE SUITE ({imageTools.length} TOOLS)</span>
+    <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
+          <ImageIcon class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+          <span>IMAGE_SUITE_V2 // {imageTools.length} TOOLS</span>
+        </div>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        Client-Side <span class="bg-gradient-to-r from-teal-600 via-emerald-600 to-cyan-700 dark:from-teal-200 dark:via-cyan-300 dark:to-emerald-400 bg-clip-text text-transparent">Image Studio</span>
+        Client-Side <span class="text-blue-600 dark:text-blue-400">Image Studio</span>
       </h1>
 
-      <p class="text-sm sm:text-base text-slate-600 dark:text-[#94A3B8] max-w-2xl leading-relaxed">
+      <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
         Convert formats, strip GPS tracking metadata, resize dimensions, and extract crisp cutouts with neural AI segmentation running locally on your graphics device.
       </p>
     </div>
 
     {/* Tools Grid */}
-    <div class="space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.06] pb-3">
         <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
           All Image Tools
         </h2>
-        <span class="text-xs text-slate-500 dark:text-[#94A3B8] font-mono">
+        <span class="text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
           {imageTools.length} tools available
         </span>
       </div>
@@ -56,34 +56,34 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
           return (
             <a
               href={tool.path}
-              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-teal-500/50 hover:bg-slate-50 dark:hover:bg-[#0D1426] hover:shadow-xl hover:shadow-teal-950/20"
+              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 transition-all duration-200 hover:border-blue-500/50 hover:shadow-md"
             >
-              <div class="space-y-3.5">
+              <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#94A3B8] group-hover:text-teal-600 dark:group-hover:text-teal-300 group-hover:border-teal-500/40 transition-colors">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:border-blue-500/30 transition-colors">
                     <Icon class="h-4 w-4" />
                   </div>
 
                   {tool.badge && (
-                    <span class="font-mono text-[10px] font-medium text-teal-600 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 px-2 py-0.5 rounded border border-teal-200 dark:border-teal-500/30">
+                    <span class="font-mono text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800/40">
                       {tool.badge}
                     </span>
                   )}
                 </div>
 
-                <div class="space-y-1.5">
-                  <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-300 transition-colors">
+                <div class="space-y-1">
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {tool.name}
                   </h3>
-                  <p class="text-xs text-slate-600 dark:text-[#94A3B8] line-clamp-2 leading-relaxed">
+                  <p class="text-xs text-slate-600 dark:text-[#9ca3af] line-clamp-2 leading-relaxed">
                     {tool.description}
                   </p>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-200 dark:border-white/[0.06] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-[#34D399]">100% Private</span>
-                <span class="flex items-center gap-1 text-slate-600 dark:text-[#94A3B8] group-hover:text-teal-600 dark:group-hover:text-teal-300 transition-colors font-medium">
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
+                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
               </div>
@@ -93,53 +93,53 @@ const imageTools = TOOLS.filter(t => t.category === 'image');
       </div>
     </div>
 
-    {/* Educational & Architectural Suite Deep Dive */}
-    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+    {/* Educational & Architectural Deep Dive */}
+    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
         <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-300 font-mono">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
             <ImageIcon class="h-4 w-4" />
             <span>GPU & Neural Architecture</span>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            About the NovaTools Image Studio
+            Client-Side Image Studio Architecture
           </h2>
         </div>
         <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 px-3 py-1 border border-teal-200 dark:border-teal-500/30">
+          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
             ONNX Web & WebGPU
           </span>
-          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
             Zero Cloud Uploads
           </span>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-        <div class="lg:col-span-6 space-y-3.5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
+        <div class="space-y-3">
           <p>
             The NovaTools Image Studio delivers professional-grade raster and vector graphics processing without the security risks of uploading personal photos or unreleased product prototypes to external clouds.
           </p>
           <p>
-            By compiling high-performance neural segmentation models and modern image codecs into WebAssembly and WebGPU runtimes, AI background removal, intelligent compression with live visual diffing, next-gen format transcoding (AVIF, WebP), and EXIF privacy sanitization happen directly on your local GPU and CPU.
+            By running high-performance neural segmentation models and modern image codecs directly in local browser memory, AI background removal, intelligent compression with live visual diffing, next-gen format transcoding (AVIF, WebP), and EXIF privacy sanitization happen directly on your local device.
           </p>
         </div>
-        <div class="lg:col-span-6 space-y-3.5">
+        <div class="space-y-3">
           <p>
             Users benefit from zero queue delays, instant batch conversions, and complete metadata protection. Hidden GPS coordinates, camera serial numbers, and personal timestamps are stripped before sharing images online.
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
               <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Sparkles class="h-4 w-4 text-teal-500" /> On-Device AI
+                <Wand2 class="h-4 w-4 text-blue-500" /> On-Device AI
               </span>
-              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Neural network inference runs locally via WebGPU shaders in real time.</p>
+              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Neural network inference runs locally via WebGPU shaders in real time.</p>
             </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
               <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <ShieldCheck class="h-4 w-4 text-emerald-500" /> Privacy Scrubbing
               </span>
-              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Permanent removal of sensitive EXIF, IPTC, and location headers.</p>
+              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Permanent removal of sensitive EXIF, IPTC, and location headers.</p>
             </div>
           </div>
         </div>

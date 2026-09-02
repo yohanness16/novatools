@@ -233,7 +233,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                   deviceMode === 'wasm' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                WASM (Universal)
+                CPU (Universal)
               </button>
             </div>
           </div>

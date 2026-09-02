@@ -112,7 +112,7 @@ export const ImageResizerWorkspace: React.FC = () => {
             Drop image to resize, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Pixel-perfect bicubic resampling with aspect ratio lock. 100% local WASM.
+            Pixel-perfect bicubic resampling with aspect ratio lock. 100% local processing.
           </p>
         </div>
       ) : (

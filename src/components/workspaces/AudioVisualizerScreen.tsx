@@ -679,7 +679,7 @@ export const AudioVisualizerScreen: React.FC<AudioVisualizerScreenProps> = ({
 
         <div className="absolute bottom-2 right-3 pointer-events-none font-mono text-[9px] text-sky-400/80 flex items-center gap-1.5">
           <Sparkles className="h-2.5 w-2.5" />
-          <span>WASM Audio Core</span>
+          <span>Local DSP Core</span>
         </div>
       </div>
 

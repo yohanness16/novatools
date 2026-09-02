@@ -1,3 +1,4 @@
+# Default crawler rules
 User-agent: *
 Allow: /
 
@@ -5,11 +6,37 @@ Allow: /
 User-agent: Mediapartners-Google
 Allow: /
 
-# Search Crawlers
+# Primary Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
 Allow: /
 
-Sitemap: https://novatools.app/sitemap.xml
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# AI Search & RAG Discovery Bots (GEO / LLMO)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# XML Sitemap Location
+Sitemap: https://toolboxs.tech/sitemap.xml

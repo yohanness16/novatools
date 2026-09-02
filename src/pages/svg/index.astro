@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { TOOLS } from '../../lib/toolsData';
 import {
-  Code, Repeat, ArrowRight
+  Code, Repeat, ArrowRight, ShieldCheck, FileCode
 } from 'lucide-react';
 
 const iconMap: Record<string, any> = {
@@ -16,34 +16,34 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
   title="SVG & Vector Suite - 100% Private Vector Optimizer | NovaTools"
   description="Optimize SVG code, strip illustrator metadata, reduce file payload size, and convert vectors safely in your browser."
 >
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-12">
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
     {/* Suite Hero Header */}
-    <div class="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/85 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-8 sm:p-10 shadow-xl space-y-4">
-      {/* Ambient Glow */}
-      <div class="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-cyan-500/15 blur-3xl" />
-
-      <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 px-3.5 py-1 text-xs font-mono text-cyan-600 dark:text-cyan-300">
-        <Code class="h-3.5 w-3.5 text-cyan-500 dark:text-cyan-400" />
-        <span>SVG & VECTOR SUITE</span>
+    <div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="inline-flex items-center gap-2 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#16171a] px-3 py-1 text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
+          <Code class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+          <span>SVG_VECTOR_SUITE</span>
+        </div>
+        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">[ 100% LOCAL ]</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-        High-Precision <span class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 dark:from-cyan-200 dark:via-sky-300 dark:to-blue-400 bg-clip-text text-transparent">Vector Studio</span>
+        High-Precision <span class="text-blue-600 dark:text-blue-400">Vector Studio</span>
       </h1>
 
-      <p class="text-sm sm:text-base text-slate-600 dark:text-[#94A3B8] max-w-2xl leading-relaxed">
+      <p class="text-sm sm:text-base text-slate-600 dark:text-[#9ca3af] max-w-2xl leading-relaxed">
         Clean messy illustrator exports, strip bloated editor metadata, and minify vector paths for ultra-lightweight web icons and illustrations.
       </p>
     </div>
 
     {/* Tools Grid */}
-    <div class="space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.06] pb-3">
         <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
           All Vector Tools
         </h2>
-        <span class="text-xs text-slate-500 dark:text-[#94A3B8] font-mono">
+        <span class="text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
           {svgTools.length} tools available
         </span>
       </div>
@@ -55,34 +55,34 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
           return (
             <a
               href={tool.path}
-              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/90 p-5 transition-all duration-300 hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-[#0D1426] hover:shadow-xl hover:shadow-cyan-950/20"
+              class="group flex flex-col justify-between rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 transition-all duration-200 hover:border-blue-500/50 hover:shadow-md"
             >
-              <div class="space-y-3.5">
+              <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#0D1426] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-[#94A3B8] group-hover:text-cyan-600 dark:group-hover:text-cyan-300 group-hover:border-cyan-500/40 transition-colors">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:border-blue-500/30 transition-colors">
                     <Icon class="h-4 w-4" />
                   </div>
 
                   {tool.badge && (
-                    <span class="font-mono text-[10px] font-medium text-cyan-600 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-200 dark:border-cyan-500/30">
+                    <span class="font-mono text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800/40">
                       {tool.badge}
                     </span>
                   )}
                 </div>
 
-                <div class="space-y-1.5">
-                  <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+                <div class="space-y-1">
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {tool.name}
                   </h3>
-                  <p class="text-xs text-slate-600 dark:text-[#94A3B8] line-clamp-2 leading-relaxed">
+                  <p class="text-xs text-slate-600 dark:text-[#9ca3af] line-clamp-2 leading-relaxed">
                     {tool.description}
                   </p>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-200 dark:border-white/[0.06] font-mono text-[11px]">
-                <span class="text-emerald-600 dark:text-[#34D399]">100% Private</span>
-                <span class="flex items-center gap-1 text-slate-600 dark:text-[#94A3B8] group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors font-medium">
+              <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 dark:border-white/[0.04] font-mono text-[11px]">
+                <span class="text-emerald-600 dark:text-emerald-400">100% Private</span>
+                <span class="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-medium">
                   Launch <ArrowRight class="h-3 w-3" />
                 </span>
               </div>
@@ -92,11 +92,11 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
       </div>
     </div>
 
-    {/* Educational & Architectural Suite Deep Dive */}
-    <section class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+    {/* Educational & Architectural Deep Dive */}
+    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-4">
         <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-300 font-mono">
+          <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono">
             <Code class="h-4 w-4" />
             <span>AST Vector Engine</span>
           </div>
@@ -105,17 +105,17 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
           </h2>
         </div>
         <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span class="rounded-lg bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 px-3 py-1 border border-cyan-200 dark:border-cyan-500/30">
+          <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1 border border-blue-200 dark:border-blue-800/40">
             SVGO & JSX Transpiler
           </span>
-          <span class="rounded-lg bg-slate-100 dark:bg-[#0D1426] text-slate-700 dark:text-[#94A3B8] px-3 py-1 border border-slate-200 dark:border-white/10">
+          <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-700 dark:text-[#9ca3af] px-3 py-1 border border-slate-200 dark:border-white/[0.08]">
             Zero Server Uploads
           </span>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-        <div class="lg:col-span-6 space-y-3.5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
+        <div class="space-y-3">
           <p>
             The NovaTools SVG & Vector Studio transforms messy, bloated vector graphics exported from design applications (Figma, Adobe Illustrator, Sketch) into production-ready web assets and frontend UI components.
           </p>
@@ -123,22 +123,22 @@ const svgTools = TOOLS.filter(t => t.category === 'svg' || t.id === 'image-conve
             Operating entirely in local browser memory via SVGO Abstract Syntax Tree algorithms, redundant metadata, editor comments, empty groups, and numerical precision bloat are stripped in milliseconds.
           </p>
         </div>
-        <div class="lg:col-span-6 space-y-3.5">
+        <div class="space-y-3">
           <p>
             Beyond minification, developers can convert SVG vectors directly into clean, TypeScript-safe React JSX components formatted with camelCase SVG attributes and Tailwind CSS compatibility with a single click.
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
               <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Code class="h-4 w-4 text-cyan-500" /> React JSX Compiler
+                <Code class="h-4 w-4 text-blue-500" /> React JSX Compiler
               </span>
-              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Generates ready-to-use React/Next.js/Astro icon components.</p>
+              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Generates ready-to-use React/Next.js/Astro icon components.</p>
             </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-[#0D1426] p-3.5 border border-slate-200 dark:border-white/10 space-y-1">
+            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] space-y-1">
               <span class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Repeat class="h-4 w-4 text-cyan-500" /> Web Performance
+                <Repeat class="h-4 w-4 text-emerald-500" /> Web Performance
               </span>
-              <p class="text-xs text-slate-600 dark:text-[#94A3B8]">Reduces DOM node count and shrinks network transfer payloads.</p>
+              <p class="text-xs text-slate-500 dark:text-[#9ca3af]">Reduces DOM node count and shrinks network transfer payloads.</p>
             </div>
           </div>
         </div>

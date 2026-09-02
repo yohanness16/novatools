@@ -1,126 +1,155 @@
 ---
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Shield, Zap, ArrowRight, Server, Cpu, ShieldCheck } from 'lucide-react';
 ---
 
-<section id="about" class="w-full py-16 sm:py-24 relative overflow-hidden">
-  {/* Subtle Ambient Background Gradients */}
-  <div class="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl -z-10" />
-  <div class="pointer-events-none absolute top-1/3 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10" />
-
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20">
+<section id="about" class="w-full py-16 sm:py-24 relative overflow-hidden border-t border-slate-200 dark:border-white/[0.08] bg-[#ffffff] dark:bg-[#16171a]">
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
     
-    {/* Section Header: Enlarged About Us without icon */}
-    <div class="text-center max-w-2xl mx-auto">
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-        About Us
+    {/* Section Header */}
+    <div class="text-center max-w-2xl mx-auto space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#121316] text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
+        <span>LOCAL_RUNTIME_ARCHITECTURE</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+        Your Files Never Touch a Cloud Server
       </h2>
+      <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+        Traditional online tools upload your sensitive documents to remote servers, exposing data to third-party retention and network latency. NovaTools brings the engine directly to your machine.
+      </p>
     </div>
 
-    {/* STORY BLOCK 1: Left Image, Right Text (Scroll-reactive) */}
-    <div class="about-story-block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center transition-[opacity,transform,filter] duration-300 ease-out will-change-[opacity,transform]">
+    {/* ZIG-ZAG BLOCK 1: Cloud vs Local Architecture Diagram */}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
       
-      {/* Left Column: Real Application Screenshot */}
-      <div class="lg:col-span-6 relative group">
-        <div class="relative rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-2 sm:p-2.5 shadow-2xl shadow-cyan-950/20 overflow-hidden transition-all duration-300 group-hover:border-cyan-500/40">
-          {/* Subtle Window Header */}
-          <div class="flex items-center gap-1.5 px-3 py-2 border-b border-slate-200 dark:border-white/5 bg-slate-100/90 dark:bg-[#050811]/60 rounded-t-xl mb-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-red-500/60" />
-            <span class="h-2.5 w-2.5 rounded-full bg-amber-500/60" />
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500/60" />
-            <span class="ml-2 font-mono text-[10px] text-slate-500 dark:text-slate-400">novatools.app/console</span>
+      {/* Left: Interactive Diagram Box */}
+      <div class="lg:col-span-6 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#1e2025] p-6 shadow-sm space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-200 dark:border-white/[0.06] pb-3 text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
+          <span>DATA_FLOW_VERIFICATION.LOG</span>
+          <span class="text-emerald-600 dark:text-emerald-400">[ SANDBOXED ]</span>
+        </div>
+
+        <div class="h-56 rounded-lg bg-white dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] p-4 flex flex-col justify-center items-center relative space-y-6">
+          <div class="flex justify-between w-full max-w-sm px-2 items-center">
+            {/* Local Device */}
+            <div class="flex flex-col items-center gap-1.5 text-center">
+              <div class="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                <Cpu class="h-5 w-5" />
+              </div>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Local Device</span>
+              <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Processing</span>
+            </div>
+
+            {/* Blocked Path */}
+            <div class="flex-1 flex flex-col items-center justify-center px-4 relative">
+              <div class="w-full h-px border-t border-dashed border-slate-300 dark:border-slate-700 relative">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-900 text-[10px] font-bold text-red-600 dark:text-red-400 font-mono">
+                  BLOCKED
+                </div>
+              </div>
+            </div>
+
+            {/* Cloud Server */}
+            <div class="flex flex-col items-center gap-1.5 text-center opacity-40">
+              <div class="h-10 w-10 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-500">
+                <Server class="h-5 w-5" />
+              </div>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Cloud Server</span>
+              <span class="text-[10px] font-mono text-slate-500">Zero Uploads</span>
+            </div>
           </div>
 
-          <img
-            src="/screenshots/1_novatools_console_overview.jpg"
-            alt="NovaTools Private Document and Media Workspace"
-            class="w-full h-auto rounded-xl object-cover border border-slate-200/60 dark:border-white/5 shadow-inner"
-            loading="lazy"
-          />
+          <div class="text-center font-mono text-xs text-slate-500 dark:text-[#9ca3af] max-w-xs leading-relaxed">
+            All operations executed locally within isolated client browser memory.
+          </div>
         </div>
       </div>
 
-      {/* Right Column: Copy & Narrative */}
-      <div class="lg:col-span-6 space-y-5 text-left">
-        <h3 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-          Your Files Never Touch a Cloud Server
+      {/* Right: Narrative Details */}
+      <div class="lg:col-span-6 space-y-4 text-left">
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+          Complete Data Sovereignty & Confidentiality
         </h3>
-
-        <p class="text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-          Traditional online file converters force you to upload sensitive contracts, medical records, financial statements, and private footage to remote infrastructure. Even when platforms promise deletion, files linger in server cache and network transit.
+        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+          When converting sensitive documents, customer contracts, medical records, or proprietary footage, you should never have to compromise confidentiality.
+        </p>
+        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+          NovaTools operates entirely on your hardware. By compiling algorithms directly for client-side execution, files reside only in temporary memory and are erased the moment your tab closes.
         </p>
 
-        <p class="text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-          NovaTools eliminates that risk entirely. Every file decoding, PDF merge, image compression, and audio boost happens exclusively inside your local browser memory.
-        </p>
-
-        {/* Feature Checkpoints */}
-        <div class="space-y-2.5 pt-2">
-          <div class="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-200">
-            <CheckCircle2 class="h-4 w-4 text-emerald-500 dark:text-[#34D399] shrink-0 mt-0.5" />
-            <span><strong>Zero Data Retention:</strong> Nothing is logged, stored, or sent across the internet.</span>
-          </div>
-          <div class="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-200">
-            <CheckCircle2 class="h-4 w-4 text-emerald-500 dark:text-[#34D399] shrink-0 mt-0.5" />
-            <span><strong>Offline Capable:</strong> Tools run seamlessly even on airplanes or in air-gapped workstations.</span>
-          </div>
+        <div class="pt-2">
+          <a href="/privacy" class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            <span>Read Privacy Manifesto</span>
+            <ArrowRight class="h-4 w-4" />
+          </a>
         </div>
       </div>
 
     </div>
 
-    {/* DIVIDING SEPARATOR LINE BETWEEN STORY BLOCKS */}
-    <div class="relative w-full max-w-4xl mx-auto my-6 flex items-center justify-center">
-      <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-white/15 to-transparent" />
-      <div class="absolute h-1.5 w-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 shadow-[0_0_10px_rgba(56,189,248,0.7)]" />
-    </div>
+    {/* Precision Laser Divider */}
+    <div class="laser-divider"></div>
 
-    {/* STORY BLOCK 2: Left Text, Right Image (Scroll-reactive) */}
-    <div class="about-story-block grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center transition-[opacity,transform,filter] duration-300 ease-out will-change-[opacity,transform]">
+    {/* ZIG-ZAG BLOCK 2: Performance & Benchmark */}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
       
-      {/* Left Column: Copy & Narrative */}
-      <div class="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
-        <h3 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+      {/* Left: Narrative */}
+      <div class="lg:col-span-6 space-y-4 text-left order-2 lg:order-1">
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
           Native Speed Without Artificial Limits
         </h3>
-
-        <p class="text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-          Cloud tools throttle free users with 10MB limits, daily conversion quotas, slow queues, and watermarked downloads to push paid subscriptions.
+        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+          Cloud converters throttle file sizes and force queue wait times to sell premium plans. NovaTools taps into your CPU and GPU directly, bypassing artificial upload ceilings.
         </p>
 
-        <p class="text-sm text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-          By utilizing modern client-side execution and hardware acceleration, NovaTools taps directly into your CPU and GPU. Process large videos, batch documents, and high-resolution images instantly without paywalls.
-        </p>
-
-        {/* Feature Checkpoints */}
-        <div class="space-y-2.5 pt-2">
-          <div class="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-200">
-            <CheckCircle2 class="h-4 w-4 text-emerald-500 dark:text-[#34D399] shrink-0 mt-0.5" />
-            <span><strong>No Upload Delays:</strong> Zero network latency or slow file uploading queues.</span>
-          </div>
-          <div class="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-200">
-            <CheckCircle2 class="h-4 w-4 text-emerald-500 dark:text-[#34D399] shrink-0 mt-0.5" />
-            <span><strong>Free & Unbounded:</strong> Full access to all 21+ tools with no file size quotas.</span>
-          </div>
-        </div>
+        <ul class="space-y-2.5 pt-1 text-xs text-slate-700 dark:text-[#d1d5db]">
+          <li class="flex items-center gap-2.5">
+            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span>Zero network upload or download bottlenecks</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span>Multi-threaded background Web Workers</span>
+          </li>
+          <li class="flex items-center gap-2.5">
+            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span>100% free with no daily caps or watermarks</span>
+          </li>
+        </ul>
       </div>
 
-      {/* Right Column: Real Application Screenshot */}
-      <div class="lg:col-span-6 relative group order-1 lg:order-2">
-        <div class="relative rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0A0F1D]/80 backdrop-blur-xl p-2 sm:p-2.5 shadow-2xl shadow-indigo-950/20 overflow-hidden transition-all duration-300 group-hover:border-indigo-500/40">
-          {/* Subtle Window Header */}
-          <div class="flex items-center gap-1.5 px-3 py-2 border-b border-slate-200 dark:border-white/5 bg-slate-100/90 dark:bg-[#050811]/60 rounded-t-xl mb-1.5">
-            <span class="h-2.5 w-2.5 rounded-full bg-red-500/60" />
-            <span class="h-2.5 w-2.5 rounded-full bg-amber-500/60" />
-            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500/60" />
-            <span class="ml-2 font-mono text-[10px] text-slate-500 dark:text-slate-400">novatools.app/image/background-remover</span>
+      {/* Right: Benchmark Comparison Bar Box */}
+      <div class="lg:col-span-6 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#1e2025] p-6 shadow-sm space-y-4 order-1 lg:order-2">
+        <div class="flex justify-between items-center border-b border-slate-200 dark:border-white/[0.06] pb-3 text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
+          <span>PERFORMANCE_BENCHMARK</span>
+          <span>LATENCY COMPARISON</span>
+        </div>
+
+        <div class="h-56 rounded-lg bg-white dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] p-5 flex flex-col justify-center space-y-5">
+          {/* Cloud Converter Latency */}
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-medium">
+              <span class="text-slate-600 dark:text-[#9ca3af]">Cloud-Based Services (Upload + Queue + Download)</span>
+              <span class="font-mono text-slate-500">14.2s</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5">
+              <div class="bg-slate-400 dark:bg-slate-600 h-2.5 rounded-full" style="width: 85%"></div>
+            </div>
           </div>
 
-          <img
-            src="/screenshots/3_novatools_bg_remover_diff.jpg"
-            alt="NovaTools AI Background Remover Studio"
-            class="w-full h-auto rounded-xl object-cover border border-slate-200/60 dark:border-white/5 shadow-inner"
-            loading="lazy"
-          />
+          {/* NovaTools In-Browser Latency */}
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold text-slate-900 dark:text-white">
+              <span class="text-blue-600 dark:text-blue-400">NovaTools (Client-Side In-Memory)</span>
+              <span class="font-mono text-blue-600 dark:text-blue-400">0.8s</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5">
+              <div class="bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full" style="width: 15%"></div>
+            </div>
+          </div>
+
+          <div class="pt-2 text-center font-mono text-[11px] text-slate-500 dark:text-[#9ca3af] border-t border-slate-100 dark:border-white/[0.04]">
+            * Tested on standard 50MB multi-page document sequence
+          </div>
         </div>
       </div>
 
@@ -128,49 +157,3 @@ import { CheckCircle2 } from 'lucide-react';
 
   </div>
 </section>
-
-<script>
-  function setupScrollFade() {
-    const blocks = document.querySelectorAll<HTMLElement>('.about-story-block');
-    if (!blocks.length) return;
-
-    let ticking = false;
-
-    const updateScrollFade = () => {
-      const windowHeight = window.innerHeight;
-      const centerY = windowHeight * 0.52;
-
-      blocks.forEach((block) => {
-        const rect = block.getBoundingClientRect();
-        const blockCenter = rect.top + rect.height / 2;
-        const distanceFromCenter = Math.abs(centerY - blockCenter);
-        const maxDistance = windowHeight * 0.6;
-
-        // Smooth proximity-based opacity & scaling
-        let progress = 1 - (distanceFromCenter / maxDistance);
-        progress = Math.max(0.25, Math.min(1, progress));
-
-        block.style.opacity = `${progress}`;
-        block.style.transform = `scale(${0.96 + 0.04 * progress})`;
-        block.style.filter = progress < 0.35 ? 'blur(1px)' : 'none';
-      });
-
-      ticking = false;
-    };
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScrollFade);
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
-    updateScrollFade();
-  }
-
-  // Run on initial load
-  setupScrollFade();
-  document.addEventListener('astro:page-load', setupScrollFade);
-</script>

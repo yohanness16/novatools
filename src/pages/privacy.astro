@@ -1,38 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Shield, Lock, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock, CheckCircle2, ShieldCheck } from 'lucide-react';
 ---
 
 <Layout
-  title="Privacy Ledger & Data Governance - NovaTools"
-  description="Comprehensive privacy policy for NovaTools. Learn how your files remain 100% private in local browser memory and how third-party advertising cookies operate."
+  title="Privacy Policy & Data Governance - NovaTools"
+  description="Comprehensive privacy policy for NovaTools. Learn how your files remain 100% private in local browser memory and how data governance operates."
 >
   <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
-    <div class="space-y-2 border-b border-[#2A2D33] pb-5">
-      <div class="inline-flex items-center gap-1.5 rounded border border-[#3FBE73]/30 bg-[#122D1F] px-2.5 py-0.5 text-[11px] font-mono font-medium text-[#3FBE73]">
+    <div class="space-y-2 border-b border-slate-200 dark:border-white/[0.08] pb-5">
+      <div class="inline-flex items-center gap-1.5 rounded border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400">
         <Shield class="h-3.5 w-3.5" />
         <span>Cryptographic Zero-Knowledge Guarantee</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#ECEDEF]">Privacy Policy & Data Governance</h1>
-      <p class="text-[11px] text-[#8B8F98] font-mono">Ledger Specification · {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+        Privacy Policy & Data Governance
+      </h1>
+      <p class="text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
+        Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+      </p>
     </div>
 
-    <div class="space-y-6 text-xs sm:text-sm text-[#8B8F98] leading-relaxed">
+    <div class="space-y-6 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
       {/* Section 1 */}
-      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
-        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">1. Zero-Upload Architecture</h2>
+      <section class="space-y-2 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
+          1. Zero-Upload Architecture
+        </h2>
         <p>
-          At NovaTools (<a href="https://novatools.app" class="text-[#4F8CFF] hover:underline">novatools.app</a>), our fundamental technical premise is that <strong>we do not transmit, collect, process, or store your documents, photos, audio tracks, or videos on any remote servers.</strong>
+          At NovaTools (<a href="https://toolboxs.tech" class="text-blue-600 dark:text-blue-400 hover:underline">toolboxs.tech</a>), our fundamental technical premise is that <strong>we do not transmit, collect, process, or store your documents, photos, audio tracks, or videos on any remote servers.</strong>
         </p>
         <p>
-          All operations—including PDF merging, audio volume amplification, neural subtitle generation, image compression, video trimming, and EXIF scrubbing—execute <strong>100% locally within your client browser runtime</strong> using WebAssembly, WebCodecs, and Web Workers.
+          All operations—including PDF merging, audio volume amplification, neural subtitle generation, image compression, video trimming, and EXIF scrubbing—execute <strong>100% locally within your client browser sandbox</strong> using in-browser processing engines, WebCodecs, and Web Workers.
         </p>
       </section>
 
       {/* Section 2 */}
-      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
-        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">2. Zero Data Collection Spec</h2>
-        <ul class="list-disc pl-4 space-y-1 text-xs text-[#8B8F98]">
+      <section class="space-y-2 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
+          2. Zero Data Collection Spec
+        </h2>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-slate-600 dark:text-[#9ca3af]">
           <li>Zero collection or retention of document bytes, images, or audio buffers.</li>
           <li>Zero logging of file names, metadata tags, passwords, or transcription text.</li>
           <li>Zero requirement for user accounts, credentials, or tracking identifiers to use any tool.</li>
@@ -40,22 +48,26 @@ import { Shield, Lock, CheckCircle2 } from 'lucide-react';
       </section>
 
       {/* Section 3: Google AdSense and Cookies */}
-      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
-        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">3. Advertising & Cookies (Google AdSense)</h2>
+      <section class="space-y-2 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
+          3. Advertising & Functional Cookies
+        </h2>
         <p>
           To maintain free, open-access infrastructure without paywalls, we may serve programmatic advertisements provided by third-party vendors, such as <strong>Google AdSense</strong>.
         </p>
-        <div class="rounded border border-[#2A2D33] bg-[#0B0C0F] p-3 space-y-1.5 text-xs text-[#8B8F98] font-mono">
+        <div class="rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-[#16171a] p-3.5 space-y-1.5 text-xs text-slate-500 dark:text-[#9ca3af] font-mono">
           <p>• Third-Party Vendors: Google uses cookies to serve ads based on prior user visits.</p>
-          <p>• Opting Out: Users may opt out of personalized advertising via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-[#4F8CFF] hover:underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" class="text-[#4F8CFF] hover:underline">aboutads.info</a>.</p>
+          <p>• Opting Out: Users may opt out of personalized advertising via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">aboutads.info</a>.</p>
         </div>
       </section>
 
       {/* Section 4: Contact */}
-      <section class="space-y-2 rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5">
-        <h2 class="text-xs font-semibold text-[#ECEDEF] uppercase tracking-wider font-mono">4. Security & Compliance Contact</h2>
+      <section class="space-y-2 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+        <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
+          4. Security & Compliance Contact
+        </h2>
         <p>
-          For questions regarding local-first execution compliance or audit inquiries: <code class="text-[#4F8CFF] font-mono">privacy@novatools.app</code> or visit our <a href="/contact" class="text-[#4F8CFF] hover:underline">Contact Desk</a>.
+          For questions regarding local-first execution compliance or audit inquiries: visit our <a href="/contact" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold">Contact Desk</a>.
         </p>
       </section>
     </div>

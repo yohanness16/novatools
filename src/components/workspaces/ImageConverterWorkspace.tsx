@@ -124,7 +124,7 @@ export const ImageConverterWorkspace: React.FC = () => {
             Drop images to convert formats, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Batch convert between WebP, PNG, JPG, AVIF, and BMP formats. 100% local WASM.
+            Batch convert between WebP, PNG, JPG, AVIF, and BMP formats. 100% local processing.
           </p>
         </div>
       ) : (

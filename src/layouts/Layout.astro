@@ -17,7 +17,7 @@ export interface Props {
 const {
   title,
   description = 'NovaTools is a high-performance, 100% client-side document, image, video, and PDF manipulation suite. Fast, private, and local.',
-  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'wasm', 'private pdf merger', 'online media tools'],
+  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'local processing', 'private pdf merger', 'online media tools'],
   canonicalUrl = Astro.url.href,
   faqs = [],
   breadcrumbs = [],
@@ -62,7 +62,7 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       breadcrumbs={breadcrumbs}
     />
 
-    {/* Cross-Origin Isolation for WASM and Multi-threaded Web Workers */}
+    {/* Cross-Origin Isolation for In-Browser Multi-threaded Web Workers */}
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
 
@@ -73,7 +73,7 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="selection:bg-sky-500/25 selection:text-sky-500 flex min-h-[100dvh] flex-col font-sans antialiased">
+  <body class="selection:bg-blue-500/25 selection:text-blue-500 flex min-h-[100dvh] flex-col font-sans antialiased">
     {/* Console Top Bar Header */}
     <Header client:load />
 

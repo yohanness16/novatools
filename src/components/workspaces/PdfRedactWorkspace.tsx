@@ -76,7 +76,7 @@ export const PdfRedactWorkspace: React.FC = () => {
             Drop PDF to flatten & lock, or <span className="text-[#4F8CFF] underline">browse files</span>
           </h3>
           <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Lock interactive form values and rasterize annotations. 100% local WASM.
+            Lock interactive form values and rasterize annotations. 100% local processing.
           </p>
         </div>
       ) : (

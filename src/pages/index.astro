@@ -3,49 +3,58 @@ import Layout from '../layouts/Layout.astro';
 import { HeroSection } from '../components/HeroSection';
 import AboutSection from '../components/AboutSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Lock, Code, Eye } from 'lucide-react';
 ---
 
 <Layout
-  title="NovaTools - 100% Private Media, Video & PDF Utilities"
+  title="NovaTools - 100% Private In-Browser Media, Video & PDF Utilities"
   description="High-performance, privacy-first PDF, image, video, and audio tools running instantly in your browser. Zero cloud uploads, 100% free."
 >
-  {/* Dynamic Interactive Hero Section */}
+  {/* Dynamic Interactive Hero Section (100vh) */}
   <HeroSection client:load />
 
-  {/* Alternating Zig-Zag About Us Section */}
+  {/* Alternating Architecture & Speed About Section */}
   <AboutSection />
 
   {/* Interactive Bento Grid Services Section */}
   <ServicesSection />
 
-  <div id="catalog" class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-12">
-    {/* Architecture & Security Ledger */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#0A0F1D]/80 backdrop-blur-md p-6 sm:p-7 space-y-4 shadow-xl">
-      <div class="flex items-center gap-2.5 border-b border-slate-200 dark:border-white/10 pb-3 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-        <ShieldCheck class="h-4 w-4 text-sky-600 dark:text-[#38BDF8]" />
-        <span>Privacy & Performance Guarantee</span>
+  {/* Security Ledger & Open Architecture Guarantee */}
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex items-center gap-2.5 border-b border-slate-200 dark:border-white/[0.06] pb-4 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
+        <ShieldCheck class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+        <span>SECURITY_LEDGER // ARCHITECTURE GUARANTEE</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="rounded-lg bg-slate-100 dark:bg-[#0D1426] p-4 border border-slate-200 dark:border-white/10 space-y-1.5">
-          <div class="font-bold text-slate-900 dark:text-white">Zero Server Uploads</div>
-          <p class="text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-            All document decryption, image rendering, and video slicing execute completely inside your private browser memory.
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+            <Lock class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span>Stateless by Default</span>
+          </div>
+          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+            We maintain zero databases of user files. The application runs entirely from static assets loaded into your local browser cache.
           </p>
         </div>
 
-        <div class="rounded-lg bg-slate-100 dark:bg-[#0D1426] p-4 border border-slate-200 dark:border-white/10 space-y-1.5">
-          <div class="font-bold text-slate-900 dark:text-white">Instant Processing</div>
-          <p class="text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-            Local device execution eliminates bandwidth lag, upload delays, and cloud conversion waiting lines.
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+            <Code class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span>100% Client-Side Runtime</span>
+          </div>
+          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+            All algorithms, from PDF manipulation to AI neural inference, execute directly on your local device CPU and GPU.
           </p>
         </div>
 
-        <div class="rounded-lg bg-slate-100 dark:bg-[#0D1426] p-4 border border-slate-200 dark:border-white/10 space-y-1.5">
-          <div class="font-bold text-slate-900 dark:text-white">No Limits or Quotas</div>
-          <p class="text-slate-600 dark:text-[#94A3B8] leading-relaxed">
-            Convert, compress, and edit as many files as you need without daily limits, file restrictions, or paywalls.
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+            <Eye class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span>Open Verification</span>
+          </div>
+          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
+            Inspect network activity via Browser DevTools at any time to verify zero outbound requests transmitting payload data.
           </p>
         </div>
       </div>
