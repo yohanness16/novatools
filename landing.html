@@ -142,32 +142,73 @@
 </head>
 <body class="bg-surface-bright text-on-surface font-body-lg min-h-screen flex flex-col pt-16">
 <!-- TopNavBar (Shared Component) -->
+<!-- TopNavBar (Shared Component) -->
 <nav class="fixed top-0 w-full h-16 z-50 bg-surface border-b border-outline-variant flat no shadows flex justify-between items-center px-6 max-w-[1920px] mx-auto">
 <div class="flex items-center gap-6">
-<span class="font-headline-md text-headline-md font-bold text-primary">NovaTools</span>
-<div class="hidden md:flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-1.5 w-64 ml-4">
+<span class="font-headline-md text-headline-md font-bold text-primary whitespace-nowrap">NovaTools</span>
+<div class="hidden lg:flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-1.5 w-64 ml-4">
 <span class="material-symbols-outlined text-outline-variant text-sm mr-2">search</span>
-<span class="font-mono-label text-mono-label text-on-surface-variant flex-1">Cmd + K</span>
+<span class="font-mono-label text-mono-label text-on-surface-variant flex-1 whitespace-nowrap">Cmd + K</span>
 </div>
 </div>
-<div class="hidden md:flex gap-6 items-center">
-<div class="inline-flex items-center gap-1.5 bg-surface-container-low border border-outline-variant px-2.5 py-1 rounded-full mr-4">
+<div class="hidden lg:flex gap-4 xl:gap-6 items-center flex-1 justify-center">
+<div class="inline-flex items-center gap-1.5 bg-surface-container-low border border-outline-variant px-2.5 py-1 rounded-full mr-4 whitespace-nowrap">
 <span class="material-symbols-outlined text-primary-container text-sm">verified_user</span>
 <span class="font-mono-label text-mono-label text-on-surface-variant">100% PRIVATE</span>
 </div>
-<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1" href="#">Dashboard</a>
-<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Analytics</a>
-<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Security</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 whitespace-nowrap" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded whitespace-nowrap" href="#">Analytics</a>
+<a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 hover:bg-surface-container-low transition-colors px-2 py-1 rounded whitespace-nowrap" href="#">Security</a>
 </div>
 <div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="terminal">terminal</span>
-<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="settings">settings</span>
-<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors" data-icon="help">help</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors hidden md:block" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors hidden md:block" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded cursor-pointer transition-colors hidden md:block" data-icon="help">help</span>
 <div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
-<img alt="User profile" class="w-full h-full object-cover" data-alt="A small, circular user profile picture featuring an abstract, low-poly geometric rendering of a human face in shades of cool grey and subtle industrial blue. The style is clean, modern, and professional, sitting on a stark white background to match a high-performance web console interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQcmRMq5EW2As4eIMByS_bL5eJLfzppREJ9ThqYmLouQ3cWPK3aVQpFzZvO_vgSBv-SH9miifqch9Q1xExyH0Sl012vPVhWBXijV5g4WP1xU6eU7dXMnb8eR7p8XXRLSouRcDjomqzYEH3mjt84WsStb84UtQYGq_AmId4pT9_Lt6NzOpQRcPwxZoUlkVMnW2F9JfC231fs_wjkajH_MjjAypzdbfFbZBp13M_Ltuwx5srCH4qV1w4"/>
+<img alt="User profile" class="w-full h-full object-cover" data-alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQcmRMq5EW2As4eIMByS_bL5eJLfzppREJ9ThqYmLouQ3cWPK3aVQpFzZvO_vgSBv-SH9miifqch9Q1xExyH0Sl012vPVhWBXijV5g4WP1xU6eU7dXMnb8eR7p8XXRLSouRcDjomqzYEH3mjt84WsStb84UtQYGq_AmId4pT9_Lt6NzOpQRcPwxZoUlkVMnW2F9JfC231fs_wjkajH_MjjAypzdbfFbZBp13M_Ltuwx5srCH4qV1w4"/>
 </div>
+<button id="mobile-menu-btn" class="lg:hidden flex items-center justify-center p-2 rounded text-on-surface hover:bg-surface-container-low transition-colors focus:outline-none whitespace-nowrap">
+    <span class="material-symbols-outlined">menu</span>
+</button>
 </div>
 </nav>
+
+<!-- Mobile/Tablet Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-40 bg-surface/95 backdrop-blur-sm pt-16 flex-col hidden overflow-y-auto">
+    <div class="p-6 flex flex-col gap-6">
+        <div class="flex items-center bg-surface-container-low border border-outline-variant rounded px-3 py-1.5 w-full">
+            <span class="material-symbols-outlined text-outline-variant text-sm mr-2">search</span>
+            <span class="font-mono-label text-mono-label text-on-surface-variant flex-1 whitespace-nowrap">Search...</span>
+        </div>
+
+        <div class="inline-flex items-center gap-1.5 bg-surface-container-low border border-outline-variant px-2.5 py-1 rounded-full w-fit whitespace-nowrap">
+            <span class="material-symbols-outlined text-primary-container text-sm">verified_user</span>
+            <span class="font-mono-label text-mono-label text-on-surface-variant">100% PRIVATE</span>
+        </div>
+
+        <nav class="flex flex-col gap-4">
+            <a class="text-primary font-bold cursor-pointer active:scale-95 duration-150 transition-colors py-2 whitespace-nowrap" href="#">Dashboard</a>
+            <a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 transition-colors py-2 whitespace-nowrap" href="#">Analytics</a>
+            <a class="text-on-surface-variant font-medium cursor-pointer active:scale-95 duration-150 transition-colors py-2 whitespace-nowrap" href="#">Security</a>
+        </nav>
+
+        <div class="flex items-center gap-6 mt-4 pt-4 border-t border-outline-variant">
+            <div class="flex flex-col items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-on-surface-variant">terminal</span>
+                <span class="text-xs text-on-surface-variant whitespace-nowrap">Terminal</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-on-surface-variant">settings</span>
+                <span class="text-xs text-on-surface-variant whitespace-nowrap">Settings</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-on-surface-variant">help</span>
+                <span class="text-xs text-on-surface-variant whitespace-nowrap">Help</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Main Content -->
 <main class="flex-1 flex flex-col w-full max-w-[1920px] mx-auto relative">
 <!-- Section 1.1: Hero & Live Workbench -->
@@ -183,30 +224,30 @@
                         Create, Convert &amp; Edit with <br/>
 <span class="text-primary-container">NovaTools</span>
 </h1>
-<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface-variant h-[40px] flex items-center">
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface-variant min-h-[40px] flex items-center flex-wrap">
 <span class="typewriter-cursor" id="typewriter-text">PDF Manipulation</span>
 </div>
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mt-4">
                         Industrial-grade processing running entirely within your browser. Native speeds, zero server uploads, complete data privacy.
                     </p>
-<div class="flex gap-4 mt-6">
-<button class="bg-primary-container text-on-primary font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:ring-2 hover:ring-primary-container hover:ring-offset-2 hover:ring-offset-surface-bright transition-all active:scale-95 border border-transparent">
+<div class="flex flex-col sm:flex-row gap-4 mt-6">
+<button class="bg-primary-container text-on-primary font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:ring-2 hover:ring-primary-container hover:ring-offset-2 hover:ring-offset-surface-bright transition-all active:scale-95 border border-transparent whitespace-nowrap">
                             Launch Workbench
                         </button>
-<button class="bg-transparent border border-outline-variant text-on-surface font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:bg-surface-container-low transition-colors active:scale-95">
+<button class="bg-transparent border border-outline-variant text-on-surface font-body-lg text-body-lg px-6 py-3 rounded-DEFAULT hover:bg-surface-container-low transition-colors active:scale-95 whitespace-nowrap">
                             Read Specs
                         </button>
 </div>
 </div>
 <!-- Right: Action Graphic -->
 <div class="relative h-[450px] w-full bento-cell rounded-lg p-4 flex flex-col shadow-sm">
-<div class="flex justify-between items-center mb-4 border-b border-outline-variant pb-2">
+<div class="flex flex-wrap justify-between items-center mb-4 border-b border-outline-variant pb-2 gap-2">
 <span class="font-mono-label text-mono-label text-on-surface-variant">ENV_01 / WORKSPACE</span>
-<div class="flex gap-2">
-<button class="text-xs px-2 py-1 bg-surface-container-high rounded border border-outline-variant text-on-surface">PDF</button>
-<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">IMAGE</button>
-<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">AUDIO</button>
-<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors">VIDEO</button>
+<div class="flex flex-wrap gap-2">
+<button class="text-xs px-2 py-1 bg-surface-container-high rounded border border-outline-variant text-on-surface whitespace-nowrap">PDF</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors whitespace-nowrap">IMAGE</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors whitespace-nowrap">AUDIO</button>
+<button class="text-xs px-2 py-1 hover:bg-surface-container-low rounded border border-transparent text-on-surface-variant transition-colors whitespace-nowrap">VIDEO</button>
 <span class="material-symbols-outlined text-outline-variant text-sm ml-2 self-center cursor-pointer">fullscreen</span>
 </div>
 </div>
@@ -235,17 +276,17 @@
 </div>
 </div>
 <!-- Bottom Metrics Bar -->
-<div class="absolute bottom-0 left-0 w-full border-t border-outline-variant bg-surface-container-lowest py-3 px-6 flex flex-wrap gap-8 justify-center items-center z-10">
+<div class="absolute bottom-0 left-0 w-full border-t border-outline-variant bg-surface-container-lowest py-3 px-6 flex flex-col md:flex-row flex-wrap gap-4 md:gap-8 justify-center items-center z-10">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-tertiary text-lg">cloud_off</span>
 <span class="font-mono-data text-mono-data text-on-surface font-medium">Zero Uploads</span>
 </div>
-<div class="w-1 h-4 border-l border-outline-variant"></div>
+<div class="hidden md:block w-1 h-4 border-l border-outline-variant"></div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-tertiary text-lg">speed</span>
 <span class="font-mono-data text-mono-data text-on-surface font-medium">Instant Speed</span>
 </div>
-<div class="w-1 h-4 border-l border-outline-variant"></div>
+<div class="hidden md:block w-1 h-4 border-l border-outline-variant"></div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-tertiary text-lg">shield_lock</span>
 <span class="font-mono-data text-mono-data text-on-surface font-medium">Private by Design</span>
@@ -359,7 +400,7 @@
 <h2 class="font-display text-display text-on-surface mb-4">Comprehensive Utility Grid</h2>
 <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl text-center">Five specialized engines engineered for precision client-side execution.</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto md:auto-rows-[250px]">
 <!-- Card 1: PDF (Tall) -->
 <div class="bento-cell rounded-lg p-6 shadow-sm flex flex-col relative overflow-hidden group lg:row-span-2 col-span-1">
 <div class="absolute inset-0 bg-gradient-to-b from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -505,7 +546,7 @@
 </div>
 <!-- Expanded Global Footer -->
 <footer class="w-full bg-surface border-t border-outline-variant pt-16 pb-8">
-<div class="max-w-7xl mx-auto px-gutter md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+<div class="max-w-7xl mx-auto px-gutter md:px-margin-desktop grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 <div class="lg:col-span-2 flex flex-col gap-6">
 <span class="font-headline-md text-headline-md text-primary font-bold">NovaTools</span>
 <p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm">Privacy-first productivity tools engineered for modern web browsers. No uploads, native speeds.</p>
@@ -516,24 +557,24 @@
 </div>
 <div class="flex flex-col gap-4">
 <span class="font-mono-label text-mono-label text-on-surface font-bold">DOCUMENT SUITE</span>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">PDF Merger</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">PDF Splitter</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Compressor</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">OCR Engine</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">PDF Merger</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">PDF Splitter</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Compressor</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">OCR Engine</a>
 </div>
 <div class="flex flex-col gap-4">
 <span class="font-mono-label text-mono-label text-on-surface font-bold">MEDIA ENGINE</span>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Image Converter</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Background AI</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Video Trimmer</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Audio Normalize</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Image Converter</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Background AI</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Video Trimmer</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Audio Normalize</a>
 </div>
 <div class="flex flex-col gap-4">
 <span class="font-mono-label text-mono-label text-on-surface font-bold">RESOURCES</span>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Documentation</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Architecture Spec</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Privacy Policy</a>
-<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">GitHub</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Architecture Spec</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer whitespace-nowrap">GitHub</a>
 </div>
 </div>
 <div class="w-full border-t border-outline-variant pt-6 px-gutter md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 font-mono-data text-mono-data">
@@ -585,4 +626,28 @@
 
         setTimeout(type, 1000);
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const icon = btn.querySelector('.material-symbols-outlined');
+
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('flex');
+                    icon.textContent = 'close';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('flex');
+                    icon.textContent = 'menu';
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    });
+</script>
 </body></html>
