@@ -1,37 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { TOOLS, SUITES, type ToolMeta } from '../lib/toolsData';
-import {
-  Layers,
-  Scissors,
-  RotateCw,
-  Lock,
-  EyeOff,
-  FileImage,
-  FilePlus,
-  FileText,
-  Repeat,
-  Minimize2,
-  Maximize2,
-  ShieldCheck,
-  Code,
-  Film,
-  Clock,
-  Music,
-  VolumeX,
-  Subtitles,
-  Volume2,
-  Printer,
-  Presentation,
-  FileSpreadsheet,
-  Workflow,
-  GitBranch,
-  Database,
-  ArrowRight,
-  Image as ImageIcon,
-  Video,
-  Network,
-} from 'lucide-react';
+import { ToolTileGrid } from './ToolTileGrid';
 
 interface Props {
   category: ToolMeta['category'];
@@ -41,37 +11,6 @@ interface Props {
 }
 
 const { category, title, description } = Astro.props;
-
-const iconMap: Record<string, any> = {
-  Layers,
-  Scissors,
-  RotateCw,
-  Lock,
-  EyeOff,
-  FileImage,
-  FilePlus,
-  FileText,
-  Repeat,
-  Minimize2,
-  Maximize2,
-  ShieldCheck,
-  Code,
-  Film,
-  Clock,
-  Music,
-  VolumeX,
-  Subtitles,
-  Volume2,
-  Printer,
-  Presentation,
-  FileSpreadsheet,
-  Workflow,
-  GitBranch,
-  Database,
-  ImageIcon,
-  Video,
-  Network,
-};
 
 const suite = SUITES.find((s) => s.id === category)!;
 const suiteTools = TOOLS.filter((t) => t.category === category);
@@ -115,29 +54,7 @@ const suiteTools = TOOLS.filter((t) => t.category === category);
       </div>
     </div>
 
-    {/* Action Grid */}
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
-      {suiteTools.map((tool) => {
-        const Icon = iconMap[tool.iconName] || Layers;
-
-        return (
-          <a
-            href={tool.path}
-            class="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[106px]"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-sm transition-colors group-hover:bg-[#FACC15] group-hover:text-[#141413]">
-                <Icon class="h-4 w-4" />
-              </div>
-              <ArrowRight class="h-3.5 w-3.5 text-[#746D61] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#141413] dark:group-hover:text-[#FACC15] transition-all" />
-            </div>
-
-            <span class="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] truncate">
-              {tool.shortName}
-            </span>
-          </a>
-        );
-      })}
-    </div>
+    {/* Action Grid with Vertical 2-Part Hover Preview */}
+    <ToolTileGrid client:load tools={suiteTools} />
   </div>
 </Layout>
