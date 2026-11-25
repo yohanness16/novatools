@@ -59,9 +59,9 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
   return (
     <div className="relative nt-card overflow-visible flex flex-col">
       {/* Top Header of Editor Card */}
-      <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22] rounded-t-2xl">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] rounded-t-2xl">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#4B5563] dark:text-[#D1D5DB]">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#454038] dark:text-[#CBC4B6]">
             Script / Prompt
           </span>
         </div>
@@ -73,14 +73,14 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             onClick={() => setShowSamplesMenu(!showSamplesMenu)}
             className="nt-btn-secondary flex items-center gap-2 px-3 py-1.5 text-xs font-bold"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Sample scripts</span>
             <ChevronDown className="w-3 h-3 text-[#746D61]" />
           </button>
 
           {showSamplesMenu && (
             <div className="nt-window absolute right-0 mt-2 w-72 py-1.5 z-30 origin-top-right">
-              <div className="px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF] border-b border-[var(--nt-border)]">
+              <div className="px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#746D61] dark:text-[#938B7D] border-b border-[var(--nt-border)]">
                 Choose a sample
               </div>
               {SAMPLE_SCRIPTS.map((s) => (
@@ -88,10 +88,10 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
                   key={s.id}
                   type="button"
                   onClick={() => handleSelectSample(s)}
-                  className="w-full text-left px-3.5 py-2.5 hover:bg-[#FEF7D6] dark:hover:bg-[#2563EB]/10 text-xs transition-colors flex flex-col gap-0.5 cursor-pointer"
+                  className="w-full text-left px-3.5 py-2.5 hover:bg-[#FEF7D6] dark:hover:bg-[#FACC15]/10 text-xs transition-colors flex flex-col gap-0.5 cursor-pointer"
                 >
-                  <span className="font-extrabold text-[#111214] dark:text-[#F3F4F6]">{s.title}</span>
-                  <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] line-clamp-1">{s.content}</span>
+                  <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0]">{s.title}</span>
+                  <span className="text-[11px] text-[#746D61] dark:text-[#938B7D] line-clamp-1">{s.content}</span>
                 </button>
               ))}
             </div>
@@ -108,26 +108,26 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
           onKeyDown={handleKeyDown}
           placeholder="Start typing or paste your text here to generate lifelike speech..."
           rows={7}
-          className="w-full h-full bg-transparent border-0 text-[#111214] dark:text-[#F3F4F6] placeholder:text-[#746D61] dark:placeholder:text-[#938B7D] focus:outline-none resize-y text-base sm:text-lg leading-relaxed font-sans"
+          className="w-full h-full bg-transparent border-0 text-[#141413] dark:text-[#FAF7F0] placeholder:text-[#746D61] dark:placeholder:text-[#938B7D] focus:outline-none resize-y text-base sm:text-lg leading-relaxed font-sans"
         />
       </div>
 
       {/* Footer Status Bar with Word/Char Counts & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-t border-[var(--nt-border)] bg-[#EFE9DC]/60 dark:bg-[#191714] rounded-b-2xl text-xs text-[#4B5563] dark:text-[#D1D5DB]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-t border-[var(--nt-border)] bg-[#EFE9DC]/60 dark:bg-[#191714] rounded-b-2xl text-xs text-[#454038] dark:text-[#CBC4B6]">
         {/* Stats */}
         <div className="flex items-center gap-5 font-mono">
           <div className="flex items-center gap-1.5">
-            <Type className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+            <Type className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>
-              <strong className="text-[#111214] dark:text-[#F3F4F6] font-extrabold">{charCount.toLocaleString()}</strong> chars
-              <span className="text-[#6B7280] dark:text-[#9CA3AF] ml-1">({wordCount} words)</span>
+              <strong className="text-[#141413] dark:text-[#FAF7F0] font-extrabold">{charCount.toLocaleString()}</strong> chars
+              <span className="text-[#746D61] dark:text-[#938B7D] ml-1">({wordCount} words)</span>
             </span>
           </div>
 
           <div className="flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-[#15803D] dark:text-[#4ADE80]" />
             <span>
-              Est. <strong className="text-[#111214] dark:text-[#F3F4F6] font-extrabold">~{estSeconds}s</strong>
+              Est. <strong className="text-[#141413] dark:text-[#FAF7F0] font-extrabold">~{estSeconds}s</strong>
             </span>
           </div>
         </div>
@@ -154,12 +154,12 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             </button>
           )}
 
-          <div className="hidden lg:flex items-center gap-1 pl-2 text-[11px] text-[#6B7280] dark:text-[#9CA3AF] border-l border-[var(--nt-border)]">
-            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#111214] dark:text-[#F3F4F6]">
+          <div className="hidden lg:flex items-center gap-1 pl-2 text-[11px] text-[#746D61] dark:text-[#938B7D] border-l border-[var(--nt-border)]">
+            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0]">
               Ctrl
             </kbd>
             <span>+</span>
-            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#111214] dark:text-[#F3F4F6]">
+            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0]">
               Enter
             </kbd>
           </div>

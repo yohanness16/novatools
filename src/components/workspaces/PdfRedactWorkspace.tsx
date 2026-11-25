@@ -82,12 +82,12 @@ export const PdfRedactWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]">
                 <FileText className="h-4 w-4" />
               </div>
               <div>
-                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                   {pageCount} Pages · {formatBytes(file.size)}
                 </p>
               </div>
@@ -104,27 +104,27 @@ export const PdfRedactWorkspace: React.FC = () => {
           </div>
 
           <div className="nt-well p-4 space-y-2.5">
-            <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
+            <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
               Flattening Rules
             </span>
 
             <div className="space-y-2 text-xs">
-              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#111214] dark:text-[#F3F4F6]">
+              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={flattenForms}
                   onChange={(e) => setFlattenForms(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span className="font-medium">Flatten Fillable AcroForm Fields into static text</span>
               </label>
 
-              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#111214] dark:text-[#F3F4F6]">
+              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={flattenAnnotations}
                   onChange={(e) => setFlattenAnnotations(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span className="font-medium">Merge Annotations, Highlights, and Vector Markups</span>
               </label>

@@ -16,10 +16,10 @@
 
 ## 2. Visual & Token System
 
-- **Palette (Crisp Light Studio default + Matte Dark toggle):**
-  - Light: Canvas `#FAFAFA`, Surface `#FFFFFF`, Well `#F3F4F6`, Hairline `#E5E7EB`, Ink `#111214`, Muted `#6B7280`, Accent `#2563EB`.
-  - Dark: Canvas `#0B0C0F`, Surface `#13151A`, Well `#1A1D24`, Hairline `rgba(255,255,255,0.09)`, Ink `#F3F4F6`, Muted `#9CA3AF`, Accent `#3B82F6`.
-- **Depth & Borders:** Flat 1px hairline borders, clean `rounded-xl` (`12px`) cards and `rounded-lg` (`8px`) buttons, zero 2.5D bevels, zero traffic-light dots, zero neon glows.
+- **Palette (Warm Desktop Studio Yellow + Black + Cream + Matte Dark Obsidian toggle):**
+  - Light: Canvas `#F5F1E8`, Surface `#FFFFFF`, Well `#EAE3D4`, Border `rgba(20, 20, 19, 0.11)`, Ink `#141413`, Muted `#746D61`, Accent `#FACC15`.
+  - Dark: Canvas `#141311`, Surface `#1F1D19`, Well `#0E0D0B`, Border `rgba(250, 247, 240, 0.10)`, Bone Ink `#FAF7F0`, Muted `#938B7D`, Accent `#FACC15`.
+- **Depth & Borders:** Tactile NovaTools desktop app `.nt-window` frames with subtle studio dots, 2.5D `.nt-card-interactive` lift, recessed `.nt-well` trays, and `.nt-btn-yellow` keycap action buttons—without any explanatory prose.
 - **Typography:** `Plus Jakarta Sans` for UI/actions, `JetBrains Mono` strictly for file sizes, counts, durations, and `⌘K`.
 
 ---

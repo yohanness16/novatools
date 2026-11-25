@@ -111,8 +111,8 @@ export const VideoTrimmerWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 Total Length: {formatDuration(duration)} · {formatBytes(file.size)}
               </p>
             </div>
@@ -143,7 +143,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
           <div className="nt-well p-4 space-y-3.5">
             <div className="flex justify-between items-center text-xs font-mono font-bold">
               <span className="nt-badge-yellow px-2.5 py-0.5">Start: {formatDuration(startTime)}</span>
-              <span className="text-[#4B5563] dark:text-[#D1D5DB]">
+              <span className="text-[#454038] dark:text-[#CBC4B6]">
                 Clip: {formatDuration(Math.max(0, endTime - startTime))}
               </span>
               <span className="nt-badge-success px-2.5 py-0.5">End: {formatDuration(endTime)}</span>
@@ -151,7 +151,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
 
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] text-[#4B5563] dark:text-[#D1D5DB] font-mono font-semibold block mb-1">
+                <label className="text-[11px] text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold block mb-1">
                   Start Trim Marker
                 </label>
                 <input
@@ -166,7 +166,7 @@ export const VideoTrimmerWorkspace: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-[11px] text-[#4B5563] dark:text-[#D1D5DB] font-mono font-semibold block mb-1">
+                <label className="text-[11px] text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold block mb-1">
                   End Trim Marker
                 </label>
                 <input
@@ -182,12 +182,12 @@ export const VideoTrimmerWorkspace: React.FC = () => {
             </div>
 
             <div className="pt-2 border-t border-[var(--nt-border)]">
-              <label className="flex items-center gap-2 text-xs font-semibold text-[#111214] dark:text-[#F3F4F6] cursor-pointer">
+              <label className="flex items-center gap-2 text-xs font-semibold text-[#141413] dark:text-[#FAF7F0] cursor-pointer">
                 <input
                   type="checkbox"
                   checked={muteAudio}
                   onChange={(e) => setMuteAudio(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 {muteAudio ? <VolumeX className="h-4 w-4 text-[#B91C1C]" /> : <Volume2 className="h-4 w-4 text-[#746D61]" />}
                 <span>Mute audio track in exported clip</span>

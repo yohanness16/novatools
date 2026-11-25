@@ -176,10 +176,10 @@ export const TextToSpeechWorkspace: React.FC = () => {
       {/* Studio Top Bar */}
       <div className="nt-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]">
             <Volume2 className="w-5 h-5" />
           </div>
-          <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+          <span className="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
             {selectedVoice.name} · {selectedVoice.country}
           </span>
         </div>
@@ -196,7 +196,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] leading-tight">
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] leading-tight">
                   {selectedVoice.name}
                 </span>
                 {selectedVoice.grade && (
@@ -205,7 +205,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
                   </span>
                 )}
               </div>
-              <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF] capitalize">
+              <span className="font-mono text-[10px] text-[#746D61] dark:text-[#938B7D] capitalize">
                 {selectedVoice.country} · {selectedVoice.gender}
               </span>
             </div>
@@ -217,7 +217,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
             onClick={() => setIsVoiceSettingsOpen(true)}
             className="nt-btn-secondary flex items-center gap-2 px-3.5 py-2.5 text-xs font-bold"
           >
-            <Sliders className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
+            <Sliders className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Voice settings</span>
           </button>
         </div>

@@ -164,7 +164,7 @@ export const VideoToGifWorkspace: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
                 <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {formatBytes(file.size)}
                 </span>
@@ -174,7 +174,7 @@ export const VideoToGifWorkspace: React.FC = () => {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 {gifResult ? 'GIF rendered · Ready to inspect & download' : 'Select trim range and frame rate settings'}
               </p>
             </div>
@@ -216,14 +216,14 @@ export const VideoToGifWorkspace: React.FC = () => {
                   >
                     {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
                   </button>
-                  <span className="font-mono text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                  <span className="font-mono text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                     {formatDuration(currentTime)} / {formatDuration(duration)}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#746D61] dark:text-[#938B7D]">
                   <span>Clip:</span>
-                  <span className="font-bold text-[#111214] dark:text-[#60A5FA]">{clipDuration}s</span>
+                  <span className="font-bold text-[#141413] dark:text-[#FACC15]">{clipDuration}s</span>
                   <span>({estimatedFrames} frames)</span>
                 </div>
               </div>
@@ -231,9 +231,9 @@ export const VideoToGifWorkspace: React.FC = () => {
 
             <div className="lg:col-span-6 space-y-3.5">
               <div className="nt-well p-4 space-y-3">
-                <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center justify-between">
+                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                    <Clock className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                     Trim Video Timeline
                   </span>
                   <span className="nt-badge-yellow px-2 py-0.5 font-mono text-[10px] font-bold">
@@ -242,7 +242,7 @@ export const VideoToGifWorkspace: React.FC = () => {
                 </label>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] text-[#4B5563] dark:text-[#D1D5DB] font-mono">
+                  <div className="flex justify-between text-[11px] text-[#454038] dark:text-[#CBC4B6] font-mono">
                     <span>Start Position</span>
                     <span>{formatDuration(startTime)}</span>
                   </div>
@@ -262,7 +262,7 @@ export const VideoToGifWorkspace: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] text-[#4B5563] dark:text-[#D1D5DB] font-mono">
+                  <div className="flex justify-between text-[11px] text-[#454038] dark:text-[#CBC4B6] font-mono">
                     <span>End Position</span>
                     <span>{formatDuration(endTime)}</span>
                   </div>
@@ -284,8 +284,8 @@ export const VideoToGifWorkspace: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="nt-well p-3 space-y-1.5">
-                  <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
-                    <Zap className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                  <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                    <Zap className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                     Frame Rate (FPS)
                   </label>
                   <select
@@ -302,8 +302,8 @@ export const VideoToGifWorkspace: React.FC = () => {
                 </div>
 
                 <div className="nt-well p-3 space-y-1.5">
-                  <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
-                    <Layers className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                  <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                    <Layers className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                     Width Scaling
                   </label>
                   <select
@@ -349,7 +349,7 @@ export const VideoToGifWorkspace: React.FC = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--nt-border)] pb-3">
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-[#15803D] dark:bg-[#4ADE80]" />
-                  <h4 className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] uppercase tracking-wider font-mono">
+                  <h4 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
                     Animated GIF Output
                   </h4>
                 </div>
@@ -375,21 +375,21 @@ export const VideoToGifWorkspace: React.FC = () => {
                 <div className="md:col-span-5 nt-card p-4 space-y-2 text-xs font-mono">
                   <div className="flex justify-between py-1 border-b border-[var(--nt-border)] text-[#746D61]">
                     <span>Dimensions</span>
-                    <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">
+                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
                       {gifResult.width} × {gifResult.height} px
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[var(--nt-border)] text-[#746D61]">
                     <span>Frame Count</span>
-                    <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">{gifResult.frameCount} frames</span>
+                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">{gifResult.frameCount} frames</span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[var(--nt-border)] text-[#746D61]">
                     <span>Frame Rate</span>
-                    <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">{fps} FPS</span>
+                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">{fps} FPS</span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[var(--nt-border)] text-[#746D61]">
                     <span>Duration</span>
-                    <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">{gifResult.duration.toFixed(1)}s</span>
+                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">{gifResult.duration.toFixed(1)}s</span>
                   </div>
                   <div className="flex justify-between py-1 text-[#746D61]">
                     <span>Output Size</span>

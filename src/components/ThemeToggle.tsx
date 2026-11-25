@@ -27,20 +27,20 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
   };
 
   if (!mounted) {
-    return <div className={`h-8 w-8 rounded-lg ${className}`} />;
+    return <div className={`h-8 w-8 rounded-xl ${className}`} />;
   }
 
   return (
     <button
       onClick={toggleTheme}
       type="button"
-      className={`nt-btn-secondary flex h-8 w-8 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#2563EB] ${className}`}
+      className={`nt-btn-secondary flex h-8 w-8 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15] ${className}`}
       aria-label="Theme"
     >
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 text-[#F3F4F6]" />
+        <Sun className="h-4 w-4 text-[#FACC15]" />
       ) : (
-        <Moon className="h-4 w-4 text-[#111214]" />
+        <Moon className="h-4 w-4 text-[#141413]" />
       )}
     </button>
   );

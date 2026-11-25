@@ -213,10 +213,10 @@ export default function DiagramStudioWorkspace() {
     <div className="w-full space-y-5">
       <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15] flex items-center justify-center shrink-0">
               <Workflow className="w-5 h-5" />
             </div>
-            <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+            <span className="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
               {diagramType.toUpperCase()}
             </span>
           </div>
@@ -275,7 +275,7 @@ export default function DiagramStudioWorkspace() {
               onClick={() => handleTypeChange(item.type)}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 border transition-all cursor-pointer ${
                 active
-                  ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
+                  ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
                   : 'nt-btn-secondary'
               }`}
             >
@@ -294,8 +294,8 @@ export default function DiagramStudioWorkspace() {
                 onClick={() => setLeftTab('doc')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   leftTab === 'doc'
-                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
-                    : 'text-[#4B5563] dark:text-[#D1D5DB]'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                    : 'text-[#454038] dark:text-[#CBC4B6]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -306,8 +306,8 @@ export default function DiagramStudioWorkspace() {
                 onClick={() => setLeftTab('code')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   leftTab === 'code'
-                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
-                    : 'text-[#4B5563] dark:text-[#D1D5DB]'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                    : 'text-[#454038] dark:text-[#CBC4B6]'
                 }`}
               >
                 <FileCode className="w-3.5 h-3.5" />
@@ -344,8 +344,8 @@ export default function DiagramStudioWorkspace() {
 
         <div className="lg:col-span-7 nt-card p-4 flex flex-col h-[600px]">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--nt-border)]">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5 font-mono">
-              <Eye className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+              <Eye className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
               Visual Canvas
             </span>
 
@@ -364,24 +364,24 @@ export default function DiagramStudioWorkspace() {
               <div className="nt-well flex items-center gap-1 p-0.5 rounded-lg">
                 <button
                   onClick={() => setZoomLevel((z) => Math.max(0.5, z - 0.2))}
-                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Zoom Out"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-[10px] font-mono font-bold text-[#111214] dark:text-[#F3F4F6] px-1">
+                <span className="text-[10px] font-mono font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
                   {Math.round(zoomLevel * 100)}%
                 </span>
                 <button
                   onClick={() => setZoomLevel((z) => Math.min(2.5, z + 0.2))}
-                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Zoom In"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setZoomLevel(1)}
-                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Reset Zoom"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />

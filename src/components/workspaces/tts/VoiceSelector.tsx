@@ -43,13 +43,13 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#141413]/55 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="nt-window relative w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shadow-card">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15] flex items-center justify-center shadow-card">
               <Volume2 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#111214] dark:text-[#F3F4F6]">
+              <h3 className="text-base font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Voices
               </h3>
             </div>
@@ -66,7 +66,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         </div>
 
         {/* Search & Filters Bar */}
-        <div className="px-6 py-4 border-b border-[var(--nt-border)] space-y-3 bg-[#F8FAFC] dark:bg-[#181B22]">
+        <div className="px-6 py-4 border-b border-[var(--nt-border)] space-y-3 bg-[#FCFBF8] dark:bg-[#191714]">
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#746D61]" />
             <input
@@ -89,8 +89,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                   onClick={() => setGenderFilter(g)}
                   className={`px-3 py-1 rounded-lg font-bold capitalize transition-all cursor-pointer ${
                     genderFilter === g
-                      ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                      : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                      ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]'
+                      : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                   }`}
                 >
                   {g}
@@ -138,7 +138,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                 }}
                 className={`group relative p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-3 text-left ${
                   isSelected
-                    ? 'bg-[#FEF7D6]/85 dark:bg-[#2563EB]/10 border-[#2563EB] ring-1 ring-[#FACC15]/40 shadow-card'
+                    ? 'bg-[#FEF7D6]/85 dark:bg-[#FACC15]/10 border-[#141413] dark:border-[#FACC15] ring-1 ring-[#FACC15]/40 shadow-card'
                     : 'nt-card-interactive'
                 }`}
               >
@@ -149,7 +149,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-sm text-[#111214] dark:text-[#F3F4F6]">
+                        <span className="font-extrabold text-sm text-[#141413] dark:text-[#FAF7F0]">
                           {voice.name}
                         </span>
                         {voice.grade && (
@@ -158,29 +158,29 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                           </span>
                         )}
                       </div>
-                      <span className="font-mono text-[11px] text-[#6B7280] dark:text-[#9CA3AF] capitalize">
+                      <span className="font-mono text-[11px] text-[#746D61] dark:text-[#938B7D] capitalize">
                         {voice.country} · {voice.gender}
                       </span>
                     </div>
                   </div>
 
                   {isSelected && (
-                    <div className="w-6 h-6 rounded-full bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shadow-sm">
+                    <div className="w-6 h-6 rounded-full bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15] flex items-center justify-center shadow-sm">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   )}
                 </div>
 
-                <p className="text-xs text-[#4B5563] dark:text-[#D1D5DB] leading-relaxed line-clamp-2">
+                <p className="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed line-clamp-2">
                   {voice.description}
                 </p>
 
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="nt-well text-[10px] font-mono font-bold px-2 py-0.5 text-[#4B5563] dark:text-[#D1D5DB] capitalize">
+                  <span className="nt-well text-[10px] font-mono font-bold px-2 py-0.5 text-[#454038] dark:text-[#CBC4B6] capitalize">
                     {voice.category}
                   </span>
                   {voice.traits && (
-                    <span className="text-[10px] font-medium text-[#6B7280] dark:text-[#9CA3AF]">
+                    <span className="text-[10px] font-medium text-[#746D61] dark:text-[#938B7D]">
                       {voice.traits}
                     </span>
                   )}
@@ -190,7 +190,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           })}
 
           {filteredVoices.length === 0 && (
-            <div className="col-span-2 py-12 text-center text-[#6B7280] dark:text-[#9CA3AF]">
+            <div className="col-span-2 py-12 text-center text-[#746D61] dark:text-[#938B7D]">
               <p className="text-sm font-semibold">No voices found matching &quot;{searchQuery}&quot;.</p>
               <button
                 type="button"
@@ -209,7 +209,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22] flex items-center justify-between text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF]">
+        <div className="px-6 py-4 border-t border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] flex items-center justify-between text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
           <span>{filteredVoices.length} voices available</span>
           <button
             type="button"

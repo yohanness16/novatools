@@ -108,8 +108,8 @@ export const PdfSplitWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 Total Pages: {pageCount} · {formatBytes(file.size)}
               </p>
             </div>
@@ -129,8 +129,8 @@ export const PdfSplitWorkspace: React.FC = () => {
             {/* Custom Range */}
             <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
-                  <Scissors className="h-4 w-4 text-[#2563EB]" />
+                <div className="flex items-center gap-2 text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                  <Scissors className="h-4 w-4 text-[#CA8A04]" />
                   <span>Range</span>
                 </div>
                 <input
@@ -164,11 +164,11 @@ export const PdfSplitWorkspace: React.FC = () => {
             {/* Burst All */}
             <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   <Archive className="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
                   <span>All Pages (ZIP)</span>
                 </div>
-                <div className="nt-subcard font-mono text-[11px] text-[#4B5563] dark:text-[#9CA3AF] px-3 py-2">
+                <div className="nt-subcard font-mono text-[11px] text-[#454038] dark:text-[#938B7D] px-3 py-2">
                   {pageCount} PDFs
                 </div>
               </div>

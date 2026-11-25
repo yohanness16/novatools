@@ -93,12 +93,12 @@ export const PdfProtectWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]">
                 <FileText className="h-4 w-4" />
               </div>
               <div>
-                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                   {pageCount} Pages · {formatBytes(file.size)}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export const PdfProtectWorkspace: React.FC = () => {
           <div className="nt-well p-4 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
+                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
                   Access Password
                 </label>
                 <input
@@ -132,7 +132,7 @@ export const PdfProtectWorkspace: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
+                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
                   Confirm Password
                 </label>
                 <input
@@ -145,7 +145,7 @@ export const PdfProtectWorkspace: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] text-[#4B5563] dark:text-[#D1D5DB] font-mono pt-1">
+            <div className="flex items-center gap-2 text-[11px] text-[#454038] dark:text-[#CBC4B6] font-mono pt-1">
               <ShieldCheck className="h-3.5 w-3.5 text-[#15803D] dark:text-[#4ADE80]" />
               <span>Standard AES encryption compatible with all PDF readers</span>
             </div>

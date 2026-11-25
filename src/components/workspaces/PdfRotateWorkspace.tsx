@@ -120,8 +120,8 @@ export const PdfRotateWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 {pageCount} Pages · {formatBytes(file.size)}
               </p>
             </div>

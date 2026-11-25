@@ -152,14 +152,14 @@ export default function PdfToDocWorkspace() {
     <div className="w-full space-y-5">
       <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15] flex items-center justify-center shrink-0">
             <FileText className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+            <span className="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
               {docTitle}
             </span>
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] flex items-center gap-2 mt-0.5 font-mono">
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] flex items-center gap-2 mt-0.5 font-mono">
               <span>{pageCount} pages</span>
               <span>·</span>
               <span>{metadata.wordCount} words</span>
@@ -207,8 +207,8 @@ export default function PdfToDocWorkspace() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="lg:col-span-4 nt-card p-4 flex flex-col h-[620px]">
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--nt-border)]">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5 font-mono">
-                  <Layers className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+                  <Layers className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   Pages ({pages.length})
                 </span>
                 <span className="text-[11px] text-[#746D61] font-mono">Select page</span>
@@ -221,8 +221,8 @@ export default function PdfToDocWorkspace() {
                     onClick={() => setSelectedPageIdx(idx)}
                     className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex items-start justify-between gap-2 cursor-pointer ${
                       selectedPageIdx === idx
-                        ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 border-[#2563EB] text-[#111214] dark:text-[#F3F4F6] shadow-sm'
-                        : 'nt-subcard text-[#4B5563] dark:text-[#D1D5DB] hover:border-[var(--nt-border-strong)]'
+                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 border-[#141413] dark:border-[#FACC15] text-[#141413] dark:text-[#FAF7F0] shadow-sm'
+                        : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
                     }`}
                   >
                     <div>
@@ -246,8 +246,8 @@ export default function PdfToDocWorkspace() {
                     onClick={() => setActiveViewMode('preview')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'preview'
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
-                        : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -258,8 +258,8 @@ export default function PdfToDocWorkspace() {
                     onClick={() => setActiveViewMode('editor')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'editor'
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
-                        : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <FileCode className="w-3.5 h-3.5" />
@@ -270,8 +270,8 @@ export default function PdfToDocWorkspace() {
                     onClick={() => setActiveViewMode('visual')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'visual'
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
-                        : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <BookOpen className="w-3.5 h-3.5" />

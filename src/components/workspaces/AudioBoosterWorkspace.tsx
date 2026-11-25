@@ -201,7 +201,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
                 <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {formatBytes(file.size)}
                 </span>
@@ -211,7 +211,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 {boostedResult ? 'Amplification complete · Ready to preview & download' : 'Configure gain levels & presets'}
               </p>
             </div>
@@ -234,11 +234,11 @@ export const AudioBoosterWorkspace: React.FC = () => {
           {(boostedResult || originalUrl) && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5 font-mono">
-                  <Activity className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+                  <Activity className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Audio Waveform & Spectrum Monitor</span>
                 </label>
-                <span className="text-[11px] font-mono text-[#6B7280] dark:text-[#9CA3AF]">
+                <span className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
                   Click wave to play
                 </span>
               </div>
@@ -269,7 +269,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[#4B5563] dark:text-[#D1D5DB]">Preview Channel:</span>
+                  <span className="text-xs font-bold text-[#454038] dark:text-[#CBC4B6]">Preview Channel:</span>
                   <div className="flex items-center rounded-xl bg-white dark:bg-[#141311] p-1 border border-[var(--nt-border)]">
                     <button
                       onClick={() => {
@@ -278,8 +278,8 @@ export const AudioBoosterWorkspace: React.FC = () => {
                       }}
                       className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                         activeSource === 'original'
-                          ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
-                          : 'text-[#746D61] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                          ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                          : 'text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                       }`}
                     >
                       Original
@@ -292,8 +292,8 @@ export const AudioBoosterWorkspace: React.FC = () => {
                       disabled={!boostedResult}
                       className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                         activeSource === 'boosted'
-                          ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
-                          : 'text-[#746D61] hover:text-[#111214] dark:hover:text-[#F3F4F6] disabled:opacity-35'
+                          ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                          : 'text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] disabled:opacity-35'
                       }`}
                     >
                       Boosted (+{boostedResult ? boostedResult.gainDb : currentDbGain} dB)
@@ -331,7 +331,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
                     onChange={(e) => handleSeek(Number(e.target.value))}
                     className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
                   />
-                  <div className="flex justify-between text-[11px] text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+                  <div className="flex justify-between text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono">
                     <span>{formatDuration(currentTime)}</span>
                     <span>{formatDuration(duration)}</span>
                   </div>
@@ -341,8 +341,8 @@ export const AudioBoosterWorkspace: React.FC = () => {
           )}
 
           <div className="space-y-2">
-            <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+            <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
               Volume Enhancement Presets
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
@@ -355,7 +355,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
                     onClick={() => handlePresetSelect(preset.id)}
                     className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >
@@ -363,7 +363,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
                       <Icon className="h-3.5 w-3.5" />
                       <span className="text-xs font-extrabold">{preset.name}</span>
                     </div>
-                    <span className={`text-[10px] leading-tight line-clamp-2 ${isSelected ? 'opacity-85' : 'text-[#6B7280] dark:text-[#9CA3AF]'}`}>
+                    <span className={`text-[10px] leading-tight line-clamp-2 ${isSelected ? 'opacity-85' : 'text-[#746D61] dark:text-[#938B7D]'}`}>
                       {preset.desc}
                     </span>
                   </button>
@@ -375,7 +375,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
           <div className="nt-well grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
             <div className="md:col-span-2 space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
+                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   Gain Multiplier
                 </label>
                 <span className="nt-badge-yellow px-2.5 py-0.5 font-mono text-xs font-bold">
@@ -394,7 +394,7 @@ export const AudioBoosterWorkspace: React.FC = () => {
                 }}
                 className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+              <div className="flex justify-between text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono">
                 <span>100% (Original)</span>
                 <span>200% (+6 dB)</span>
                 <span>300% (+12 dB Max)</span>
@@ -402,22 +402,22 @@ export const AudioBoosterWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-2 border-t md:border-t-0 md:border-l border-[var(--nt-border)] pt-3 md:pt-0 md:pl-4">
-              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#111214] dark:text-[#F3F4F6]">
+              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={enableLimiter}
                   onChange={(e) => setEnableLimiter(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span>Anti-Clipping Limiter</span>
               </label>
 
-              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#111214] dark:text-[#F3F4F6]">
+              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={normalizePeak}
                   onChange={(e) => setNormalizePeak(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span>Auto Peak Normalization</span>
               </label>

@@ -92,8 +92,8 @@ export const ExifScrubberWorkspace: React.FC = () => {
                 />
               )}
               <div>
-                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
-                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                   {formatBytes(file.size)} · {file.type || 'image/jpeg'}
                 </p>
               </div>
@@ -132,14 +132,14 @@ export const ExifScrubberWorkspace: React.FC = () => {
 
           {tags.length > 0 ? (
             <div className="nt-well overflow-hidden">
-              <div className="border-b border-[var(--nt-border)] px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6]">
+              <div className="border-b border-[var(--nt-border)] px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">
                 Detected EXIF Headers
               </div>
               <div className="max-h-56 overflow-y-auto divide-y divide-[var(--nt-border)] bg-white/60 dark:bg-[#1F1D19]/60">
                 {tags.map((t, idx) => (
                   <div key={idx} className="flex justify-between px-4 py-2 text-xs font-mono">
-                    <span className="text-[#6B7280] dark:text-[#9CA3AF]">{t.name}</span>
-                    <span className="text-[#111214] dark:text-[#F3F4F6] max-w-[60%] truncate text-right font-semibold">
+                    <span className="text-[#746D61] dark:text-[#938B7D]">{t.name}</span>
+                    <span className="text-[#141413] dark:text-[#FAF7F0] max-w-[60%] truncate text-right font-semibold">
                       {t.value}
                     </span>
                   </div>
@@ -148,7 +148,7 @@ export const ExifScrubberWorkspace: React.FC = () => {
             </div>
           ) : (
             <div className="nt-well p-4 text-center">
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
                 No sensitive EXIF tags detected in this image header.
               </p>
             </div>

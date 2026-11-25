@@ -123,8 +123,8 @@ export const SvgOptimizerWorkspace: React.FC = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`rounded-lg px-3 py-1 text-xs font-bold transition-all cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
-                    : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 {tab.label}
@@ -141,7 +141,7 @@ export const SvgOptimizerWorkspace: React.FC = () => {
                   className="flex items-center justify-center max-h-full max-w-full"
                   dangerouslySetInnerHTML={{ __html: optimizedSvg }}
                 />
-                <span className="nt-card absolute bottom-2.5 left-2.5 px-2.5 py-1 font-mono text-[10px] font-bold text-[#111214] dark:text-[#F3F4F6]">
+                <span className="nt-card absolute bottom-2.5 left-2.5 px-2.5 py-1 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0]">
                   Vector Canvas
                 </span>
               </div>
@@ -150,7 +150,7 @@ export const SvgOptimizerWorkspace: React.FC = () => {
             {activeTab === 'svg' && (
               <div className="nt-well p-4">
                 <div className="flex justify-between items-center mb-2 pb-2 border-b border-[var(--nt-border)]">
-                  <span className="font-mono text-xs font-bold text-[#4B5563] dark:text-[#D1D5DB]">
+                  <span className="font-mono text-xs font-bold text-[#454038] dark:text-[#CBC4B6]">
                     SVG Code ({optimizedBytes} bytes)
                   </span>
                   <button
@@ -165,7 +165,7 @@ export const SvgOptimizerWorkspace: React.FC = () => {
                   readOnly
                   value={optimizedSvg}
                   rows={9}
-                  className="w-full bg-transparent font-mono text-xs text-[#111214] dark:text-[#F3F4F6] focus:outline-none resize-none"
+                  className="w-full bg-transparent font-mono text-xs text-[#141413] dark:text-[#FAF7F0] focus:outline-none resize-none"
                 />
               </div>
             )}
@@ -174,7 +174,7 @@ export const SvgOptimizerWorkspace: React.FC = () => {
               <div className="nt-well p-4">
                 <div className="flex flex-wrap justify-between items-center gap-2 mb-2 pb-2 border-b border-[var(--nt-border)]">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-[#4B5563] dark:text-[#D1D5DB]">Component:</span>
+                    <span className="text-xs font-bold text-[#454038] dark:text-[#CBC4B6]">Component:</span>
                     <input
                       type="text"
                       value={componentName}
@@ -194,13 +194,13 @@ export const SvgOptimizerWorkspace: React.FC = () => {
                   readOnly
                   value={reactComponentCode}
                   rows={9}
-                  className="w-full bg-transparent font-mono text-xs text-[#111214] dark:text-[#60A5FA] focus:outline-none resize-none"
+                  className="w-full bg-transparent font-mono text-xs text-[#141413] dark:text-[#FACC15] focus:outline-none resize-none"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6] mb-1.5 font-mono">
+              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0] mb-1.5 font-mono">
                 Raw SVG Source:
               </label>
               <textarea
@@ -213,7 +213,7 @@ export const SvgOptimizerWorkspace: React.FC = () => {
           </div>
 
           <div className="lg:col-span-4 nt-well p-4 space-y-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF] block border-b border-[var(--nt-border)] pb-2">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#746D61] dark:text-[#938B7D] block border-b border-[var(--nt-border)] pb-2">
               SVGO Clean Rules
             </span>
 
@@ -228,13 +228,13 @@ export const SvgOptimizerWorkspace: React.FC = () => {
               ].map((rule) => (
                 <label
                   key={rule.key}
-                  className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-[#111214] dark:text-[#F3F4F6]"
+                  className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-[#141413] dark:text-[#FAF7F0]"
                 >
                   <input
                     type="checkbox"
                     checked={options[rule.key as keyof SvgOptimizeOptions]}
                     onChange={() => handleOptionToggle(rule.key as keyof SvgOptimizeOptions)}
-                    className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                   />
                   <span className="font-medium">{rule.label}</span>
                 </label>

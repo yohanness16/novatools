@@ -122,11 +122,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-16 sm:pt-24">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-xs" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-[#141413]/55 dark:bg-black/75 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
-      <div className="relative w-full max-w-lg overflow-hidden rounded-xl border border-[var(--nt-border)] bg-white dark:bg-[#13151A] shadow-dropdown">
-        <div className="flex items-center border-b border-[var(--nt-border)] px-3.5 py-3">
-          <Search className="h-4 w-4 text-[#6B7280] mr-2.5 shrink-0" />
+      <div className="relative w-full max-w-lg overflow-hidden nt-window shadow-[0_24px_64px_-12px_rgba(20,20,19,0.35)]">
+        <div className="flex items-center border-b border-[var(--nt-border)] px-3.5 py-3 bg-[#FCFBF8] dark:bg-[#191714]">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] mr-2.5 shrink-0">
+            <Search className="h-3.5 w-3.5" />
+          </div>
           <input
             ref={inputRef}
             type="text"
@@ -136,27 +141,29 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setSelectedIndex(0);
             }}
             placeholder="Search"
-            className="w-full bg-transparent text-sm font-medium text-[#111214] dark:text-[#F3F4F6] placeholder-[#6B7280] focus:outline-none"
+            className="w-full bg-transparent text-sm font-medium text-[#141413] dark:text-[#FAF7F0] placeholder-[#746D61] dark:placeholder-[#938B7D] focus:outline-none"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="rounded-md p-1 text-[#6B7280] hover:text-[#111214] dark:hover:text-white cursor-pointer"
+              className="rounded-md p-1 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] cursor-pointer"
               aria-label="Clear"
             >
               <X className="h-3.5 w-3.5" />
             </button>
           )}
-          <kbd className="ml-2 rounded bg-[#F3F4F6] dark:bg-[#1A1D24] px-1.5 py-0.5 font-mono text-[10px] text-[#6B7280] border border-[var(--nt-border)]">
+          <kbd className="ml-2 rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-2 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0] border border-[var(--nt-border)]">
             ESC
           </kbd>
         </div>
 
-        <div className="max-h-[52vh] overflow-y-auto p-1.5">
+        <div className="max-h-[52vh] overflow-y-auto p-2 bg-white dark:bg-[#1F1D19]">
           {filteredTools.length === 0 ? (
-            <div className="py-10 text-center text-xs text-[#6B7280]">No results</div>
+            <div className="py-10 text-center font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
+              No results
+            </div>
           ) : (
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {filteredTools.map((tool, index) => {
                 const IconComponent = iconMap[tool.iconName] || Layers;
                 const isSelected = index === selectedIndex;
@@ -167,17 +174,25 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     href={tool.path}
                     onClick={onClose}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
+                    className={`flex items-center justify-between rounded-xl px-3 py-2 transition-colors border ${
                       isSelected
-                        ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                        : 'text-[#111214] dark:text-[#F3F4F6] hover:bg-[#F3F4F6] dark:hover:bg-[#1A1D24]'
+                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 border-[#D9A700]/60 text-[#141413] dark:text-[#FAF7F0]'
+                        : 'text-[#141413] dark:text-[#FAF7F0] hover:bg-[#FCFBF8] dark:hover:bg-[#26231E] border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <IconComponent className="h-4 w-4 shrink-0" />
-                      <span className="text-xs font-semibold truncate">{tool.shortName}</span>
+                      <div
+                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                          isSelected
+                            ? 'bg-[#141413] border-[#141413] text-[#FACC15]'
+                            : 'bg-[#F5F1E8] dark:bg-[#141311] border-[var(--nt-border)] text-[#454038] dark:text-[#CBC4B6]'
+                        }`}
+                      >
+                        <IconComponent className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="text-xs font-bold truncate">{tool.shortName}</span>
                     </div>
-                    <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF] shrink-0">
+                    <span className="rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#454038] dark:text-[#CBC4B6] border border-[var(--nt-border)] shrink-0">
                       {tool.shortTag}
                     </span>
                   </a>

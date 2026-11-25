@@ -79,48 +79,60 @@ const suiteTools = TOOLS.filter((t) => t.category === category);
 
 <Layout title={title} description={description}>
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
-    {/* Compact Visual Suite Header */}
-    <div class="nt-window p-4 sm:p-5 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <div class="h-14 w-14 sm:h-16 sm:w-16 rounded-xl overflow-hidden border border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22] shrink-0">
+    {/* Desktop App Suite Header Window */}
+    <div class="nt-window overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-2.5 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714]">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-[#141413] dark:bg-[#FAF7F0]/35"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-[#FACC15]"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-[#D6CFC0] dark:bg-[#454038]"></span>
+          </div>
+          <span class="font-mono text-[11px] font-bold text-[#141413] dark:text-[#FAF7F0]">
+            {suite.label}
+          </span>
+        </div>
+        <a
+          href="/"
+          class="nt-btn-secondary px-2.5 py-1 text-[11px] font-bold"
+        >
+          All
+        </a>
+      </div>
+
+      <div class="p-4 sm:p-5 flex items-center gap-4">
+        <div class="h-14 w-14 sm:h-16 sm:w-16 rounded-xl overflow-hidden border border-[var(--nt-border)] bg-[#F5F1E8] dark:bg-[#191714] shrink-0">
           <img src={suite.image} alt={suite.label} class="h-full w-full object-cover" />
         </div>
         <div class="flex items-baseline gap-2.5">
-          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#111214] dark:text-[#F3F4F6]">
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
             {suite.label}
           </h1>
-          <span class="font-mono text-xs text-[#6B7280] dark:text-[#9CA3AF]">
+          <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-xs font-bold">
             {suiteTools.length}
           </span>
         </div>
       </div>
-
-      <a
-        href="/"
-        class="nt-btn-secondary px-3 py-1.5 text-xs font-semibold shrink-0"
-      >
-        All
-      </a>
     </div>
 
     {/* Action Grid */}
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
       {suiteTools.map((tool) => {
         const Icon = iconMap[tool.iconName] || Layers;
 
         return (
           <a
             href={tool.path}
-            class="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[104px]"
+            class="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[106px]"
           >
             <div class="flex items-center justify-between">
-              <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] transition-colors group-hover:bg-[#2563EB] group-hover:text-white">
+              <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-sm transition-colors group-hover:bg-[#FACC15] group-hover:text-[#141413]">
                 <Icon class="h-4 w-4" />
               </div>
-              <ArrowRight class="h-3.5 w-3.5 text-[#9CA3AF] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#2563EB] transition-all" />
+              <ArrowRight class="h-3.5 w-3.5 text-[#746D61] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#141413] dark:group-hover:text-[#FACC15] transition-all" />
             </div>
 
-            <span class="text-sm font-bold text-[#111214] dark:text-[#F3F4F6] truncate">
+            <span class="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] truncate">
               {tool.shortName}
             </span>
           </a>

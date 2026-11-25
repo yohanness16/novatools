@@ -46,13 +46,13 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#141413]/55 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="nt-window relative w-full max-w-lg overflow-hidden">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shadow-card">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15] flex items-center justify-center shadow-card">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#111214] dark:text-[#F3F4F6]">
+              <h3 className="text-base font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Settings
               </h3>
             </div>
@@ -73,7 +73,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
           {/* Speed / Pacing */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs font-bold">
-              <span className="text-[#111214] dark:text-[#F3F4F6]">Speaking Speed</span>
+              <span className="text-[#141413] dark:text-[#FAF7F0]">Speaking Speed</span>
               <span className="nt-badge-yellow px-2 py-0.5 font-mono">{settings.speed.toFixed(2)}x</span>
             </div>
             <input
@@ -83,9 +83,9 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               step="0.05"
               value={settings.speed}
               onChange={(e) => onChange({ ...settings, speed: parseFloat(e.target.value) })}
-              className="w-full h-2 bg-[#F3F4F6] dark:bg-[#1A1D24] rounded-lg appearance-none cursor-pointer"
+              className="w-full h-2 bg-[#EAE3D4] dark:bg-[#141311] rounded-lg appearance-none cursor-pointer"
             />
-            <div className="flex justify-between font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">
+            <div className="flex justify-between font-mono text-[10px] text-[#746D61] dark:text-[#938B7D]">
               <span>Slower (0.6x)</span>
               <span>Default (1.0x)</span>
               <span>Faster (1.75x)</span>
@@ -95,7 +95,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
           {/* Stability / Expressiveness */}
           <div className="space-y-2 pt-4 border-t border-[var(--nt-border)]">
             <div className="flex items-center justify-between text-xs font-bold">
-              <span className="text-[#111214] dark:text-[#F3F4F6]">Expressiveness &amp; Stability</span>
+              <span className="text-[#141413] dark:text-[#FAF7F0]">Expressiveness &amp; Stability</span>
               <span className="nt-badge-yellow px-2 py-0.5 font-mono">
                 {settings.stability < 0.4
                   ? 'Dynamic / Expressive'
@@ -111,9 +111,9 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               step="0.05"
               value={settings.stability}
               onChange={(e) => onChange({ ...settings, stability: parseFloat(e.target.value) })}
-              className="w-full h-2 bg-[#F3F4F6] dark:bg-[#1A1D24] rounded-lg appearance-none cursor-pointer"
+              className="w-full h-2 bg-[#EAE3D4] dark:bg-[#141311] rounded-lg appearance-none cursor-pointer"
             />
-            <div className="flex justify-between font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">
+            <div className="flex justify-between font-mono text-[10px] text-[#746D61] dark:text-[#938B7D]">
               <span>More Emotive</span>
               <span>Natural Balanced</span>
               <span>More Consistent</span>
@@ -124,8 +124,8 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
           <div className="space-y-4 pt-4 border-t border-[var(--nt-border)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Blend className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
-                <span className="text-xs sm:text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">
+                <Blend className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
+                <span className="text-xs sm:text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   Dual-Voice Blending
                 </span>
               </div>
@@ -133,14 +133,14 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 type="button"
                 onClick={() => onChange({ ...settings, blendEnabled: !settings.blendEnabled })}
                 className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border border-[var(--nt-border-strong)] p-0.5 transition-colors duration-200 ease-in-out focus:outline-none ${
-                  settings.blendEnabled ? 'bg-[#141413] dark:bg-[#2563EB]' : 'bg-[#F3F4F6] dark:bg-[#1A1D24]'
+                  settings.blendEnabled ? 'bg-[#141413] dark:bg-[#FACC15]' : 'bg-[#EAE3D4] dark:bg-[#141311]'
                 }`}
                 aria-pressed={settings.blendEnabled}
               >
                 <span
                   className={`pointer-events-none inline-block h-4.5 w-4.5 transform rounded-full shadow-sm transition duration-200 ease-in-out ${
                     settings.blendEnabled
-                      ? 'translate-x-5 bg-[#2563EB] dark:bg-[#141413]'
+                      ? 'translate-x-5 bg-[#FACC15] dark:bg-[#141413]'
                       : 'translate-x-0 bg-white dark:bg-[#454038]'
                   }`}
                 />
@@ -151,7 +151,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               <div className="nt-well p-4 space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-[#4B5563] dark:text-[#D1D5DB] mb-1">
+                    <label className="block text-[11px] font-bold text-[#454038] dark:text-[#CBC4B6] mb-1">
                       Primary Voice
                     </label>
                     <select
@@ -172,7 +172,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-[#4B5563] dark:text-[#D1D5DB] mb-1">
+                    <label className="block text-[11px] font-bold text-[#454038] dark:text-[#CBC4B6] mb-1">
                       Secondary Voice
                     </label>
                     <select
@@ -195,7 +195,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 </div>
 
                 <div className="space-y-1.5">
-                  <div className="flex justify-between font-mono text-[11px] font-bold text-[#111214] dark:text-[#F3F4F6]">
+                  <div className="flex justify-between font-mono text-[11px] font-bold text-[#141413] dark:text-[#FAF7F0]">
                     <span>
                       {primaryVoiceObj.name} ({Math.round((1 - settings.blendConfig.blendRatio) * 100)}%)
                     </span>
@@ -225,8 +225,8 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
           {/* Hardware Acceleration Mode */}
           <div className="space-y-2.5 pt-4 border-t border-[var(--nt-border)]">
             <div className="flex items-center justify-between text-xs font-bold">
-              <span className="text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
-                <Cpu className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
+              <span className="text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                <Cpu className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
                 Hardware Acceleration
               </span>
               <span className="nt-badge-success px-2 py-0.5 text-[10px] font-mono">
@@ -239,8 +239,8 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 onClick={() => onDeviceChange('auto')}
                 className={`py-2 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   deviceMode === 'auto' || deviceMode === 'webgpu'
-                    ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                    : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                    ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]'
+                    : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 Auto (WebGPU Fast)
@@ -250,8 +250,8 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                 onClick={() => onDeviceChange('wasm')}
                 className={`py-2 px-3 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   deviceMode === 'wasm'
-                    ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                    : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                    ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]'
+                    : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 CPU (Universal)
@@ -261,7 +261,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 border-t border-[var(--nt-border)] bg-[#F8FAFC] dark:bg-[#181B22] flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] flex items-center justify-between">
           <button
             type="button"
             onClick={handleReset}

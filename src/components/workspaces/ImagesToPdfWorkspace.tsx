@@ -116,7 +116,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
       {images.length > 0 && (
         <div className="nt-card p-5 space-y-5">
           <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
-            <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
+            <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
               Queued Images ({images.length})
             </span>
             <button
@@ -129,7 +129,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
 
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
+              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
                 Target Page Geometry
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -140,7 +140,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
                     onClick={() => setPageSize(sz)}
                     className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       pageSize === sz
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >
@@ -151,7 +151,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
+              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
                 Page Margins
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -162,7 +162,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
                     onClick={() => setMargin(m)}
                     className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       margin === m
-                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >

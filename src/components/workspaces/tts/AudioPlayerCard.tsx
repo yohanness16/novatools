@@ -229,13 +229,13 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
             {voiceFlag}
           </div>
           <div>
-            <h4 className="text-base font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-2">
+            <h4 className="text-base font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2">
               <span>{voiceName}</span>
               <span className="nt-badge-success px-2 py-0.5 text-[10px] font-bold font-mono">
                 24kHz Hi-Fi
               </span>
             </h4>
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5 font-mono">
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] mt-0.5 font-mono">
               Duration: {duration.toFixed(1)}s · Lossless Take
             </p>
           </div>
@@ -260,7 +260,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
                 title="Download Subtitles (.SRT)"
                 className="nt-btn-secondary flex items-center gap-1 px-2.5 py-2 text-xs font-mono font-bold"
               >
-                <FileText className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                <FileText className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 <span>SRT</span>
               </button>
 
@@ -270,7 +270,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
                 title="Download Subtitles (.VTT)"
                 className="nt-btn-secondary flex items-center gap-1 px-2.5 py-2 text-xs font-mono font-bold"
               >
-                <FileText className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
+                <FileText className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 <span>VTT</span>
               </button>
             </div>
@@ -310,7 +310,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
 
         {/* Timeline Scrubber */}
         <div className="flex-1 min-w-[140px] flex items-center gap-3">
-          <span className="text-xs font-mono text-[#111214] dark:text-[#F3F4F6] font-bold shrink-0">
+          <span className="text-xs font-mono text-[#141413] dark:text-[#FAF7F0] font-bold shrink-0">
             {formatTime(currentTime)}
           </span>
           <input
@@ -322,7 +322,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
             onChange={handleSeek}
             className="w-full h-2 bg-white dark:bg-[#141311] rounded-lg appearance-none cursor-pointer"
           />
-          <span className="text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF] shrink-0">
+          <span className="text-xs font-mono text-[#746D61] dark:text-[#938B7D] shrink-0">
             {formatTime(duration)}
           </span>
         </div>
@@ -336,8 +336,8 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
               onClick={() => handleRateChange(rate)}
               className={`px-2 py-1 rounded-lg font-mono font-bold transition-all cursor-pointer ${
                 playbackRate === rate
-                  ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                  : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
+                  ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]'
+                  : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
               }`}
             >
               {rate}x

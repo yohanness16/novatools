@@ -119,146 +119,162 @@ export const ActionHub: React.FC = () => {
   const totalSize = droppedFiles.reduce((acc, f) => acc + f.size, 0);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-      {/* 1. Universal Drop Bar */}
-      <section aria-label="Drop file">
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files?.length) handleFilesSelected(e.target.files);
-            e.target.value = '';
-          }}
-        />
-
-        {droppedFiles.length === 0 ? (
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragOver(true);
-            }}
-            onDragLeave={() => setIsDragOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragOver(false);
-              if (e.dataTransfer.files?.length) {
-                handleFilesSelected(e.dataTransfer.files);
-              }
-            }}
-            data-active={isDragOver ? 'true' : 'false'}
-            className="nt-dropzone group cursor-pointer px-5 py-6 sm:py-7 flex flex-col sm:flex-row items-center justify-between gap-4"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] transition-transform duration-150 group-hover:scale-105">
-                <Upload className="h-5 w-5" />
-              </div>
-              <div className="flex items-center gap-2 text-base sm:text-lg font-bold tracking-tight text-[#111214] dark:text-[#F3F4F6]">
-                <span>Drop file</span>
-              </div>
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-7">
+      {/* 1. Desktop App Universal Drop Window */}
+      <section aria-label="Drop file" className="nt-window overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714]">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5" aria-hidden="true">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#141413] dark:bg-[#FAF7F0]/35" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FACC15]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#D6CFC0] dark:bg-[#454038]" />
             </div>
+            <span className="font-mono text-[11px] font-bold text-[#141413] dark:text-[#FAF7F0]">
+              NovaTools
+            </span>
+          </div>
+          <span className="font-mono text-[10px] font-bold text-[#746D61] dark:text-[#938B7D]">
+            {TOOLS.length}
+          </span>
+        </div>
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                fileInputRef.current?.click();
+        <div className="p-4 sm:p-5 bg-white dark:bg-[#1F1D19]">
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files?.length) handleFilesSelected(e.target.files);
+              e.target.value = '';
+            }}
+          />
+
+          {droppedFiles.length === 0 ? (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragOver(true);
               }}
-              className="nt-btn-primary px-5 py-2.5 text-xs font-semibold inline-flex items-center gap-2 shrink-0"
+              onDragLeave={() => setIsDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragOver(false);
+                if (e.dataTransfer.files?.length) {
+                  handleFilesSelected(e.dataTransfer.files);
+                }
+              }}
+              data-active={isDragOver ? 'true' : 'false'}
+              className="nt-dropzone group cursor-pointer px-5 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4"
             >
-              <span>Browse</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        ) : (
-          <div
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragOver(true);
-            }}
-            onDragLeave={() => setIsDragOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragOver(false);
-              if (e.dataTransfer.files?.length) {
-                handleFilesSelected(e.dataTransfer.files);
-              }
-            }}
-            className="nt-window p-4 sm:p-5 space-y-4 border-[#2563EB]/40"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
-                  <File className="h-4 w-4" />
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card transition-transform duration-150 group-hover:-translate-y-0.5">
+                  <Upload className="h-5 w-5" />
                 </div>
-                <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                  <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] truncate max-w-[240px] sm:max-w-md">
-                    {droppedFiles.length === 1
-                      ? droppedFiles[0].name
-                      : `${droppedFiles.length} files`}
-                  </span>
-                  <span className="font-mono text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
-                    {formatBytes(totalSize)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="nt-btn-secondary px-3 py-1.5 text-xs font-semibold"
-                >
-                  Change
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDroppedFiles([])}
-                  className="nt-btn-secondary p-1.5 text-[#6B7280] hover:text-[#111214] dark:hover:text-white"
-                  aria-label="Clear"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Instant Matched Actions */}
-            <div className="flex flex-wrap gap-2">
-              {matchedTools.length > 0 ? (
-                matchedTools.map((tool, idx) => {
-                  const Icon = ICON_MAP[tool.iconName] || Layers;
-                  const isLaunching = launchingPath === tool.path;
-                  return (
-                    <button
-                      key={tool.id}
-                      type="button"
-                      disabled={Boolean(launchingPath)}
-                      onClick={() => handleActionLaunch(tool)}
-                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                        idx === 0
-                          ? 'nt-btn-primary'
-                          : 'nt-btn-secondary hover:border-[#2563EB]/40'
-                      }`}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                      <span>{isLaunching ? 'Opening...' : tool.shortName}</span>
-                    </button>
-                  );
-                })
-              ) : (
-                <span className="text-xs text-[#6B7280] dark:text-[#9CA3AF]">
-                  Select tool below
+                <span className="text-base sm:text-lg font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+                  Drop file
                 </span>
-              )}
+              </div>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
+                className="nt-btn-yellow px-5 py-2.5 text-xs inline-flex items-center gap-2 shrink-0"
+              >
+                <span>Browse</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
             </div>
-          </div>
-        )}
+          ) : (
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragOver(true);
+              }}
+              onDragLeave={() => setIsDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragOver(false);
+                if (e.dataTransfer.files?.length) {
+                  handleFilesSelected(e.dataTransfer.files);
+                }
+              }}
+              className="nt-well p-4 space-y-4"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                    <File className="h-4 w-4" />
+                  </div>
+                  <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                    <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] truncate max-w-[240px] sm:max-w-md">
+                      {droppedFiles.length === 1
+                        ? droppedFiles[0].name
+                        : `${droppedFiles.length} files`}
+                    </span>
+                    <span className="nt-badge-yellow px-2 py-0.5 font-mono text-[10px] font-bold">
+                      {formatBytes(totalSize)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="nt-btn-secondary px-3 py-1.5 text-xs font-bold"
+                  >
+                    Change
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDroppedFiles([])}
+                    className="nt-btn-secondary p-1.5 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0]"
+                    aria-label="Clear"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Instant Matched Actions */}
+              <div className="flex flex-wrap gap-2">
+                {matchedTools.length > 0 ? (
+                  matchedTools.map((tool, idx) => {
+                    const Icon = ICON_MAP[tool.iconName] || Layers;
+                    const isLaunching = launchingPath === tool.path;
+                    return (
+                      <button
+                        key={tool.id}
+                        type="button"
+                        disabled={Boolean(launchingPath)}
+                        onClick={() => handleActionLaunch(tool)}
+                        className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold transition-all cursor-pointer ${
+                          idx === 0 ? 'nt-btn-yellow' : 'nt-btn-secondary'
+                        }`}
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                        <span>{isLaunching ? 'Opening...' : tool.shortName}</span>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <span className="text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
+                    Select tool
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* 2. Bespoke Visual Suite Strip */}
-      <section aria-label="Suites" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      {/* 2. Tactile Visual Suite Strip */}
+      <section aria-label="Suites" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
         {SUITES.map((suite) => {
           const isSelected = activeCategory === suite.id;
           return (
@@ -270,11 +286,11 @@ export const ActionHub: React.FC = () => {
               }
               className={`group nt-card-interactive overflow-hidden text-left cursor-pointer flex flex-col ${
                 isSelected
-                  ? 'ring-2 ring-[#2563EB] border-[#2563EB]'
+                  ? 'ring-2 ring-[#141413] dark:ring-[#FACC15] border-[#141413] dark:border-[#FACC15]'
                   : ''
               }`}
             >
-              <div className="aspect-[4/3] w-full bg-[#F8FAFC] dark:bg-[#181B22] overflow-hidden border-b border-[var(--nt-border)] flex items-center justify-center">
+              <div className="aspect-[4/3] w-full bg-[#F5F1E8] dark:bg-[#191714] overflow-hidden border-b border-[var(--nt-border)] flex items-center justify-center">
                 <img
                   src={suite.image}
                   alt={suite.label}
@@ -283,10 +299,10 @@ export const ActionHub: React.FC = () => {
                 />
               </div>
               <div className="px-3.5 py-2.5 flex items-center justify-between">
-                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   {suite.label}
                 </span>
-                <span className="font-mono text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
+                <span className="nt-badge-yellow px-2 py-0.5 font-mono text-[10px] font-bold">
                   {suite.count}
                 </span>
               </div>
@@ -295,10 +311,10 @@ export const ActionHub: React.FC = () => {
         })}
       </section>
 
-      {/* 3. Filter Bar + Action Grid */}
+      {/* 3. Filter Bar + Tactile Desktop Action Grid */}
       <section aria-label="Tools" className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="inline-flex items-center gap-1 rounded-xl bg-[#EAE3D4]/85 dark:bg-[#1F1D19] p-1 border border-[var(--nt-border)] overflow-x-auto">
             {CATEGORIES.map((cat) => {
               const active = activeCategory === cat.id;
               return (
@@ -306,10 +322,10 @@ export const ActionHub: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                     active
-                      ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
-                      : 'bg-white dark:bg-[#13151A] text-[#4B5563] dark:text-[#9CA3AF] border border-[var(--nt-border)] hover:text-[#111214] dark:hover:text-white'
+                      ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                      : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                   }`}
                 >
                   {cat.label}
@@ -319,20 +335,20 @@ export const ActionHub: React.FC = () => {
           </div>
 
           <div className="relative w-full sm:w-56">
-            <Search className="h-3.5 w-3.5 text-[#6B7280] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="h-3.5 w-3.5 text-[#746D61] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter"
               aria-label="Filter tools"
-              className="nt-input w-full pl-8 pr-7 py-1.5 text-xs"
+              className="nt-input w-full pl-8 pr-7 py-2 text-xs font-medium"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#111214] dark:hover:text-white cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] cursor-pointer"
                 aria-label="Clear filter"
               >
                 <X className="h-3.5 w-3.5" />
@@ -341,29 +357,29 @@ export const ActionHub: React.FC = () => {
           </div>
         </div>
 
-        {/* 1-2 Word Action Tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {/* 1-2 Word Tactile Action Tiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
           {filteredTools.map((tool) => {
             const Icon = ICON_MAP[tool.iconName] || Layers;
             return (
               <a
                 key={tool.id}
                 href={tool.path}
-                className="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[104px]"
+                className="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[106px]"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] transition-colors group-hover:bg-[#2563EB] group-hover:text-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-sm transition-colors group-hover:bg-[#FACC15] group-hover:text-[#141413]">
                     <Icon className="h-4 w-4" />
                   </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#9CA3AF] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#2563EB] transition-all" />
+                  <ArrowRight className="h-3.5 w-3.5 text-[#746D61] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#141413] dark:group-hover:text-[#FACC15] transition-all" />
                 </div>
 
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6] truncate">
+                  <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] truncate">
                     {tool.shortName}
                   </span>
                   {activeCategory === 'all' && (
-                    <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF] shrink-0">
+                    <span className="font-mono text-[10px] font-bold text-[#746D61] dark:text-[#938B7D] shrink-0">
                       {tool.shortTag}
                     </span>
                   )}

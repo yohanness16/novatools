@@ -25,7 +25,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
   return (
     <div
       className={`nt-card p-5 sm:p-6 transition-all ${
-        isEnabled ? 'border-[#2563EB] bg-[#EFF6FF]/60 dark:bg-[#3B82F6]/10' : ''
+        isEnabled ? 'border-[#141413] dark:border-[#FACC15] bg-[#FEF7D6]/45 dark:bg-[#FACC15]/10' : ''
       }`}
     >
       {/* Header with Switch */}
@@ -34,13 +34,13 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
           <div
             className={`p-2.5 rounded-xl flex items-center justify-center transition-colors ${
               isEnabled
-                ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
-                : 'nt-well text-[#4B5563] dark:text-[#D1D5DB]'
+                ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#CA8A04] dark:text-[#FACC15]'
+                : 'nt-well text-[#454038] dark:text-[#CBC4B6]'
             }`}
           >
             <Blend className="w-5 h-5" />
           </div>
-          <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+          <span className="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
             Voice Blend
           </span>
         </div>
@@ -49,7 +49,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
           type="button"
           onClick={() => onToggle(!isEnabled)}
           className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border border-[var(--nt-border-strong)] p-0.5 transition-colors duration-200 ease-in-out focus:outline-none ${
-            isEnabled ? 'bg-[#2563EB]' : 'bg-[#F3F4F6] dark:bg-[#1A1D24]'
+            isEnabled ? 'bg-[#FACC15]' : 'bg-[#EAE3D4] dark:bg-[#141311]'
           }`}
           aria-pressed={isEnabled}
         >
@@ -68,7 +68,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
           {/* Dual Voice Pickers */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="nt-well p-4 space-y-2">
-              <label className="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Primary Voice ({primaryPct}%)
               </label>
               <select
@@ -85,7 +85,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
             </div>
 
             <div className="nt-well p-4 space-y-2">
-              <label className="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Secondary Voice ({secondaryPct}%)
               </label>
               <select
@@ -104,7 +104,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
 
           {/* Interpolation Slider */}
           <div className="nt-well p-4 space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#111214] dark:text-[#F3F4F6]">
+            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#141413] dark:text-[#FAF7F0]">
               <span>
                 {primary.name} ({primaryPct}%)
               </span>
