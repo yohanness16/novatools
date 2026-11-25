@@ -27,31 +27,31 @@ export const CookieConsent: React.FC = () => {
   return (
     <aside
       aria-label="Cookie and Privacy Preferences"
-      className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 rounded border border-[#2A2D33] bg-[#131418] p-4 shadow-2xl space-y-2.5"
+      className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 nt-window p-4 space-y-3"
     >
-      <div className="flex items-center gap-2">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#122D1F] border border-[#3FBE73]/30 text-[#3FBE73]">
-          <ShieldCheck className="h-3.5 w-3.5" />
+      <div className="flex items-center gap-2.5">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+          <ShieldCheck className="h-4 w-4" />
         </div>
-        <h4 className="text-xs font-semibold text-[#ECEDEF]">
+        <h4 className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
           Privacy & Runtime Preferences
         </h4>
       </div>
 
-      <p className="text-[11px] text-[#8B8F98] leading-relaxed">
-        NovaTools processes 100% of files in client-side memory. We use cookies and third-party advertising partners (such as Google AdSense) to support open infrastructure.
+      <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+        NovaTools processes 100% of your files locally in browser memory. Cookies are used only to remember theme settings and support open advertising partners.
       </p>
 
       <div className="flex items-center gap-2 pt-0.5">
         <button
           onClick={handleAccept}
-          className="flex-1 py-1.5 px-3 bg-[#4F8CFF] hover:bg-[#3B79F0] text-white font-semibold text-xs rounded transition-colors"
+          className="flex-1 py-2 px-3 nt-btn-yellow text-xs"
         >
           Accept All
         </button>
         <button
           onClick={handleDecline}
-          className="py-1.5 px-3 bg-[#1B1D22] hover:bg-[#22242B] text-[#8B8F98] hover:text-[#ECEDEF] font-medium text-xs rounded transition-colors border border-[#2A2D33]"
+          className="py-2 px-3 nt-btn-secondary text-xs font-semibold"
         >
           Essential Only
         </button>

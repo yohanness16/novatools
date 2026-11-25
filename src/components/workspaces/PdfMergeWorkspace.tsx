@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, readFileAsArrayBuffer } from '../../lib/utils';
-import { Upload, FileText, ArrowUp, ArrowDown, Trash2, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { Upload, FileText, ArrowUp, ArrowDown, Trash2, Loader2 } from 'lucide-react';
 
 interface PdfFileItem {
   id: string;
@@ -15,7 +16,6 @@ interface PdfFileItem {
 export const PdfMergeWorkspace: React.FC = () => {
   const [files, setFiles] = useState<PdfFileItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -104,25 +104,14 @@ export const PdfMergeWorkspace: React.FC = () => {
   const totalSize = files.reduce((acc, f) => acc + f.size, 0);
 
   return (
-    <div className="w-full space-y-4">
-      {/* Dropzone Container */}
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setIsDragOver(true);
-        }}
-        onDragLeave={() => setIsDragOver(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setIsDragOver(false);
-          if (e.dataTransfer.files) handleFiles(e.dataTransfer.files);
-        }}
+    <div className="w-full space-y-5">
+      <WorkspaceDropzone
         onClick={() => fileInputRef.current?.click()}
-        className={`group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed p-6 sm:p-10 transition-colors ${
-          isDragOver
-            ? 'border-[#4F8CFF] bg-[#16233F]'
-            : 'border-[#2A2D33] bg-[#1B1D22] hover:border-[#4F8CFF] hover:bg-[#151820]'
-        }`}
+        onFilesDrop={handleFiles}
+        icon={<Upload className="h-5 w-5" />}
+        title="Drop PDF files here, or"
+        subtitle="Select 2 or more documents to merge into one ordered PDF."
+        badgeText="100% Local Processing"
       >
         <input
           ref={fileInputRef}
@@ -135,69 +124,44 @@ export const PdfMergeWorkspace: React.FC = () => {
             e.target.value = '';
           }}
         />
+      </WorkspaceDropzone>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-          <Upload className="h-5 w-5" />
-        </div>
+      {error && <WorkspaceAlert variant="error" message={error} />}
+      {success && <WorkspaceAlert variant="success" message="PDFs compiled and downloaded successfully." />}
 
-        <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-          Drop PDF files here, or <span className="text-[#4F8CFF] underline">browse files</span>
-        </h3>
-        <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-          Select 2+ documents to merge into one sequence. 100% local processing.
-        </p>
-      </div>
-
-      {/* Error Alert */}
-      {error && (
-        <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
-          <AlertCircle className="h-4 w-4 shrink-0" />
-          <span>{error}</span>
-        </div>
-      )}
-
-      {/* Success Alert */}
-      {success && (
-        <div className="flex items-center gap-2 rounded bg-[#122D1F] border border-[#3FBE73]/40 p-3 text-xs text-[#3FBE73]">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          <span>PDFs compiled and downloaded successfully.</span>
-        </div>
-      )}
-
-      {/* File Queue List */}
       {files.length > 0 && (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2A2D33] pb-2.5">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-[#ECEDEF]">
+        <div className="nt-card p-4 sm:p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                 Queued Documents ({files.length})
               </span>
-              <span className="rounded bg-[#1B1D22] px-2 py-0.5 font-mono text-[10px] text-[#8B8F98] border border-[#2A2D33]">
+              <span className="nt-badge-yellow px-2.5 py-0.5 font-mono text-[10px] font-bold">
                 {totalPages} Total Pages · {formatBytes(totalSize)}
               </span>
             </div>
             <button
               onClick={clearAll}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#F0564B] transition-colors"
+              className="font-mono text-[11px] font-semibold text-[#746D61] hover:text-[#B91C1C] dark:hover:text-[#F87171] transition-colors cursor-pointer"
             >
               Clear Queue
             </button>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="nt-well p-2.5 space-y-2">
             {files.map((item, index) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded bg-[#1B1D22] border border-[#2A2D33] p-2.5 transition-colors hover:border-[#4F8CFF]/40"
+                className="nt-subcard flex items-center justify-between p-3 transition-colors"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#131418] text-[#8B8F98] font-mono text-[10px] border border-[#2A2D33]">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] font-mono text-[11px] font-bold">
                     {index + 1}
                   </div>
-                  <FileText className="h-3.5 w-3.5 shrink-0 text-[#8B8F98]" />
+                  <FileText className="h-4 w-4 shrink-0 text-[#746D61]" />
                   <div className="truncate min-w-0">
-                    <p className="truncate text-xs font-medium text-[#ECEDEF]">{item.name}</p>
-                    <p className="text-[10px] text-[#8B8F98] font-mono">
+                    <p className="truncate text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{item.name}</p>
+                    <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono">
                       {item.pageCount} {item.pageCount === 1 ? 'page' : 'pages'} · {formatBytes(item.size)}
                     </p>
                   </div>
@@ -208,7 +172,7 @@ export const PdfMergeWorkspace: React.FC = () => {
                     onClick={() => moveFile(index, 'up')}
                     disabled={index === 0}
                     title="Move Up"
-                    className="rounded p-1 text-[#8B8F98] hover:bg-[#131418] hover:text-[#ECEDEF] disabled:opacity-25"
+                    className="nt-btn-secondary p-1.5 disabled:opacity-30"
                   >
                     <ArrowUp className="h-3.5 w-3.5" />
                   </button>
@@ -216,14 +180,14 @@ export const PdfMergeWorkspace: React.FC = () => {
                     onClick={() => moveFile(index, 'down')}
                     disabled={index === files.length - 1}
                     title="Move Down"
-                    className="rounded p-1 text-[#8B8F98] hover:bg-[#131418] hover:text-[#ECEDEF] disabled:opacity-25"
+                    className="nt-btn-secondary p-1.5 disabled:opacity-30"
                   >
                     <ArrowDown className="h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={() => removeFile(item.id)}
                     title="Remove"
-                    className="rounded p-1 text-[#8B8F98] hover:bg-[#331614] hover:text-[#F0564B]"
+                    className="nt-btn-secondary p-1.5 hover:!text-[#B91C1C]"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -232,23 +196,20 @@ export const PdfMergeWorkspace: React.FC = () => {
             ))}
           </div>
 
-          {/* Merge Action Button */}
-          <div className="pt-2">
-            <button
-              onClick={handleMerge}
-              disabled={isProcessing || files.length < 2}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40 disabled:pointer-events-none"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Compiling PDF in Local Memory...</span>
-                </>
-              ) : (
-                <span>Merge {files.length} PDF Documents</span>
-              )}
-            </button>
-          </div>
+          <button
+            onClick={handleMerge}
+            disabled={isProcessing || files.length < 2}
+            className="w-full flex items-center justify-center gap-2 nt-btn-yellow py-3 px-4 text-xs disabled:opacity-40 disabled:pointer-events-none"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Compiling PDF in Local Memory...</span>
+              </>
+            ) : (
+              <span>Merge {files.length} PDF Documents</span>
+            )}
+          </button>
         </div>
       )}
     </div>

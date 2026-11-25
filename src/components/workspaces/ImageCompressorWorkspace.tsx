@@ -1,7 +1,8 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
-import { Upload, Minimize2, CheckCircle2, AlertCircle, Loader2, Download } from 'lucide-react';
+import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { Minimize2, Loader2, Download } from 'lucide-react';
 
 export const ImageCompressorWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -11,7 +12,7 @@ export const ImageCompressorWorkspace: React.FC = () => {
   const [quality, setQuality] = useState<number>(0.75);
   const [maxWidth, setMaxWidth] = useState<number>(1920);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [sliderPos, setSliderPos] = useState<number>(50); // 0 to 100 percentage
+  const [sliderPos, setSliderPos] = useState<number>(50);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -89,11 +90,15 @@ export const ImageCompressorWorkspace: React.FC = () => {
       : 0;
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-5">
       {!file ? (
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          onFilesDrop={(files) => files[0] && handleFile(files[0])}
+          icon={<Minimize2 className="h-5 w-5" />}
+          title="Drop image to compress, or"
+          subtitle="Interactive side-by-side comparison slider with quality & max width controls."
+          badgeText="100% In-Browser Processing"
         >
           <input
             ref={fileInputRef}
@@ -105,28 +110,18 @@ export const ImageCompressorWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-            <Minimize2 className="h-5 w-5" />
-          </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop image to compress, or <span className="text-[#4F8CFF] underline">browse</span>
-          </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Interactive side-by-side diff slider. 100% in-browser processing.
-          </p>
-        </div>
+        </WorkspaceDropzone>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
-          {/* Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
+        <div className="nt-card p-5 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
               {compressedBlob && (
                 <div className="flex items-center gap-2">
-                  <span className="rounded bg-[#122D1F] px-2 py-0.5 font-mono text-[10px] font-medium text-[#3FBE73] border border-[#3FBE73]/30">
+                  <span className="nt-badge-success px-2.5 py-0.5 font-mono text-[10px] font-bold">
                     -{savingsPercent}% Saved
                   </span>
-                  <span className="font-mono text-[10px] text-[#8B8F98]">
+                  <span className="font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
                     {formatBytes(file.size)} → {formatBytes(compressedBlob.size)}
                   </span>
                 </div>
@@ -139,18 +134,17 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 setCompressedUrl(null);
                 setCompressedBlob(null);
               }}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+              className="nt-btn-secondary px-3 py-1.5 font-mono text-[11px] font-semibold"
             >
               Choose different image
             </button>
           </div>
 
-          {/* Interactive Split Diff Viewer */}
           {originalUrl && (
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center text-[11px] text-[#8B8F98] font-mono px-1">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono px-1">
                 <span>Original ({formatBytes(file.size)})</span>
-                <span className="text-[#4F8CFF]">Drag hairline divider to inspect</span>
+                <span className="font-bold text-[#141413] dark:text-[#FACC15]">Drag divider to inspect</span>
                 <span>Compressed ({compressedBlob ? formatBytes(compressedBlob.size) : '...'})</span>
               </div>
 
@@ -161,9 +155,8 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 onMouseLeave={() => setIsDragging(false)}
                 onMouseMove={handleMouseMove}
                 onTouchMove={handleTouchMove}
-                className="relative h-[280px] sm:h-[360px] w-full select-none overflow-hidden rounded border border-[#2A2D33] bg-[#0B0C0F] cursor-ew-resize"
+                className="nt-well relative h-[280px] sm:h-[360px] w-full select-none overflow-hidden cursor-ew-resize"
               >
-                {/* Background Image (Compressed) */}
                 {compressedUrl && (
                   <img
                     src={compressedUrl}
@@ -172,7 +165,6 @@ export const ImageCompressorWorkspace: React.FC = () => {
                   />
                 )}
 
-                {/* Foreground Image (Original) with Clip-Path */}
                 <div
                   className="absolute inset-0 overflow-hidden pointer-events-none"
                   style={{ width: `${sliderPos}%` }}
@@ -188,27 +180,25 @@ export const ImageCompressorWorkspace: React.FC = () => {
                   />
                 </div>
 
-                {/* Slider Handle Line */}
                 <div
-                  className="absolute top-0 bottom-0 w-[1px] bg-[#4F8CFF] pointer-events-none z-20"
+                  className="absolute top-0 bottom-0 w-0.5 bg-[#141413] dark:bg-[#FACC15] pointer-events-none z-20"
                   style={{ left: `${sliderPos}%` }}
                 >
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded bg-[#131418] text-[#ECEDEF] border border-[#2A2D33] shadow-md">
-                    <span className="font-mono text-[9px] text-[#8B8F98]">⟷</span>
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-[#FACC15] text-[#141413] border-2 border-[#141413] shadow-card font-mono text-[10px] font-bold">
+                    ⟷
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Sliders and Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
+          <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-medium text-[#ECEDEF]">
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   Compression Quality
                 </label>
-                <span className="font-mono text-xs text-[#4F8CFF] font-semibold">
+                <span className="nt-badge-yellow px-2 py-0.5 font-mono text-xs font-bold">
                   {Math.round(quality * 100)}%
                 </span>
               </div>
@@ -219,23 +209,23 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 step="0.05"
                 value={quality}
                 onChange={(e) => handleQualityChange(parseFloat(e.target.value))}
-                className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
+                className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-medium text-[#ECEDEF]">
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   Max Width Limit
                 </label>
-                <span className="font-mono text-xs text-[#8B8F98]">
+                <span className="font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
                   {maxWidth}px
                 </span>
               </div>
               <select
                 value={maxWidth}
                 onChange={(e) => handleMaxWidthChange(Number(e.target.value))}
-                className="w-full rounded border border-[#2A2D33] bg-[#131418] px-3 py-1.5 text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
+                className="nt-input w-full px-3 py-2 text-xs font-medium"
               >
                 <option value="3840">4K Ultra (3840px)</option>
                 <option value="1920">Full HD (1920px - Default)</option>
@@ -245,37 +235,29 @@ export const ImageCompressorWorkspace: React.FC = () => {
             </div>
           </div>
 
-          {/* Download Button */}
-          <div>
-            <button
-              onClick={() => {
-                if (compressedBlob && file) {
-                  downloadBlob(compressedBlob, `compressed_${file.name}`);
-                }
-              }}
-              disabled={isProcessing || !compressedBlob}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Optimizing Pixels Locally...</span>
-                </>
-              ) : (
-                <>
-                  <Download className="h-3.5 w-3.5" />
-                  <span>Download Compressed Image ({compressedBlob ? formatBytes(compressedBlob.size) : ''})</span>
-                </>
-              )}
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              if (compressedBlob && file) {
+                downloadBlob(compressedBlob, `compressed_${file.name}`);
+              }
+            }}
+            disabled={isProcessing || !compressedBlob}
+            className="w-full flex items-center justify-center gap-2 nt-btn-yellow py-3 px-4 text-xs disabled:opacity-40"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Optimizing Pixels Locally...</span>
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4" />
+                <span>Download Compressed Image ({compressedBlob ? formatBytes(compressedBlob.size) : ''})</span>
+              </>
+            )}
+          </button>
 
-          {error && (
-            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+          {error && <WorkspaceAlert variant="error" message={error} />}
         </div>
       )}
     </div>

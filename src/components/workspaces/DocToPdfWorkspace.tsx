@@ -1,19 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   FileText,
   Printer,
   Upload,
-  Sparkles,
   Download,
-  Eye,
-  Check,
-  RefreshCw,
-  Sliders,
-  Maximize2,
   FileCode,
-  BookOpen,
-  LayoutTemplate,
   Copy,
+  Check,
 } from 'lucide-react';
 import { DocEngine, type DocTheme } from '../../engines/docEngine';
 import { downloadBlob } from '../../lib/utils';
@@ -94,7 +87,7 @@ export default function DocToPdfWorkspace() {
       const pdfBlob = await DocEngine.markdownToPdfBlob(markdown, docTitle || 'Document', theme, pageSize);
       downloadBlob(pdfBlob, `${(docTitle || 'document').toLowerCase().replace(/\s+/g, '-')}.pdf`);
       setStatusMessage('PDF downloaded successfully!');
-    } catch (err: any) {
+    } catch {
       setStatusMessage(`PDF generation fallback: Opening print preview...`);
       DocEngine.triggerBrowserPdfPrint(markdown, docTitle || 'Document', theme, pageSize);
     } finally {
@@ -149,22 +142,21 @@ export default function DocToPdfWorkspace() {
   const previewHtml = DocEngine.markdownToHtml(markdown);
 
   return (
-    <div className="space-y-6">
-      {/* Top Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/[0.08] pb-4">
-        {/* Document Title input */}
+    <div className="space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--nt-border)] pb-4">
         <div className="flex items-center gap-3 flex-1 max-w-md">
-          <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shrink-0">
+            <FileText className="h-4 w-4" />
+          </div>
           <input
             type="text"
             value={docTitle}
             onChange={(e) => setDocTitle(e.target.value)}
             placeholder="Document Title"
-            className="w-full bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] rounded-lg px-3 py-1.5 text-xs sm:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+            className="nt-input w-full px-3 py-2 text-xs sm:text-sm font-bold"
           />
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           <input
             ref={fileInputRef}
@@ -176,7 +168,7 @@ export default function DocToPdfWorkspace() {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer"
+            className="nt-btn-secondary inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold"
           >
             <Upload className="h-3.5 w-3.5" />
             <span>Load File</span>
@@ -185,7 +177,7 @@ export default function DocToPdfWorkspace() {
           <button
             type="button"
             onClick={handleDownloadMarkdown}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer"
+            className="nt-btn-secondary inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold"
           >
             <Download className="h-3.5 w-3.5" />
             <span>Download .MD</span>
@@ -195,9 +187,9 @@ export default function DocToPdfWorkspace() {
             type="button"
             onClick={handleDownloadDocx}
             disabled={isProcessing}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
+            className="nt-btn-secondary inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold disabled:opacity-40"
           >
-            <FileCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <FileCode className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Download DOCX</span>
           </button>
 
@@ -205,7 +197,7 @@ export default function DocToPdfWorkspace() {
             type="button"
             onClick={handleDownloadPdf}
             disabled={isProcessing}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-40 active:scale-95"
+            className="nt-btn-yellow inline-flex items-center gap-1.5 px-4 py-2 text-xs disabled:opacity-40"
           >
             <Download className="h-3.5 w-3.5" />
             <span>Download PDF (.pdf)</span>
@@ -215,21 +207,18 @@ export default function DocToPdfWorkspace() {
             type="button"
             onClick={handlePrintPdf}
             disabled={isProcessing}
-            title="Open browser vector print dialogue"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] hover:bg-slate-100 dark:hover:bg-[#202227] transition-colors cursor-pointer disabled:opacity-40"
+            className="nt-btn-secondary inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold disabled:opacity-40"
           >
             <Printer className="h-3.5 w-3.5" />
-            <span>Print / Vector</span>
+            <span>Print</span>
           </button>
         </div>
       </div>
 
-      {/* Theme & Styling Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-3 rounded-lg bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] text-xs">
-        {/* Visual Themes */}
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-slate-500 dark:text-[#9ca3af] font-medium">Style Theme:</span>
-          <div className="flex items-center gap-1">
+      <div className="nt-well flex flex-wrap items-center justify-between gap-4 p-3.5 text-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-mono text-[#746D61] dark:text-[#938B7D] font-bold">Style Theme:</span>
+          <div className="flex flex-wrap items-center gap-1">
             {(
               [
                 { id: 'github', label: 'GitHub README' },
@@ -242,10 +231,10 @@ export default function DocToPdfWorkspace() {
                 key={t.id}
                 type="button"
                 onClick={() => setTheme(t.id)}
-                className={`px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   theme === t.id
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:bg-slate-200 dark:hover:bg-white/[0.06]'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:bg-white/70 dark:hover:bg-[#26231E]'
                 }`}
               >
                 {t.label}
@@ -254,19 +243,18 @@ export default function DocToPdfWorkspace() {
           </div>
         </div>
 
-        {/* Page Size Selection */}
         <div className="flex items-center gap-2">
-          <span className="font-mono text-slate-500 dark:text-[#9ca3af] font-medium">Page Size:</span>
+          <span className="font-mono text-[#746D61] dark:text-[#938B7D] font-bold">Page Size:</span>
           <div className="flex items-center gap-1">
             {(['A4', 'Letter'] as const).map((ps) => (
               <button
                 key={ps}
                 type="button"
                 onClick={() => setPageSize(ps)}
-                className={`px-2 py-0.5 rounded font-mono text-[11px] font-semibold transition-colors cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg font-mono text-[11px] font-bold transition-colors cursor-pointer ${
                   pageSize === ps
-                    ? 'bg-slate-800 dark:bg-white text-white dark:text-slate-900'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:bg-slate-200 dark:hover:bg-white/[0.06]'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:bg-white/70 dark:hover:bg-[#26231E]'
                 }`}
               >
                 {ps}
@@ -276,17 +264,15 @@ export default function DocToPdfWorkspace() {
         </div>
       </div>
 
-      {/* Workspace Split Editor / Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[520px]">
-        {/* LEFT: Markdown Code Editor */}
-        <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] overflow-hidden shadow-sm">
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
-            <span className="font-bold text-slate-700 dark:text-[#d1d5db]">MARKDOWN_EDITOR</span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 min-h-[520px]">
+        <div className="nt-card flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] text-xs font-mono">
+            <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">MARKDOWN_EDITOR</span>
             <button
               onClick={handleCopyMarkdown}
-              className="flex items-center gap-1 text-slate-500 dark:text-[#9ca3af] hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+              className="flex items-center gap-1 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FACC15] font-semibold cursor-pointer"
             >
-              {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? <Check className="h-3.5 w-3.5 text-[#15803D]" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
@@ -294,24 +280,23 @@ export default function DocToPdfWorkspace() {
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
             placeholder="Type or paste Markdown, KaTeX formulas ($$E=mc^2$$), and tables here..."
-            className="flex-1 p-4 font-mono text-xs sm:text-sm bg-transparent text-slate-900 dark:text-[#f9fafb] focus:outline-none resize-none leading-relaxed"
+            className="flex-1 p-4 font-mono text-xs sm:text-sm bg-transparent text-[#141413] dark:text-[#FAF7F0] focus:outline-none resize-none leading-relaxed"
           />
-          <div className="px-4 py-2 border-t border-slate-100 dark:border-white/[0.04] bg-slate-50/50 dark:bg-[#121316] text-[11px] font-mono text-slate-500 dark:text-[#9ca3af] flex justify-between">
+          <div className="px-4 py-2.5 border-t border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] text-[11px] font-mono text-[#746D61] dark:text-[#938B7D] flex justify-between">
             <span>{metadata.wordCount} words · {metadata.charCount} chars</span>
             <span>Est. ~{metadata.readingTimeMinutes} min reading</span>
           </div>
         </div>
 
-        {/* RIGHT: Live KaTeX & Document Preview */}
-        <div className="flex flex-col rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] overflow-hidden shadow-sm">
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50/70 dark:bg-[#121316] text-xs font-mono">
-            <span className="font-bold text-slate-700 dark:text-[#d1d5db]">
+        <div className="nt-card flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714] text-xs font-mono">
+            <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
               LIVE_RENDER // {theme.toUpperCase()}
             </span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">KaTeX Math Active</span>
+            <span className="nt-badge-success px-2 py-0.5 text-[10px] font-bold">KaTeX Active</span>
           </div>
 
-          <div className="flex-1 p-6 overflow-y-auto max-h-[580px] bg-white text-slate-900 dark:bg-[#1e2025] dark:text-[#d1d5db] prose prose-slate dark:prose-invert max-w-none text-xs sm:text-sm">
+          <div className="flex-1 p-6 overflow-y-auto max-h-[580px] bg-white text-[#141413] dark:bg-[#1F1D19] dark:text-[#FAF7F0] prose prose-stone dark:prose-invert max-w-none text-xs sm:text-sm">
             <div
               dangerouslySetInnerHTML={{ __html: previewHtml }}
               className={`doc-theme-${theme}`}
@@ -320,9 +305,8 @@ export default function DocToPdfWorkspace() {
         </div>
       </div>
 
-      {/* Status Bar */}
       {statusMessage && (
-        <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 p-3 text-xs text-blue-700 dark:text-blue-300 font-mono">
+        <div className="nt-badge-yellow rounded-xl p-3 text-xs font-mono font-bold">
           {statusMessage}
         </div>
       )}

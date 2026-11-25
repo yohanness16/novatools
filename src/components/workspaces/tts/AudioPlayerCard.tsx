@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { SynthesizedAudioResult } from '../../../engines/ttsTypes';
 import { cuesToSrt, cuesToVtt } from '../../../engines/ttsEngine';
-import { 
-  Play, 
-  Pause, 
-  RotateCcw, 
-  Download, 
-  FileText, 
-  Music, 
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  Download,
+  FileText,
   Volume2,
   VolumeX,
-  Sparkles,
-  ChevronDown
 } from 'lucide-react';
 
 interface AudioPlayerCardProps {
@@ -56,9 +53,12 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch(console.error);
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(console.error);
     }
   };
 
@@ -80,7 +80,10 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       setCurrentTime(0);
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(console.error);
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(console.error);
     }
   };
 
@@ -131,7 +134,6 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         const barPosRatio = i / numBars;
         const isPast = barPosRatio <= progressPos;
 
-        // Wave profile calculation
         let barHeight = 6;
         if (isPlaying) {
           const sine = Math.sin(phase + i * 0.28);
@@ -144,12 +146,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
 
         const y = (canvas.height - barHeight) / 2;
 
-        if (isPast) {
-          ctx.fillStyle = '#6366f1'; // Indigo 500
-        } else {
-          ctx.fillStyle = '#334155'; // Slate 700
-        }
-
+        ctx.fillStyle = isPast ? '#FACC15' : '#454038';
         ctx.beginPath();
         ctx.roundRect(x, y, barWidth, barHeight, 2);
         ctx.fill();
@@ -217,7 +214,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
   if (!result) return null;
 
   return (
-    <div className="bg-white dark:bg-[#1e2025] rounded-xl border border-slate-200 dark:border-white/[0.08] p-6 shadow-sm space-y-5">
+    <div className="nt-card p-5 sm:p-6 space-y-5">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -226,20 +223,20 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       />
 
       {/* Header Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--nt-border)]">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 flex items-center justify-center text-2xl shadow-inner">
+          <div className="nt-well w-11 h-11 flex items-center justify-center text-xl">
             {voiceFlag}
           </div>
           <div>
-            <h4 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h4 className="text-base font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2">
               <span>{voiceName}</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 font-mono">
+              <span className="nt-badge-success px-2 py-0.5 text-[10px] font-bold font-mono">
                 24kHz Hi-Fi
               </span>
             </h4>
-            <p className="text-xs text-slate-500 dark:text-[#9ca3af] mt-0.5 font-mono">
-              Duration: {duration.toFixed(1)}s • Lossless Take
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] mt-0.5 font-mono">
+              Duration: {duration.toFixed(1)}s · Lossless Take
             </p>
           </div>
         </div>
@@ -249,21 +246,21 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
           <button
             type="button"
             onClick={handleDownloadWav}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer active:scale-95"
+            className="nt-btn-yellow flex items-center gap-1.5 px-4 py-2 text-xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download Audio (WAV)</span>
           </button>
-          
+
           {result.cues && result.cues.length > 0 && (
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={handleDownloadSrt}
                 title="Download Subtitles (.SRT)"
-                className="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] hover:bg-slate-200 dark:hover:bg-[#202227] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] text-xs font-semibold font-mono transition-all cursor-pointer"
+                className="nt-btn-secondary flex items-center gap-1 px-2.5 py-2 text-xs font-mono font-bold"
               >
-                <FileText className="w-3.5 h-3.5" />
+                <FileText className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 <span>SRT</span>
               </button>
 
@@ -271,9 +268,9 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
                 type="button"
                 onClick={handleDownloadVtt}
                 title="Download Subtitles (.VTT)"
-                className="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] hover:bg-slate-200 dark:hover:bg-[#202227] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] text-xs font-semibold font-mono transition-all cursor-pointer"
+                className="nt-btn-secondary flex items-center gap-1 px-2.5 py-2 text-xs font-mono font-bold"
               >
-                <FileText className="w-3.5 h-3.5" />
+                <FileText className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 <span>VTT</span>
               </button>
             </div>
@@ -282,7 +279,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       </div>
 
       {/* Waveform Visualization Canvas */}
-      <div className="bg-slate-950/90 rounded-2xl p-3 border border-slate-800 shadow-inner">
+      <div className="bg-[#141311] rounded-2xl p-3.5 border border-[var(--nt-border)] shadow-well">
         <canvas
           ref={canvasRef}
           width={600}
@@ -292,29 +289,28 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       </div>
 
       {/* Audio Controls Bar */}
-      <div className="flex items-center gap-4">
-        {/* Play/Pause Button */}
+      <div className="nt-well p-3.5 flex flex-wrap sm:flex-nowrap items-center gap-3.5">
         <button
           type="button"
           onClick={togglePlay}
-          className="w-12 h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/30 transition-all cursor-pointer shrink-0 hover:scale-105 active:scale-95"
+          className="nt-btn-yellow w-11 h-11 flex items-center justify-center shrink-0"
+          aria-label={isPlaying ? 'Pause playback' : 'Play playback'}
         >
           {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
         </button>
 
-        {/* Restart Button */}
         <button
           type="button"
           onClick={handleRestart}
           title="Restart from beginning"
-          className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all shrink-0 cursor-pointer shadow-sm"
+          className="nt-btn-secondary p-2.5 shrink-0"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
 
         {/* Timeline Scrubber */}
-        <div className="flex-1 flex items-center gap-3">
-          <span className="text-xs font-mono text-slate-300 font-semibold shrink-0">
+        <div className="flex-1 min-w-[140px] flex items-center gap-3">
+          <span className="text-xs font-mono text-[#141413] dark:text-[#FAF7F0] font-bold shrink-0">
             {formatTime(currentTime)}
           </span>
           <input
@@ -324,22 +320,24 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
             step="0.05"
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+            className="w-full h-2 bg-white dark:bg-[#141311] rounded-lg appearance-none cursor-pointer"
           />
-          <span className="text-xs font-mono text-slate-400 shrink-0">
+          <span className="text-xs font-mono text-[#746D61] dark:text-[#938B7D] shrink-0">
             {formatTime(duration)}
           </span>
         </div>
 
         {/* Playback Rate Dropdown */}
-        <div className="flex items-center gap-1 bg-slate-800/80 rounded-xl p-1 text-xs">
+        <div className="nt-subcard flex items-center gap-1 p-1 text-xs">
           {[1.0, 1.25, 1.5].map((rate) => (
             <button
               key={rate}
               type="button"
               onClick={() => handleRateChange(rate)}
-              className={`px-2 py-1 rounded-lg font-mono font-medium transition-all cursor-pointer ${
-                playbackRate === rate ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              className={`px-2 py-1 rounded-lg font-mono font-bold transition-all cursor-pointer ${
+                playbackRate === rate
+                  ? 'bg-[#141413] text-[#FACC15]'
+                  : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
               }`}
             >
               {rate}x
@@ -351,9 +349,14 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         <button
           type="button"
           onClick={toggleMute}
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+          className="nt-btn-secondary p-2 shrink-0"
+          aria-label={isMuted ? 'Unmute' : 'Mute'}
         >
-          {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
+          {isMuted ? (
+            <VolumeX className="w-4 h-4 text-[#B91C1C] dark:text-[#F87171]" />
+          ) : (
+            <Volume2 className="w-4 h-4" />
+          )}
         </button>
       </div>
     </div>

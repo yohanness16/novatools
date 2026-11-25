@@ -2,7 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import { type ToolMeta, TOOLS } from '../lib/toolsData';
 import AdSenseAd from './AdSenseAd.astro';
-import { ShieldCheck, HelpCircle, Layers, ArrowRight, BookOpen, Sparkles, CheckCircle2, Lock } from 'lucide-react';
+import {
+  ShieldCheck,
+  HelpCircle,
+  Layers,
+  ArrowRight,
+  BookOpen,
+  Sparkles,
+  CheckCircle2,
+  Lock,
+} from 'lucide-react';
 
 interface Props {
   tool: ToolMeta;
@@ -10,7 +19,7 @@ interface Props {
 
 const { tool } = Astro.props;
 
-const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== tool.id).slice(0, 4);
+const relatedTools = TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 4);
 ---
 
 <Layout
@@ -19,56 +28,98 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
   keywords={tool.keywords}
   faqs={tool.faqs}
 >
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-    
-    {/* Top Header & Breadcrumb & Privacy Strip */}
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/[0.08] pb-5">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:py-8 sm:px-6 lg:px-8 space-y-7">
+    {/* Compact Desktop App Header Strip */}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-1">
       <div class="space-y-1.5">
-        <nav class="flex items-center gap-2 text-xs text-slate-500 dark:text-[#9ca3af] font-mono" aria-label="Breadcrumb">
-          <a href="/" class="hover:text-slate-900 dark:hover:text-white transition-colors">Console</a>
-          <span class="text-slate-400 dark:text-[#64748b]">/</span>
-          <a href={`/${tool.category}`} class="text-slate-600 dark:text-[#d1d5db] hover:text-blue-600 dark:hover:text-blue-400 capitalize transition-colors">
+        <nav class="flex items-center gap-2 text-xs text-[#746D61] dark:text-[#938B7D] font-mono" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-[#141413] dark:hover:text-[#FAF7F0] transition-colors">Desktop</a>
+          <span>/</span>
+          <a
+            href={`/${tool.category}`}
+            class="text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FACC15] capitalize transition-colors"
+          >
             {tool.categoryLabel}
           </a>
-          <span class="text-slate-400 dark:text-[#64748b]">/</span>
-          <span class="text-slate-900 dark:text-white font-semibold">{tool.name}</span>
+          <span>/</span>
+          <span class="text-[#141413] dark:text-[#FAF7F0] font-bold">{tool.name}</span>
         </nav>
-        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
           {tool.name}
         </h1>
+        <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] max-w-2xl">
+          {tool.description}
+        </p>
       </div>
 
-      {/* Privacy Ledger Strip */}
-      <div class="privacy-ledger-strip shrink-0 self-start sm:self-auto border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#121316] text-slate-700 dark:text-[#d1d5db]">
-        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-        <span class="font-medium text-slate-900 dark:text-[#f9fafb]">0 bytes uploaded</span>
-        <span class="text-slate-400 dark:text-[#64748b]">·</span>
-        <span class="text-slate-700 dark:text-[#9ca3af]">Local In-Browser Engine</span>
+      {/* Privacy Ledger Pill */}
+      <div class="privacy-ledger-strip shrink-0 self-start md:self-auto">
+        <span class="h-2 w-2 rounded-full bg-[#15803D] dark:bg-[#4ADE80]"></span>
+        <span class="font-bold text-[#141413] dark:text-[#FAF7F0]">0 bytes uploaded</span>
+        <span class="text-[#746D61]">·</span>
+        <span>Local In-Browser Engine</span>
       </div>
     </div>
 
-    {/* Educational About Section (Placed at Top for Instant Context) */}
+    {/* PRIMARY DESKTOP WORKBENCH WINDOW (Above the Fold) */}
+    <section class="nt-window overflow-hidden">
+      {/* Window Chrome Titlebar */}
+      <div class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-[var(--nt-border)] bg-[#FCFBF8] dark:bg-[#191714]">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5" aria-hidden="true">
+            <span class="h-3 w-3 rounded-full bg-[#141413] dark:bg-[#FAF7F0]/35"></span>
+            <span class="h-3 w-3 rounded-full bg-[#FACC15]"></span>
+            <span class="h-3 w-3 rounded-full bg-[#D6CFC0] dark:bg-[#454038]"></span>
+          </div>
+          <span class="font-mono text-[11px] font-bold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+            {tool.name}
+          </span>
+          <span class="hidden sm:inline-flex rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-2 py-0.5 font-mono text-[10px] font-semibold text-[#454038] dark:text-[#CBC4B6] border border-[var(--nt-border)]">
+            {tool.categoryLabel}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 text-[10px] font-mono">
+          {tool.about?.supportedFormats && tool.about.supportedFormats.length > 0 && (
+            <span class="hidden md:inline-flex rounded-full bg-white dark:bg-[#1F1D19] px-2.5 py-0.5 text-[#746D61] dark:text-[#938B7D] border border-[var(--nt-border)]">
+              {tool.about.supportedFormats.slice(0, 4).join(' · ')}
+            </span>
+          )}
+          <span class="nt-badge-yellow px-2.5 py-0.5 font-bold">LOCAL SANDBOX</span>
+        </div>
+      </div>
+
+      {/* Interactive Tool Surface */}
+      <div class="p-4 sm:p-6 lg:p-7">
+        <slot />
+      </div>
+    </section>
+
+    {/* Google AdSense Display Ad Unit */}
+    <AdSenseAd slotId="5386318888" className="my-6" />
+
+    {/* Overview & Client Processing Details */}
     {tool.about && (
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-[#f9fafb]">
-            <BookOpen class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">
+            <BookOpen class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Overview & Client Processing</span>
           </div>
           <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
             {tool.about.technicalMechanism && (
-              <span class="rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-2.5 py-1 border border-blue-200 dark:border-blue-800/40">
+              <span class="nt-badge-yellow px-2.5 py-1 font-bold">
                 {tool.about.technicalMechanism.replace(/WASM/g, 'In-Browser Engine').replace(/WebAssembly/g, 'Local Client Runtime')}
               </span>
             )}
             {tool.about.supportedFormats && tool.about.supportedFormats.length > 0 && (
-              <span class="rounded bg-slate-100 dark:bg-[#16171a] text-slate-600 dark:text-[#9ca3af] px-2.5 py-1 border border-slate-200 dark:border-white/[0.06]">
+              <span class="rounded-full bg-[#EAE3D4] dark:bg-[#141311] text-[#454038] dark:text-[#CBC4B6] px-2.5 py-1 border border-[var(--nt-border)]">
                 {tool.about.supportedFormats.join(', ')}
               </span>
             )}
           </div>
         </div>
-        <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-[#d1d5db] leading-relaxed">
+        <div class="space-y-3 text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
           {tool.about.paragraphs.map((p) => (
             <p>{p.replace(/WebAssembly/g, 'client-side in-browser runtime').replace(/WASM/g, 'local engine')}</p>
           ))}
@@ -76,57 +127,47 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
       </section>
     )}
 
-    {/* Interactive Work Surface (Full-Width Workbench Hero) */}
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-7 shadow-sm">
-      <slot />
-    </section>
-
-    {/* Google AdSense Display Ad Unit */}
-    <AdSenseAd slotId="5386318888" className="my-6" />
-
-    {/* Educational Deep-Dive: Side-by-Side Bento Grid */}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
-      {/* Left: Step-by-Step Guide */}
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#f9fafb] border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <Layers class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+    {/* Step-by-Step Guide & Security Specifications */}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] border-b border-[var(--nt-border)] pb-3">
+          <Layers class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
           <span>Step-by-Step Execution Guide</span>
         </div>
 
         <div class="space-y-3">
           {tool.howToSteps.map((step) => (
-            <div class="flex items-start gap-3 rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06]">
-              <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-white dark:bg-[#1e2025] font-mono text-xs font-bold text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-white/[0.08]">
+            <div class="nt-subcard flex items-start gap-3 p-3.5">
+              <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] font-mono text-xs font-bold">
                 {step.step}
               </span>
               <div class="space-y-1 text-xs">
-                <h3 class="font-bold text-slate-900 dark:text-[#f9fafb]">{step.title}</h3>
-                <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">{step.desc}</p>
+                <h3 class="font-bold text-[#141413] dark:text-[#FAF7F0]">{step.title}</h3>
+                <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">{step.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Right: Key Features & Local Security Sandbox */}
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#f9fafb] border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <ShieldCheck class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] border-b border-[var(--nt-border)] pb-3">
+          <ShieldCheck class="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
           <span>Security & Processing Specifications</span>
         </div>
 
-        <ul class="space-y-3 text-xs text-slate-700 dark:text-[#d1d5db]">
-          <li class="flex items-start gap-3 rounded-lg bg-slate-50 dark:bg-[#16171a] p-3 border border-slate-200 dark:border-white/[0.06]">
-            <Lock class="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+        <ul class="space-y-3 text-xs text-[#454038] dark:text-[#CBC4B6]">
+          <li class="nt-subcard flex items-start gap-3 p-3.5">
+            <Lock class="h-4 w-4 shrink-0 text-[#15803D] dark:text-[#4ADE80] mt-0.5" />
             <div>
-              <strong class="text-slate-900 dark:text-white block">100% In-Memory Sandbox</strong>
-              <span class="text-slate-600 dark:text-[#9ca3af]">Files are decoded and manipulated inside local RAM. Memory is wiped immediately when closed.</span>
+              <strong class="text-[#141413] dark:text-[#FAF7F0] block">100% In-Memory Sandbox</strong>
+              <span>Files are decoded and manipulated inside local RAM. Memory clears immediately when closed.</span>
             </div>
           </li>
           {tool.features.map((feat) => (
-            <li class="flex items-start gap-3 rounded-lg bg-slate-50 dark:bg-[#16171a] p-3 border border-slate-200 dark:border-white/[0.06]">
-              <CheckCircle2 class="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
-              <span class="text-slate-800 dark:text-[#d1d5db] font-medium leading-relaxed">
+            <li class="nt-subcard flex items-start gap-3 p-3.5">
+              <CheckCircle2 class="h-4 w-4 shrink-0 text-[#CA8A04] dark:text-[#FACC15] mt-0.5" />
+              <span class="text-[#141413] dark:text-[#FAF7F0] font-medium leading-relaxed">
                 {feat.replace(/WASM/g, 'Local Engine').replace(/WebAssembly/g, 'In-Browser Runtime')}
               </span>
             </li>
@@ -137,20 +178,20 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
 
     {/* Common Practical Use Cases */}
     {tool.useCases && tool.useCases.length > 0 && (
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#f9fafb] border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <Sparkles class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] border-b border-[var(--nt-border)] pb-3">
+          <Sparkles class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
           <span>Practical Use Cases</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {tool.useCases.map((uc) => (
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-4 border border-slate-200 dark:border-white/[0.06] space-y-2 flex flex-col justify-between">
-              <h4 class="text-xs font-bold text-slate-900 dark:text-[#f9fafb] flex items-center gap-2">
-                <span class="h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            <div class="nt-subcard p-4 space-y-2 flex flex-col justify-between">
+              <h4 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-[#FACC15] shrink-0"></span>
                 {uc.title}
               </h4>
-              <p class="text-xs text-slate-600 dark:text-[#9ca3af] leading-relaxed flex-1">
+              <p class="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed flex-1">
                 {uc.description}
               </p>
             </div>
@@ -159,20 +200,23 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
       </section>
     )}
 
-    {/* FAQs Section */}
+    {/* FAQs */}
     {tool.faqs && tool.faqs.length > 0 && (
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#f9fafb] border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <HelpCircle class="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <span>Frequently Asked Questions (FAQ)</span>
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] border-b border-[var(--nt-border)] pb-3">
+          <HelpCircle class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>Frequently Asked Questions</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           {tool.faqs.map((faq) => (
-            <div class="rounded-lg bg-slate-50 dark:bg-[#16171a] p-4 border border-slate-200 dark:border-white/[0.06] space-y-1.5">
-              <h4 class="text-xs font-bold text-slate-900 dark:text-[#f9fafb]">{faq.question}</h4>
-              <p class="text-xs text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-                {faq.answer.replace(/WebAssembly \(WASM\)/g, 'Client-Side In-Browser Engine').replace(/WebAssembly/g, 'Client-Side Engine').replace(/WASM/g, 'Local Engine')}
+            <div class="nt-subcard p-4 space-y-1.5">
+              <h4 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{faq.question}</h4>
+              <p class="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+                {faq.answer
+                  .replace(/WebAssembly \(WASM\)/g, 'Client-Side In-Browser Engine')
+                  .replace(/WebAssembly/g, 'Client-Side Engine')
+                  .replace(/WASM/g, 'Local Engine')}
               </p>
             </div>
           ))}
@@ -180,36 +224,39 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
       </section>
     )}
 
-    {/* Related Suite Tools Navigation */}
+    {/* Related Suite Tools */}
     {relatedTools.length > 0 && (
-      <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 space-y-4 shadow-sm">
-        <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.06] pb-3">
-          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#f9fafb]">
+      <section class="nt-card p-5 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">
             More in {tool.categoryLabel}
           </div>
-          <a href={`/${tool.category}`} class="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium">
+          <a
+            href={`/${tool.category}`}
+            class="text-xs font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1"
+          >
             <span>View All</span>
             <ArrowRight class="h-3 w-3" />
           </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {relatedTools.map((rel) => (
             <a
               href={rel.path}
-              class="group flex flex-col justify-between rounded-lg bg-slate-50 dark:bg-[#16171a] p-3.5 border border-slate-200 dark:border-white/[0.06] hover:border-blue-500/40 hover:bg-slate-100 dark:hover:bg-[#202227] transition-all"
+              class="group nt-card-interactive flex flex-col justify-between p-4"
             >
-              <div class="space-y-1">
-                <h5 class="text-xs font-bold text-slate-900 dark:text-[#f9fafb] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <div class="space-y-1.5">
+                <h5 class="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] group-hover:underline">
                   {rel.name}
                 </h5>
-                <p class="text-[11px] text-slate-500 dark:text-[#9ca3af] line-clamp-2">
+                <p class="text-[11px] text-[#454038] dark:text-[#CBC4B6] line-clamp-2">
                   {rel.description}
                 </p>
               </div>
-              <div class="mt-3 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-[#9ca3af] pt-2 border-t border-slate-200/60 dark:border-white/[0.04]">
-                <span class="text-emerald-600 dark:text-emerald-400">Local Sandbox</span>
-                <span class="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1">
+              <div class="mt-3 flex items-center justify-between text-[10px] font-mono pt-2.5 border-t border-[var(--nt-border)]">
+                <span class="text-[#15803D] dark:text-[#4ADE80] font-bold">Local Sandbox</span>
+                <span class="text-[#141413] dark:text-[#FACC15] font-bold flex items-center gap-1">
                   Open <ArrowRight class="h-2.5 w-2.5" />
                 </span>
               </div>
@@ -218,6 +265,5 @@ const relatedTools = TOOLS.filter(t => t.category === tool.category && t.id !== 
         </div>
       </section>
     )}
-
   </div>
 </Layout>

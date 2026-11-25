@@ -11,22 +11,16 @@ import {
   Printer,
   ChevronLeft,
   ChevronRight,
-  Palette,
-  Eye,
   Edit3,
   RefreshCw,
   FileSpreadsheet,
-  Layers,
   ShieldCheck,
-  Sliders,
-  Type,
-  Code,
 } from 'lucide-react';
 import { DocEngine } from '../../engines/docEngine';
 import { PptxEngine, type AdvancedSlideTheme } from '../../engines/pptxEngine';
 import { ExcelEngine } from '../../engines/excelEngine';
 import { AiDocEngine } from '../../engines/aiDocEngine';
-import type { DocSlide, DocTable, SlideTheme } from '../../engines/docTypes';
+import type { DocSlide, DocTable } from '../../engines/docTypes';
 
 const SAMPLE_MARKDOWN = `# NovaTools Master Executive Brief
 
@@ -72,7 +66,7 @@ export default function DocStudioWorkspace() {
   const [slides, setSlides] = useState<DocSlide[]>([]);
   const [tables, setTables] = useState<DocTable[]>([]);
   const [currentSlideIdx, setCurrentSlideIdx] = useState<number>(0);
-  const [currentTableIdx, setCurrentTableIdx] = useState<number>(0);
+  const [currentTableIdx] = useState<number>(0);
   const [slideTheme, setSlideTheme] = useState<AdvancedSlideTheme>('onyx-dark');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -81,7 +75,6 @@ export default function DocStudioWorkspace() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize and check AI availability
   useEffect(() => {
     AiDocEngine.checkAIAvailability().then((info) => {
       setAiTier(info.statusDescription);
@@ -145,7 +138,6 @@ export default function DocStudioWorkspace() {
     URL.revokeObjectURL(url);
   };
 
-  // Direct One-Click Downloads
   const handleDownloadPdf = async () => {
     setIsProcessing(true);
     setStatusMessage('Compiling direct vector PDF binary...');
@@ -153,7 +145,7 @@ export default function DocStudioWorkspace() {
       const blob = await DocEngine.markdownToPdfBlob(content, docTitle);
       downloadBlob(blob, `${docTitle.toLowerCase().replace(/\s+/g, '-')}.pdf`);
       setStatusMessage('PDF downloaded successfully!');
-    } catch (err: any) {
+    } catch {
       DocEngine.triggerBrowserPdfPrint(content, docTitle);
       setStatusMessage('Print preview ready!');
     } finally {
@@ -179,7 +171,7 @@ export default function DocStudioWorkspace() {
 
   const handleDownloadPptx = async () => {
     setIsProcessing(true);
-    setStatusMessage(`Generating PowerPoint Onyx Deck (${slides.length} slides)...`);
+    setStatusMessage(`Generating PowerPoint Deck (${slides.length} slides)...`);
     try {
       const blob = await PptxEngine.generatePptxBlob(slides, slideTheme);
       downloadBlob(blob, `${docTitle.toLowerCase().replace(/\s+/g, '-')}-slides.pptx`);
@@ -213,10 +205,9 @@ export default function DocStudioWorkspace() {
     setTimeout(() => setStatusMessage(''), 3000);
   };
 
-  // AI Actions
   const handleAiSmartSlides = async () => {
     setIsProcessing(true);
-    setStatusMessage('AI analyzing document & structuring Onyx slide deck...');
+    setStatusMessage('AI analyzing document & structuring slide deck...');
     try {
       const aiSlides = await AiDocEngine.generateSmartSlideDeck(content, { theme: slideTheme }, (msg) => {
         setStatusMessage(msg);
@@ -224,7 +215,7 @@ export default function DocStudioWorkspace() {
       setSlides(aiSlides);
       setActiveTab('slides');
       setCurrentSlideIdx(0);
-      setStatusMessage('AI Onyx Slide Deck Generated!');
+      setStatusMessage('AI Slide Deck Generated!');
     } catch (err: any) {
       setStatusMessage(`AI Slide Generation failed: ${err.message}`);
     } finally {
@@ -242,7 +233,6 @@ export default function DocStudioWorkspace() {
       });
       setTables(aiTables);
       setActiveTab('spreadsheet');
-      setCurrentTableIdx(0);
       setStatusMessage(`Extracted ${aiTables.length} table(s)!`);
     } catch (err: any) {
       setStatusMessage(`Table extraction failed: ${err.message}`);
@@ -278,18 +268,18 @@ export default function DocStudioWorkspace() {
   const currentTable = tables[currentTableIdx] || tables[0];
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6">
-      {/* Top Header & Metrics Bar */}
-      <div className="bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="w-full space-y-5">
+      {/* Toolbar Card */}
+      <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
-            <FileText className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shrink-0">
+            <FileText className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0]">
               {docTitle || 'Document Studio'}
-            </h1>
-            <p className="text-xs text-slate-500 dark:text-[#9ca3af] flex items-center gap-3 mt-1 font-mono">
+            </h2>
+            <p className="text-[11px] text-[#746D61] dark:text-[#938B7D] flex items-center gap-2.5 mt-0.5 font-mono">
               <span>{metadata.wordCount} words</span>
               <span>•</span>
               <span>{metadata.readingTimeMinutes} min read</span>
@@ -301,7 +291,6 @@ export default function DocStudioWorkspace() {
           </div>
         </div>
 
-        {/* Action Controls & AI Toolbar */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <input
             type="file"
@@ -312,35 +301,34 @@ export default function DocStudioWorkspace() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-200 dark:hover:bg-[#202227] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] flex items-center gap-1.5 transition-all cursor-pointer"
+            className="nt-btn-secondary px-3 py-2 text-xs font-bold flex items-center gap-1.5"
           >
             <Upload className="w-3.5 h-3.5" />
             Upload File
           </button>
 
-          {/* AI Action Menu */}
           <button
             onClick={handleAiSmartSlides}
             disabled={isProcessing}
-            className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 text-xs font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-1.5 transition-all cursor-pointer"
+            className="nt-btn-yellow px-3 py-2 text-xs flex items-center gap-1.5"
           >
-            <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+            <Sparkles className="w-3.5 h-3.5" />
             AI to Slides
           </button>
 
           <button
             onClick={handleAiExtractTables}
             disabled={isProcessing}
-            className="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-xs font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 transition-all cursor-pointer"
+            className="nt-btn-secondary px-3 py-2 text-xs font-bold flex items-center gap-1.5"
           >
-            <TableIcon className="w-3.5 h-3.5 text-emerald-500" />
+            <TableIcon className="w-3.5 h-3.5 text-[#15803D] dark:text-[#4ADE80]" />
             AI to Excel
           </button>
 
           <button
             onClick={handleAiSummarize}
             disabled={isProcessing}
-            className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-200 dark:hover:bg-[#202227] text-xs font-semibold text-slate-700 dark:text-[#d1d5db] flex items-center gap-1.5 transition-all cursor-pointer"
+            className="nt-btn-secondary px-3 py-2 text-xs font-bold flex items-center gap-1.5"
           >
             <Edit3 className="w-3.5 h-3.5" />
             Summarize
@@ -348,53 +336,50 @@ export default function DocStudioWorkspace() {
         </div>
       </div>
 
-      {/* AI Status Notification */}
       {statusMessage && (
-        <div className="px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2 font-mono">
+        <div className="nt-badge-yellow rounded-xl px-4 py-2.5 text-xs flex items-center gap-2 font-mono font-bold">
           <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-          {statusMessage}
+          <span>{statusMessage}</span>
         </div>
       )}
 
-      {/* Split Dual-Pane Studio */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Pane: Markdown Editor */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col h-[650px] shadow-sm">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-white/[0.06]">
+      {/* Dual Pane Studio */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div className="lg:col-span-6 nt-card p-4 flex flex-col h-[620px]">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--nt-border)]">
             <div className="flex items-center gap-2">
-              <Edit3 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-white font-mono">Document Editor</span>
+              <Edit3 className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] font-mono">
+                Document Editor
+              </span>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={handleCopy}
-                className="p-1.5 rounded-lg bg-slate-100 dark:bg-[#16171a] hover:bg-slate-200 dark:hover:bg-[#202227] text-slate-500 dark:text-[#9ca3af] text-xs flex items-center gap-1 transition cursor-pointer"
-                title="Copy Markdown"
-              >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
-            </div>
+            <button
+              onClick={handleCopy}
+              className="nt-btn-secondary px-2.5 py-1 text-xs flex items-center gap-1 font-semibold"
+              title="Copy Markdown"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-[#15803D]" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'Copied' : 'Copy'}</span>
+            </button>
           </div>
 
           <textarea
             value={content}
             onChange={(e) => handleContentChange(e.target.value)}
             placeholder="Type or paste Markdown / upload a DOCX..."
-            className="flex-1 w-full bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] rounded-lg p-4 text-xs sm:text-sm font-mono text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 resize-none overflow-y-auto leading-relaxed"
+            className="nt-input flex-1 w-full p-4 text-xs sm:text-sm font-mono resize-none overflow-y-auto leading-relaxed"
           />
         </div>
 
-        {/* Right Pane: Multi-Tab Live Preview */}
-        <div className="lg:col-span-6 bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] rounded-xl p-4 sm:p-5 flex flex-col h-[650px] shadow-sm">
-          {/* Tab Navigation */}
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-white/[0.06]">
-            <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-[#16171a] rounded-lg border border-slate-200 dark:border-white/[0.08]">
+        <div className="lg:col-span-6 nt-card p-4 flex flex-col h-[620px]">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--nt-border)]">
+            <div className="nt-well flex items-center gap-1 p-1 rounded-xl">
               <button
                 onClick={() => setActiveTab('document')}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'document'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -403,10 +388,10 @@ export default function DocStudioWorkspace() {
 
               <button
                 onClick={() => setActiveTab('slides')}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'slides'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 <Presentation className="w-3.5 h-3.5" />
@@ -415,10 +400,10 @@ export default function DocStudioWorkspace() {
 
               <button
                 onClick={() => setActiveTab('spreadsheet')}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'spreadsheet'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -426,64 +411,57 @@ export default function DocStudioWorkspace() {
               </button>
             </div>
 
-            {/* Slide Theme Picker */}
             {activeTab === 'slides' && (
-              <div className="flex items-center gap-2">
-                <select
-                  value={slideTheme}
-                  onChange={(e) => setSlideTheme(e.target.value as AdvancedSlideTheme)}
-                  className="bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-xs font-semibold text-slate-800 dark:text-white rounded-lg px-2.5 py-1 outline-none cursor-pointer"
-                >
-                  <option value="onyx-dark">Onyx Dark (Flagship)</option>
-                  <option value="dark-indigo">Dark Indigo</option>
-                  <option value="corporate-blue">Corporate Blue</option>
-                  <option value="minimal-emerald">Emerald Clean</option>
-                  <option value="sunset-modern">Sunset Modern</option>
-                </select>
-              </div>
+              <select
+                value={slideTheme}
+                onChange={(e) => setSlideTheme(e.target.value as AdvancedSlideTheme)}
+                className="nt-input text-xs font-bold px-2.5 py-1.5 cursor-pointer"
+              >
+                <option value="onyx-dark">Onyx Dark (Flagship)</option>
+                <option value="dark-indigo">Dark Indigo</option>
+                <option value="corporate-blue">Corporate Blue</option>
+                <option value="minimal-emerald">Emerald Clean</option>
+                <option value="sunset-modern">Sunset Modern</option>
+              </select>
             )}
           </div>
 
-          {/* Tab 1: Rendered Document View */}
           {activeTab === 'document' && (
-            <div className="flex-1 bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] rounded-lg p-6 overflow-y-auto prose prose-slate dark:prose-invert max-w-none text-xs sm:text-sm">
+            <div className="nt-well flex-1 p-6 overflow-y-auto prose prose-stone dark:prose-invert max-w-none text-xs sm:text-sm">
               <div dangerouslySetInnerHTML={{ __html: DocEngine.markdownToHtml(content) }} />
             </div>
           )}
 
-          {/* Tab 2: Visual Slide Carousel View */}
           {activeTab === 'slides' && (
             <div className="flex-1 flex flex-col justify-between overflow-hidden">
               {slides.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-slate-500 dark:text-[#9ca3af] text-xs">
-                  <Presentation className="w-10 h-10 mb-2 opacity-30" />
-                  No slides detected. Add headings (e.g. # Title, ## Topic) or click "AI to Slides".
+                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#746D61] dark:text-[#938B7D] text-xs p-6 text-center">
+                  <Presentation className="w-10 h-10 mb-2 opacity-35" />
+                  No slides detected. Add headings (# Title, ## Topic) or click "AI to Slides".
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col justify-between">
-                  {/* Slide Canvas */}
                   <div
-                    className={`aspect-video w-full rounded-xl border p-6 flex flex-col justify-between shadow-lg transition-all duration-300 ${
+                    className={`aspect-video w-full rounded-2xl border p-6 flex flex-col justify-between shadow-card transition-all duration-200 ${
                       slideTheme === 'corporate-blue'
-                        ? 'bg-white border-slate-200 text-slate-900'
+                        ? 'bg-white border-[var(--nt-border)] text-[#141413]'
                         : slideTheme === 'minimal-emerald'
                         ? 'bg-[#022c22] border-emerald-800 text-emerald-50'
                         : slideTheme === 'sunset-modern'
-                        ? 'bg-[#18181b] border-orange-950 text-slate-100'
-                        : 'bg-[#0a0b0e] border-[#282e3e] text-white'
+                        ? 'bg-[#1C1814] border-amber-900/60 text-[#FAF7F0]'
+                        : 'bg-[#141311] border-white/10 text-[#FAF7F0]'
                     }`}
                   >
-                    {/* Slide Header */}
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-[#FACC15] text-[#141413]">
                           {currentSlide?.layout || 'content'}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">
+                        <span className="text-[10px] opacity-65 font-mono">
                           Slide {currentSlideIdx + 1} / {slides.length}
                         </span>
                       </div>
-                      <h2 className="text-lg sm:text-xl font-bold tracking-tight mb-1">
+                      <h2 className="text-lg sm:text-xl font-extrabold tracking-tight mb-1">
                         {currentSlide?.title}
                       </h2>
                       {currentSlide?.subtitle && (
@@ -491,7 +469,6 @@ export default function DocStudioWorkspace() {
                       )}
                     </div>
 
-                    {/* Slide Body */}
                     <div className="my-auto py-2">
                       {currentSlide?.layout === 'stats' && (
                         <div className="grid grid-cols-2 gap-3 py-2">
@@ -499,11 +476,11 @@ export default function DocStudioWorkspace() {
                             ? currentSlide.bullets.slice(0, 2)
                             : ['99.9% Reliability', '10x Performance']
                           ).map((item, idx) => (
-                            <div key={idx} className="text-center p-3 bg-white/5 rounded-lg border border-white/10">
-                              <div className="text-2xl sm:text-3xl font-black text-blue-400">
+                            <div key={idx} className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
+                              <div className="text-2xl sm:text-3xl font-black text-[#FACC15]">
                                 {item.split(' - ')[0] || item.split(' ')[0]}
                               </div>
-                              <div className="text-xs text-slate-300 mt-1">
+                              <div className="text-xs opacity-80 mt-1">
                                 {item.split(' - ')[1] || item.replace(/^[0-9.%+x]+/, '').trim() || 'Key Metric'}
                               </div>
                             </div>
@@ -512,13 +489,13 @@ export default function DocStudioWorkspace() {
                       )}
 
                       {currentSlide?.layout === 'quote' && (
-                        <blockquote className="text-center italic text-sm sm:text-base opacity-90 border-l-2 border-blue-500 pl-4 py-2">
+                        <blockquote className="text-center italic text-sm sm:text-base opacity-90 border-l-2 border-[#FACC15] pl-4 py-2">
                           “{currentSlide?.quoteText || currentSlide?.title}”
                         </blockquote>
                       )}
 
                       {currentSlide?.layout === 'code' && (
-                        <div className="bg-black/60 rounded-lg p-3 font-mono text-xs text-blue-300 border border-white/10 overflow-x-auto max-h-40">
+                        <div className="bg-black/60 rounded-xl p-3 font-mono text-xs text-[#FACC15] border border-white/10 overflow-x-auto max-h-40">
                           <pre>{currentSlide?.codeSnippet?.code || '// Code preview'}</pre>
                         </div>
                       )}
@@ -529,7 +506,7 @@ export default function DocStudioWorkspace() {
                           <ul className="space-y-2 text-xs sm:text-sm">
                             {currentSlide?.bullets?.map((b, bIdx) => (
                               <li key={bIdx} className="flex items-start gap-2">
-                                <span className="text-blue-400 font-bold">•</span>
+                                <span className="text-[#FACC15] font-bold">•</span>
                                 <span className="opacity-90">{b}</span>
                               </li>
                             ))}
@@ -537,31 +514,29 @@ export default function DocStudioWorkspace() {
                         )}
                     </div>
 
-                    {/* Slide Footer */}
                     <div className="flex items-center justify-between text-[10px] opacity-60 border-t border-white/10 pt-2 font-mono">
-                      <span>NovaTools Onyx</span>
+                      <span>NovaTools Studio</span>
                       <span>16:9 Widescreen</span>
                     </div>
                   </div>
 
-                  {/* Carousel Controls */}
                   <div className="flex items-center justify-between pt-3">
                     <button
                       onClick={() => setCurrentSlideIdx((prev) => Math.max(0, prev - 1))}
                       disabled={currentSlideIdx === 0}
-                      className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-xs font-semibold text-slate-700 dark:text-white disabled:opacity-30 flex items-center gap-1 cursor-pointer"
+                      className="nt-btn-secondary px-3 py-1.5 text-xs font-bold disabled:opacity-30 flex items-center gap-1"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Prev
                     </button>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       {slides.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => setCurrentSlideIdx(idx)}
-                          className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                            currentSlideIdx === idx ? 'bg-blue-600 w-4' : 'bg-slate-300 dark:bg-white/20'
+                          className={`h-2 rounded-full transition-all cursor-pointer ${
+                            currentSlideIdx === idx ? 'bg-[#141413] dark:bg-[#FACC15] w-5' : 'bg-[#D6CFC0] dark:bg-[#36322B] w-2'
                           }`}
                         />
                       ))}
@@ -570,7 +545,7 @@ export default function DocStudioWorkspace() {
                     <button
                       onClick={() => setCurrentSlideIdx((prev) => Math.min(slides.length - 1, prev + 1))}
                       disabled={currentSlideIdx === slides.length - 1}
-                      className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-xs font-semibold text-slate-700 dark:text-white disabled:opacity-30 flex items-center gap-1 cursor-pointer"
+                      className="nt-btn-secondary px-3 py-1.5 text-xs font-bold disabled:opacity-30 flex items-center gap-1"
                     >
                       Next
                       <ChevronRight className="w-4 h-4" />
@@ -581,32 +556,31 @@ export default function DocStudioWorkspace() {
             </div>
           )}
 
-          {/* Tab 3: Extracted Tables View */}
           {activeTab === 'spreadsheet' && (
             <div className="flex-1 flex flex-col justify-between overflow-hidden">
               {tables.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-slate-500 dark:text-[#9ca3af] text-xs">
-                  <TableIcon className="w-10 h-10 mb-2 opacity-30" />
-                  No markdown tables detected. Add GFM pipe tables or click "AI to Excel".
+                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#746D61] dark:text-[#938B7D] text-xs p-6 text-center">
+                  <TableIcon className="w-10 h-10 mb-2 opacity-35" />
+                  No markdown tables detected. Add pipe tables or click "AI to Excel".
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col justify-between">
-                  <div className="flex-1 bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] rounded-lg overflow-auto">
+                  <div className="nt-well flex-1 overflow-auto">
                     <table className="w-full text-left text-xs border-collapse">
                       <thead>
-                        <tr className="bg-slate-100 dark:bg-[#121316] border-b border-slate-200 dark:border-white/[0.08] sticky top-0">
+                        <tr className="bg-[#141413] text-[#FACC15] sticky top-0">
                           {currentTable?.headers.map((h, hIdx) => (
-                            <th key={hIdx} className="p-2.5 text-slate-900 dark:text-white font-bold border-r border-slate-200 dark:border-white/[0.06]">
+                            <th key={hIdx} className="p-3 font-bold border-r border-white/10">
                               {h}
                             </th>
                           ))}
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="bg-white dark:bg-[#1F1D19]">
                         {currentTable?.rows.map((row, rIdx) => (
-                          <tr key={rIdx} className="border-b border-slate-200/60 dark:border-white/[0.04] hover:bg-slate-100 dark:hover:bg-[#1e2025]">
+                          <tr key={rIdx} className="border-b border-[var(--nt-border)] hover:bg-[#FEF7D6]/40 dark:hover:bg-[#26231E]">
                             {row.map((cell, cIdx) => (
-                              <td key={cIdx} className="p-2.5 text-slate-700 dark:text-[#d1d5db] border-r border-slate-200/60 dark:border-white/[0.04]">
+                              <td key={cIdx} className="p-3 text-[#141413] dark:text-[#FAF7F0] border-r border-[var(--nt-border)]">
                                 {cell}
                               </td>
                             ))}
@@ -616,11 +590,11 @@ export default function DocStudioWorkspace() {
                     </table>
                   </div>
 
-                  <div className="text-[11px] text-slate-500 dark:text-[#9ca3af] mt-2 flex items-center justify-between font-mono">
+                  <div className="text-[11px] text-[#746D61] dark:text-[#938B7D] mt-2 flex items-center justify-between font-mono">
                     <span>
                       {currentTable?.rows.length} row(s) • {currentTable?.headers.length} column(s)
                     </span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Ready for Excel (.xlsx) Export</span>
+                    <span className="text-[#15803D] dark:text-[#4ADE80] font-bold">Ready for Excel (.xlsx) Export</span>
                   </div>
                 </div>
               )}
@@ -629,21 +603,20 @@ export default function DocStudioWorkspace() {
         </div>
       </div>
 
-      {/* Floating Master Export Dock */}
-      <div className="bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] rounded-xl p-4 sm:p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      {/* Master Export Dock */}
+      <div className="nt-well p-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          <span className="text-xs text-slate-600 dark:text-[#9ca3af] font-mono">
+          <ShieldCheck className="w-5 h-5 text-[#15803D] dark:text-[#4ADE80]" />
+          <span className="text-xs text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold">
             {aiTier || '100% Client-Side Privacy Engine Active'}
           </span>
         </div>
 
-        {/* Master One-Click Export Buttons */}
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleDownloadPdf}
             disabled={isProcessing}
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs font-bold text-white flex items-center gap-2 transition shadow-sm cursor-pointer active:scale-95"
+            className="nt-btn-yellow px-4 py-2 text-xs flex items-center gap-2"
           >
             <Download className="w-4 h-4" />
             Download PDF (.pdf)
@@ -652,27 +625,27 @@ export default function DocStudioWorkspace() {
           <button
             onClick={handleDownloadDocx}
             disabled={isProcessing}
-            className="px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-200 dark:hover:bg-[#202227] text-xs font-bold text-slate-800 dark:text-[#d1d5db] flex items-center gap-2 transition shadow-sm cursor-pointer"
+            className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <FileText className="w-4 h-4" />
             Word (.docx)
           </button>
 
           <button
             onClick={handleDownloadPptx}
             disabled={isProcessing}
-            className="px-3.5 py-2 rounded-lg bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/40 hover:bg-orange-100 dark:hover:bg-orange-900/40 text-xs font-bold text-orange-700 dark:text-orange-300 flex items-center gap-2 transition shadow-sm cursor-pointer"
+            className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <Presentation className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+            <Presentation className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
             PowerPoint (.pptx)
           </button>
 
           <button
             onClick={handleDownloadXlsx}
             disabled={isProcessing}
-            className="px-3.5 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-2 transition shadow-sm cursor-pointer"
+            className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <FileSpreadsheet className="w-4 h-4 text-[#15803D] dark:text-[#4ADE80]" />
             Excel (.xlsx)
           </button>
 
@@ -680,7 +653,7 @@ export default function DocStudioWorkspace() {
             onClick={handlePrintPdf}
             disabled={isProcessing}
             title="Open browser vector print dialog"
-            className="px-3 py-2 rounded-lg bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-200 dark:hover:bg-[#202227] text-xs font-semibold text-slate-700 dark:text-[#9ca3af] flex items-center gap-1.5 transition cursor-pointer"
+            className="nt-btn-secondary px-3 py-2 text-xs font-bold flex items-center gap-1.5"
           >
             <Printer className="w-3.5 h-3.5" />
             Print

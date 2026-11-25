@@ -14,13 +14,12 @@ const {
 } = Astro.props;
 ---
 
-<div class={`adsense-container max-w-5xl mx-auto my-6 px-4 flex flex-col justify-center items-center rounded-xl bg-white dark:bg-[#1e2025] border border-slate-200 dark:border-white/[0.08] shadow-sm overflow-hidden relative ${className}`}>
-  <div class="flex items-center justify-between w-full px-3 py-1.5 text-[10px] font-mono text-slate-500 dark:text-[#9ca3af] uppercase tracking-wider border-b border-slate-100 dark:border-white/[0.04]">
+<div class={`adsense-container max-w-5xl mx-auto my-6 px-4 flex flex-col justify-center items-center nt-card overflow-hidden relative ${className}`}>
+  <div class="flex items-center justify-between w-full px-3 py-1.5 text-[10px] font-mono text-[#746D61] dark:text-[#938B7D] uppercase tracking-wider border-b border-[var(--nt-border)]">
     <span>Advertisement</span>
     <span>Sponsored Display</span>
   </div>
   <div class="w-full flex justify-center py-2">
-    <!-- small ads -->
     <ins
       class="adsbygoogle"
       style="display:block; width:100%; min-height:90px;"

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { GenerationHistoryItem } from '../../../engines/ttsTypes';
-import { History, Play, Download, Trash2, Clock, Volume2 } from 'lucide-react';
+import { History, Download, Trash2 } from 'lucide-react';
 
 interface GenerationHistoryProps {
   items: GenerationHistoryItem[];
@@ -33,20 +33,25 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/80 p-6 shadow-xl space-y-4">
+    <div className="nt-card p-5 sm:p-6 space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <History className="w-4 h-4 text-indigo-400" />
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider">
-            Recent Takes ({items.length})
+      <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+            <History className="w-3.5 h-3.5" />
+          </div>
+          <h4 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider">
+            Recent Takes
           </h4>
+          <span className="nt-badge-yellow px-2 py-0.5 font-mono text-[10px] font-bold">
+            {items.length}
+          </span>
         </div>
 
         <button
           type="button"
           onClick={onClear}
-          className="flex items-center gap-1 text-xs text-slate-500 hover:text-red-400 transition-colors cursor-pointer"
+          className="nt-btn-secondary flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold hover:text-[#B91C1C]"
         >
           <Trash2 className="w-3.5 h-3.5" />
           <span>Clear History</span>
@@ -61,26 +66,32 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
             <div
               key={item.id}
               onClick={() => onSelect(item)}
-              className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+              className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                 isCurrent
-                  ? 'bg-indigo-950/40 border-indigo-500/60 ring-1 ring-indigo-500/30 shadow-md'
-                  : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
+                  ? 'bg-[#FEF7D6]/85 dark:bg-[#FACC15]/10 border-[#CA8A04] ring-1 ring-[#FACC15]/40 shadow-sm'
+                  : 'nt-subcard hover:border-[var(--nt-border-strong)]'
               }`}
             >
               {/* Left Info */}
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-base shrink-0">
+                <div className="nt-well w-9 h-9 flex items-center justify-center text-base shrink-0">
                   {item.voiceFlag}
                 </div>
 
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-white">{item.voiceName}</span>
-                    <span className="text-[10px] text-slate-500">• {item.duration.toFixed(1)}s</span>
-                    <span className="text-[10px] text-slate-500">• {formatTimestamp(item.timestamp)}</span>
+                  <div className="flex items-center gap-2 font-mono">
+                    <span className="text-xs font-extrabold font-sans text-[#141413] dark:text-[#FAF7F0]">
+                      {item.voiceName}
+                    </span>
+                    <span className="text-[10px] text-[#746D61] dark:text-[#938B7D]">
+                      · {item.duration.toFixed(1)}s
+                    </span>
+                    <span className="text-[10px] text-[#746D61] dark:text-[#938B7D]">
+                      · {formatTimestamp(item.timestamp)}
+                    </span>
                   </div>
-                  <p className="text-xs text-slate-400 truncate mt-0.5 max-w-[280px] sm:max-w-md">
-                    "{item.text}"
+                  <p className="text-xs text-[#454038] dark:text-[#CBC4B6] truncate mt-0.5 max-w-[280px] sm:max-w-md">
+                    &quot;{item.text}&quot;
                   </p>
                 </div>
               </div>
@@ -91,7 +102,7 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
                   type="button"
                   onClick={(e) => handleDownload(e, item)}
                   title="Download WAV"
-                  className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-all cursor-pointer shadow-sm"
+                  className="nt-btn-secondary p-2"
                 >
                   <Download className="w-3.5 h-3.5" />
                 </button>

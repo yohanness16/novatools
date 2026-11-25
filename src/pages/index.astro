@@ -11,56 +11,55 @@ import { ShieldCheck, Lock, Code, Eye } from 'lucide-react';
   title="NovaTools - In-Browser Media, Video & PDF Utilities"
   description="High-performance, privacy-first PDF, image, video, and audio tools running instantly in your browser. Zero cloud uploads, 100% free."
 >
-  {/* Dynamic Interactive Hero Section (100vh) */}
   <HeroSection client:load />
 
-  {/* Alternating Architecture & Speed About Section */}
   <AboutSection />
 
-  {/* Interactive Bento Grid Services Section */}
   <ServicesSection />
 
-  {/* Google AdSense Display Slot */}
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <AdSenseAd slotId="5386318888" className="my-8" />
   </div>
 
   {/* Security Ledger & Open Architecture Guarantee */}
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <section class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 sm:p-8 space-y-6 shadow-sm">
-      <div class="flex items-center gap-2.5 border-b border-slate-200 dark:border-white/[0.06] pb-4 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
-        <ShieldCheck class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-        <span>SECURITY_LEDGER // ARCHITECTURE GUARANTEE</span>
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <section class="nt-window p-6 sm:p-8 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--nt-border)] pb-4 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] font-mono">
+        <div class="flex items-center gap-2.5">
+          <ShieldCheck class="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
+          <span>SECURITY_LEDGER // ARCHITECTURE GUARANTEE</span>
+        </div>
+        <span class="nt-badge-yellow px-2.5 py-0.5 text-[10px]">ZERO-KNOWLEDGE</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-            <Lock class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+        <div class="nt-subcard p-4 space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
+            <Lock class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Stateless by Default</span>
           </div>
-          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            We maintain zero databases of user files. The application runs entirely from static assets loaded into your local browser cache.
+          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Zero databases of user files. The studio executes entirely from static assets loaded into your local browser cache.
           </p>
         </div>
 
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-            <Code class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <div class="nt-subcard p-4 space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
+            <Code class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>100% Client-Side Runtime</span>
           </div>
-          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            All algorithms, from PDF manipulation to AI neural inference, execute directly on your local device CPU and GPU.
+          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Every algorithm, from vector PDF manipulation to neural speech and image masking, executes directly on your CPU and GPU.
           </p>
         </div>
 
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
-            <Eye class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <div class="nt-subcard p-4 space-y-2">
+          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
+            <Eye class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Open Verification</span>
           </div>
-          <p class="text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            Inspect network activity via Browser DevTools at any time to verify zero outbound requests transmitting payload data.
+          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Inspect network traffic via Browser DevTools at any time to confirm zero outbound requests transmitting file bytes.
           </p>
         </div>
       </div>

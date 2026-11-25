@@ -5,24 +5,16 @@ import {
   type RemoveBgProgress,
 } from '../../engines/backgroundRemoverEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
-import {
-  Image as ImageIcon,
-  Upload,
-  Download,
-  Palette,
-  Loader2,
-  AlertCircle,
-  CheckCircle2,
-  Scissors,
-} from 'lucide-react';
+import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { Download, Palette, Scissors } from 'lucide-react';
 
 const COLOR_SWATCHES = [
   { id: 'transparent', label: 'Transparent', value: 'transparent', isChecker: true },
   { id: 'white', label: 'Pure White', value: '#ffffff' },
-  { id: 'black', label: 'Dark Studio', value: '#121215' },
-  { id: 'gray', label: 'Neutral Gray', value: '#e2e8f0' },
-  { id: 'blue', label: 'Studio Blue', value: '#4F8CFF' },
-  { id: 'emerald', label: 'Mint Green', value: '#3FBE73' },
+  { id: 'black', label: 'Studio Black', value: '#141413' },
+  { id: 'cream', label: 'Warm Alabaster', value: '#F5F1E8' },
+  { id: 'yellow', label: 'Studio Yellow', value: '#FACC15' },
+  { id: 'emerald', label: 'Mint Green', value: '#15803D' },
 ];
 
 export const BackgroundRemoverWorkspace: React.FC = () => {
@@ -30,12 +22,10 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [result, setResult] = useState<RemoveBgResult | null>(null);
 
-  // Settings
   const [bgType, setBgType] = useState<'transparent' | 'color' | 'blur'>('transparent');
   const [customColor, setCustomColor] = useState<string>('#ffffff');
-  const [splitPos, setSplitPos] = useState<number>(50); // 0 to 100%
+  const [splitPos, setSplitPos] = useState<number>(50);
 
-  // Processing state
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [progressInfo, setProgressInfo] = useState<RemoveBgProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -115,11 +105,15 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-5">
       {!file ? (
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          onFilesDrop={(files) => files[0] && handleFile(files[0])}
+          icon={<Scissors className="h-5 w-5" />}
+          title="Drop image to remove background, or"
+          subtitle="Isolate foreground subjects and export transparent PNGs in real-time."
+          badgeText="100% Local AI Engine"
         >
           <input
             ref={fileInputRef}
@@ -131,34 +125,23 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-            <Scissors className="h-5 w-5" />
-          </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop image to remove background, or <span className="text-[#4F8CFF] underline">browse files</span>
-          </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Isolate subjects and export transparent PNGs in real-time. 100% local engine.
-          </p>
-        </div>
+        </WorkspaceDropzone>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
+        <div className="nt-card p-5 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
-                <span className="rounded bg-[#1B1D22] px-2 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {formatBytes(file.size)}
                 </span>
                 {result && (
-                  <span className="rounded bg-[#122D1F] px-2 py-0.5 text-[10px] font-mono text-[#3FBE73] border border-[#3FBE73]/30 flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
+                  <span className="nt-badge-success px-2.5 py-0.5 text-[10px] font-mono font-bold">
                     Isolated ({result.originalWidth}×{result.originalHeight})
                   </span>
                 )}
               </div>
-              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 {result ? 'Drag divider to inspect before/after difference' : 'Extracting foreground in memory...'}
               </p>
             </div>
@@ -170,32 +153,19 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
                 setOriginalUrl(null);
                 setResult(null);
               }}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+              className="nt-btn-secondary px-3 py-1.5 font-mono text-[11px] font-semibold self-start sm:self-auto"
             >
               Choose different image
             </button>
           </div>
 
-          {/* Interactive Before/After Split Viewer */}
           <div
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseUp={() => setIsDraggingSplit(false)}
             onMouseLeave={() => setIsDraggingSplit(false)}
-            className="relative w-full aspect-video sm:aspect-[16/10] max-h-[400px] rounded overflow-hidden bg-[#0B0C0F] border border-[#2A2D33] select-none flex items-center justify-center cursor-ew-resize"
+            className="relative w-full aspect-video sm:aspect-[16/10] max-h-[400px] rounded-xl overflow-hidden bg-checkerboard border border-[var(--nt-border)] select-none flex items-center justify-center cursor-ew-resize shadow-well"
           >
-            {/* Checkerboard Pattern for Transparency */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'linear-gradient(45deg, #18181b 25%, transparent 25%), linear-gradient(-45deg, #18181b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #18181b 75%), linear-gradient(-45deg, transparent 75%, #18181b 75%)',
-                backgroundSize: '16px 16px',
-                backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px',
-              }}
-            />
-
-            {/* After Image (Full background) */}
             {result && (
               <img
                 src={result.dataUrl}
@@ -204,7 +174,6 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               />
             )}
 
-            {/* Before Image (Clipped overlay) */}
             {originalUrl && (
               <div
                 className="absolute inset-0 overflow-hidden"
@@ -222,44 +191,43 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
               </div>
             )}
 
-            {/* Splitter Divider Handle */}
             <div
-              className="absolute top-0 bottom-0 w-[1px] bg-[#4F8CFF] z-20 pointer-events-none"
+              className="absolute top-0 bottom-0 w-0.5 bg-[#141413] dark:bg-[#FACC15] z-20 pointer-events-none"
               style={{ left: `${splitPos}%` }}
             >
               <div
                 onMouseDown={() => setIsDraggingSplit(true)}
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-6 w-6 items-center justify-center rounded bg-[#131418] text-[#ECEDEF] border border-[#2A2D33] shadow-md pointer-events-auto cursor-ew-resize"
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-[#FACC15] text-[#141413] border-2 border-[#141413] shadow-card pointer-events-auto cursor-ew-resize font-mono text-[10px] font-bold"
               >
-                <span className="font-mono text-[9px] text-[#8B8F98]">⟷</span>
+                ⟷
               </div>
             </div>
 
-            {/* Badge Labels */}
-            <div className="absolute top-2.5 left-2.5 bg-[#131418]/90 border border-[#2A2D33] px-2 py-0.5 rounded font-mono text-[10px] text-[#8B8F98] pointer-events-none z-10">
+            <div className="nt-card absolute top-2.5 left-2.5 px-2.5 py-1 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0] pointer-events-none z-10">
               Original
             </div>
-            <div className="absolute top-2.5 right-2.5 bg-[#16233F]/90 border border-[#4F8CFF]/30 px-2 py-0.5 rounded font-mono text-[10px] text-[#4F8CFF] pointer-events-none z-10 font-semibold">
+            <div className="nt-badge-dark absolute top-2.5 right-2.5 px-2.5 py-1 font-mono text-[10px] font-bold pointer-events-none z-10">
               Background Removed
             </div>
           </div>
 
-          {/* Background Replacement Bar */}
-          <div className="bg-[#1B1D22] p-3 rounded border border-[#2A2D33] space-y-2">
+          <div className="nt-well p-4 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5">
-                <Palette className="h-3.5 w-3.5 text-[#4F8CFF]" />
+              <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                <Palette className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 Background Replacement Backdrop
               </label>
 
-              <span className="text-[10px] font-mono text-[#8B8F98]">
+              <span className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
                 Mode: {bgType === 'transparent' ? 'Transparent PNG' : customColor}
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
               {COLOR_SWATCHES.map((swatch) => {
-                const isSelected = bgType === (swatch.id === 'transparent' ? 'transparent' : 'color') && (swatch.id === 'transparent' || customColor === swatch.value);
+                const isSelected =
+                  bgType === (swatch.id === 'transparent' ? 'transparent' : 'color') &&
+                  (swatch.id === 'transparent' || customColor === swatch.value);
 
                 return (
                   <button
@@ -271,19 +239,19 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
                         handleColorChange('color', swatch.value);
                       }
                     }}
-                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded border text-xs font-medium transition-colors ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
-                        : 'border-[#2A2D33] bg-[#131418] text-[#8B8F98] hover:text-[#ECEDEF]'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        : 'nt-btn-secondary'
                     }`}
                   >
                     <span
-                      className="h-3.5 w-3.5 rounded-full border border-white/20 shrink-0"
+                      className="h-3.5 w-3.5 rounded-full border border-black/20 shrink-0"
                       style={
                         swatch.isChecker
                           ? {
                               backgroundImage:
-                                'linear-gradient(45deg, #71717a 25%, transparent 25%), linear-gradient(-45deg, #71717a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #71717a 75%), linear-gradient(-45deg, transparent 75%, #71717a 75%)',
+                                'linear-gradient(45deg, #9f9686 25%, transparent 25%), linear-gradient(-45deg, #9f9686 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #9f9686 75%), linear-gradient(-45deg, transparent 75%, #9f9686 75%)',
                               backgroundSize: '6px 6px',
                             }
                           : { backgroundColor: swatch.value }
@@ -294,57 +262,33 @@ export const BackgroundRemoverWorkspace: React.FC = () => {
                 );
               })}
 
-              {/* Custom Hex Color Picker */}
-              <div className="flex items-center gap-1.5 pl-2 border-l border-[#2A2D33]">
+              <div className="flex items-center gap-1.5 pl-2 border-l border-[var(--nt-border)]">
                 <input
                   type="color"
                   value={customColor}
                   onChange={(e) => handleColorChange('color', e.target.value)}
-                  className="h-6 w-6 rounded border border-[#2A2D33] bg-transparent cursor-pointer"
+                  className="h-7 w-7 rounded-lg border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   title="Pick custom color"
                 />
-                <span className="text-[10px] text-[#8B8F98] font-mono">{customColor}</span>
+                <span className="text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono">{customColor}</span>
               </div>
             </div>
           </div>
 
-          {/* Action Footer */}
-          <div>
-            <button
-              onClick={handleDownload}
-              disabled={!result || isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40"
-            >
-              <Download className="h-3.5 w-3.5" />
-              <span>Download Cutout PNG</span>
-            </button>
-          </div>
+          <button
+            onClick={handleDownload}
+            disabled={!result || isProcessing}
+            className="w-full flex items-center justify-center gap-2 nt-btn-yellow py-3 px-4 text-xs disabled:opacity-40"
+          >
+            <Download className="h-4 w-4" />
+            <span>Download Cutout PNG</span>
+          </button>
 
-          {/* Progress Box */}
           {isProcessing && progressInfo && (
-            <div className="rounded bg-[#16233F] border border-[#4F8CFF]/30 p-3 space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[#ECEDEF] flex items-center gap-2">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4F8CFF]" />
-                  {progressInfo.message}
-                </span>
-                <span className="font-mono text-[#4F8CFF] font-bold">{progressInfo.progress}%</span>
-              </div>
-              <div className="h-1 w-full overflow-hidden rounded bg-[#131418]">
-                <div
-                  className="h-full bg-[#4F8CFF] transition-all duration-300 rounded"
-                  style={{ width: `${progressInfo.progress}%` }}
-                />
-              </div>
-            </div>
+            <WorkspaceProgress message={progressInfo.message} progress={progressInfo.progress} />
           )}
 
-          {error && (
-            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+          {error && <WorkspaceAlert variant="error" message={error} />}
         </div>
       )}
     </div>

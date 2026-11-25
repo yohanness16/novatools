@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import {
   FileText,
   Upload,
-  Download,
   Copy,
   Check,
   RefreshCw,
@@ -10,12 +9,11 @@ import {
   FileCode,
   ShieldCheck,
   Layers,
-  Sparkles,
-  ArrowRight,
   BookOpen,
 } from 'lucide-react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { DocEngine } from '../../engines/docEngine';
+import { WorkspaceDropzone } from './WorkspaceUI';
 
 export default function PdfToDocWorkspace() {
   const [extractedMarkdown, setExtractedMarkdown] = useState<string>('');
@@ -32,10 +30,7 @@ export default function PdfToDocWorkspace() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processPdfFile = async (file: File) => {
     if (!file.name.endsWith('.pdf') && file.type !== 'application/pdf') {
       setStatusMessage('Please select a valid .pdf document.');
       return;
@@ -72,6 +67,11 @@ export default function PdfToDocWorkspace() {
       setTimeout(() => setStatusMessage(''), 4000);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) await processPdfFile(file);
   };
 
   const handleDownloadDocx = async () => {
@@ -125,7 +125,6 @@ export default function PdfToDocWorkspace() {
   const [activeViewMode, setActiveViewMode] = useState<'preview' | 'editor' | 'visual'>('preview');
   const [pageCanvasUrl, setPageCanvasUrl] = useState<string | null>(null);
 
-  // Render canvas visual thumbnail whenever selected page changes
   React.useEffect(() => {
     if (pdfBuffer && pageCount > 0) {
       PdfEngine.renderPageToCanvas(pdfBuffer, selectedPageIdx + 1, 1.2)
@@ -146,21 +145,20 @@ export default function PdfToDocWorkspace() {
   const metadata = DocEngine.getDocMetadata(extractedMarkdown, docTitle);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
-      {/* Top Header Card */}
-      <div className="bg-surface/80 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="w-full space-y-5">
+      <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-            <FileText className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shrink-0">
+            <FileText className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-zinc-100 flex items-center gap-2">
-              PDF to Word (DOCX) & Markdown Converter
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2 flex-wrap">
+              <span>PDF to Word (DOCX) & Markdown</span>
+              <span className="nt-badge-yellow text-[10px] px-2.5 py-0.5 font-mono font-bold">
                 Lossless Typography
               </span>
-            </h1>
-            <p className="text-xs text-zinc-400 flex items-center gap-2 mt-1">
+            </h2>
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] flex items-center gap-2 mt-0.5 font-mono">
               <span>{pageCount} page(s)</span>
               <span>•</span>
               <span>{metadata.wordCount} words extracted</span>
@@ -170,7 +168,6 @@ export default function PdfToDocWorkspace() {
           </div>
         </div>
 
-        {/* Action Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
           <input
             type="file"
@@ -181,7 +178,7 @@ export default function PdfToDocWorkspace() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center gap-1.5 transition shadow-glow-sm"
+            className="nt-btn-yellow px-4 py-2 text-xs flex items-center gap-1.5"
           >
             <Upload className="w-3.5 h-3.5" />
             Upload PDF
@@ -190,47 +187,34 @@ export default function PdfToDocWorkspace() {
       </div>
 
       {statusMessage && (
-        <div className="px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-blue-300 flex items-center gap-2 animate-pulse">
+        <div className="nt-badge-yellow rounded-xl px-4 py-2.5 text-xs flex items-center gap-2 font-mono font-bold">
           <RefreshCw className="w-3.5 h-3.5 animate-spin" />
           <span>{statusMessage}</span>
           {progressPercent > 0 && progressPercent < 100 && (
-            <span className="ml-auto font-mono text-[11px] font-bold">{progressPercent}%</span>
+            <span className="ml-auto">{progressPercent}%</span>
           )}
         </div>
       )}
 
-      {/* Main Workspace Area */}
       {!extractedMarkdown ? (
-        /* Empty State Dropzone */
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-zinc-800 hover:border-blue-500/50 rounded-2xl p-12 text-center cursor-pointer transition-all bg-surface/40 hover:bg-surface/60 flex flex-col items-center justify-center space-y-4"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-            <Upload className="w-8 h-8" />
-          </div>
-          <div>
-            <h3 className="text-base font-bold text-zinc-100">Drop your PDF document here</h3>
-            <p className="text-xs text-zinc-400 mt-1 max-w-sm">
-              Extracts text layers, headings, bullet lists, and converts into editable Microsoft Word (.docx) and Markdown with 100% privacy.
-            </p>
-          </div>
-          <span className="px-3.5 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-semibold text-zinc-300">
-            Select PDF File
-          </span>
-        </div>
+          onFilesDrop={(files) => files[0] && processPdfFile(files[0])}
+          icon={<Upload className="w-5 h-5" />}
+          title="Drop your PDF document here, or"
+          subtitle="Extracts text layers, headings, and lists into editable Microsoft Word (.docx) & Markdown."
+          badgeText="100% Local Extraction"
+        />
       ) : (
-        /* Split Extracted View & Page Inspector */
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left: Page Navigator */}
-            <div className="lg:col-span-4 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-blue-400" />
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div className="lg:col-span-4 nt-card p-4 flex flex-col h-[620px]">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--nt-border)]">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+                  <Layers className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   Pages ({pages.length})
                 </span>
-                <span className="text-[11px] text-zinc-500 font-mono">Select page</span>
+                <span className="text-[11px] text-[#746D61] font-mono">Select page</span>
               </div>
 
               <div className="flex-1 overflow-y-auto space-y-2 pr-1">
@@ -238,19 +222,19 @@ export default function PdfToDocWorkspace() {
                   <button
                     key={idx}
                     onClick={() => setSelectedPageIdx(idx)}
-                    className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex items-start justify-between gap-2 ${
+                    className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex items-start justify-between gap-2 cursor-pointer ${
                       selectedPageIdx === idx
-                        ? 'bg-blue-600/20 border-blue-500/50 text-blue-200'
-                        : 'bg-zinc-950/60 border-zinc-900 text-zinc-400 hover:border-zinc-700'
+                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 border-[#141413] dark:border-[#FACC15] text-[#141413] dark:text-[#FAF7F0] shadow-sm'
+                        : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
                     }`}
                   >
                     <div>
-                      <div className="font-bold text-zinc-200">Page {p.pageNumber}</div>
-                      <p className="text-[11px] opacity-70 line-clamp-2 mt-0.5 font-mono">
+                      <div className="font-extrabold">Page {p.pageNumber}</div>
+                      <p className="text-[11px] opacity-75 line-clamp-2 mt-0.5 font-mono">
                         {p.text.slice(0, 80) || 'Empty or image page'}
                       </p>
                     </div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+                    <span className="nt-badge-dark text-[10px] font-mono px-2 py-0.5 shrink-0 font-bold">
                       {p.text.split(/\s+/).filter(Boolean).length} w
                     </span>
                   </button>
@@ -258,17 +242,15 @@ export default function PdfToDocWorkspace() {
               </div>
             </div>
 
-            {/* Right: Multi-Mode Live Document Inspector */}
-            <div className="lg:col-span-8 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-              {/* Header Mode Switcher */}
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-                <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-xl border border-zinc-800">
+            <div className="lg:col-span-8 nt-card p-4 flex flex-col h-[620px]">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--nt-border)]">
+                <div className="nt-well flex items-center gap-1 p-1 rounded-xl">
                   <button
                     onClick={() => setActiveViewMode('preview')}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'preview'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-zinc-400 hover:text-zinc-200'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -277,10 +259,10 @@ export default function PdfToDocWorkspace() {
 
                   <button
                     onClick={() => setActiveViewMode('editor')}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'editor'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-zinc-400 hover:text-zinc-200'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <FileCode className="w-3.5 h-3.5" />
@@ -289,10 +271,10 @@ export default function PdfToDocWorkspace() {
 
                   <button
                     onClick={() => setActiveViewMode('visual')}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       activeViewMode === 'visual'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-zinc-400 hover:text-zinc-200'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
+                        : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                     }`}
                   >
                     <BookOpen className="w-3.5 h-3.5" />
@@ -302,17 +284,15 @@ export default function PdfToDocWorkspace() {
 
                 <button
                   onClick={handleCopy}
-                  className="p-1.5 rounded-lg bg-zinc-800/60 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 text-xs flex items-center gap-1 transition"
-                  title="Copy Full Markdown"
+                  className="nt-btn-secondary px-3 py-1.5 text-xs flex items-center gap-1 font-bold"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span className="text-[11px]">Copy All</span>
+                  {copied ? <Check className="w-3.5 h-3.5 text-[#15803D]" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied' : 'Copy All'}</span>
                 </button>
               </div>
 
-              {/* View Mode 1: Rendered HTML/Word Document */}
               {activeViewMode === 'preview' && (
-                <div className="flex-1 bg-white text-zinc-900 rounded-xl p-8 overflow-y-auto shadow-inner border border-zinc-300 prose prose-indigo max-w-none text-xs sm:text-sm">
+                <div className="flex-1 bg-white text-[#141413] rounded-xl p-8 overflow-y-auto shadow-well border border-[var(--nt-border)] prose prose-stone max-w-none text-xs sm:text-sm">
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DocEngine.markdownToHtml(pages[selectedPageIdx]?.markdown || extractedMarkdown),
@@ -321,27 +301,25 @@ export default function PdfToDocWorkspace() {
                 </div>
               )}
 
-              {/* View Mode 2: Editable Markdown Editor */}
               {activeViewMode === 'editor' && (
                 <textarea
                   value={pages[selectedPageIdx]?.markdown || ''}
                   onChange={(e) => handlePageMarkdownChange(e.target.value)}
                   placeholder="Edit extracted text or markdown..."
-                  className="flex-1 w-full bg-zinc-950/80 border border-zinc-900 rounded-xl p-4 text-xs font-mono text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 resize-none overflow-y-auto leading-relaxed shadow-inner"
+                  className="nt-input flex-1 w-full p-4 text-xs font-mono resize-none overflow-y-auto leading-relaxed"
                 />
               )}
 
-              {/* View Mode 3: Original Visual PDF Canvas Snapshot */}
               {activeViewMode === 'visual' && (
-                <div className="flex-1 bg-zinc-950/80 border border-zinc-900 rounded-xl p-4 flex items-center justify-center overflow-auto">
+                <div className="nt-well flex-1 p-4 flex items-center justify-center overflow-auto">
                   {pageCanvasUrl ? (
                     <img
                       src={pageCanvasUrl}
                       alt={`PDF Page ${selectedPageIdx + 1}`}
-                      className="max-h-full max-w-full rounded shadow-2xl border border-zinc-700 object-contain"
+                      className="max-h-full max-w-full rounded-xl shadow-card border border-[var(--nt-border)] object-contain"
                     />
                   ) : (
-                    <div className="text-xs text-zinc-500 flex items-center gap-2">
+                    <div className="text-xs text-[#746D61] flex items-center gap-2 font-mono">
                       <RefreshCw className="w-4 h-4 animate-spin" /> Rendering page visual...
                     </div>
                   )}
@@ -350,12 +328,11 @@ export default function PdfToDocWorkspace() {
             </div>
           </div>
 
-          {/* Master Export Dock */}
-          <div className="bg-surface/90 backdrop-blur-xl border border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+          <div className="nt-well p-4 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              <span className="text-xs text-zinc-400">
-                100% Client-Side Private • Extracted directly inside browser memory
+              <ShieldCheck className="w-5 h-5 text-[#15803D] dark:text-[#4ADE80]" />
+              <span className="text-xs text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold">
+                100% Client-Side Private • Extracted inside browser memory
               </span>
             </div>
 
@@ -363,7 +340,7 @@ export default function PdfToDocWorkspace() {
               <button
                 onClick={handleDownloadDocx}
                 disabled={isProcessing}
-                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white flex items-center gap-2 transition shadow-glow-sm"
+                className="nt-btn-yellow px-4 py-2 text-xs flex items-center gap-2"
               >
                 <FileText className="w-4 h-4" />
                 Download Word (.docx)
@@ -371,17 +348,17 @@ export default function PdfToDocWorkspace() {
 
               <button
                 onClick={handleDownloadMarkdown}
-                className="px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-xs font-semibold text-zinc-200 flex items-center gap-1.5 transition"
+                className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-1.5"
               >
-                <FileCode className="w-4 h-4 text-indigo-400" />
+                <FileCode className="w-4 h-4" />
                 Markdown (.md)
               </button>
 
               <button
                 onClick={handleDownloadPlainText}
-                className="px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-xs font-semibold text-zinc-200 flex items-center gap-1.5 transition"
+                className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-1.5"
               >
-                <FileText className="w-4 h-4 text-zinc-400" />
+                <FileText className="w-4 h-4" />
                 Plain Text (.txt)
               </button>
             </div>

@@ -8,71 +8,71 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
   description="Have questions, suggestions, or need assistance? Contact the NovaTools development team."
 >
   <div class="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
-    <div class="space-y-2 border-b border-slate-200 dark:border-white/[0.08] pb-4">
-      <div class="inline-flex items-center gap-1.5 rounded border border-blue-500/30 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 text-xs font-mono font-medium text-blue-600 dark:text-blue-400">
+    <div class="nt-window p-6 sm:p-7 space-y-3">
+      <div class="inline-flex items-center gap-1.5 rounded-full border border-[#D9A700]/40 bg-[#FEF7D6] dark:bg-[#FACC15]/15 px-3 py-1 text-xs font-mono font-bold text-[#141413] dark:text-[#FACC15]">
         <Mail class="h-3.5 w-3.5" />
         <span>Developer Support Desk</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
         Contact & System Feedback
       </h1>
-      <p class="text-xs text-slate-600 dark:text-[#9ca3af]">
+      <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6]">
         Submit bug reports, feature proposals, or codec inquiries directly to the engineering team.
       </p>
     </div>
 
-    <div class="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+    <div class="nt-card p-6 sm:p-7">
       <form class="space-y-4" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden'); this.reset();">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-900 dark:text-white mb-1.5">Your Name</label>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Your Name</label>
             <input
               type="text"
               required
               placeholder="e.g. Alex"
-              class="w-full rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+              class="nt-input w-full px-3.5 py-2.5 text-xs"
             />
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-900 dark:text-white mb-1.5">Email Address</label>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Email Address</label>
             <input
               type="email"
               required
               placeholder="alex@example.com"
-              class="w-full rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+              class="nt-input w-full px-3.5 py-2.5 text-xs"
             />
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-900 dark:text-white mb-1.5">Category</label>
-          <select class="w-full rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] px-3.5 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Category</label>
+          <select class="nt-input w-full px-3.5 py-2.5 text-xs">
             <option>General Feedback / Bug Report</option>
             <option>PDF Suite Runtime Issue</option>
             <option>Image Suite / Canvas Issue</option>
             <option>Video / WebCodecs Issue</option>
-            <option>OpenAI Whisper Subtitle Transcription</option>
+            <option>Whisper Subtitle Transcription</option>
           </select>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-900 dark:text-white mb-1.5">Message</label>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Message</label>
           <textarea
             rows="4"
             required
             placeholder="Describe the issue, reproduction steps, or format requirements..."
-            class="w-full rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] p-3 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-blue-500 focus:outline-none resize-none font-mono"
+            class="nt-input w-full p-3.5 text-xs resize-none font-mono"
           ></textarea>
         </div>
 
-        <div id="contact-success" class="hidden flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 p-3 text-xs text-emerald-700 dark:text-emerald-400">
+        <div id="contact-success" class="hidden nt-badge-success rounded-xl flex items-center gap-2 p-3 text-xs font-semibold">
           <CheckCircle2 class="h-4 w-4 shrink-0" />
           <span>Message logged. We will review your note shortly.</span>
         </div>
 
         <button
           type="submit"
-          class="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 py-2.5 px-4 text-xs font-bold text-white transition-colors"
+          class="w-full flex items-center justify-center gap-2 nt-btn-yellow py-3 px-4 text-xs"
         >
           <Send class="h-3.5 w-3.5" />
           <span>Submit Note</span>

@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, downloadBlob, readFileAsArrayBuffer } from '../../lib/utils';
+import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
 import JSZip from 'jszip';
-import { Upload, FileText, Scissors, Archive, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Upload, Scissors, Archive, Loader2 } from 'lucide-react';
 
 export const PdfSplitWorkspace: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -79,11 +80,15 @@ export const PdfSplitWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-5">
       {!file ? (
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          onFilesDrop={(files) => files[0] && handleFile(files[0])}
+          icon={<Upload className="h-5 w-5" />}
+          title="Drop PDF to split or extract, or"
+          subtitle="Extract custom page ranges or burst all pages into a ZIP archive."
+          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -95,22 +100,13 @@ export const PdfSplitWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-            <Upload className="h-5 w-5" />
-          </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop PDF to split or extract, or <span className="text-[#4F8CFF] underline">browse files</span>
-          </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Extract page intervals or burst all pages to ZIP. 100% local processing.
-          </p>
-        </div>
+        </WorkspaceDropzone>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#2A2D33] pb-3">
+        <div className="nt-card p-5 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
-              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 Total Pages: {pageCount} · {formatBytes(file.size)}
               </p>
             </div>
@@ -120,22 +116,21 @@ export const PdfSplitWorkspace: React.FC = () => {
                 setBuffer(null);
                 setSuccessMsg(null);
               }}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+              className="nt-btn-secondary px-3 py-1.5 font-mono text-[11px] font-semibold"
             >
               Choose different file
             </button>
           </div>
 
-          {/* Extraction Modes */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Mode 1: Custom Range */}
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 space-y-2.5 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Custom Range */}
+            <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#ECEDEF]">
-                  <Scissors className="h-3.5 w-3.5 text-[#4F8CFF]" />
+                <div className="flex items-center gap-2 text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                  <Scissors className="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Extract Custom Page Range</span>
                 </div>
-                <p className="text-[11px] text-[#8B8F98]">
+                <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6]">
                   Enter comma-separated page ranges (e.g. 1-3, 5, 7-{pageCount || 10})
                 </p>
                 <input
@@ -143,14 +138,14 @@ export const PdfSplitWorkspace: React.FC = () => {
                   value={rangeStr}
                   onChange={(e) => setRangeStr(e.target.value)}
                   placeholder="e.g. 1-3, 5"
-                  className="w-full rounded border border-[#2A2D33] bg-[#131418] px-3 py-1.5 font-mono text-xs text-[#ECEDEF] focus:border-[#4F8CFF] focus:outline-none"
+                  className="nt-input w-full px-3 py-2 font-mono text-xs"
                 />
               </div>
 
               <button
                 onClick={handleExtractRange}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-1.5 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2 px-3 text-xs font-semibold text-white transition-colors disabled:opacity-40"
+                className="w-full flex items-center justify-center gap-2 nt-btn-yellow py-2.5 px-3 text-xs disabled:opacity-40"
               >
                 {isProcessing ? (
                   <>
@@ -166,17 +161,17 @@ export const PdfSplitWorkspace: React.FC = () => {
               </button>
             </div>
 
-            {/* Mode 2: Burst All Pages */}
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 space-y-2.5 flex flex-col justify-between">
+            {/* Burst All */}
+            <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#ECEDEF]">
-                  <Archive className="h-3.5 w-3.5 text-[#3FBE73]" />
+                <div className="flex items-center gap-2 text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                  <Archive className="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
                   <span>Burst All Pages into Individual Files</span>
                 </div>
-                <p className="text-[11px] text-[#8B8F98]">
+                <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6]">
                   Extract every page as a standalone PDF bundled into a ZIP archive.
                 </p>
-                <div className="font-mono text-[11px] text-[#8B8F98] bg-[#131418] p-1.5 rounded border border-[#2A2D33]">
+                <div className="nt-subcard font-mono text-[11px] text-[#454038] dark:text-[#CBC4B6] px-3 py-2">
                   Will output {pageCount} single-page PDF files
                 </div>
               </div>
@@ -184,7 +179,7 @@ export const PdfSplitWorkspace: React.FC = () => {
               <button
                 onClick={handleBurstAll}
                 disabled={isProcessing}
-                className="w-full flex items-center justify-center gap-1.5 rounded bg-[#122D1F] hover:bg-[#163827] border border-[#3FBE73]/40 py-2 px-3 text-xs font-semibold text-[#3FBE73] transition-colors disabled:opacity-40"
+                className="w-full flex items-center justify-center gap-2 nt-btn-primary py-2.5 px-3 text-xs font-bold disabled:opacity-40"
               >
                 {isProcessing ? (
                   <>
@@ -201,18 +196,8 @@ export const PdfSplitWorkspace: React.FC = () => {
             </div>
           </div>
 
-          {error && (
-            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-          {successMsg && (
-            <div className="flex items-center gap-2 rounded bg-[#122D1F] border border-[#3FBE73]/40 p-3 text-xs text-[#3FBE73]">
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>{successMsg}</span>
-            </div>
-          )}
+          {error && <WorkspaceAlert variant="error" message={error} />}
+          {successMsg && <WorkspaceAlert variant="success" message={successMsg} />}
         </div>
       )}
     </div>

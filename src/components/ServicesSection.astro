@@ -1,203 +1,257 @@
 ---
-import { Layers, Image as ImageIcon, Video, FileText, Code2, ArrowRight, ShieldCheck, Volume2, Wand2 } from 'lucide-react';
+import { TOOLS } from '../lib/toolsData';
+import {
+  Layers,
+  Image as ImageIcon,
+  Video,
+  FileText,
+  Workflow,
+  Code2,
+  ArrowRight,
+  Wand2,
+} from 'lucide-react';
+
+const pdfCount = TOOLS.filter((t) => t.category === 'pdf').length;
+const imageCount = TOOLS.filter((t) => t.category === 'image').length;
+const videoCount = TOOLS.filter((t) => t.category === 'video').length;
+const docCount = TOOLS.filter((t) => t.category === 'document').length;
+const diagramCount = TOOLS.filter((t) => t.category === 'diagram').length;
+const svgCount = TOOLS.filter((t) => t.category === 'svg').length;
 ---
 
-<section id="services" class="w-full py-16 sm:py-24 relative overflow-hidden border-t border-slate-200 dark:border-white/[0.08] bg-slate-50/50 dark:bg-[#121316]">
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-    
+<section id="services" class="w-full py-16 sm:py-24 border-t border-[var(--nt-border)] bg-[#EFE9DC]/65 dark:bg-[#0E0D0B]/70">
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
     {/* Section Header */}
-    <div class="text-center max-w-2xl mx-auto space-y-3">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
-        <span>TOOL_SUITE_CATALOG</span>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="space-y-2.5 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--nt-border)] bg-white dark:bg-[#1F1D19] text-xs font-mono font-semibold text-[#141413] dark:text-[#FAF7F0] shadow-sm">
+          <span class="h-2 w-2 rounded-full bg-[#141413] dark:bg-[#FACC15]"></span>
+          <span>DESKTOP_APP_LAUNCHER</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+          Six focused utility suites
+        </h2>
+        <p class="text-sm sm:text-base text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+          Open any workspace straight in your browser. Zero installs, zero logins, zero file uploads.
+        </p>
       </div>
-      <h2 class="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-        Comprehensive Utility Grid
-      </h2>
-      <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-        Six specialized engines engineered for precision client-side execution with zero cloud dependencies.
-      </p>
+      <div class="font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
+        {TOOLS.length} Local Engines Ready
+      </div>
     </div>
 
-    {/* Bento Grid Container */}
+    {/* Asymmetric Bento Launcher Grid (7/5, 6/6, 5/7) */}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
-      
-      {/* BENTO CARD 1: PDF Manipulation (Large - Col Span 7) */}
+      {/* 1. PDF Suite (7 cols) */}
       <a
         href="/pdf"
-        class="group relative md:col-span-2 lg:col-span-7 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 flex flex-col justify-between overflow-hidden transition-all duration-200 hover:border-blue-500/50 hover:shadow-lg"
+        class="group md:col-span-2 lg:col-span-7 nt-card-interactive p-6 flex flex-col justify-between overflow-hidden"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40">
-              <Layers class="h-4 w-4" />
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-sm">
+              <Layers class="h-5 w-5" />
             </div>
-            <span class="font-mono text-[11px] text-slate-500 dark:text-[#9ca3af]">ENGINE_01</span>
+            <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {pdfCount} TOOLS
+            </span>
           </div>
 
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight pt-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            PDF Manipulation & Fusion
+          <h3 class="text-xl font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight pt-1">
+            PDF Manipulation & Security
           </h3>
-          <p class="text-xs sm:text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed max-w-md">
-            Merge multi-page documents, split chapters, protect with AES password encryption, redact annotations, and re-order pages instantly.
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed max-w-md">
+            Merge multi-page documents, split intervals, number pages, rotate, encrypt with passwords, and extract high-DPI page renders.
           </p>
         </div>
 
-        {/* UI Preview Area */}
-        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/[0.04] space-y-3">
-          <div class="flex items-center justify-center gap-3 py-3">
-            <div class="h-16 w-14 rounded bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] p-2 -rotate-6 shadow-sm flex flex-col justify-between">
-              <span class="font-mono text-[8px] text-slate-400">01</span>
-              <div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+        <div class="mt-6 pt-4 border-t border-[var(--nt-border)] space-y-4">
+          <div class="nt-well flex items-center justify-center gap-3 py-4 px-3">
+            <div class="nt-card h-16 w-14 p-2 -rotate-6 flex flex-col justify-between">
+              <span class="font-mono text-[8px] text-[#746D61]">01</span>
+              <div class="h-1 w-full bg-[#EAE3D4] dark:bg-[#36322B] rounded-full"></div>
             </div>
-            <div class="h-20 w-16 rounded bg-blue-50 dark:bg-[#1a2333] border-2 border-blue-500 p-2.5 z-10 shadow-md flex flex-col justify-between scale-105">
-              <span class="font-mono text-[8px] font-bold text-blue-600 dark:text-blue-400">MERGE</span>
+            <div class="nt-card h-20 w-16 border-2 border-[#141413] dark:border-[#FACC15] p-2.5 z-10 flex flex-col justify-between scale-105">
+              <span class="font-mono text-[8px] font-bold text-[#141413] dark:text-[#FACC15]">MERGE</span>
               <div class="space-y-1">
-                <div class="h-1 w-full bg-blue-400/50 rounded"></div>
-                <div class="h-1 w-2/3 bg-blue-400/50 rounded"></div>
+                <div class="h-1 w-full bg-[#FACC15] rounded-full"></div>
+                <div class="h-1 w-2/3 bg-[#141413] dark:bg-[#FAF7F0] rounded-full"></div>
               </div>
             </div>
-            <div class="h-16 w-14 rounded bg-slate-100 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] p-2 rotate-6 shadow-sm flex flex-col justify-between">
-              <span class="font-mono text-[8px] text-slate-400">02</span>
-              <div class="h-1 w-full bg-slate-300 dark:bg-slate-700 rounded"></div>
+            <div class="nt-card h-16 w-14 p-2 rotate-6 flex flex-col justify-between">
+              <span class="font-mono text-[8px] text-[#746D61]">02</span>
+              <div class="h-1 w-full bg-[#EAE3D4] dark:bg-[#36322B] rounded-full"></div>
             </div>
           </div>
 
-          <div class="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-            <span>10 Tools Available</span>
-            <span class="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold group-hover:underline">
-              Launch Suite <ArrowRight class="h-3 w-3" />
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-[#746D61] dark:text-[#938B7D]">Merge · Split · Protect · Numberer</span>
+            <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+              Open Suite <ArrowRight class="h-3.5 w-3.5" />
             </span>
           </div>
         </div>
       </a>
 
-      {/* BENTO CARD 2: AI Background Removal (Col Span 5) */}
+      {/* 2. Image Suite (5 cols) */}
       <a
         href="/image"
-        class="group relative md:col-span-2 lg:col-span-5 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-6 flex flex-col justify-between overflow-hidden transition-all duration-200 hover:border-blue-500/50 hover:shadow-lg"
+        class="group md:col-span-2 lg:col-span-5 nt-card-interactive p-6 flex flex-col justify-between overflow-hidden"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
-              <ImageIcon class="h-4 w-4" />
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FACC15] text-[#141413] border border-[#D4A900] shadow-sm">
+              <ImageIcon class="h-5 w-5" />
             </div>
-            <span class="font-mono text-[11px] text-slate-500 dark:text-[#9ca3af]">ENGINE_02</span>
+            <span class="nt-badge-dark px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {imageCount} TOOLS
+            </span>
           </div>
 
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight pt-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <h3 class="text-xl font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight pt-1">
             Image Studio & Cutout
           </h3>
-          <p class="text-xs sm:text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            AI neural background removal, format converter (AVIF, WebP, PNG), lossless compression, and EXIF metadata sanitizer.
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            AI background removal, lossless compression, WebP/AVIF conversion, pixel resizing, and EXIF GPS metadata scrubbing.
           </p>
         </div>
 
-        {/* UI Preview Area */}
-        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/[0.04] space-y-3">
-          <div class="h-20 w-full rounded-lg border border-slate-200 dark:border-white/[0.08] bg-checkerboard flex items-center justify-center relative overflow-hidden">
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] shadow-sm text-xs font-mono text-slate-800 dark:text-white">
-              <Wand2 class="h-3.5 w-3.5 text-emerald-500" />
+        <div class="mt-6 pt-4 border-t border-[var(--nt-border)] space-y-4">
+          <div class="h-24 w-full rounded-xl border border-[var(--nt-border)] bg-checkerboard flex items-center justify-center">
+            <div class="nt-card flex items-center gap-2 px-3.5 py-2 text-xs font-mono font-bold text-[#141413] dark:text-[#FAF7F0]">
+              <Wand2 class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
               <span>ALPHA_MASK_EXTRACT</span>
             </div>
           </div>
 
-          <div class="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-            <span>6 Tools Available</span>
-            <span class="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold group-hover:underline">
-              Launch Suite <ArrowRight class="h-3 w-3" />
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-[#746D61] dark:text-[#938B7D]">Cutout · Compress · EXIF</span>
+            <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+              Open Suite <ArrowRight class="h-3.5 w-3.5" />
             </span>
           </div>
         </div>
       </a>
 
-      {/* BENTO CARD 3: Video Suite (Col Span 4) */}
+      {/* 3. Video & Audio Suite (6 cols) */}
       <a
         href="/video"
-        class="group relative lg:col-span-4 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 flex flex-col justify-between overflow-hidden transition-all duration-200 hover:border-blue-500/50 hover:shadow-lg"
+        class="group lg:col-span-6 nt-card-interactive p-6 flex flex-col justify-between"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40">
-              <Video class="h-4 w-4" />
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15]">
+              <Video class="h-5 w-5" />
             </div>
-            <span class="font-mono text-[10px] text-slate-500 dark:text-[#9ca3af]">ENGINE_03</span>
+            <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {videoCount} TOOLS
+            </span>
           </div>
-
-          <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            Video & Subtitle Suite
+          <h3 class="text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+            Video, Audio & Voice Studio
           </h3>
-          <p class="text-xs text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            Trim footage, generate speech-to-text subtitles, mute audio, and convert to GIF.
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Whisper AI subtitle generator, animated lyrics video maker, Kokoro neural TTS, audio booster, video trimmer, compressor, and GIF creator.
           </p>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-          <span>8 Video Tools</span>
-          <span class="text-blue-600 dark:text-blue-400 flex items-center gap-1 font-semibold group-hover:underline">
-            Open <ArrowRight class="h-2.5 w-2.5" />
+        <div class="mt-5 pt-4 border-t border-[var(--nt-border)] flex items-center justify-between text-xs font-mono">
+          <span class="text-[#746D61] dark:text-[#938B7D]">Whisper · TTS · DSP · GIF</span>
+          <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+            Open Suite <ArrowRight class="h-3.5 w-3.5" />
           </span>
         </div>
       </a>
 
-      {/* BENTO CARD 4: Document & AI Studio (Col Span 4) */}
+      {/* 4. Document & AI Suite (6 cols) */}
       <a
         href="/document"
-        class="group relative lg:col-span-4 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 flex flex-col justify-between overflow-hidden transition-all duration-200 hover:border-blue-500/50 hover:shadow-lg"
+        class="group lg:col-span-6 nt-card-interactive p-6 flex flex-col justify-between"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/40">
-              <FileText class="h-4 w-4" />
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FACC15] text-[#141413] border border-[#D4A900]">
+              <FileText class="h-5 w-5" />
             </div>
-            <span class="font-mono text-[10px] text-slate-500 dark:text-[#9ca3af]">ENGINE_04</span>
+            <span class="nt-badge-dark px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {docCount} TOOLS
+            </span>
           </div>
-
-          <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            Document & AI Studio
+          <h3 class="text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+            Document & Office Studio
           </h3>
-          <p class="text-xs text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            Universal Document Studio, Markdown to DOCX/PDF, OpenXML parsing, and slide deck generation.
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Universal Document Studio, Markdown to DOCX/PDF with KaTeX math, OpenXML Word conversion, PowerPoint slides, and Excel extraction.
           </p>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-          <span>7 Doc Tools</span>
-          <span class="text-blue-600 dark:text-blue-400 flex items-center gap-1 font-semibold group-hover:underline">
-            Open <ArrowRight class="h-2.5 w-2.5" />
+        <div class="mt-5 pt-4 border-t border-[var(--nt-border)] flex items-center justify-between text-xs font-mono">
+          <span class="text-[#746D61] dark:text-[#938B7D]">DOCX · PDF · PPTX · XLSX</span>
+          <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+            Open Suite <ArrowRight class="h-3.5 w-3.5" />
           </span>
         </div>
       </a>
 
-      {/* BENTO CARD 5: SVG & Diagrams (Col Span 4) */}
+      {/* 5. Diagram Suite (7 cols) */}
+      <a
+        href="/diagram"
+        class="group lg:col-span-7 nt-card-interactive p-6 flex flex-col justify-between"
+      >
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15]">
+              <Workflow class="h-5 w-5" />
+            </div>
+            <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {diagramCount} TOOLS
+            </span>
+          </div>
+          <h3 class="text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+            AI Diagram & Architecture Studio
+          </h3>
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Transform technical specs or schema notes into clean Mermaid flowcharts, database ERDs, sequence diagrams, and 4K SVG/PNG exports.
+          </p>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-[var(--nt-border)] flex items-center justify-between text-xs font-mono">
+          <span class="text-[#746D61] dark:text-[#938B7D]">Flowchart · ERD · Architecture</span>
+          <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+            Open Suite <ArrowRight class="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </a>
+
+      {/* 6. SVG Vector Suite (5 cols) */}
       <a
         href="/svg"
-        class="group relative lg:col-span-4 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 flex flex-col justify-between overflow-hidden transition-all duration-200 hover:border-blue-500/50 hover:shadow-lg"
+        class="group lg:col-span-5 nt-card-interactive p-6 flex flex-col justify-between"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/40">
-              <Code2 class="h-4 w-4" />
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FACC15] text-[#141413] border border-[#D4A900]">
+              <Code2 class="h-5 w-5" />
             </div>
-            <span class="font-mono text-[10px] text-slate-500 dark:text-[#9ca3af]">ENGINE_05</span>
+            <span class="nt-badge-dark px-2.5 py-0.5 font-mono text-[10px] font-bold">
+              {svgCount} TOOL
+            </span>
           </div>
-
-          <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            SVG & Vector Tools
+          <h3 class="text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+            SVG & Vector Cleaner
           </h3>
-          <p class="text-xs text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-            Minify SVG markup, strip editor comments, precision scaling, and architecture diagramming.
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+            Minify SVG paths, strip Illustrator/Figma metadata, round coordinates, and export clean React JSX components.
           </p>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-white/[0.04] flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-          <span>5 Vector Tools</span>
-          <span class="text-blue-600 dark:text-blue-400 flex items-center gap-1 font-semibold group-hover:underline">
-            Open <ArrowRight class="h-2.5 w-2.5" />
+        <div class="mt-5 pt-4 border-t border-[var(--nt-border)] flex items-center justify-between text-xs font-mono">
+          <span class="text-[#746D61] dark:text-[#938B7D]">SVG · JSX · Minify</span>
+          <span class="flex items-center gap-1 font-bold text-[#141413] dark:text-[#FACC15] group-hover:translate-x-0.5 transition-transform">
+            Open Suite <ArrowRight class="h-3.5 w-3.5" />
           </span>
         </div>
       </a>
-
     </div>
-
   </div>
 </section>

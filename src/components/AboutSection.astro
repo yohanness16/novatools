@@ -1,159 +1,152 @@
 ---
-import { CheckCircle2, Shield, Zap, ArrowRight, Server, Cpu, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Server, Cpu, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
 ---
 
-<section id="about" class="w-full py-16 sm:py-24 relative overflow-hidden border-t border-slate-200 dark:border-white/[0.08] bg-[#ffffff] dark:bg-[#16171a]">
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-    
+<section id="about" class="w-full py-16 sm:py-24 relative">
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
     {/* Section Header */}
-    <div class="text-center max-w-2xl mx-auto space-y-3">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#121316] text-xs font-mono text-slate-700 dark:text-[#d1d5db]">
+    <div class="max-w-2xl space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--nt-border)] bg-white dark:bg-[#1F1D19] text-xs font-mono font-semibold text-[#141413] dark:text-[#FAF7F0] shadow-sm">
+        <span class="h-2 w-2 rounded-full bg-[#FACC15]"></span>
         <span>LOCAL_RUNTIME_ARCHITECTURE</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-        Your Files Never Touch a Cloud Server
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+        Your files never touch a remote server
       </h2>
-      <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-        Traditional online tools upload your sensitive documents to remote servers, exposing data to third-party retention and network latency. NovaTools brings the engine directly to your machine.
+      <p class="text-sm sm:text-base text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+        Traditional online converters upload private documents to remote clusters, exposing sensitive records to retention and queues. NovaTools brings the desktop engine directly to your machine.
       </p>
     </div>
 
-    {/* ZIG-ZAG BLOCK 1: Cloud vs Local Architecture Diagram */}
+    {/* BLOCK 1: Cloud vs Local Architecture */}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      
-      {/* Left: Interactive Diagram Box */}
-      <div class="lg:col-span-6 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#1e2025] p-6 shadow-sm space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-200 dark:border-white/[0.06] pb-3 text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-          <span>DATA_FLOW_VERIFICATION.LOG</span>
-          <span class="text-emerald-600 dark:text-emerald-400">[ SANDBOXED ]</span>
+      <div class="lg:col-span-6 nt-window overflow-hidden">
+        <div class="flex justify-between items-center border-b border-[var(--nt-border)] px-5 py-3 bg-[#FCFBF8] dark:bg-[#191714] text-xs font-mono">
+          <span class="font-bold text-[#141413] dark:text-[#FAF7F0]">DATA_FLOW_VERIFICATION</span>
+          <span class="nt-badge-success px-2.5 py-0.5 text-[10px] font-bold">SANDBOXED</span>
         </div>
 
-        <div class="h-56 rounded-lg bg-white dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] p-4 flex flex-col justify-center items-center relative space-y-6">
-          <div class="flex justify-between w-full max-w-sm px-2 items-center">
-            {/* Local Device */}
-            <div class="flex flex-col items-center gap-1.5 text-center">
-              <div class="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <Cpu class="h-5 w-5" />
+        <div class="p-5">
+          <div class="nt-well h-56 p-5 flex flex-col justify-center items-center space-y-6">
+            <div class="flex justify-between w-full max-w-sm px-2 items-center">
+              <div class="flex flex-col items-center gap-2 text-center">
+                <div class="nt-card h-12 w-12 flex items-center justify-center bg-[#141413] text-[#FACC15] border-[#141413]">
+                  <Cpu class="h-5 w-5" />
+                </div>
+                <span class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Local Device</span>
+                <span class="text-[10px] font-mono font-bold text-[#15803D] dark:text-[#4ADE80]">Active Memory</span>
               </div>
-              <span class="text-xs font-bold text-slate-900 dark:text-white">Local Device</span>
-              <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Processing</span>
-            </div>
 
-            {/* Blocked Path */}
-            <div class="flex-1 flex flex-col items-center justify-center px-4 relative">
-              <div class="w-full h-px border-t border-dashed border-slate-300 dark:border-slate-700 relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-900 text-[10px] font-bold text-red-600 dark:text-red-400 font-mono">
-                  BLOCKED
+              <div class="flex-1 flex flex-col items-center justify-center px-3 relative">
+                <div class="w-full h-px border-t-2 border-dashed border-[#746D61]/40 relative">
+                  <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#FEF2F2] dark:bg-[#7F1D1D]/60 border border-[#FECACA] dark:border-[#F87171]/40 text-[10px] font-bold text-[#B91C1C] dark:text-[#FCA5A5] font-mono shadow-sm">
+                    BLOCKED
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Cloud Server */}
-            <div class="flex flex-col items-center gap-1.5 text-center opacity-40">
-              <div class="h-10 w-10 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-500">
-                <Server class="h-5 w-5" />
+              <div class="flex flex-col items-center gap-2 text-center opacity-50">
+                <div class="nt-card h-12 w-12 flex items-center justify-center text-[#746D61]">
+                  <Server class="h-5 w-5" />
+                </div>
+                <span class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Cloud Server</span>
+                <span class="text-[10px] font-mono text-[#746D61]">0 Bytes Sent</span>
               </div>
-              <span class="text-xs font-bold text-slate-900 dark:text-white">Cloud Server</span>
-              <span class="text-[10px] font-mono text-slate-500">Zero Uploads</span>
             </div>
-          </div>
 
-          <div class="text-center font-mono text-xs text-slate-500 dark:text-[#9ca3af] max-w-xs leading-relaxed">
-            All operations executed locally within isolated client browser memory.
+            <div class="text-center font-mono text-xs text-[#454038] dark:text-[#CBC4B6] max-w-xs leading-relaxed">
+              Every operation runs inside isolated browser RAM and clears on tab close.
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Right: Narrative Details */}
       <div class="lg:col-span-6 space-y-4 text-left">
-        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
-          Complete Data Sovereignty & Confidentiality
+        <h3 class="text-2xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+          Complete data sovereignty & confidentiality
         </h3>
-        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-          When converting sensitive documents, customer contracts, medical records, or proprietary footage, you should never have to compromise confidentiality.
+        <p class="text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+          When converting legal contracts, financial PDFs, medical images, or private audio, you should never have to upload files across public networks.
         </p>
-        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-          NovaTools operates entirely on your hardware. By compiling algorithms directly for client-side execution, files reside only in temporary memory and are erased the moment your tab closes.
+        <p class="text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+          NovaTools compiles engines directly for client-side execution so your hardware performs all decoding, synthesis, and rendering locally.
         </p>
 
         <div class="pt-2">
-          <a href="/privacy" class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+          <a href="/privacy" class="nt-btn-secondary inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold">
+            <ShieldCheck class="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
             <span>Read Privacy Manifesto</span>
-            <ArrowRight class="h-4 w-4" />
+            <ArrowRight class="h-3.5 w-3.5" />
           </a>
         </div>
       </div>
-
     </div>
 
-    {/* Precision Laser Divider */}
     <div class="laser-divider"></div>
 
-    {/* ZIG-ZAG BLOCK 2: Performance & Benchmark */}
+    {/* BLOCK 2: Performance Benchmark */}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-      
-      {/* Left: Narrative */}
       <div class="lg:col-span-6 space-y-4 text-left order-2 lg:order-1">
-        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
-          Native Speed Without Artificial Limits
+        <h3 class="text-2xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+          Native speed without file caps or queues
         </h3>
-        <p class="text-sm text-slate-600 dark:text-[#9ca3af] leading-relaxed">
-          Cloud converters throttle file sizes and force queue wait times to sell premium plans. NovaTools taps into your CPU and GPU directly, bypassing artificial upload ceilings.
+        <p class="text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+          Cloud converters throttle upload speed and enforce waiting rooms. NovaTools accesses your CPU and WebGPU directly for instant desktop responsiveness.
         </p>
 
-        <ul class="space-y-2.5 pt-1 text-xs text-slate-700 dark:text-[#d1d5db]">
+        <ul class="space-y-2.5 pt-1 text-xs sm:text-sm text-[#141413] dark:text-[#FAF7F0] font-medium">
           <li class="flex items-center gap-2.5">
-            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <CheckCircle2 class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15] shrink-0" />
             <span>Zero network upload or download bottlenecks</span>
           </li>
           <li class="flex items-center gap-2.5">
-            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <CheckCircle2 class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15] shrink-0" />
             <span>Multi-threaded background Web Workers</span>
           </li>
           <li class="flex items-center gap-2.5">
-            <CheckCircle2 class="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
-            <span>100% free with no daily caps or watermarks</span>
+            <CheckCircle2 class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15] shrink-0" />
+            <span>100% free with no daily limits or watermarks</span>
           </li>
         </ul>
       </div>
 
-      {/* Right: Benchmark Comparison Bar Box */}
-      <div class="lg:col-span-6 rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#1e2025] p-6 shadow-sm space-y-4 order-1 lg:order-2">
-        <div class="flex justify-between items-center border-b border-slate-200 dark:border-white/[0.06] pb-3 text-xs font-mono text-slate-500 dark:text-[#9ca3af]">
-          <span>PERFORMANCE_BENCHMARK</span>
-          <span>LATENCY COMPARISON</span>
+      <div class="lg:col-span-6 nt-window overflow-hidden order-1 lg:order-2">
+        <div class="flex justify-between items-center border-b border-[var(--nt-border)] px-5 py-3 bg-[#FCFBF8] dark:bg-[#191714] text-xs font-mono">
+          <span class="font-bold text-[#141413] dark:text-[#FAF7F0]">PERFORMANCE_BENCHMARK</span>
+          <span class="nt-badge-yellow px-2.5 py-0.5 text-[10px] font-bold">17x FASTER</span>
         </div>
 
-        <div class="h-56 rounded-lg bg-white dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.06] p-5 flex flex-col justify-center space-y-5">
-          {/* Cloud Converter Latency */}
-          <div class="space-y-1.5">
-            <div class="flex justify-between text-xs font-medium">
-              <span class="text-slate-600 dark:text-[#9ca3af]">Cloud-Based Services (Upload + Queue + Download)</span>
-              <span class="font-mono text-slate-500">14.2s</span>
+        <div class="p-5">
+          <div class="nt-well h-56 p-5 flex flex-col justify-center space-y-5">
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-[#454038] dark:text-[#CBC4B6]">Cloud Services (Upload + Queue + Download)</span>
+                <span class="font-mono text-[#746D61]">14.2s</span>
+              </div>
+              <div class="w-full bg-white dark:bg-[#1F1D19] rounded-full h-3 p-0.5 border border-[var(--nt-border)]">
+                <div class="bg-[#A8A092] dark:bg-[#514A40] h-full rounded-full" style="width: 85%"></div>
+              </div>
             </div>
-            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5">
-              <div class="bg-slate-400 dark:bg-slate-600 h-2.5 rounded-full" style="width: 85%"></div>
-            </div>
-          </div>
 
-          {/* NovaTools In-Browser Latency */}
-          <div class="space-y-1.5">
-            <div class="flex justify-between text-xs font-bold text-slate-900 dark:text-white">
-              <span class="text-blue-600 dark:text-blue-400">NovaTools (Client-Side In-Memory)</span>
-              <span class="font-mono text-blue-600 dark:text-blue-400">0.8s</span>
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <span class="flex items-center gap-1.5">
+                  <Zap class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                  NovaTools (Local Memory)
+                </span>
+                <span class="font-mono">0.8s</span>
+              </div>
+              <div class="w-full bg-white dark:bg-[#1F1D19] rounded-full h-3 p-0.5 border border-[var(--nt-border)]">
+                <div class="bg-[#FACC15] h-full rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]" style="width: 14%"></div>
+              </div>
             </div>
-            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5">
-              <div class="bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full" style="width: 15%"></div>
-            </div>
-          </div>
 
-          <div class="pt-2 text-center font-mono text-[11px] text-slate-500 dark:text-[#9ca3af] border-t border-slate-100 dark:border-white/[0.04]">
-            * Tested on standard 50MB multi-page document sequence
+            <div class="pt-2 text-center font-mono text-[11px] text-[#746D61] dark:text-[#938B7D] border-t border-[var(--nt-border)]">
+              * Measured on 50MB multi-page document sequence
+            </div>
           </div>
         </div>
       </div>
-
     </div>
-
   </div>
 </section>

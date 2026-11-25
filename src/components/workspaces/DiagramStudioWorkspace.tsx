@@ -16,12 +16,9 @@ import {
   ShieldCheck,
   ZoomIn,
   ZoomOut,
-  Maximize2,
   RotateCcw,
-  Palette,
   FileText,
   Workflow,
-  Share2,
 } from 'lucide-react';
 import { DiagramEngine } from '../../engines/diagramEngine';
 import { DocEngine } from '../../engines/docEngine';
@@ -50,7 +47,7 @@ The system coordinates order processing, user authentication, inventory validati
 export default function DiagramStudioWorkspace() {
   const [docText, setDocText] = useState<string>(SAMPLE_DOCUMENT);
   const [diagramType, setDiagramType] = useState<DiagramType>('flowchart');
-  const [diagramTheme, setDiagramTheme] = useState<DiagramTheme>('dark');
+  const [diagramTheme, setDiagramTheme] = useState<DiagramTheme>('neutral');
   const [mermaidCode, setMermaidCode] = useState<string>('');
   const [renderedSvg, setRenderedSvg] = useState<string>('');
   const [renderError, setRenderError] = useState<string | null>(null);
@@ -63,7 +60,6 @@ export default function DiagramStudioWorkspace() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Generate initial diagram on mount
   useEffect(() => {
     generateDiagram(docText, diagramType, diagramTheme);
   }, []);
@@ -121,7 +117,6 @@ export default function DiagramStudioWorkspace() {
     }
   };
 
-  // Upload handler for PDF, DOCX, MD, TXT
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -158,7 +153,6 @@ export default function DiagramStudioWorkspace() {
     }
   };
 
-  // Export handlers
   const handleDownloadSvg = () => {
     if (!renderedSvg) return;
     const blob = new Blob([renderedSvg], { type: 'image/svg+xml;charset=utf-8' });
@@ -209,35 +203,31 @@ export default function DiagramStudioWorkspace() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6">
-      {/* Top Header Card */}
-      <div className="bg-surface/80 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="w-full space-y-5">
+      <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
-            <Workflow className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shrink-0">
+            <Workflow className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-zinc-100 flex items-center gap-2">
-              AI Document-to-Diagram Studio
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 font-medium">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2 flex-wrap">
+              <span>AI Document-to-Diagram Studio</span>
+              <span className="nt-badge-yellow text-[10px] px-2.5 py-0.5 font-mono font-bold">
                 Mermaid.js Vector
               </span>
-            </h1>
-            <p className="text-xs text-zinc-400 flex items-center gap-2 mt-1">
+            </h2>
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] flex items-center gap-2 mt-0.5 font-mono flex-wrap">
               <span>Flowcharts</span>
               <span>•</span>
               <span>ER Diagrams</span>
               <span>•</span>
               <span>Architecture</span>
               <span>•</span>
-              <span>Sequence</span>
-              <span>•</span>
-              <span>100% Client-Side Private</span>
+              <span>100% Client-Side</span>
             </p>
           </div>
         </div>
 
-        {/* Action Controls & Dropzone */}
         <div className="flex flex-wrap items-center gap-2.5">
           <input
             type="file"
@@ -248,32 +238,31 @@ export default function DiagramStudioWorkspace() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="px-3.5 py-2 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-xs font-semibold text-zinc-200 flex items-center gap-1.5 transition shadow-sm"
+            className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-1.5"
           >
-            <Upload className="w-3.5 h-3.5 text-zinc-400" />
+            <Upload className="w-3.5 h-3.5" />
             Upload PDF / DOCX
           </button>
 
           <button
             onClick={() => generateDiagram(docText, diagramType, diagramTheme)}
             disabled={isProcessing}
-            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white flex items-center gap-2 transition shadow-glow-sm"
+            className="nt-btn-yellow px-4 py-2 text-xs flex items-center gap-2"
           >
             <Sparkles className="w-4 h-4" />
-            Regenerate AI
+            Regenerate Diagram
           </button>
         </div>
       </div>
 
       {statusMessage && (
-        <div className="px-4 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-xs text-purple-300 flex items-center gap-2 animate-pulse">
+        <div className="nt-badge-yellow rounded-xl px-4 py-2.5 text-xs flex items-center gap-2 font-mono font-bold">
           <RefreshCw className="w-3.5 h-3.5 animate-spin" />
           <span>{statusMessage}</span>
         </div>
       )}
 
-      {/* Diagram Type & Discipline Selector */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
         {(
           [
             { type: 'flowchart', label: 'Flowchart', icon: GitBranch },
@@ -286,14 +275,15 @@ export default function DiagramStudioWorkspace() {
           ] as const
         ).map((item) => {
           const Icon = item.icon;
+          const active = diagramType === item.type;
           return (
             <button
               key={item.type}
               onClick={() => handleTypeChange(item.type)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 transition-all ${
-                diagramType === item.type
-                  ? 'bg-purple-600 text-white shadow-glow-sm'
-                  : 'bg-zinc-900/90 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700'
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 border transition-all cursor-pointer ${
+                active
+                  ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                  : 'nt-btn-secondary'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -303,40 +293,42 @@ export default function DiagramStudioWorkspace() {
         })}
       </div>
 
-      {/* Studio Split Panes */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Document Source & Mermaid Code Editor */}
-        <div className="lg:col-span-5 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-            <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-xl border border-zinc-800">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div className="lg:col-span-5 nt-card p-4 flex flex-col h-[600px]">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--nt-border)]">
+            <div className="nt-well flex items-center gap-1 p-1 rounded-xl">
               <button
                 onClick={() => setLeftTab('doc')}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                  leftTab === 'doc' ? 'bg-purple-600 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  leftTab === 'doc'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                    : 'text-[#454038] dark:text-[#CBC4B6]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                Document Source
+                Source
               </button>
 
               <button
                 onClick={() => setLeftTab('code')}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                  leftTab === 'code' ? 'bg-purple-600 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  leftTab === 'code'
+                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                    : 'text-[#454038] dark:text-[#CBC4B6]'
                 }`}
               >
                 <FileCode className="w-3.5 h-3.5" />
-                Mermaid Code
+                Mermaid
               </button>
             </div>
 
             <button
               onClick={handleCopyCode}
-              className="p-1.5 rounded-lg bg-zinc-800/60 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 text-xs flex items-center gap-1 transition"
+              className="nt-btn-secondary px-2.5 py-1.5 text-xs flex items-center gap-1 font-bold"
               title="Copy Mermaid Code"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span className="text-[11px]">Copy Code</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-[#15803D]" /> : <Copy className="w-3.5 h-3.5" />}
+              <span className="text-[11px]">{copied ? 'Copied' : 'Copy'}</span>
             </button>
           </div>
 
@@ -345,64 +337,58 @@ export default function DiagramStudioWorkspace() {
               value={docText}
               onChange={(e) => setDocText(e.target.value)}
               placeholder="Paste document text, architecture specs, or database schema..."
-              className="flex-1 w-full bg-zinc-950/70 border border-zinc-900 rounded-xl p-4 text-xs font-mono text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-purple-500/50 resize-none overflow-y-auto leading-relaxed shadow-inner"
+              className="nt-input flex-1 w-full p-4 text-xs font-mono resize-none overflow-y-auto leading-relaxed"
             />
           ) : (
             <textarea
               value={mermaidCode}
               onChange={(e) => handleCodeChange(e.target.value)}
               placeholder="Mermaid.js syntax..."
-              className="flex-1 w-full bg-zinc-950/70 border border-zinc-900 rounded-xl p-4 text-xs font-mono text-purple-300 placeholder-zinc-600 focus:outline-none focus:border-purple-500/50 resize-none overflow-y-auto leading-relaxed shadow-inner"
+              className="nt-input flex-1 w-full p-4 text-xs font-mono resize-none overflow-y-auto leading-relaxed"
             />
           )}
         </div>
 
-        {/* Right: Interactive Visual Diagram Canvas */}
-        <div className="lg:col-span-7 bg-surface/60 backdrop-blur-xl border border-zinc-800/80 rounded-2xl p-4 flex flex-col h-[650px] shadow-xl">
-          {/* Canvas Controls Header */}
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5 text-purple-400" />
-                Visual Canvas
-              </span>
-            </div>
+        <div className="lg:col-span-7 nt-card p-4 flex flex-col h-[600px]">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--nt-border)]">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+              <Eye className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+              Visual Canvas
+            </span>
 
             <div className="flex items-center gap-2">
-              {/* Theme Picker */}
               <select
                 value={diagramTheme}
                 onChange={(e) => handleThemeChange(e.target.value as DiagramTheme)}
-                className="bg-zinc-900 border border-zinc-700 text-xs text-zinc-300 rounded-lg px-2 py-1 outline-none"
+                className="nt-input text-xs font-semibold rounded-lg px-2.5 py-1 cursor-pointer"
               >
-                <option value="dark">Dark Theme</option>
-                <option value="forest">Forest Theme</option>
                 <option value="neutral">Neutral Theme</option>
                 <option value="default">Classic Theme</option>
+                <option value="forest">Forest Theme</option>
+                <option value="dark">Dark Theme</option>
               </select>
 
-              {/* Zoom Controls */}
-              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-0.5">
+              <div className="nt-well flex items-center gap-1 p-0.5 rounded-lg">
                 <button
                   onClick={() => setZoomLevel((z) => Math.max(0.5, z - 0.2))}
-                  className="p-1 text-zinc-400 hover:text-white rounded"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Zoom Out"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-[10px] font-mono text-zinc-400 px-1">
+                <span className="text-[10px] font-mono font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
                   {Math.round(zoomLevel * 100)}%
                 </span>
                 <button
                   onClick={() => setZoomLevel((z) => Math.min(2.5, z + 0.2))}
-                  className="p-1 text-zinc-400 hover:text-white rounded"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Zoom In"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setZoomLevel(1)}
-                  className="p-1 text-zinc-400 hover:text-white rounded"
+                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
                   title="Reset Zoom"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -411,20 +397,21 @@ export default function DiagramStudioWorkspace() {
             </div>
           </div>
 
-          {/* Canvas Viewport */}
           <div
             ref={canvasRef}
-            className="flex-1 bg-zinc-950/90 border border-zinc-900 rounded-xl p-6 overflow-auto flex items-center justify-center relative shadow-inner"
+            className={`flex-1 rounded-xl border border-[var(--nt-border)] p-6 overflow-auto flex items-center justify-center relative shadow-well ${
+              diagramTheme === 'dark' ? 'bg-[#141311]' : 'bg-[#FCFBF8]'
+            }`}
           >
             {renderError ? (
-              <div className="text-center p-6 space-y-2 max-w-md">
-                <div className="text-red-400 text-xs font-bold">Syntax Error in Diagram</div>
-                <div className="text-[11px] font-mono text-zinc-400 bg-red-950/40 p-3 rounded-lg border border-red-900/60 text-left overflow-x-auto">
+              <div className="text-center p-6 space-y-3 max-w-md">
+                <div className="text-[#B91C1C] text-xs font-extrabold">Syntax Error in Diagram</div>
+                <div className="nt-badge-danger text-[11px] font-mono p-3 text-left overflow-x-auto">
                   {renderError}
                 </div>
                 <button
                   onClick={() => generateDiagram(docText, diagramType, diagramTheme)}
-                  className="mt-2 px-3 py-1.5 rounded-lg bg-purple-600 text-white text-xs font-semibold"
+                  className="nt-btn-yellow px-4 py-2 text-xs"
                 >
                   Auto-Fix & Regenerate
                 </button>
@@ -436,7 +423,7 @@ export default function DiagramStudioWorkspace() {
                 dangerouslySetInnerHTML={{ __html: renderedSvg }}
               />
             ) : (
-              <div className="text-xs text-zinc-500 flex items-center gap-2">
+              <div className="text-xs text-[#746D61] flex items-center gap-2 font-mono">
                 <RefreshCw className="w-4 h-4 animate-spin" /> Rendering diagram...
               </div>
             )}
@@ -444,11 +431,10 @@ export default function DiagramStudioWorkspace() {
         </div>
       </div>
 
-      {/* Floating Master Export Dock */}
-      <div className="bg-surface/90 backdrop-blur-xl border border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+      <div className="nt-well p-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-emerald-400" />
-          <span className="text-xs text-zinc-400">
+          <ShieldCheck className="w-5 h-5 text-[#15803D] dark:text-[#4ADE80]" />
+          <span className="text-xs text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold">
             100% Client-Side Private • Vector graphics compiled locally
           </span>
         </div>
@@ -456,7 +442,7 @@ export default function DiagramStudioWorkspace() {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleDownloadSvg}
-            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white flex items-center gap-2 transition shadow-glow-sm"
+            className="nt-btn-yellow px-4 py-2 text-xs flex items-center gap-2"
           >
             <Download className="w-4 h-4" />
             Download SVG (Vector)
@@ -465,17 +451,17 @@ export default function DiagramStudioWorkspace() {
           <button
             onClick={handleDownloadPng}
             disabled={isProcessing}
-            className="px-4 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/40 hover:bg-indigo-600/30 text-xs font-bold text-indigo-300 flex items-center gap-2 transition"
+            className="nt-btn-primary px-4 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <Download className="w-4 h-4 text-indigo-400" />
+            <Download className="w-4 h-4" />
             Download 4K PNG
           </button>
 
           <button
             onClick={handleDownloadCode}
-            className="px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-xs font-semibold text-zinc-200 flex items-center gap-1.5 transition"
+            className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-1.5"
           >
-            <FileCode className="w-4 h-4 text-purple-400" />
+            <FileCode className="w-4 h-4" />
             Mermaid (.mmd)
           </button>
         </div>

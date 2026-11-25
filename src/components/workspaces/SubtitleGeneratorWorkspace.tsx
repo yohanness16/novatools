@@ -24,6 +24,7 @@ import {
   AFRICAN_LANGUAGES,
 } from '../../lib/languages';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
+import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
 import JSZip from 'jszip';
 import {
   Subtitles,
@@ -438,9 +439,16 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
   return (
     <div className="w-full space-y-6">
       {!file ? (
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          onFilesDrop={(files) => {
+            if (files[0]) handleFile(files[0]);
+          }}
+          icon={<Subtitles className="h-5 w-5" />}
+          title="Drop video or audio to generate subtitles, or"
+          highlightText="browse files"
+          subtitle="Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files."
+          badgeText="OpenAI Whisper AI (WASM) · 100+ Languages Supported"
         >
           <input
             ref={fileInputRef}
@@ -452,45 +460,40 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-            <Subtitles className="h-5 w-5" />
-          </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop video or audio to generate subtitles, or <span className="text-[#4F8CFF] underline">browse files</span>
-          </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98] text-center">
-            Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files.
-          </p>
-          <div className="mt-3 flex items-center gap-2 text-[10px] font-mono text-[#8B8F98] bg-[#131418] px-2.5 py-1 rounded border border-[#2A2D33]">
-            <Sparkles className="h-3 w-3 text-[#4F8CFF]" />
-            <span>OpenAI Whisper AI (WebAssembly) · 100+ Languages Supported</span>
-          </div>
-        </div>
+        </WorkspaceDropzone>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
+        <div className="nt-card p-5 sm:p-6 space-y-5">
           {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-4">
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-semibold text-zinc-200">{file.name}</span>
-                <span className="rounded-md bg-zinc-800 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700">
-                  {formatBytes(file.size)}
-                </span>
-                {trackEntries.length > 0 && (
-                  <span className="rounded-md bg-brand-500/10 px-2 py-0.5 text-[10px] font-medium text-brand-400 border border-brand-500/30 flex items-center gap-1">
-                    <Languages className="h-3 w-3" />
-                    {trackEntries.length} {trackEntries.length === 1 ? 'Language Track' : 'Language Tracks'}
-                  </span>
-                )}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card">
+                <Subtitles className="h-5 w-5" />
               </div>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                {currentCues.length > 0
-                  ? `${currentCues.length} Subtitle Cues in Active Track`
-                  : 'Ready to generate AI subtitles'}
-              </p>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] break-all">
+                    {file.name}
+                  </span>
+                  <span className="nt-well px-2 py-0.5 text-[10px] font-mono font-semibold text-[#454038] dark:text-[#CBC4B6]">
+                    {formatBytes(file.size)}
+                  </span>
+                  {trackEntries.length > 0 && (
+                    <span className="nt-badge-yellow px-2.5 py-0.5 text-[10px] font-bold flex items-center gap-1">
+                      <Languages className="h-3 w-3" />
+                      {trackEntries.length} {trackEntries.length === 1 ? 'Language Track' : 'Language Tracks'}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs font-mono text-[#746D61] dark:text-[#938B7D] mt-0.5">
+                  {currentCues.length > 0
+                    ? `${currentCues.length} subtitle cues in active track`
+                    : 'Ready to transcribe & generate subtitles'}
+                </p>
+              </div>
             </div>
 
             <button
+              type="button"
               onClick={() => {
                 if (mediaUrl) URL.revokeObjectURL(mediaUrl);
                 setFile(null);
@@ -498,7 +501,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                 setTracks({});
                 setActiveTrackLang('original');
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200 self-start sm:self-auto transition-colors"
+              className="nt-btn-secondary px-3 py-1.5 text-xs font-semibold self-start sm:self-auto"
             >
               Choose different file
             </button>
@@ -506,17 +509,17 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
           {/* Initial Controls / Transcribe Button */}
           {trackEntries.length === 0 && (
-            <div className="space-y-4 pt-2">
+            <div className="space-y-4 pt-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-zinc-300 flex items-center justify-between mb-1.5">
+                <div className="nt-well p-4 space-y-2">
+                  <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <Globe className="h-3.5 w-3.5 text-brand-400" />
+                      <Globe className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                       Spoken Audio Language
                     </span>
-                    <span className="text-[10px] text-brand-400 font-mono">100+ Languages</span>
+                    <span className="font-mono text-[10px] text-[#746D61] dark:text-[#938B7D]">100+ Languages</span>
                   </label>
-                  
+
                   {/* Language Selector Button */}
                   <button
                     type="button"
@@ -527,25 +530,26 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       setIsLangPickerOpen(true);
                     }}
                     disabled={isProcessing}
-                    className="w-full flex items-center justify-between rounded-xl border border-surface-border bg-zinc-900/90 px-3.5 py-2.5 text-xs text-zinc-200 hover:border-zinc-700 focus:border-brand-500 focus:outline-none transition-colors"
+                    className="nt-input w-full flex items-center justify-between px-3.5 py-2.5 text-xs hover:border-[#141413] dark:hover:border-[#FACC15] transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <span className="font-semibold text-zinc-100">
+                      <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
                         {selectedLanguage === 'auto' ? 'Auto-Detect Language' : selectedLangOption?.name || selectedLanguage}
                       </span>
                       {selectedLangOption?.nativeName && selectedLanguage !== 'auto' && (
-                        <span className="text-zinc-400 font-normal">({selectedLangOption.nativeName})</span>
+                        <span className="text-[#746D61] dark:text-[#938B7D] font-normal">({selectedLangOption.nativeName})</span>
                       )}
                     </div>
-                    <ChevronDown className="h-4 w-4 text-zinc-400 shrink-0 ml-2" />
+                    <ChevronDown className="h-4 w-4 text-[#746D61] shrink-0 ml-2" />
                   </button>
                 </div>
 
                 <div className="flex flex-col justify-end">
                   <button
+                    type="button"
                     onClick={handleGenerate}
                     disabled={isProcessing}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-brand-500 py-2.5 px-4 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-[0.98] transition-all disabled:opacity-50"
+                    className="nt-btn-yellow w-full flex items-center justify-center gap-2 py-3.5 px-5 text-xs sm:text-sm disabled:opacity-50"
                   >
                     {isProcessing ? (
                       <>
@@ -564,46 +568,31 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
               {/* Progress Box */}
               {isProcessing && progressInfo && (
-                <div className="rounded-xl border border-brand-500/30 bg-brand-500/10 p-4 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-zinc-200 flex items-center gap-2">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-400" />
-                      {progressInfo.message}
-                    </span>
-                    <span className="font-mono text-brand-400 font-bold">{progressInfo.progress}%</span>
-                  </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
-                    <div
-                      className="h-full bg-brand-500 transition-all duration-300 rounded-full"
-                      style={{ width: `${progressInfo.progress}%` }}
-                    />
-                  </div>
-                </div>
+                <WorkspaceProgress message={progressInfo.message} progress={progressInfo.progress} />
               )}
             </div>
           )}
 
           {/* Subtitle Studio Layout */}
           {trackEntries.length > 0 && (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {/* Studio Top Control Strip: Track Switcher & Translate Action */}
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-zinc-900/90 p-3 rounded-xl border border-zinc-800/90">
+              <div className="nt-well flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5">
                 {/* Track Selector Tabs */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-medium mr-1">
-                    <Layers className="h-3.5 w-3.5 text-brand-400" />
-                    Language Track:
+                  <span className="text-xs text-[#454038] dark:text-[#CBC4B6] flex items-center gap-1.5 font-bold mr-1">
+                    <Layers className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                    Track:
                   </span>
                   {trackEntries.map(([langCode, track]) => {
                     const isSelected = activeTrackLang === langCode;
                     return (
                       <button
                         key={langCode}
+                        type="button"
                         onClick={() => setActiveTrackLang(langCode)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                          isSelected
-                            ? 'bg-brand-500 text-white shadow-glow-sm'
-                            : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white border border-zinc-700'
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-all ${
+                          isSelected ? 'nt-btn-yellow' : 'nt-btn-secondary'
                         }`}
                       >
                         <span>{track.name}</span>
@@ -615,23 +604,23 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
                 {/* Translate Subtitles Trigger Button */}
                 <button
+                  type="button"
                   onClick={() => {
-                    // Smart default target: if active is Amharic, default to English; otherwise Amharic
                     setTargetTranslateLang(activeTrackLang === 'am' ? 'en' : 'am');
                     setIsTranslateModalOpen(true);
                   }}
-                  className="flex items-center gap-2 rounded-lg bg-indigo-600/20 border border-indigo-500/40 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-600/30 hover:border-indigo-500 transition-all self-start md:self-auto shrink-0"
+                  className="nt-btn-primary flex items-center gap-2 px-3.5 py-2 text-xs font-bold self-start md:self-auto shrink-0"
                 >
-                  <Languages className="h-3.5 w-3.5 text-indigo-400" />
+                  <Languages className="h-3.5 w-3.5 text-[#FACC15]" />
                   <span>Translate Subtitles (1-Click AI)</span>
                 </button>
               </div>
 
               {/* Studio Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
                 {/* Media Player Column (5 Cols) */}
-                <div className="lg:col-span-5 space-y-4">
-                  <div className="relative rounded-xl overflow-hidden bg-black border border-zinc-800 aspect-video flex items-center justify-center">
+                <div className="lg:col-span-5 space-y-3.5">
+                  <div className="relative rounded-2xl overflow-hidden bg-[#141311] border border-[var(--nt-border)] shadow-card aspect-video flex items-center justify-center">
                     {isVideo && mediaUrl ? (
                       <video
                         ref={mediaRef as any}
@@ -644,7 +633,9 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       />
                     ) : mediaUrl ? (
                       <div className="flex flex-col items-center justify-center p-6 text-center space-y-3">
-                        <Volume2 className="h-12 w-12 text-brand-400 animate-pulse" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1F1D19] border border-white/10 text-[#FACC15]">
+                          <Volume2 className="h-6 w-6 animate-pulse" />
+                        </div>
                         <audio
                           ref={mediaRef as any}
                           src={mediaUrl}
@@ -653,16 +644,16 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                           onPlay={() => setIsPlaying(true)}
                           onPause={() => setIsPlaying(false)}
                         />
-                        <span className="text-xs text-zinc-400 font-mono">Audio Playback Stream</span>
+                        <span className="text-xs text-[#938B7D] font-mono">Audio Playback Stream</span>
                       </div>
                     ) : (
-                      <div className="text-zinc-600 text-xs font-mono">No Media Loaded</div>
+                      <div className="text-[#746D61] text-xs font-mono">No Media Loaded</div>
                     )}
 
                     {/* Live Subtitle Overlay */}
                     {showSubtitleOverlay && activeCue && (
-                      <div className="absolute bottom-4 inset-x-4 flex justify-center pointer-events-none">
-                        <span className="rounded-lg bg-black/85 px-3 py-1.5 text-center text-xs sm:text-sm font-semibold text-white shadow-lg backdrop-blur-sm border border-white/10 max-w-[90%] leading-relaxed">
+                      <div className="absolute bottom-3.5 inset-x-3.5 flex justify-center pointer-events-none">
+                        <span className="rounded-lg bg-[#141413]/92 px-3 py-1.5 text-center text-xs sm:text-sm font-semibold text-[#FAF7F0] shadow-card backdrop-blur-sm border border-[#FACC15]/40 max-w-[92%] leading-relaxed">
                           {activeCue.text}
                         </span>
                       </div>
@@ -670,26 +661,29 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   </div>
 
                   {/* Playback Controls Bar */}
-                  <div className="rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                  <div className="nt-well p-3.5 space-y-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
                         <button
+                          type="button"
                           onClick={togglePlay}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-white hover:bg-brand-600 active:scale-95 transition-all"
+                          className="nt-btn-yellow flex h-8 w-8 items-center justify-center"
+                          aria-label={isPlaying ? 'Pause' : 'Play'}
                         >
                           {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
                         </button>
-                        <span className="text-xs font-mono text-zinc-300">
+                        <span className="text-xs font-mono font-semibold text-[#141413] dark:text-[#FAF7F0]">
                           {formatTimeVtt(currentTime)} / {formatTimeVtt(duration)}
                         </span>
                       </div>
 
                       <button
+                        type="button"
                         onClick={() => setShowSubtitleOverlay(!showSubtitleOverlay)}
-                        className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-md border transition-colors ${
+                        className={`flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 transition-all cursor-pointer ${
                           showSubtitleOverlay
-                            ? 'bg-brand-500/10 border-brand-500/30 text-brand-400'
-                            : 'bg-zinc-800 border-zinc-700 text-zinc-400'
+                            ? 'nt-badge-yellow'
+                            : 'nt-subcard text-[#746D61] dark:text-[#938B7D]'
                         }`}
                       >
                         <Eye className="h-3 w-3" />
@@ -704,7 +698,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       step={0.05}
                       value={currentTime}
                       onChange={(e) => handleSeek(parseFloat(e.target.value))}
-                      className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-brand-500"
+                      className="w-full h-1.5 bg-white dark:bg-[#1F1D19] rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
                 </div>
@@ -714,21 +708,22 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   {/* Editor Toolbar */}
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="relative flex-1 min-w-[180px]">
-                      <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-500" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#746D61]" />
                       <input
                         type="text"
-                        placeholder="Search transcript..."
+                        placeholder="Search transcript cues..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-800 bg-zinc-900/90 pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder:text-zinc-500 focus:border-brand-500 focus:outline-none"
+                        className="nt-input w-full pl-8 pr-3 py-1.5 text-xs"
                       />
                     </div>
 
                     <button
+                      type="button"
                       onClick={() => addCue(currentCues.length - 1)}
-                      className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 hover:text-white transition-all active:scale-95 shrink-0"
+                      className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold shrink-0"
                     >
-                      <Plus className="h-3.5 w-3.5 text-brand-400" />
+                      <Plus className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                       <span>Add Cue</span>
                     </button>
                   </div>
@@ -744,57 +739,66 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       return (
                         <div
                           key={cue.id}
-                          className={`rounded-xl border p-3 transition-all space-y-2 ${
+                          className={`rounded-xl border p-3 transition-all space-y-2 shadow-sm ${
                             isActive
-                              ? 'border-brand-500/60 bg-brand-500/10 shadow-glow-sm'
-                              : 'border-zinc-800/80 bg-zinc-900/60 hover:border-zinc-700'
+                              ? 'border-[#CA8A04] bg-[#FEF7D6]/75 dark:bg-[#FACC15]/10 ring-1 ring-[#FACC15]/40'
+                              : 'nt-subcard hover:border-[var(--nt-border-strong)]'
                           }`}
                         >
                           <div className="flex items-center justify-between gap-2">
                             {/* Cue Index & Jump Button */}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <button
+                                type="button"
                                 onClick={() => handleSeek(cue.start)}
-                                className={`flex h-5 w-5 items-center justify-center rounded-md text-[10px] font-bold font-mono transition-all ${
+                                className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-extrabold font-mono transition-all cursor-pointer ${
                                   isActive
-                                    ? 'bg-brand-500 text-white'
-                                    : 'bg-zinc-800 text-zinc-400 hover:bg-brand-500 hover:text-white'
+                                    ? 'bg-[#141413] text-[#FACC15]'
+                                    : 'bg-[#EAE3D4] dark:bg-[#141311] text-[#454038] dark:text-[#CBC4B6] hover:bg-[#141413] hover:text-[#FACC15]'
                                 }`}
                               >
                                 {idx + 1}
                               </button>
 
                               {/* Timestamp Controls */}
-                              <div className="flex items-center gap-1 font-mono text-[11px] text-zinc-400">
+                              <div className="flex items-center gap-1 font-mono text-[11px] text-[#746D61] dark:text-[#938B7D]">
                                 <button
+                                  type="button"
                                   onClick={() => updateCueTimes(cue.id, -0.1, 0)}
-                                  className="px-1 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px]"
+                                  className="nt-btn-secondary px-1.5 py-0.5 text-[10px] font-bold"
                                   title="Nudge start -0.1s"
                                 >
                                   -
                                 </button>
-                                <span className="font-semibold text-zinc-200">{formatTimeVtt(cue.start)}</span>
+                                <span className="font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
+                                  {formatTimeVtt(cue.start)}
+                                </span>
                                 <button
+                                  type="button"
                                   onClick={() => updateCueTimes(cue.id, 0.1, 0)}
-                                  className="px-1 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px]"
+                                  className="nt-btn-secondary px-1.5 py-0.5 text-[10px] font-bold"
                                   title="Nudge start +0.1s"
                                 >
                                   +
                                 </button>
 
-                                <span className="mx-1 text-zinc-600">→</span>
+                                <span className="mx-1 text-[#746D61]">→</span>
 
                                 <button
+                                  type="button"
                                   onClick={() => updateCueTimes(cue.id, 0, -0.1)}
-                                  className="px-1 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px]"
+                                  className="nt-btn-secondary px-1.5 py-0.5 text-[10px] font-bold"
                                   title="Nudge end -0.1s"
                                 >
                                   -
                                 </button>
-                                <span className="font-semibold text-zinc-200">{formatTimeVtt(cue.end)}</span>
+                                <span className="font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
+                                  {formatTimeVtt(cue.end)}
+                                </span>
                                 <button
+                                  type="button"
                                   onClick={() => updateCueTimes(cue.id, 0, 0.1)}
-                                  className="px-1 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px]"
+                                  className="nt-btn-secondary px-1.5 py-0.5 text-[10px] font-bold"
                                   title="Nudge end +0.1s"
                                 >
                                   +
@@ -805,15 +809,17 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                             {/* Action Buttons */}
                             <div className="flex items-center gap-1">
                               <button
+                                type="button"
                                 onClick={() => addCue(idx)}
-                                className="p-1 rounded-md text-zinc-500 hover:text-brand-400 hover:bg-zinc-800 transition-colors"
+                                className="p-1.5 rounded-lg text-[#746D61] hover:text-[#141413] dark:hover:text-[#FACC15] hover:bg-[#EAE3D4] dark:hover:bg-[#1F1D19] transition-colors cursor-pointer"
                                 title="Insert cue below"
                               >
                                 <Plus className="h-3.5 w-3.5" />
                               </button>
                               <button
+                                type="button"
                                 onClick={() => deleteCue(cue.id)}
-                                className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+                                className="p-1.5 rounded-lg text-[#746D61] hover:text-[#B91C1C] dark:hover:text-[#F87171] hover:bg-[#FEF2F2] dark:hover:bg-red-950/40 transition-colors cursor-pointer"
                                 title="Delete cue"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -826,15 +832,15 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                             value={cue.text}
                             rows={2}
                             onChange={(e) => updateCueText(cue.id, e.target.value)}
-                            className="w-full resize-none rounded-lg border border-zinc-800/80 bg-zinc-950/60 p-2 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-brand-500 focus:outline-none leading-relaxed transition-colors font-sans"
+                            className="nt-input w-full resize-none p-2.5 text-xs leading-relaxed font-sans"
                           />
                         </div>
                       );
                     })}
 
                     {filteredCues.length === 0 && (
-                      <div className="text-center py-8 text-xs text-zinc-500">
-                        No subtitle cues match "{searchQuery}"
+                      <div className="nt-well text-center py-8 text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+                        No subtitle cues match &quot;{searchQuery}&quot;
                       </div>
                     )}
                   </div>
@@ -842,43 +848,49 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               </div>
 
               {/* Export Actions Footer */}
-              <div className="rounded-xl border border-surface-border bg-zinc-900/60 p-4 space-y-3">
+              <div className="nt-well p-4 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <h5 className="text-xs font-semibold text-zinc-200">
+                    <h5 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                       Export Subtitles ({tracks[activeTrackLang]?.name || 'Current Track'})
                     </h5>
-                    <p className="text-[11px] text-zinc-400">Download formatted subtitle files or copy text</p>
+                    <p className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                      Download formatted subtitle files or copy text
+                    </p>
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap">
                     <button
+                      type="button"
                       onClick={() => handleDownload('srt')}
-                      className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white active:scale-95 transition-all"
+                      className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                     >
-                      <Download className="h-3.5 w-3.5 text-brand-400" />
+                      <Download className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                       <span>Download .SRT</span>
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => handleDownload('vtt')}
-                      className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white active:scale-95 transition-all"
+                      className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                     >
-                      <Download className="h-3.5 w-3.5 text-brand-400" />
+                      <Download className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                       <span>Download .VTT</span>
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => handleDownload('txt')}
-                      className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white active:scale-95 transition-all"
+                      className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                     >
-                      <FileText className="h-3.5 w-3.5 text-zinc-400" />
+                      <FileText className="h-3.5 w-3.5 text-[#746D61]" />
                       <span>Download .TXT</span>
                     </button>
 
                     <button
+                      type="button"
                       onClick={handleDownloadZip}
-                      className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-glow-sm hover:bg-brand-600 active:scale-95 transition-all"
+                      className="nt-btn-yellow flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>Download All Tracks (ZIP)</span>
@@ -886,29 +898,32 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-2 border-t border-zinc-800/80 text-[11px] text-zinc-400">
+                <div className="flex items-center gap-2 pt-2.5 border-t border-[var(--nt-border)] text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
                   <span>Quick Copy:</span>
                   <button
+                    type="button"
                     onClick={() => handleCopyClipboard('srt')}
-                    className="text-brand-400 hover:underline flex items-center gap-1"
+                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedFormat === 'srt' ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                    {copiedFormat === 'srt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     SRT
                   </button>
                   <span>·</span>
                   <button
+                    type="button"
                     onClick={() => handleCopyClipboard('vtt')}
-                    className="text-brand-400 hover:underline flex items-center gap-1"
+                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedFormat === 'vtt' ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                    {copiedFormat === 'vtt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     WebVTT
                   </button>
                   <span>·</span>
                   <button
+                    type="button"
                     onClick={() => handleCopyClipboard('txt')}
-                    className="text-brand-400 hover:underline flex items-center gap-1"
+                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedFormat === 'txt' ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                    {copiedFormat === 'txt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     Plain Text
                   </button>
                 </div>
@@ -916,29 +931,28 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             </div>
           )}
 
-          {error && (
-            <div className="flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
-              <span>{error}</span>
-            </div>
-          )}
+          {error && <WorkspaceAlert variant="error" message={error} />}
         </div>
       )}
 
       {/* Searchable Language Selection Modal */}
       {isLangPickerOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
-          <div className="w-full max-w-lg rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2.5">
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-[#4F8CFF]" />
-                <h4 className="text-xs font-semibold text-[#ECEDEF]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141413]/55 backdrop-blur-sm animate-in fade-in">
+          <div className="nt-window w-full max-w-lg p-5 space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                  <Globe className="h-4 w-4" />
+                </div>
+                <h4 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   {langPickerMode === 'transcribe' ? 'Select Audio Spoken Language' : 'Select Target Translation Language'}
                 </h4>
               </div>
               <button
+                type="button"
                 onClick={() => setIsLangPickerOpen(false)}
-                className="p-1 rounded text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                className="nt-btn-secondary p-1.5"
+                aria-label="Close modal"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -946,19 +960,19 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
             {/* Search Input */}
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#8B8F98]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#746D61]" />
               <input
                 type="text"
                 autoFocus
                 placeholder="Search language name, native script (e.g. አማርኛ, Español), or code (am, es)..."
                 value={langSearchQuery}
                 onChange={(e) => setLangSearchQuery(e.target.value)}
-                className="w-full rounded border border-[#2A2D33] bg-[#0B0C0F] pl-8 pr-3 py-1.5 text-xs text-[#ECEDEF] placeholder:text-[#5B606D] focus:border-[#4F8CFF] focus:outline-none"
+                className="nt-input w-full pl-9 pr-3 py-2 text-xs"
               />
             </div>
 
             {/* Region Filter Tabs */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-1 text-[11px] scrollbar-none">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-none">
               {[
                 { id: 'all', label: 'All (100+)' },
                 { id: 'popular', label: 'Popular' },
@@ -970,11 +984,10 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               ].map((tab) => (
                 <button
                   key={tab.id}
+                  type="button"
                   onClick={() => setLangRegionFilter(tab.id)}
-                  className={`px-2 py-0.5 rounded font-medium whitespace-nowrap transition-colors ${
-                    langRegionFilter === tab.id
-                      ? 'bg-[#4F8CFF] text-white'
-                      : 'bg-[#1B1D22] text-[#8B8F98] hover:text-[#ECEDEF]'
+                  className={`px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    langRegionFilter === tab.id ? 'nt-btn-yellow' : 'nt-btn-secondary'
                   }`}
                 >
                   {tab.label}
@@ -983,7 +996,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             </div>
 
             {/* Language Grid */}
-            <div className="max-h-[280px] overflow-y-auto space-y-0.5 pr-1 custom-scrollbar divide-y divide-[#2A2D33]/40">
+            <div className="nt-well max-h-[280px] overflow-y-auto space-y-1 p-2 custom-scrollbar">
               {filteredLanguages.map((lang) => {
                 const isSelected =
                   langPickerMode === 'transcribe'
@@ -993,6 +1006,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                 return (
                   <button
                     key={lang.code}
+                    type="button"
                     onClick={() => {
                       if (langPickerMode === 'transcribe') {
                         setSelectedLanguage(lang.code);
@@ -1001,29 +1015,29 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       }
                       setIsLangPickerOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between p-2 rounded text-left text-xs transition-colors ${
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-all cursor-pointer border ${
                       isSelected
-                        ? 'bg-[#16233F] text-[#4F8CFF] border border-[#4F8CFF]/40'
-                        : 'hover:bg-[#1B1D22] text-[#ECEDEF] border border-transparent'
+                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] border-[#CA8A04] font-bold shadow-sm'
+                        : 'bg-white dark:bg-[#1F1D19] hover:bg-[#FCFBF8] dark:hover:bg-[#26231E] text-[#141413] dark:text-[#FAF7F0] border-[var(--nt-border)]'
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold">{lang.name}</span>
-                      <span className="text-[#8B8F98] font-normal">({lang.nativeName})</span>
+                      <span className="font-bold">{lang.name}</span>
+                      <span className="text-[#746D61] dark:text-[#938B7D] font-normal">({lang.nativeName})</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] uppercase text-[#8B8F98] bg-[#0B0C0F] px-1.5 py-0.5 rounded border border-[#2A2D33]">
+                      <span className="nt-well font-mono text-[10px] uppercase text-[#454038] dark:text-[#CBC4B6] px-1.5 py-0.5">
                         {lang.code}
                       </span>
-                      {isSelected && <Check className="h-3.5 w-3.5 text-[#4F8CFF] shrink-0" />}
+                      {isSelected && <Check className="h-3.5 w-3.5 text-[#141413] dark:text-[#FACC15] shrink-0" />}
                     </div>
                   </button>
                 );
               })}
 
               {filteredLanguages.length === 0 && (
-                <div className="py-6 text-center text-xs text-[#8B8F98] font-mono">
-                  No languages found matching "{langSearchQuery}"
+                <div className="py-6 text-center text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+                  No languages found matching &quot;{langSearchQuery}&quot;
                 </div>
               )}
             </div>
@@ -1033,17 +1047,21 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
       {/* 1-Click AI Translation Modal */}
       {isTranslateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
-          <div className="w-full max-w-md rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#2A2D33] pb-2.5">
-              <div className="flex items-center gap-2">
-                <Languages className="h-4 w-4 text-[#4F8CFF]" />
-                <h4 className="text-xs font-semibold text-[#ECEDEF]">Translate Subtitles</h4>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141413]/55 backdrop-blur-sm animate-in fade-in">
+          <div className="nt-window w-full max-w-md p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                  <Languages className="h-4 w-4" />
+                </div>
+                <h4 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">Translate Subtitles</h4>
               </div>
               {!isTranslating && (
                 <button
+                  type="button"
                   onClick={() => setIsTranslateModalOpen(false)}
-                  className="p-1 rounded text-[#8B8F98] hover:text-[#ECEDEF] hover:bg-[#1B1D22] transition-colors"
+                  className="nt-btn-secondary p-1.5"
+                  aria-label="Close modal"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1051,9 +1069,9 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <p className="text-xs text-zinc-300 leading-relaxed">
-                Translate all <span className="font-semibold text-white">{currentCues.length}</span> subtitle cues from{' '}
-                <span className="text-brand-400 font-medium">
+              <p className="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+                Translate all <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0]">{currentCues.length}</span> subtitle cues from{' '}
+                <span className="nt-badge-yellow px-2 py-0.5 font-bold">
                   {tracks[activeTrackLang]?.name || 'Current Track'}
                 </span>{' '}
                 while preserving exact millisecond timestamps.
@@ -1061,7 +1079,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
 
               {/* Target Language Selection */}
               <div>
-                <label className="text-xs font-medium text-zinc-300 block mb-1.5">
+                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block mb-1.5">
                   Target Language
                 </label>
                 <button
@@ -1073,44 +1091,35 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     setLangRegionFilter('all');
                     setIsLangPickerOpen(true);
                   }}
-                  className="w-full flex items-center justify-between rounded-xl border border-zinc-700 bg-zinc-950 px-3.5 py-2.5 text-xs text-zinc-100 hover:border-zinc-600 transition-colors"
+                  className="nt-input w-full flex items-center justify-between px-3.5 py-2.5 text-xs hover:border-[#141413] dark:hover:border-[#FACC15] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <span className="font-semibold">{targetTranslateLangOption?.name || targetTranslateLang}</span>
-                    <span className="text-zinc-400">({targetTranslateLangOption?.nativeName || targetTranslateLang})</span>
+                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
+                      {targetTranslateLangOption?.name || targetTranslateLang}
+                    </span>
+                    <span className="text-[#746D61] dark:text-[#938B7D]">
+                      ({targetTranslateLangOption?.nativeName || targetTranslateLang})
+                    </span>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-zinc-400 shrink-0" />
+                  <ChevronDown className="h-4 w-4 text-[#746D61] shrink-0" />
                 </button>
               </div>
 
               {/* Translation Progress */}
               {isTranslating && translationProgress && (
-                <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-3.5 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-indigo-200 flex items-center gap-2">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-400" />
-                      Translating cues ({translationProgress.currentCue}/{translationProgress.totalCues})...
-                    </span>
-                    <span className="font-mono text-indigo-400 font-bold">
-                      {translationProgress.progress}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
-                    <div
-                      className="h-full bg-indigo-500 transition-all duration-300 rounded-full"
-                      style={{ width: `${translationProgress.progress}%` }}
-                    />
-                  </div>
-                </div>
+                <WorkspaceProgress
+                  message={`Translating cues (${translationProgress.currentCue}/${translationProgress.totalCues})...`}
+                  progress={translationProgress.progress}
+                />
               )}
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-zinc-800">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[var(--nt-border)]">
                 <button
                   type="button"
                   disabled={isTranslating}
                   onClick={() => setIsTranslateModalOpen(false)}
-                  className="px-3 py-2 rounded-xl text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+                  className="nt-btn-secondary px-3.5 py-2 text-xs font-semibold"
                 >
                   Cancel
                 </button>
@@ -1119,7 +1128,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   type="button"
                   disabled={isTranslating || !targetTranslateLang}
                   onClick={handleTranslateSubtitles}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-glow-sm transition-all disabled:opacity-50"
+                  className="nt-btn-yellow flex items-center gap-1.5 px-4 py-2 text-xs disabled:opacity-50"
                 >
                   {isTranslating ? (
                     <>

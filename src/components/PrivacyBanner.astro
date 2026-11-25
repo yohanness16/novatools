@@ -2,27 +2,27 @@
 import { Shield, Lock, Cpu } from 'lucide-react';
 ---
 
-<div class="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-5 sm:p-6 shadow-sm">
+<div class="relative overflow-hidden nt-card p-5 sm:p-6">
   <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
     <div class="space-y-1.5 max-w-2xl">
-      <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+      <div class="flex items-center gap-2 text-[#15803D] dark:text-[#4ADE80]">
         <Shield class="h-4 w-4" />
-        <span class="text-xs font-semibold uppercase tracking-wider font-mono">Zero Network Privacy Architecture</span>
+        <span class="text-xs font-bold uppercase tracking-wider font-mono">Zero Network Privacy Architecture</span>
       </div>
-      <h3 class="text-sm font-bold text-slate-900 dark:text-white">Your confidential documents & media never leave your device</h3>
-      <p class="text-xs leading-relaxed text-slate-600 dark:text-[#9ca3af]">
-        Unlike legacy converters that upload files to cloud servers, 
+      <h3 class="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">Your confidential documents & media never leave your device</h3>
+      <p class="text-xs leading-relaxed text-[#454038] dark:text-[#CBC4B6]">
+        Unlike legacy converters that upload files to cloud servers,
         NovaTools processes transcoding, OCR speech recognition, audio normalisation, and vector rendering <strong>100% in local client-side memory</strong>.
       </p>
     </div>
 
-    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0 text-xs text-slate-600 dark:text-[#d1d5db] font-mono">
-      <div class="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] px-3 py-1.5 text-slate-800 dark:text-white">
-        <Lock class="h-3.5 w-3.5 text-emerald-500" />
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0 text-xs font-mono">
+      <div class="nt-subcard flex items-center gap-1.5 px-3 py-1.5 text-[#141413] dark:text-[#FAF7F0] font-semibold">
+        <Lock class="h-3.5 w-3.5 text-[#15803D] dark:text-[#4ADE80]" />
         <span>Zero Network I/O</span>
       </div>
-      <div class="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] px-3 py-1.5 text-slate-800 dark:text-white">
-        <Cpu class="h-3.5 w-3.5 text-blue-500" />
+      <div class="nt-subcard flex items-center gap-1.5 px-3 py-1.5 text-[#141413] dark:text-[#FAF7F0] font-semibold">
+        <Cpu class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
         <span>Local In-Browser Engine</span>
       </div>
     </div>

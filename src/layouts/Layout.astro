@@ -27,27 +27,27 @@ const adSenseClientId = 'ca-pub-6768212179657827';
 ---
 
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="light scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    {/* Inline Theme Detection to prevent theme flash */}
+    {/* Inline Theme Detection: Defaults to Warm Studio Light Mode */}
     <script is:inline>
       (() => {
         try {
           const stored = localStorage.getItem('novatools-theme');
-          if (stored === 'light') {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-          } else {
+          if (stored === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
           }
         } catch (e) {
-          document.documentElement.classList.add('dark');
+          document.documentElement.classList.add('light');
         }
       })();
     </script>
@@ -66,11 +66,11 @@ const adSenseClientId = 'ca-pub-6768212179657827';
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
 
-    {/* Google Fonts: Ethiopic (Amharic) and Modern Display Fonts */}
+    {/* Google Fonts: Plus Jakarta Sans, JetBrains Mono & Multilingual / Ethiopic Display */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=Noto+Sans+Ethiopic:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
 
@@ -81,12 +81,12 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="selection:bg-blue-500/25 selection:text-blue-500 flex min-h-[100dvh] flex-col font-sans antialiased">
-    {/* Console Top Bar Header */}
+  <body class="selection:bg-[#FACC15]/45 selection:text-[#141413] flex min-h-[100dvh] flex-col font-sans antialiased">
+    {/* Desktop App Top Bar */}
     <Header client:load />
 
     {/* Main Content */}
-    <main class="flex-1 pt-16">
+    <main class="flex-1 pt-[4.5rem]">
       <slot />
     </main>
 

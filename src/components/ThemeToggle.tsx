@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
 export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }) => {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,25 +27,21 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
   };
 
   if (!mounted) {
-    return <div className={`h-9 w-9 rounded-lg ${className}`} />;
+    return <div className={`h-9 w-9 rounded-xl ${className}`} />;
   }
 
   return (
     <button
       onClick={toggleTheme}
       type="button"
-      className={`relative flex h-9 w-9 items-center justify-center rounded-lg border transition-colors duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 active:scale-95 ${
-        theme === 'dark'
-          ? 'bg-[#1e2025] border-white/[0.08] text-amber-300 hover:bg-[#26282e] hover:text-amber-200'
-          : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
-      } ${className}`}
-      title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+      className={`nt-btn-secondary relative flex h-9 w-9 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15] ${className}`}
+      title={theme === 'dark' ? 'Switch to Warm Light Studio' : 'Switch to Dark Studio'}
       aria-label="Toggle color theme"
     >
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 transition-transform duration-150" />
+        <Sun className="h-4 w-4 text-[#FACC15]" />
       ) : (
-        <Moon className="h-4 w-4 transition-transform duration-150" />
+        <Moon className="h-4 w-4 text-[#141413]" />
       )}
     </button>
   );

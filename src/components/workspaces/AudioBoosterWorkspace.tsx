@@ -6,17 +6,15 @@ import {
 } from '../../engines/audioBoosterEngine';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import { AudioVisualizerScreen } from './AudioVisualizerScreen';
+import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
 import {
   Volume2,
-  Upload,
   Play,
   Pause,
   Download,
   Sparkles,
   Sliders,
-  RotateCcw,
   Loader2,
-  AlertCircle,
   Activity,
   Mic,
   Radio,
@@ -38,19 +36,16 @@ export const AudioBoosterWorkspace: React.FC = () => {
   const [boostedResult, setBoostedResult] = useState<BoostResult | null>(null);
   const [boostedUrl, setBoostedUrl] = useState<string | null>(null);
 
-  // Settings
-  const [gainPercent, setGainPercent] = useState<number>(200); // 100% to 300%
+  const [gainPercent, setGainPercent] = useState<number>(200);
   const [enableLimiter, setEnableLimiter] = useState<boolean>(true);
   const [normalizePeak, setNormalizePeak] = useState<boolean>(false);
   const [activePreset, setActivePreset] = useState<'custom' | 'speech' | 'podcast' | 'max' | 'warmth'>('custom');
 
-  // Player State
   const [activeSource, setActiveSource] = useState<'original' | 'boosted'>('boosted');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
 
-  // Processing State
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [progressInfo, setProgressInfo] = useState<BoostProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +53,6 @@ export const AudioBoosterWorkspace: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Cleanup object URLs on unmount
   useEffect(() => {
     return () => {
       if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -113,7 +107,6 @@ export const AudioBoosterWorkspace: React.FC = () => {
         setEnableLimiter(true);
         setNormalizePeak(false);
         break;
-      case 'custom':
       default:
         break;
     }
@@ -179,11 +172,15 @@ export const AudioBoosterWorkspace: React.FC = () => {
   const currentDbGain = AudioBoosterEngine.multiplierToDb(gainPercent / 100);
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-5">
       {!file ? (
-        <div
+        <WorkspaceDropzone
           onClick={() => fileInputRef.current?.click()}
-          className="group relative flex cursor-pointer flex-col items-center justify-center rounded border border-dashed border-[#2A2D33] bg-[#1B1D22] p-6 sm:p-10 hover:border-[#4F8CFF] hover:bg-[#151820] transition-colors"
+          onFilesDrop={(files) => files[0] && handleFile(files[0])}
+          icon={<Volume2 className="h-5 w-5" />}
+          title="Drop audio or video to boost volume, or"
+          subtitle="Amplify quiet recordings up to 300% (+12 dB) with anti-clipping dynamics limiter."
+          badgeText="Web Audio DSP Engine"
         >
           <input
             ref={fileInputRef}
@@ -195,33 +192,23 @@ export const AudioBoosterWorkspace: React.FC = () => {
               e.target.value = '';
             }}
           />
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-[#131418] border border-[#2A2D33] text-[#8B8F98] group-hover:text-[#4F8CFF] group-hover:border-[#4F8CFF]/40 transition-colors">
-            <Volume2 className="h-5 w-5" />
-          </div>
-          <h3 className="mt-3 text-xs font-semibold text-[#ECEDEF]">
-            Drop audio or video to boost volume, or <span className="text-[#4F8CFF] underline">browse files</span>
-          </h3>
-          <p className="mt-0.5 font-mono text-[11px] text-[#8B8F98]">
-            Amplify quiet recordings up to 300% (+12 dB) with anti-clipping dynamics limiter.
-          </p>
-        </div>
+        </WorkspaceDropzone>
       ) : (
-        <div className="rounded border border-[#2A2D33] bg-[#131418] p-4 sm:p-5 space-y-4">
-          {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2D33] pb-3">
+        <div className="nt-card p-5 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-medium text-[#ECEDEF]">{file.name}</span>
-                <span className="rounded bg-[#1B1D22] px-2 py-0.5 text-[10px] font-mono text-[#8B8F98] border border-[#2A2D33]">
+                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {formatBytes(file.size)}
                 </span>
                 {boostedResult && (
-                  <span className="rounded bg-[#122D1F] px-2 py-0.5 text-[10px] font-mono text-[#3FBE73] border border-[#3FBE73]/30">
+                  <span className="nt-badge-success px-2.5 py-0.5 text-[10px] font-mono font-bold">
                     Boosted +{boostedResult.gainDb} dB
                   </span>
                 )}
               </div>
-              <p className="text-[10px] text-[#8B8F98] font-mono mt-0.5">
+              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
                 {boostedResult ? 'Amplification complete · Ready to preview & download' : 'Configure gain levels & presets'}
               </p>
             </div>
@@ -235,26 +222,24 @@ export const AudioBoosterWorkspace: React.FC = () => {
                 setBoostedResult(null);
                 setBoostedUrl(null);
               }}
-              className="font-mono text-[11px] text-[#8B8F98] hover:text-[#ECEDEF] transition-colors"
+              className="nt-btn-secondary px-3 py-1.5 font-mono text-[11px] font-semibold self-start sm:self-auto"
             >
               Choose different file
             </button>
           </div>
 
-          {/* AUDIO WAVE VISUALIZER MONITOR SCREEN BOX */}
           {(boostedResult || originalUrl) && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5 font-mono">
-                  <Activity className="h-3.5 w-3.5 text-sky-400" />
+                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
+                  <Activity className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Audio Waveform & Spectrum Monitor</span>
                 </label>
-                <span className="text-[10px] font-mono text-slate-500">
-                  Interactive Screen · Click wave to play
+                <span className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                  Click wave to play
                 </span>
               </div>
 
-              {/* Dedicated Visualizer Canvas Box */}
               <AudioVisualizerScreen
                 audioElement={audioRef.current}
                 isPlaying={isPlaying}
@@ -265,9 +250,8 @@ export const AudioBoosterWorkspace: React.FC = () => {
             </div>
           )}
 
-          {/* Audio Player & A/B Comparison Controls */}
           {(boostedResult || originalUrl) && (
-            <div className="rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5 space-y-3">
+            <div className="nt-well p-4 space-y-3">
               {currentAudioSrc && (
                 <audio
                   ref={audioRef}
@@ -280,21 +264,19 @@ export const AudioBoosterWorkspace: React.FC = () => {
                 />
               )}
 
-              {/* Player Top Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                {/* A/B Source Toggle Buttons */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-[#8B8F98]">Preview Channel:</span>
-                  <div className="flex items-center rounded bg-[#131418] p-0.5 border border-[#2A2D33]">
+                  <span className="text-xs font-bold text-[#454038] dark:text-[#CBC4B6]">Preview Channel:</span>
+                  <div className="flex items-center rounded-xl bg-white dark:bg-[#141311] p-1 border border-[var(--nt-border)]">
                     <button
                       onClick={() => {
                         setActiveSource('original');
                         setIsPlaying(false);
                       }}
-                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                         activeSource === 'original'
-                          ? 'bg-[#1B1D22] text-[#ECEDEF]'
-                          : 'text-[#8B8F98] hover:text-[#ECEDEF]'
+                          ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                          : 'text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                       }`}
                     >
                       Original
@@ -305,10 +287,10 @@ export const AudioBoosterWorkspace: React.FC = () => {
                         setIsPlaying(false);
                       }}
                       disabled={!boostedResult}
-                      className={`px-2.5 py-0.5 rounded text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                         activeSource === 'boosted'
-                          ? 'bg-[#4F8CFF] text-white'
-                          : 'text-[#8B8F98] hover:text-[#ECEDEF] disabled:opacity-30'
+                          ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
+                          : 'text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] disabled:opacity-35'
                       }`}
                     >
                       Boosted (+{boostedResult ? boostedResult.gainDb : currentDbGain} dB)
@@ -316,11 +298,10 @@ export const AudioBoosterWorkspace: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Download Button */}
                 {boostedResult && (
                   <button
                     onClick={handleDownload}
-                    className="flex items-center gap-1.5 rounded bg-[#122D1F] hover:bg-[#163827] border border-[#3FBE73]/40 px-3 py-1 text-xs font-semibold text-[#3FBE73] transition-colors"
+                    className="nt-btn-primary flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold"
                   >
                     <Download className="h-3.5 w-3.5" />
                     <span>Download Boosted WAV ({formatBytes(boostedResult.blob.size)})</span>
@@ -328,14 +309,13 @@ export const AudioBoosterWorkspace: React.FC = () => {
                 )}
               </div>
 
-              {/* Playback Controls & Timeline Scrubber */}
               <div className="flex items-center gap-3">
                 <button
                   onClick={togglePlay}
-                  className="flex h-8 w-8 items-center justify-center rounded bg-[#4F8CFF] text-white hover:bg-[#3B79F0] transition-colors shrink-0"
+                  className="nt-btn-yellow flex h-9 w-9 items-center justify-center shrink-0"
                   aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
                 >
-                  {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 ml-0.5" />}
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
                 </button>
 
                 <div className="flex-1 space-y-1">
@@ -346,9 +326,9 @@ export const AudioBoosterWorkspace: React.FC = () => {
                     step={0.1}
                     value={currentTime}
                     onChange={(e) => handleSeek(Number(e.target.value))}
-                    className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
+                    className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
+                  <div className="flex justify-between text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono">
                     <span>{formatDuration(currentTime)}</span>
                     <span>{formatDuration(duration)}</span>
                   </div>
@@ -357,13 +337,12 @@ export const AudioBoosterWorkspace: React.FC = () => {
             </div>
           )}
 
-          {/* Preset Selector Grid */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#ECEDEF] flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-[#4F8CFF]" />
+          <div className="space-y-2">
+            <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
               Volume Enhancement Presets
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
               {PRESETS.map((preset) => {
                 const Icon = preset.icon;
                 const isSelected = activePreset === preset.id;
@@ -371,17 +350,17 @@ export const AudioBoosterWorkspace: React.FC = () => {
                   <button
                     key={preset.id}
                     onClick={() => handlePresetSelect(preset.id)}
-                    className={`flex flex-col items-start p-2.5 rounded border text-left transition-colors ${
+                    className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-[#4F8CFF] bg-[#16233F] text-[#4F8CFF]'
-                        : 'border-[#2A2D33] bg-[#1B1D22] text-[#8B8F98] hover:border-[#4F8CFF]/40 hover:text-[#ECEDEF]'
+                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        : 'nt-btn-secondary'
                     }`}
                   >
                     <div className="flex items-center gap-1.5 mb-1">
                       <Icon className="h-3.5 w-3.5" />
-                      <span className="text-xs font-semibold">{preset.name}</span>
+                      <span className="text-xs font-extrabold">{preset.name}</span>
                     </div>
-                    <span className="text-[10px] text-[#8B8F98] leading-tight line-clamp-2">
+                    <span className={`text-[10px] leading-tight line-clamp-2 ${isSelected ? 'opacity-85' : 'text-[#746D61] dark:text-[#938B7D]'}`}>
                       {preset.desc}
                     </span>
                   </button>
@@ -390,19 +369,15 @@ export const AudioBoosterWorkspace: React.FC = () => {
             </div>
           </div>
 
-          {/* Controls & Sliders */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 rounded bg-[#1B1D22] border border-[#2A2D33] p-3.5">
-            {/* Gain Slider */}
+          <div className="nt-well grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
             <div className="md:col-span-2 space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-[#ECEDEF]">
+                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   Gain Multiplier
                 </label>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs text-[#4F8CFF] font-bold">
-                    {gainPercent}% ({gainPercent >= 100 ? `+${currentDbGain}` : currentDbGain} dB)
-                  </span>
-                </div>
+                <span className="nt-badge-yellow px-2.5 py-0.5 font-mono text-xs font-bold">
+                  {gainPercent}% ({gainPercent >= 100 ? `+${currentDbGain}` : currentDbGain} dB)
+                </span>
               </div>
               <input
                 type="range"
@@ -414,84 +389,61 @@ export const AudioBoosterWorkspace: React.FC = () => {
                   setGainPercent(Number(e.target.value));
                   setActivePreset('custom');
                 }}
-                className="w-full accent-[#4F8CFF] h-1.5 bg-[#131418] rounded appearance-none cursor-pointer"
+                className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-[#8B8F98] font-mono">
+              <div className="flex justify-between text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono">
                 <span>100% (Original)</span>
                 <span>200% (+6 dB)</span>
                 <span>300% (+12 dB Max)</span>
               </div>
             </div>
 
-            {/* Limiter & Normalization Options */}
-            <div className="space-y-2 border-t md:border-t-0 md:border-l border-[#2A2D33] pt-2 md:pt-0 md:pl-3">
-              <label className="flex items-center gap-2 cursor-pointer text-xs text-[#ECEDEF]">
+            <div className="space-y-2 border-t md:border-t-0 md:border-l border-[var(--nt-border)] pt-3 md:pt-0 md:pl-4">
+              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={enableLimiter}
                   onChange={(e) => setEnableLimiter(e.target.checked)}
-                  className="rounded border-[#2A2D33] bg-[#131418] text-[#4F8CFF] focus:ring-0"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span>Anti-Clipping Limiter</span>
               </label>
 
-              <label className="flex items-center gap-2 cursor-pointer text-xs text-[#ECEDEF]">
+              <label className="nt-subcard flex items-center gap-2.5 p-2.5 cursor-pointer text-xs font-semibold text-[#141413] dark:text-[#FAF7F0]">
                 <input
                   type="checkbox"
                   checked={normalizePeak}
                   onChange={(e) => setNormalizePeak(e.target.checked)}
-                  className="rounded border-[#2A2D33] bg-[#131418] text-[#4F8CFF] focus:ring-0"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                 />
                 <span>Auto Peak Normalization</span>
               </label>
             </div>
           </div>
 
-          {/* Action Process Button */}
-          <div>
-            <button
-              onClick={handleProcess}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 rounded bg-[#4F8CFF] hover:bg-[#3B79F0] py-2.5 px-4 text-xs font-semibold text-white transition-colors disabled:opacity-40 cursor-pointer"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>Processing Audio in Browser...</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="h-3.5 w-3.5" />
-                  <span>Boost Audio ({gainPercent}%)</span>
-                </>
-              )}
-            </button>
-
-            {isProcessing && progressInfo && (
-              <div className="rounded bg-[#16233F] border border-[#4F8CFF]/30 p-3 space-y-1.5 mt-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#ECEDEF] flex items-center gap-2">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4F8CFF]" />
-                    {progressInfo.message}
-                  </span>
-                  <span className="font-mono text-[#4F8CFF] font-bold">{progressInfo.progress}%</span>
-                </div>
-                <div className="h-1 w-full overflow-hidden rounded bg-[#131418]">
-                  <div
-                    className="h-full bg-[#4F8CFF] transition-all duration-300 rounded"
-                    style={{ width: `${progressInfo.progress}%` }}
-                  />
-                </div>
-              </div>
+          <button
+            onClick={handleProcess}
+            disabled={isProcessing}
+            className="w-full flex items-center justify-center gap-2 nt-btn-yellow py-3 px-4 text-xs disabled:opacity-40"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Processing Audio in Browser...</span>
+              </>
+            ) : (
+              <>
+                <Zap className="h-4 w-4" />
+                <span>Boost Audio ({gainPercent}%)</span>
+              </>
             )}
-          </div>
+          </button>
 
-          {error && (
-            <div className="flex items-center gap-2 rounded bg-[#331614] border border-[#F0564B]/40 p-3 text-xs text-[#F0564B]">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{error}</span>
-            </div>
+          {isProcessing && progressInfo && (
+            <WorkspaceProgress message={progressInfo.message} progress={progressInfo.progress} />
           )}
+
+          {error && <WorkspaceAlert variant="error" message={error} />}
         </div>
       )}
     </div>

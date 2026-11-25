@@ -1,31 +1,26 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { 
-  TTSEngine, 
-  BUILTIN_VOICES 
+import {
+  TTSEngine,
+  BUILTIN_VOICES,
 } from '../../engines/ttsEngine';
-import type { 
-  VoiceOption, 
+import type {
   VoiceSettings,
-  SynthesizedAudioResult, 
+  SynthesizedAudioResult,
   TTSProgress,
-  GenerationHistoryItem
+  GenerationHistoryItem,
 } from '../../engines/ttsTypes';
 import { VoiceSelector } from './tts/VoiceSelector';
 import { VoiceSettingsModal } from './tts/VoiceSettingsModal';
 import { ScriptEditor } from './tts/ScriptEditor';
 import { AudioPlayerCard } from './tts/AudioPlayerCard';
 import { GenerationHistory } from './tts/GenerationHistory';
-import { 
-  Volume2, 
-  Sparkles, 
-  Sliders, 
-  Loader2, 
-  AlertCircle, 
-  Play,
+import { WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import {
+  Volume2,
+  Sparkles,
+  Sliders,
+  Loader2,
   ChevronDown,
-  Zap,
-  Cpu,
-  RotateCcw
 } from 'lucide-react';
 
 export const TextToSpeechWorkspace: React.FC = () => {
@@ -48,7 +43,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
   const [activeDevice, setActiveDevice] = useState<string>('wasm');
 
   const [scriptText, setScriptText] = useState<string>(
-    "Welcome to the all-new AI Voice Studio. You can generate studio-quality, lifelike voiceovers for videos, audiobooks, podcasts, and presentations — with unlimited length and crystal-clear acoustic fidelity."
+    'Welcome to the AI Voice Studio. Generate studio-quality, lifelike voiceovers for videos, audiobooks, podcasts, and presentations — processed locally with crystal-clear acoustic fidelity.'
   );
 
   const [progress, setProgress] = useState<TTSProgress>({
@@ -58,7 +53,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
   });
 
   const [isSynthesizing, setIsSynthesizing] = useState<boolean>(false);
-  const [isEngineReady, setIsEngineReady] = useState<boolean>(false);
+  const [, setIsEngineReady] = useState<boolean>(false);
   const [audioResult, setAudioResult] = useState<SynthesizedAudioResult | null>(null);
   const [historyItems, setHistoryItems] = useState<GenerationHistoryItem[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -76,7 +71,8 @@ export const TextToSpeechWorkspace: React.FC = () => {
     ttsEngineRef.current = engine;
 
     // Trigger non-blocking warm-up in background
-    engine.init('q8', deviceMode)
+    engine
+      .init('q8', deviceMode)
       .then(() => {
         setIsEngineReady(true);
         setActiveDevice(engine.activeDevice);
@@ -90,7 +86,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
   }, [deviceMode]);
 
   const selectedVoice = useMemo(() => {
-    return BUILTIN_VOICES.find(v => v.id === selectedVoiceId) || BUILTIN_VOICES[0];
+    return BUILTIN_VOICES.find((v) => v.id === selectedVoiceId) || BUILTIN_VOICES[0];
   }, [selectedVoiceId]);
 
   const handleSynthesize = async () => {
@@ -104,7 +100,9 @@ export const TextToSpeechWorkspace: React.FC = () => {
         ttsEngineRef.current = new TTSEngine((p) => setProgress(p));
       }
 
-      const activeVoice = voiceSettings.blendEnabled ? voiceSettings.blendConfig.primaryVoice : selectedVoiceId;
+      const activeVoice = voiceSettings.blendEnabled
+        ? voiceSettings.blendConfig.primaryVoice
+        : selectedVoiceId;
 
       const result = await ttsEngineRef.current.synthesize({
         text: scriptText,
@@ -125,7 +123,6 @@ export const TextToSpeechWorkspace: React.FC = () => {
       setAudioResult(result);
       setIsEngineReady(true);
 
-      // Add to session history
       const historyItem: GenerationHistoryItem = {
         id: `take_${Date.now()}`,
         text: scriptText,
@@ -166,56 +163,57 @@ export const TextToSpeechWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      
-      {/* Studio Header (ElevenLabs Minimal Style) */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
-            <Volume2 className="w-7 h-7 text-indigo-500" />
-            AI Voice Studio
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Synthesize lifelike speech with natural cadence, multi-chunk long text support, and ultra-fast neural vocoding.
-          </p>
+    <div className="w-full space-y-6">
+      {/* Studio Top Bar */}
+      <div className="nt-card p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#141413] text-[#FACC15] shadow-card">
+            <Volume2 className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-lg sm:text-xl font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
+              AI Voice Studio
+            </h2>
+            <p className="text-xs sm:text-sm text-[#746D61] dark:text-[#938B7D] mt-0.5">
+              Synthesize natural cadence speech with multi-chunk support and local neural vocoding.
+            </p>
+          </div>
         </div>
 
-        {/* Top Control Bar (Voice Picker & Settings Pill Buttons) */}
+        {/* Voice Picker & Settings Pill Buttons */}
         <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Active Voice Dropdown Button */}
           <button
             type="button"
             onClick={() => setIsVoiceSelectorOpen(true)}
-            className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-white transition-all shadow-md cursor-pointer group"
+            className="nt-btn-secondary flex items-center gap-3 px-3.5 py-2 text-left group"
           >
-            <div className="w-7 h-7 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-lg shrink-0 group-hover:scale-105 transition-transform">
+            <div className="nt-well w-8 h-8 flex items-center justify-center text-base shrink-0">
               {selectedVoice.flag}
             </div>
-            <div className="text-left">
+            <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs sm:text-sm font-bold text-white leading-tight">
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] leading-tight">
                   {selectedVoice.name}
                 </span>
                 {selectedVoice.grade && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300">
+                  <span className="nt-badge-yellow px-1.5 py-0.5 text-[10px] font-bold">
                     {selectedVoice.grade}
                   </span>
                 )}
               </div>
-              <span className="text-[11px] text-slate-400 capitalize">
-                {selectedVoice.country} • {selectedVoice.gender}
+              <span className="font-mono text-[10px] text-[#746D61] dark:text-[#938B7D] capitalize">
+                {selectedVoice.country} · {selectedVoice.gender}
               </span>
             </div>
-            <ChevronDown className="w-4 h-4 text-slate-400 ml-1" />
+            <ChevronDown className="w-4 h-4 text-[#746D61] ml-1" />
           </button>
 
-          {/* Voice Settings Button */}
           <button
             type="button"
             onClick={() => setIsVoiceSettingsOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 text-slate-200 hover:text-white transition-all shadow-md cursor-pointer text-xs font-semibold"
+            className="nt-btn-secondary flex items-center gap-2 px-3.5 py-2.5 text-xs font-bold"
           >
-            <Sliders className="w-4 h-4 text-indigo-400" />
+            <Sliders className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Voice settings</span>
           </button>
         </div>
@@ -233,44 +231,24 @@ export const TextToSpeechWorkspace: React.FC = () => {
 
         {/* Primary Action Button Bar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          
-          {/* Progress / ETA Banner */}
           <div className="flex-1">
             {isSynthesizing && (
-              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-indigo-500/30 space-y-2 animate-in fade-in duration-150">
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-200">
-                  <span className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
-                    <span>{progress.message || 'Synthesizing speech...'}</span>
-                  </span>
-                  <span className="font-mono text-indigo-300 font-bold">
-                    {progress.progress > 0 ? `${progress.progress}%` : ''}
-                  </span>
-                </div>
-                <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                  <div
-                    className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.max(10, progress.progress)}%` }}
-                  />
-                </div>
-              </div>
+              <WorkspaceProgress
+                message={progress.message || 'Synthesizing speech...'}
+                progress={progress.progress > 0 ? progress.progress : 12}
+              />
             )}
           </div>
 
-          {/* ElevenLabs Style Generate Button */}
           <button
             type="button"
             onClick={handleSynthesize}
             disabled={isSynthesizing || !scriptText.trim()}
-            className={`py-4 px-8 rounded-2xl font-bold text-sm sm:text-base tracking-wide shadow-xl flex items-center justify-center gap-2.5 transition-all cursor-pointer shrink-0 ${
-              isSynthesizing || !scriptText.trim()
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/60'
-                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98]'
-            }`}
+            className="nt-btn-yellow py-3.5 px-7 text-sm sm:text-base tracking-tight flex items-center justify-center gap-2 shrink-0 disabled:opacity-45"
           >
             {isSynthesizing ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin text-indigo-200" />
+                <Loader2 className="w-4 h-4 animate-spin" />
                 <span>
                   {progress.chunkIndex && progress.totalChunks && progress.totalChunks > 1
                     ? `Generating part ${progress.chunkIndex}/${progress.totalChunks}`
@@ -279,7 +257,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
               </>
             ) : (
               <>
-                <Sparkles className="w-5 h-5 text-indigo-200" />
+                <Sparkles className="w-4 h-4" />
                 <span>Generate speech</span>
               </>
             )}
@@ -287,15 +265,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
         </div>
 
         {/* Error Alert */}
-        {errorMsg && (
-          <div className="p-4 rounded-2xl bg-red-950/60 border border-red-500/50 flex items-start gap-3 text-red-200 text-xs sm:text-sm shadow-lg animate-in fade-in">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <div>
-              <strong className="font-bold block mb-0.5">Synthesis Alert</strong>
-              {errorMsg}
-            </div>
-          </div>
-        )}
+        {errorMsg && <WorkspaceAlert variant="error" message={`Synthesis Alert: ${errorMsg}`} />}
       </div>
 
       {/* Output Audio Waveform Player */}

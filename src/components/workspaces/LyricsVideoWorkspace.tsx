@@ -8,6 +8,7 @@ import {
 } from '../../engines/lyricsVideoEngine';
 import { SubtitleEngine } from '../../engines/subtitleEngine';
 import { formatDuration, formatBytes, downloadBlob } from '../../lib/utils';
+import { WorkspaceAlert } from './WorkspaceUI';
 import {
   Music,
   Video,
@@ -35,11 +36,8 @@ import {
   RotateCcw,
   Zap,
   Volume2,
-  FastForward,
-  Rewind,
   Globe,
   Check,
-  Disc,
 } from 'lucide-react';
 
 const INITIAL_STYLE: LyricsVideoStyle = {
@@ -471,7 +469,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Hidden Audio & Video Elements for Sync */}
       {audioUrl && (
         <audio
@@ -509,26 +507,28 @@ export const LyricsVideoWorkspace: React.FC = () => {
       )}
 
       {/* TOP: Video Live Preview Screen Box */}
-      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#16171a] p-4 sm:p-5 shadow-sm space-y-4">
+      <div className="nt-card p-5 sm:p-6 space-y-4">
         {/* Screen Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-white/[0.06] pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3.5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card">
               <Sparkles className="h-4 w-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
                 Live Animated Lyrics Video Studio
               </h2>
-              <p className="text-[11px] font-mono text-slate-500 dark:text-[#9ca3af]">
-                Extract lyrics from uploaded audio · Amharic (አማርኛ) & Multilingual Support
+              <p className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                Extract lyrics from uploaded audio · Amharic (አማርኛ) &amp; Multilingual Support
               </p>
             </div>
           </div>
 
           {/* Aspect Ratio Picker */}
-          <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100 dark:bg-[#121316] p-1 rounded-lg border border-slate-200 dark:border-white/[0.06]">
-            <span className="text-[10px] font-mono text-slate-500 dark:text-[#9ca3af] px-1">Canvas:</span>
+          <div className="nt-well flex items-center gap-1 self-start sm:self-auto p-1">
+            <span className="text-[10px] font-mono font-bold text-[#746D61] dark:text-[#938B7D] px-1.5">
+              Canvas:
+            </span>
             {[
               { id: '16:9', label: '16:9 Landscape' },
               { id: '9:16', label: '9:16 Shorts' },
@@ -536,11 +536,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
             ].map((ratio) => (
               <button
                 key={ratio.id}
+                type="button"
                 onClick={() => setStyle({ ...style, aspectRatio: ratio.id as any })}
-                className={`px-2.5 py-1 rounded text-[10px] font-mono transition-colors cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
                   style.aspectRatio === ratio.id
-                    ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#141413] text-[#FACC15] font-bold shadow-sm'
+                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                 }`}
               >
                 {ratio.label}
@@ -550,38 +551,44 @@ export const LyricsVideoWorkspace: React.FC = () => {
         </div>
 
         {/* Live Canvas Monitor Viewport */}
-        <div className="relative w-full flex items-center justify-center bg-slate-950 rounded-xl overflow-hidden min-h-[300px] sm:min-h-[400px] border border-slate-800 shadow-inner">
+        <div className="relative w-full flex items-center justify-center bg-[#141311] rounded-2xl overflow-hidden min-h-[300px] sm:min-h-[400px] border border-[var(--nt-border)] shadow-well">
           <canvas
             ref={canvasRef}
             onClick={togglePlay}
             className={`max-h-[480px] w-auto object-contain cursor-pointer transition-all ${
-              style.aspectRatio === '9:16' ? 'aspect-[9/16]' : style.aspectRatio === '1:1' ? 'aspect-square' : 'aspect-video'
+              style.aspectRatio === '9:16'
+                ? 'aspect-[9/16]'
+                : style.aspectRatio === '1:1'
+                ? 'aspect-square'
+                : 'aspect-video'
             }`}
           />
 
           {/* Play/Pause Hover Overlay */}
           <button
+            type="button"
             onClick={togglePlay}
-            className={`absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-950/80 hover:bg-blue-600 border border-blue-400/50 text-white shadow-2xl transition-all duration-200 hover:scale-110 cursor-pointer ${
-              isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-90'
+            className={`nt-btn-yellow absolute inset-0 m-auto flex h-14 w-14 items-center justify-center !rounded-full shadow-card-hover transition-all duration-200 ${
+              isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-95'
             }`}
             aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
           >
-            {isPlaying ? <Pause className="h-6 w-6 fill-white" /> : <Play className="h-6 w-6 fill-white ml-0.5" />}
+            {isPlaying ? <Pause className="h-6 w-6 fill-current" /> : <Play className="h-6 w-6 fill-current ml-0.5" />}
           </button>
         </div>
 
         {/* Playback Controls & Scrubber Timeline */}
-        <div className="flex items-center gap-3.5 bg-slate-50 dark:bg-[#121316] p-3 rounded-xl border border-slate-200 dark:border-white/[0.06]">
+        <div className="nt-well flex flex-wrap sm:flex-nowrap items-center gap-3.5 p-3.5">
           <button
+            type="button"
             onClick={togglePlay}
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors shrink-0 cursor-pointer"
+            className="nt-btn-yellow flex h-9 w-9 items-center justify-center shrink-0"
             aria-label={isPlaying ? 'Pause playback' : 'Play playback'}
           >
-            {isPlaying ? <Pause className="h-4 w-4 fill-white" /> : <Play className="h-4 w-4 fill-white ml-0.5" />}
+            {isPlaying ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current ml-0.5" />}
           </button>
 
-          <div className="flex-1 space-y-1">
+          <div className="flex-1 min-w-[140px] space-y-1">
             <input
               type="range"
               min={0}
@@ -589,9 +596,9 @@ export const LyricsVideoWorkspace: React.FC = () => {
               step={0.05}
               value={currentTime}
               onChange={(e) => handleSeek(Number(e.target.value))}
-              className="w-full accent-blue-600 h-1.5 bg-slate-200 dark:bg-[#202227] rounded appearance-none cursor-pointer"
+              className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-slate-500 dark:text-[#9ca3af] font-mono">
+            <div className="flex justify-between text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono font-bold">
               <span>{formatDuration(currentTime)}</span>
               <span>{formatDuration(audioDuration)}</span>
             </div>
@@ -599,13 +606,14 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
           {/* Export Video Primary Button */}
           <button
+            type="button"
             onClick={handleExportVideo}
             disabled={isExporting}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-xs font-bold text-white transition-all shadow-sm disabled:opacity-50 shrink-0 cursor-pointer active:scale-95"
+            className="nt-btn-yellow flex items-center gap-2 px-4 py-2 text-xs shrink-0 disabled:opacity-50"
           >
             {isExporting ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin text-white" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Exporting ({exportProgress}%)...</span>
               </>
             ) : (
@@ -619,24 +627,13 @@ export const LyricsVideoWorkspace: React.FC = () => {
       </div>
 
       {/* Status Notifications */}
-      {successMessage && (
-        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 p-3 text-xs text-emerald-700 dark:text-emerald-300 font-mono">
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
-          <span>{successMessage}</span>
-        </div>
-      )}
-
-      {error && (
-        <div className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-500/30 p-3 text-xs text-red-700 dark:text-red-300 font-mono">
-          <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
-          <span>{error}</span>
-        </div>
-      )}
+      {successMessage && <WorkspaceAlert variant="success" message={successMessage} />}
+      {error && <WorkspaceAlert variant="error" message={error} />}
 
       {/* BOTTOM CONFIGURATION STUDIO (TABS) */}
-      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-[#1e2025] p-4 sm:p-6 space-y-5 shadow-sm">
+      <div className="nt-card p-5 sm:p-6 space-y-5">
         {/* Navigation Tabs Header */}
-        <div className="flex items-center gap-2 border-b border-slate-100 dark:border-white/[0.06] pb-3 overflow-x-auto">
+        <div className="flex items-center gap-2 border-b border-[var(--nt-border)] pb-3.5 overflow-x-auto">
           {[
             { id: 'lyrics', label: '1. Lyrics & Audio Extractor', icon: Music },
             { id: 'media', label: '2. Background Media', icon: ImageIcon },
@@ -648,11 +645,10 @@ export const LyricsVideoWorkspace: React.FC = () => {
             return (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#16171a]'
+                className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold whitespace-nowrap transition-all ${
+                  isActive ? 'nt-btn-yellow' : 'nt-btn-secondary'
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -670,7 +666,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
               {/* Custom Upload Dropzone */}
               <div
                 onClick={() => audioInputRef.current?.click()}
-                className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-white/[0.12] bg-slate-50 dark:bg-[#16171a] p-5 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-[#202227] transition-colors"
+                className="nt-dropzone flex cursor-pointer flex-col items-center justify-center p-6 text-center"
               >
                 <input
                   ref={audioInputRef}
@@ -681,56 +677,65 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     if (e.target.files?.[0]) handleAudioUpload(e.target.files[0]);
                   }}
                 />
-                <Volume2 className="h-6 w-6 text-blue-600 dark:text-blue-400 mb-2" />
-                <span className="text-xs font-bold text-slate-800 dark:text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] mb-2.5">
+                  <Volume2 className="h-5 w-5" />
+                </div>
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   {audioFile ? audioFile.name : 'Upload Your Music (MP3, WAV, M4A, FLAC)'}
                 </span>
-                <span className="text-[10px] text-slate-500 dark:text-[#9ca3af] font-mono mt-0.5">
+                <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono mt-1">
                   Click or drag audio file
                 </span>
               </div>
 
               {/* Or Select Built-in Demo Beats */}
-              <div className="space-y-2">
-                <span className="text-xs font-semibold text-slate-800 dark:text-white block">
+              <div className="nt-well p-4 space-y-2.5">
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
                   Or select sample music track:
                 </span>
                 <div className="grid grid-cols-2 gap-2">
-                  {DEMO_TRACKS.map((demo) => (
-                    <button
-                      key={demo.id}
-                      onClick={() => loadDemoTrack(demo.id)}
-                      className={`p-2.5 rounded-lg border text-left transition-all cursor-pointer ${
-                        selectedDemoId === demo.id && !audioFile
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm'
-                          : 'border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
-                      }`}
-                    >
-                      <span className="text-xs font-bold block truncate">{demo.name}</span>
-                      <span className="text-[10px] font-mono text-slate-400">{demo.duration}s preview</span>
-                    </button>
-                  ))}
+                  {DEMO_TRACKS.map((demo) => {
+                    const isSelected = selectedDemoId === demo.id && !audioFile;
+                    return (
+                      <button
+                        key={demo.id}
+                        type="button"
+                        onClick={() => loadDemoTrack(demo.id)}
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-sm'
+                            : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
+                        }`}
+                      >
+                        <span className="text-xs font-extrabold block truncate">{demo.name}</span>
+                        <span className="text-[10px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                          {demo.duration}s preview
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
             {/* AI Auto-Transcribe & Lyric Tools */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50 dark:bg-[#16171a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+            <div className="nt-well flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 p-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Wand2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">Neural Song Lyrics Extractor (Whisper AI)</span>
+                  <Wand2 className="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
+                  <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                    Neural Song Lyrics Extractor (Whisper AI)
+                  </span>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-[#9ca3af]">
-                  Transcribe the real vocal lyrics from your uploaded music in <strong>Amharic (አማርኛ)</strong>, English, and any language.
+                <p className="text-[11px] text-[#746D61] dark:text-[#938B7D]">
+                  Transcribe vocal lyrics from your uploaded music in <strong>Amharic (አማርኛ)</strong>, English, and more.
                 </p>
               </div>
 
               {/* Language Selector + AI Buttons */}
               <div className="flex flex-wrap items-center gap-2">
-                {/* Language Select */}
-                <div className="flex items-center gap-1.5 bg-white dark:bg-[#121316] px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/[0.08]">
-                  <Globe className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                <div className="nt-input flex items-center gap-1.5 px-2.5 py-1.5">
+                  <Globe className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <select
                     value={selectedLanguage}
                     onChange={(e) => {
@@ -739,10 +744,10 @@ export const LyricsVideoWorkspace: React.FC = () => {
                         setStyle((prev) => ({ ...prev, fontFamily: 'Noto Sans Ethiopic' }));
                       }
                     }}
-                    className="bg-transparent text-xs font-semibold text-slate-800 dark:text-white outline-none cursor-pointer"
+                    className="bg-transparent text-xs font-bold text-[#141413] dark:text-[#FAF7F0] outline-none cursor-pointer"
                   >
                     {SUPPORTED_LANGUAGES.map((lang) => (
-                      <option key={lang.code} value={lang.code} className="bg-white dark:bg-[#16171a] text-slate-900 dark:text-white">
+                      <option key={lang.code} value={lang.code} className="bg-white dark:bg-[#1F1D19] text-[#141413] dark:text-[#FAF7F0]">
                         {lang.name} ({lang.native})
                       </option>
                     ))}
@@ -751,9 +756,10 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
                 {/* Button 1: Extract from Uploaded Song */}
                 <button
+                  type="button"
                   onClick={handleAutoDetectLyrics}
                   disabled={isAiDetecting}
-                  className="flex items-center gap-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-50 cursor-pointer shadow-sm active:scale-95"
+                  className="nt-btn-yellow flex items-center gap-1.5 px-3.5 py-1.5 text-xs disabled:opacity-50"
                 >
                   {isAiDetecting ? (
                     <>
@@ -770,10 +776,11 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
                 {/* Button 2: Auto-Align Pasted Lyrics */}
                 <button
+                  type="button"
                   onClick={handleAutoAlignPastedLyrics}
                   disabled={isAligning}
                   title="Align whatever lyrics are in the editor to the audio beats"
-                  className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer shadow-sm active:scale-95"
+                  className="nt-btn-primary flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold disabled:opacity-50"
                 >
                   {isAligning ? (
                     <>
@@ -782,7 +789,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Zap className="h-3.5 w-3.5" />
+                      <Zap className="h-3.5 w-3.5 text-[#FACC15]" />
                       <span>Auto-Align to Beats</span>
                     </>
                   )}
@@ -807,8 +814,9 @@ export const LyricsVideoWorkspace: React.FC = () => {
                 />
 
                 <button
+                  type="button"
                   onClick={() => lrcInputRef.current?.click()}
-                  className="flex items-center gap-1.5 rounded-lg bg-white dark:bg-[#121316] hover:bg-slate-100 dark:hover:bg-[#202227] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-[#d1d5db] px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer"
+                  className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                 >
                   <FileText className="h-3.5 w-3.5" />
                   <span>Import .LRC</span>
@@ -817,29 +825,28 @@ export const LyricsVideoWorkspace: React.FC = () => {
             </div>
 
             {(isAiDetecting || isAligning) && (
-              <div className="flex items-center gap-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 p-3 text-xs text-blue-700 dark:text-blue-300 font-mono">
-                <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                <span>{detectionProgress || 'Processing audio stream...'}</span>
-              </div>
+              <WorkspaceAlert variant="info" message={detectionProgress || 'Processing audio stream...'} />
             )}
 
             {/* Time Nudge Controls */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-xs">
-              <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-blue-500" />
+            <div className="nt-well flex flex-wrap items-center justify-between gap-3 p-3.5 text-xs">
+              <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                 <span>Timeline Synchronization Shift:</span>
               </span>
 
               <div className="flex items-center gap-2 font-mono">
                 <button
+                  type="button"
                   onClick={() => handleShiftTimestamps(-0.5)}
-                  className="px-2.5 py-1 rounded bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-[#202227] text-slate-700 dark:text-white transition cursor-pointer"
+                  className="nt-btn-secondary px-2.5 py-1 text-xs font-bold"
                 >
                   « -0.5s
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleShiftTimestamps(0.5)}
-                  className="px-2.5 py-1 rounded bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-[#202227] text-slate-700 dark:text-white transition cursor-pointer"
+                  className="nt-btn-secondary px-2.5 py-1 text-xs font-bold"
                 >
                   +0.5s »
                 </button>
@@ -849,11 +856,11 @@ export const LyricsVideoWorkspace: React.FC = () => {
             {/* Textarea for Pasting Lyrics */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-800 dark:text-white flex items-center gap-1.5">
-                  <FileText className="h-3.5 w-3.5 text-blue-500" />
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Raw Lyrics Text Editor (Type, Paste, or Edit):</span>
                 </span>
-                <span className="text-[11px] text-slate-500 dark:text-[#9ca3af] font-mono">
+                <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {lyrics.length} synced lines
                 </span>
               </div>
@@ -861,46 +868,48 @@ export const LyricsVideoWorkspace: React.FC = () => {
                 value={rawLrcText}
                 onChange={(e) => handleRawLrcChange(e.target.value)}
                 placeholder="Paste lyrics in Amharic (አማርኛ), English, or any language here and click 'Auto-Align to Beats', or click 'Extract Lyrics from Audio' to transcribe directly..."
-                className="w-full h-32 bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] rounded-xl p-3 font-mono text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 leading-relaxed"
+                className="nt-input w-full h-32 p-3 font-mono text-xs leading-relaxed"
               />
             </div>
 
             {/* Line by Line Interactive Editor */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Synchronized Lyric Lines</span>
                 </span>
 
                 <button
+                  type="button"
                   onClick={handleAddLine}
-                  className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
+                  className="nt-btn-secondary flex items-center gap-1 px-2.5 py-1 text-xs font-bold"
                 >
-                  <Plus className="h-3.5 w-3.5" />
+                  <Plus className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
                   <span>Add Line</span>
                 </button>
               </div>
 
               {lyrics.length === 0 ? (
-                <div className="p-8 text-center rounded-xl bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] text-xs text-slate-500 dark:text-[#9ca3af]">
-                  No lyrics currently loaded. Upload your song and click <strong>"Extract Lyrics from Audio"</strong> or paste your lyrics above.
+                <div className="nt-well p-8 text-center text-xs text-[#746D61] dark:text-[#938B7D]">
+                  No lyrics currently loaded. Upload your song and click{' '}
+                  <strong className="text-[#141413] dark:text-[#FAF7F0]">&quot;Extract Lyrics from Audio&quot;</strong> or paste your lyrics above.
                 </div>
               ) : (
-                <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
                   {lyrics.map((line, idx) => (
                     <div
                       key={line.id}
-                      className="flex items-center gap-2 bg-slate-50 dark:bg-[#16171a] border border-slate-200 dark:border-white/[0.08] p-2 rounded-lg text-xs"
+                      className="nt-subcard flex items-center gap-2 p-2.5 text-xs"
                     >
                       {/* Timestamp Range Inputs */}
-                      <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 text-blue-600 dark:text-blue-400">
+                      <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 text-[#454038] dark:text-[#CBC4B6]">
                         <input
                           type="number"
                           step={0.1}
                           value={line.start}
                           onChange={(e) => handleEditLine(idx, 'start', parseFloat(e.target.value) || 0)}
-                          className="w-14 bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] rounded px-1.5 py-1 text-center text-slate-900 dark:text-white font-mono"
+                          className="nt-input w-14 px-1.5 py-1 text-center font-mono text-xs"
                           title="Start time (seconds)"
                         />
                         <span>→</span>
@@ -909,7 +918,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
                           step={0.1}
                           value={line.end}
                           onChange={(e) => handleEditLine(idx, 'end', parseFloat(e.target.value) || 0)}
-                          className="w-14 bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] rounded px-1.5 py-1 text-center text-slate-900 dark:text-white font-mono"
+                          className="nt-input w-14 px-1.5 py-1 text-center font-mono text-xs"
                           title="End time (seconds)"
                         />
                       </div>
@@ -919,21 +928,23 @@ export const LyricsVideoWorkspace: React.FC = () => {
                         type="text"
                         value={line.text}
                         onChange={(e) => handleEditLine(idx, 'text', e.target.value)}
-                        className="flex-1 bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] rounded px-2.5 py-1 text-slate-900 dark:text-white placeholder-slate-400 text-xs sm:text-sm font-sans"
+                        className="nt-input flex-1 px-2.5 py-1 text-xs sm:text-sm font-sans"
                       />
 
                       {/* Action buttons */}
                       <button
+                        type="button"
                         onClick={() => handleSeek(line.start)}
-                        className="p-1.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 cursor-pointer"
+                        className="nt-btn-secondary p-1.5"
                         title="Jump to timestamp"
                       >
                         <Play className="h-3.5 w-3.5" />
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => handleDeleteLine(idx)}
-                        className="p-1.5 rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                        className="nt-btn-secondary p-1.5 hover:text-[#B91C1C]"
                         title="Delete line"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -950,10 +961,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'media' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-semibold text-slate-800 dark:text-white block">Custom Video or Image Background:</span>
+              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                Custom Video or Image Background:
+              </span>
               <div
                 onClick={() => bgInputRef.current?.click()}
-                className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-white/[0.12] bg-slate-50 dark:bg-[#16171a] p-6 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-[#202227] transition-colors"
+                className="nt-dropzone flex cursor-pointer flex-col items-center justify-center p-6 text-center"
               >
                 <input
                   ref={bgInputRef}
@@ -964,18 +977,20 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     if (e.target.files?.[0]) handleBgMediaUpload(e.target.files[0]);
                   }}
                 />
-                <ImageIcon className="h-7 w-7 text-blue-600 dark:text-blue-400 mb-2" />
-                <span className="text-xs font-bold text-slate-800 dark:text-white">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] mb-2.5">
+                  <ImageIcon className="h-5 w-5" />
+                </div>
+                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
                   {bgImageFile ? `Image: ${bgImageFile.name}` : bgVideoFile ? `Video: ${bgVideoFile.name}` : 'Upload Custom Image or Video'}
                 </span>
-                <span className="text-[10px] text-slate-500 dark:text-[#9ca3af] font-mono mt-0.5">
+                <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono mt-1">
                   Supports MP4, WebM, PNG, JPG, WebP
                 </span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-semibold text-slate-800 dark:text-white block">
+              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
                 Or select high-resolution procedural background:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -984,6 +999,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   return (
                     <button
                       key={preset.id}
+                      type="button"
                       onClick={() => {
                         setSelectedPreset(preset.type);
                         setBgImageUrl(null);
@@ -991,15 +1007,15 @@ export const LyricsVideoWorkspace: React.FC = () => {
                         setBgImageFile(null);
                         setBgVideoFile(null);
                       }}
-                      className={`h-24 rounded-xl border p-2 flex flex-col justify-end text-left relative overflow-hidden transition-all cursor-pointer ${
+                      className={`h-24 rounded-xl border p-2.5 flex flex-col justify-end text-left relative overflow-hidden transition-all cursor-pointer shadow-card ${
                         isSelected
-                          ? 'border-blue-500 ring-2 ring-blue-500/50 shadow-lg'
-                          : 'border-slate-200 dark:border-white/[0.08] hover:border-slate-400'
+                          ? 'border-[#FACC15] ring-2 ring-[#FACC15]/70'
+                          : 'border-[var(--nt-border)] hover:border-[var(--nt-border-strong)]'
                       }`}
                       style={{ background: preset.previewColor }}
                     >
-                      <div className="absolute inset-0 bg-black/20" />
-                      <span className="relative z-10 text-[11px] font-bold text-white drop-shadow">
+                      <div className="absolute inset-0 bg-black/25" />
+                      <span className="relative z-10 text-[11px] font-extrabold text-white drop-shadow">
                         {preset.name}
                       </span>
                     </button>
@@ -1008,11 +1024,13 @@ export const LyricsVideoWorkspace: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 dark:bg-[#16171a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+            <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-800 dark:text-white font-medium">Background Dimming Overlay</span>
-                  <span className="font-mono text-blue-600 dark:text-blue-400">{Math.round(style.backgroundDim * 100)}%</span>
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-[#141413] dark:text-[#FAF7F0]">Background Dimming Overlay</span>
+                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">
+                    {Math.round(style.backgroundDim * 100)}%
+                  </span>
                 </div>
                 <input
                   type="range"
@@ -1021,14 +1039,14 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   step={0.05}
                   value={style.backgroundDim}
                   onChange={(e) => setStyle({ ...style, backgroundDim: parseFloat(e.target.value) })}
-                  className="w-full accent-blue-600 h-1.5 bg-slate-200 dark:bg-[#121316] rounded appearance-none cursor-pointer"
+                  className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-800 dark:text-white font-medium">Background Blur</span>
-                  <span className="font-mono text-blue-600 dark:text-blue-400">{style.backgroundBlur}px</span>
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-[#141413] dark:text-[#FAF7F0]">Background Blur</span>
+                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">{style.backgroundBlur}px</span>
                 </div>
                 <input
                   type="range"
@@ -1037,7 +1055,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   step={1}
                   value={style.backgroundBlur}
                   onChange={(e) => setStyle({ ...style, backgroundBlur: parseInt(e.target.value, 10) })}
-                  className="w-full accent-blue-600 h-1.5 bg-slate-200 dark:bg-[#121316] rounded appearance-none cursor-pointer"
+                  className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
                 />
               </div>
             </div>
@@ -1048,7 +1066,9 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'style' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-semibold text-slate-800 dark:text-white block">Lyric Text Placement:</span>
+              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                Lyric Text Placement:
+              </span>
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { id: 'top', label: 'Top (Header Area)', icon: AlignVerticalJustifyStart },
@@ -1060,11 +1080,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   return (
                     <button
                       key={pos.id}
+                      type="button"
                       onClick={() => setStyle({ ...style, placement: pos.id as any })}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border gap-1.5 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm'
-                          : 'border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                          ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-card'
+                          : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
                       }`}
                     >
                       <Icon className="h-5 w-5" />
@@ -1075,15 +1096,15 @@ export const LyricsVideoWorkspace: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 dark:bg-[#16171a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+            <div className="nt-well grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
               <div className="space-y-1.5">
-                <span className="text-xs font-medium text-slate-800 dark:text-white">Font Family</span>
+                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">Font Family</span>
                 <select
                   value={style.fontFamily}
                   onChange={(e) => setStyle({ ...style, fontFamily: e.target.value as any })}
-                  className="w-full bg-white dark:bg-[#121316] border border-slate-200 dark:border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white cursor-pointer"
+                  className="nt-input w-full px-2.5 py-1.5 text-xs font-semibold cursor-pointer"
                 >
-                  <option value="Noto Sans Ethiopic">Noto Sans Ethiopic (አማርኛ / Ge'ez)</option>
+                  <option value="Noto Sans Ethiopic">Noto Sans Ethiopic (አማርኛ / Ge&apos;ez)</option>
                   <option value="Abyssinica SIL">Abyssinica SIL (Ethiopic Calligraphy)</option>
                   <option value="Inter">Inter (Clean Modern)</option>
                   <option value="Cabinet Grotesk">Cabinet Grotesk (Bold Display)</option>
@@ -1094,9 +1115,9 @@ export const LyricsVideoWorkspace: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-800 dark:text-white font-medium">Font Scale</span>
-                  <span className="font-mono text-blue-600 dark:text-blue-400">{style.fontSize}px</span>
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-[#141413] dark:text-[#FAF7F0]">Font Scale</span>
+                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">{style.fontSize}px</span>
                 </div>
                 <input
                   type="range"
@@ -1105,13 +1126,13 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   step={2}
                   value={style.fontSize}
                   onChange={(e) => setStyle({ ...style, fontSize: parseInt(e.target.value, 10) })}
-                  className="w-full accent-blue-600 h-1.5 bg-slate-200 dark:bg-[#121316] rounded appearance-none cursor-pointer"
+                  className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-medium text-slate-800 dark:text-white">Font Weight</span>
-                <div className="flex items-center rounded-lg bg-white dark:bg-[#121316] p-0.5 border border-slate-200 dark:border-white/[0.08]">
+                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">Font Weight</span>
+                <div className="nt-subcard flex items-center p-1 gap-1">
                   {[
                     { label: 'Regular', val: 'normal' },
                     { label: 'Semi-Bold', val: '600' },
@@ -1119,11 +1140,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   ].map((w) => (
                     <button
                       key={w.val}
+                      type="button"
                       onClick={() => setStyle({ ...style, fontWeight: w.val as any })}
-                      className={`flex-1 py-1 text-xs rounded transition-colors cursor-pointer ${
+                      className={`flex-1 py-1 text-xs rounded-md font-bold transition-colors cursor-pointer ${
                         style.fontWeight === w.val
-                          ? 'bg-blue-600 text-white font-bold'
-                          : 'text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                          ? 'bg-[#141413] text-[#FACC15]'
+                          : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
                       }`}
                     >
                       {w.label}
@@ -1133,53 +1155,53 @@ export const LyricsVideoWorkspace: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-slate-50 dark:bg-[#16171a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+            <div className="nt-well grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
               <div className="space-y-1.5">
-                <span className="text-xs font-medium text-slate-800 dark:text-white">Base Text Color</span>
+                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Base Text Color</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={style.textColor}
                     onChange={(e) => setStyle({ ...style, textColor: e.target.value })}
-                    className="h-8 w-8 rounded border border-slate-200 dark:border-white/[0.08] bg-transparent cursor-pointer"
+                    className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-slate-600 dark:text-slate-300">{style.textColor}</span>
+                  <span className="text-xs font-mono text-[#454038] dark:text-[#CBC4B6]">{style.textColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-medium text-slate-800 dark:text-white">Active Highlight Color</span>
+                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Active Highlight</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={style.activeColor}
                     onChange={(e) => setStyle({ ...style, activeColor: e.target.value })}
-                    className="h-8 w-8 rounded border border-slate-200 dark:border-white/[0.08] bg-transparent cursor-pointer"
+                    className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-blue-600 dark:text-blue-400">{style.activeColor}</span>
+                  <span className="text-xs font-mono text-[#141413] dark:text-[#FACC15]">{style.activeColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-medium text-slate-800 dark:text-white">Glow Color</span>
+                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Glow Color</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={style.glowColor}
                     onChange={(e) => setStyle({ ...style, glowColor: e.target.value })}
-                    className="h-8 w-8 rounded border border-slate-200 dark:border-white/[0.08] bg-transparent cursor-pointer"
+                    className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-slate-600 dark:text-slate-300">{style.glowColor}</span>
+                  <span className="text-xs font-mono text-[#454038] dark:text-[#CBC4B6]">{style.glowColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5 flex flex-col justify-center">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-800 dark:text-white">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   <input
                     type="checkbox"
                     checked={style.showPillBg}
                     onChange={(e) => setStyle({ ...style, showPillBg: e.target.checked })}
-                    className="rounded border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#121316] text-blue-600 focus:ring-0"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                   />
                   <span>Text Backdrop Pill Box</span>
                 </label>
@@ -1192,7 +1214,9 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'effects' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-semibold text-slate-800 dark:text-white block">Lyric Entry & Transition Animation:</span>
+              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                Lyric Entry &amp; Transition Animation:
+              </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {[
                   { id: 'karaoke', name: 'Karaoke Sweep', desc: 'Left-to-right highlight' },
@@ -1206,63 +1230,66 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   return (
                     <button
                       key={fx.id}
+                      type="button"
                       onClick={() => setStyle({ ...style, transitionEffect: fx.id as any })}
                       className={`p-3 rounded-xl border text-left flex flex-col justify-between gap-1 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-sm'
-                          : 'border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#16171a] text-slate-600 dark:text-[#9ca3af] hover:text-slate-900 dark:hover:text-white'
+                          ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-card'
+                          : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
                       }`}
                     >
-                      <span className="text-xs font-bold block">{fx.name}</span>
-                      <span className="text-[10px] text-slate-500 dark:text-[#9ca3af] leading-tight">{fx.desc}</span>
+                      <span className="text-xs font-extrabold block">{fx.name}</span>
+                      <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] leading-tight">
+                        {fx.desc}
+                      </span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 dark:bg-[#16171a] p-4 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+            <div className="nt-well grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-slate-800 dark:text-white">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   <input
                     type="checkbox"
                     checked={style.showMusicalNotes}
                     onChange={(e) => setStyle({ ...style, showMusicalNotes: e.target.checked })}
-                    className="rounded border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#121316] text-blue-600 focus:ring-0"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                   />
                   <span>Musical Notes (♪ ♫ ♩ ♬)</span>
                 </label>
-                <p className="text-[10px] text-slate-500 dark:text-[#9ca3af] pl-6">
+                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
                   Floating musical note icons during singing
                 </p>
               </div>
 
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-slate-800 dark:text-white">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   <input
                     type="checkbox"
                     checked={style.beatPulse}
                     onChange={(e) => setStyle({ ...style, beatPulse: e.target.checked })}
-                    className="rounded border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#121316] text-blue-600 focus:ring-0"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                   />
                   <span>Audio Beat Pulse Zoom</span>
                 </label>
-                <p className="text-[10px] text-slate-500 dark:text-[#9ca3af] pl-6">
+                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
                   Subtle background zoom on musical beats
                 </p>
               </div>
 
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-slate-800 dark:text-white">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                   <input
                     type="checkbox"
                     checked={style.showWaveform}
                     onChange={(e) => setStyle({ ...style, showWaveform: e.target.checked })}
-                    className="rounded border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#121316] text-blue-600 focus:ring-0"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
                   />
                   <span>Bottom Waveform Aura</span>
                 </label>
-                <p className="text-[10px] text-slate-500 dark:text-[#9ca3af] pl-6">
+                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
                   Glowing sine wave line across the footer
                 </p>
               </div>

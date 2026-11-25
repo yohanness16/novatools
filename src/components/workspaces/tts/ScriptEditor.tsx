@@ -1,14 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { SAMPLE_SCRIPTS, type SampleScript } from '../../../engines/ttsExpressions';
-import { 
-  Clipboard, 
-  Trash2, 
-  Sparkles, 
-  Clock, 
-  Type, 
-  ChevronDown, 
-  FileText,
-  Check
+import {
+  Clipboard,
+  Trash2,
+  Sparkles,
+  Clock,
+  Type,
+  ChevronDown,
 } from 'lucide-react';
 
 interface ScriptEditorProps {
@@ -28,11 +26,9 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [showSamplesMenu, setShowSamplesMenu] = useState(false);
-  const [copiedNotification, setCopiedNotification] = useState(false);
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
   const charCount = text.length;
-  // Standard human speech rate: ~150 words per minute
   const estSeconds = Math.max(1, Math.round((wordCount / (150 * (speed || 1))) * 60));
 
   const handlePaste = async () => {
@@ -61,12 +57,11 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
   };
 
   return (
-    <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col transition-all">
-      
+    <div className="relative nt-card overflow-visible flex flex-col">
       {/* Top Header of Editor Card */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-950/40">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-[var(--nt-border)] bg-[#EFE9DC]/70 dark:bg-[#191714] rounded-t-2xl">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#454038] dark:text-[#CBC4B6]">
             Script / Prompt
           </span>
         </div>
@@ -76,16 +71,16 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
           <button
             type="button"
             onClick={() => setShowSamplesMenu(!showSamplesMenu)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer shadow-sm hover:text-white"
+            className="nt-btn-secondary flex items-center gap-2 px-3 py-1.5 text-xs font-bold"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+            <Sparkles className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>Sample scripts</span>
-            <ChevronDown className="w-3 h-3 text-slate-400" />
+            <ChevronDown className="w-3 h-3 text-[#746D61]" />
           </button>
 
           {showSamplesMenu && (
-            <div className="absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl py-1.5 z-30 animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+            <div className="nt-window absolute right-0 mt-2 w-72 py-1.5 z-30 origin-top-right">
+              <div className="px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#746D61] dark:text-[#938B7D] border-b border-[var(--nt-border)]">
                 Choose a sample
               </div>
               {SAMPLE_SCRIPTS.map((s) => (
@@ -93,10 +88,10 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
                   key={s.id}
                   type="button"
                   onClick={() => handleSelectSample(s)}
-                  className="w-full text-left px-3.5 py-2.5 hover:bg-indigo-600/20 hover:text-white text-slate-300 text-xs transition-colors flex flex-col gap-0.5 cursor-pointer"
+                  className="w-full text-left px-3.5 py-2.5 hover:bg-[#FEF7D6] dark:hover:bg-[#FACC15]/10 text-xs transition-colors flex flex-col gap-0.5 cursor-pointer"
                 >
-                  <span className="font-bold text-white">{s.title}</span>
-                  <span className="text-[11px] text-slate-400 line-clamp-1">{s.content}</span>
+                  <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0]">{s.title}</span>
+                  <span className="text-[11px] text-[#746D61] dark:text-[#938B7D] line-clamp-1">{s.content}</span>
                 </button>
               ))}
             </div>
@@ -105,45 +100,44 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
       </div>
 
       {/* Main Textarea */}
-      <div className="relative p-6 flex-1 min-h-[220px]">
+      <div className="relative p-5 sm:p-6 flex-1 min-h-[210px]">
         <textarea
           ref={textareaRef}
           value={text}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Start typing or paste your text here to generate lifelike speech..."
-          rows={8}
-          className="w-full h-full bg-transparent border-0 text-slate-100 placeholder-slate-500 focus:outline-none resize-y text-base sm:text-lg leading-relaxed font-sans"
+          rows={7}
+          className="w-full h-full bg-transparent border-0 text-[#141413] dark:text-[#FAF7F0] placeholder:text-[#746D61] dark:placeholder:text-[#938B7D] focus:outline-none resize-y text-base sm:text-lg leading-relaxed font-sans"
         />
       </div>
 
       {/* Footer Status Bar with Word/Char Counts & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-t border-slate-800/80 bg-slate-950/60 text-xs text-slate-400">
-        
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-t border-[var(--nt-border)] bg-[#EFE9DC]/60 dark:bg-[#191714] rounded-b-2xl text-xs text-[#454038] dark:text-[#CBC4B6]">
         {/* Stats */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 font-mono">
           <div className="flex items-center gap-1.5">
-            <Type className="w-3.5 h-3.5 text-indigo-400" />
+            <Type className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
             <span>
-              <strong className="text-white font-bold">{charCount.toLocaleString()}</strong> characters
-              <span className="text-slate-500 ml-1">({wordCount} words)</span>
+              <strong className="text-[#141413] dark:text-[#FAF7F0] font-extrabold">{charCount.toLocaleString()}</strong> chars
+              <span className="text-[#746D61] dark:text-[#938B7D] ml-1">({wordCount} words)</span>
             </span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-emerald-400" />
+            <Clock className="w-3.5 h-3.5 text-[#15803D] dark:text-[#4ADE80]" />
             <span>
-              Est. <strong className="text-white font-bold">~{estSeconds}s</strong>
+              Est. <strong className="text-[#141413] dark:text-[#FAF7F0] font-extrabold">~{estSeconds}s</strong>
             </span>
           </div>
         </div>
 
         {/* Action Buttons & Shortcut Hint */}
-        <div className="flex items-center gap-2.5 self-end sm:self-auto">
+        <div className="flex items-center gap-2 self-end sm:self-auto">
           <button
             type="button"
             onClick={handlePaste}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm text-xs font-medium"
+            className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold"
           >
             <Clipboard className="w-3.5 h-3.5" />
             <span>Paste</span>
@@ -153,15 +147,21 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             <button
               type="button"
               onClick={() => onChange('')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-red-950/80 hover:text-red-300 hover:border-red-500/40 border border-transparent text-slate-400 transition-all cursor-pointer shadow-sm text-xs font-medium"
+              className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold hover:text-[#B91C1C]"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Clear</span>
             </button>
           )}
 
-          <div className="hidden lg:flex items-center gap-1 pl-2 text-[11px] text-slate-500 border-l border-slate-800">
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">Enter</kbd>
+          <div className="hidden lg:flex items-center gap-1 pl-2 text-[11px] text-[#746D61] dark:text-[#938B7D] border-l border-[var(--nt-border)]">
+            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0]">
+              Ctrl
+            </kbd>
+            <span>+</span>
+            <kbd className="nt-well px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0]">
+              Enter
+            </kbd>
           </div>
         </div>
       </div>

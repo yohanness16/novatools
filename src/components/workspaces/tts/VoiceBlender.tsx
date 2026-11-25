@@ -1,7 +1,7 @@
 import React from 'react';
 import { BUILTIN_VOICES } from '../../../engines/ttsEngine';
 import type { VoiceMixConfig } from '../../../engines/ttsTypes';
-import { Sparkles, Sliders, Blend } from 'lucide-react';
+import { Blend } from 'lucide-react';
 
 interface VoiceBlenderProps {
   config: VoiceMixConfig;
@@ -16,33 +16,41 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
   isEnabled,
   onToggle,
 }) => {
-  const primary = BUILTIN_VOICES.find(v => v.id === config.primaryVoice) || BUILTIN_VOICES[0];
-  const secondary = BUILTIN_VOICES.find(v => v.id === config.secondaryVoice) || BUILTIN_VOICES[1];
+  const primary = BUILTIN_VOICES.find((v) => v.id === config.primaryVoice) || BUILTIN_VOICES[0];
+  const secondary = BUILTIN_VOICES.find((v) => v.id === config.secondaryVoice) || BUILTIN_VOICES[1];
 
   const primaryPct = Math.round((1 - config.blendRatio) * 100);
   const secondaryPct = Math.round(config.blendRatio * 100);
 
   return (
-    <div className={`rounded-3xl border transition-all p-6 sm:p-7 shadow-xl ${
-      isEnabled 
-        ? 'bg-gradient-to-br from-indigo-950/60 via-purple-950/30 to-slate-900/80 border-purple-500/50 shadow-purple-500/10' 
-        : 'bg-slate-900/80 border-slate-800/90'
-    }`}>
+    <div
+      className={`nt-card p-5 sm:p-6 transition-all ${
+        isEnabled ? 'border-[#CA8A04] bg-[#FEF7D6]/45 dark:bg-[#FACC15]/10' : ''
+      }`}
+    >
       {/* Header with Switch */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-2xl ${isEnabled ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' : 'bg-slate-950 text-slate-400 border border-slate-800'}`}>
+          <div
+            className={`p-2.5 rounded-xl flex items-center justify-center transition-colors ${
+              isEnabled
+                ? 'bg-[#141413] text-[#FACC15]'
+                : 'nt-well text-[#454038] dark:text-[#CBC4B6]'
+            }`}
+          >
             <Blend className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-base font-bold text-white">Dual-Voice Blender</span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="text-sm sm:text-base font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                Dual-Voice Blender
+              </span>
+              <span className="nt-badge-yellow px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider">
                 Custom Timbre
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Interpolate between two distinct neural voice styles to craft unique human timbres
+            <p className="text-xs text-[#746D61] dark:text-[#938B7D] mt-0.5">
+              Interpolate between two distinct neural voice styles to craft unique timbres
             </p>
           </div>
         </div>
@@ -50,31 +58,33 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
         <button
           type="button"
           onClick={() => onToggle(!isEnabled)}
-          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-            isEnabled ? 'bg-purple-600' : 'bg-slate-800'
+          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border border-[var(--nt-border-strong)] p-0.5 transition-colors duration-200 ease-in-out focus:outline-none ${
+            isEnabled ? 'bg-[#141413] dark:bg-[#FACC15]' : 'bg-[#EAE3D4] dark:bg-[#141311]'
           }`}
+          aria-pressed={isEnabled}
         >
           <span
-            className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-              isEnabled ? 'translate-x-5' : 'translate-x-0'
+            className={`pointer-events-none inline-block h-5.5 w-5.5 transform rounded-full shadow-sm transition duration-200 ease-in-out ${
+              isEnabled
+                ? 'translate-x-5 bg-[#FACC15] dark:bg-[#141413]'
+                : 'translate-x-0 bg-white dark:bg-[#454038]'
             }`}
           />
         </button>
       </div>
 
       {isEnabled && (
-        <div className="space-y-5 pt-5 mt-5 border-t border-purple-500/20">
+        <div className="space-y-4 pt-5 mt-5 border-t border-[var(--nt-border)]">
           {/* Dual Voice Pickers */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Primary Voice */}
-            <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
-              <label className="block text-xs font-bold text-indigo-300">
+            <div className="nt-well p-4 space-y-2">
+              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Primary Voice ({primaryPct}%)
               </label>
               <select
                 value={config.primaryVoice}
                 onChange={(e) => onChange({ ...config, primaryVoice: e.target.value })}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-500 font-medium"
+                className="nt-input w-full px-3 py-2 text-xs sm:text-sm font-semibold"
               >
                 {BUILTIN_VOICES.map((v) => (
                   <option key={`p_${v.id}`} value={v.id}>
@@ -84,15 +94,14 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
               </select>
             </div>
 
-            {/* Secondary Voice */}
-            <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
-              <label className="block text-xs font-bold text-purple-300">
+            <div className="nt-well p-4 space-y-2">
+              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
                 Secondary Voice ({secondaryPct}%)
               </label>
               <select
                 value={config.secondaryVoice}
                 onChange={(e) => onChange({ ...config, secondaryVoice: e.target.value })}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-500 font-medium"
+                className="nt-input w-full px-3 py-2 text-xs sm:text-sm font-semibold"
               >
                 {BUILTIN_VOICES.map((v) => (
                   <option key={`s_${v.id}`} value={v.id}>
@@ -103,11 +112,15 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
             </div>
           </div>
 
-          {/* Interpolation Slider with Visual Ratio Gauge */}
-          <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-300">
-              <span className="text-indigo-400">{primary.name} ({primaryPct}%)</span>
-              <span className="text-purple-400">{secondary.name} ({secondaryPct}%)</span>
+          {/* Interpolation Slider */}
+          <div className="nt-well p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#141413] dark:text-[#FAF7F0]">
+              <span>
+                {primary.name} ({primaryPct}%)
+              </span>
+              <span>
+                {secondary.name} ({secondaryPct}%)
+              </span>
             </div>
 
             <input
@@ -117,7 +130,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
               step="0.05"
               value={config.blendRatio}
               onChange={(e) => onChange({ ...config, blendRatio: parseFloat(e.target.value) })}
-              className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+              className="w-full h-2 bg-white dark:bg-[#141311] rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>

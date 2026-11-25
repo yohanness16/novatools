@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { BUILTIN_VOICES } from '../../../engines/ttsEngine';
-import type { VoiceOption } from '../../../engines/ttsTypes';
-import { Search, Volume2, Check, X, Sparkles, Filter, ChevronDown } from 'lucide-react';
+import { Search, Volume2, Check, X } from 'lucide-react';
 
 interface VoiceSelectorProps {
   selectedVoiceId: string;
@@ -41,97 +40,85 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-      {/* Modal Container */}
-      <div className="relative w-full max-w-3xl max-h-[85vh] bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-100 animate-in zoom-in-95 duration-200">
-        
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#141413]/55 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="nt-window relative w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-800 bg-slate-900/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--nt-border)] bg-[#EFE9DC]/70 dark:bg-[#191714]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <div className="w-10 h-10 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shadow-card">
               <Volume2 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Select Voice</h3>
-              <p className="text-xs text-slate-400">Choose from 20+ studio-grade neural voices</p>
+              <h3 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                Select Voice
+              </h3>
+              <p className="text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
+                Choose from 20+ studio-grade neural voices
+              </p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+            className="nt-btn-secondary p-2"
+            aria-label="Close voice selector"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Search & Filters Bar */}
-        <div className="px-6 py-4 border-b border-slate-800/80 bg-slate-950/50 space-y-3">
-          {/* Search Bar */}
+        <div className="px-6 py-4 border-b border-[var(--nt-border)] space-y-3 bg-[#FCFBF8] dark:bg-[#191714]">
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#746D61]" />
             <input
               type="text"
               placeholder="Search by voice name, accent, style (e.g., 'Heart', 'British', 'Deep')..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all shadow-inner"
+              className="nt-input w-full pl-10 pr-4 py-2.5 text-sm"
               autoFocus
             />
           </div>
 
-          {/* Filter Pills */}
           <div className="flex items-center justify-between flex-wrap gap-2 pt-1 text-xs">
             {/* Gender Filters */}
-            <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800">
-              <button
-                type="button"
-                onClick={() => setGenderFilter('all')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
-                  genderFilter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                onClick={() => setGenderFilter('female')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
-                  genderFilter === 'female' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Female
-              </button>
-              <button
-                type="button"
-                onClick={() => setGenderFilter('male')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
-                  genderFilter === 'male' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Male
-              </button>
+            <div className="nt-well flex items-center p-1 gap-1">
+              {(['all', 'female', 'male'] as const).map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGenderFilter(g)}
+                  className={`px-3 py-1 rounded-lg font-bold capitalize transition-all cursor-pointer ${
+                    genderFilter === g
+                      ? 'bg-[#141413] text-[#FACC15]'
+                      : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                  }`}
+                >
+                  {g}
+                </button>
+              ))}
             </div>
 
-            {/* Accent Select */}
+            {/* Accent & Category Filters */}
             <div className="flex items-center gap-2">
               <select
                 value={accentFilter}
                 onChange={(e) => setAccentFilter(e.target.value)}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                className="nt-input px-3 py-1.5 text-xs font-semibold cursor-pointer"
               >
-                <option value="all">🌍 All Accents</option>
-                <option value="en-us">🇺🇸 American</option>
-                <option value="en-gb">🇬🇧 British</option>
+                <option value="all">All Accents</option>
+                <option value="en-us">American</option>
+                <option value="en-gb">British</option>
               </select>
 
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                className="nt-input px-3 py-1.5 text-xs font-semibold cursor-pointer"
               >
-                <option value="all">✨ All Styles</option>
+                <option value="all">All Styles</option>
                 <option value="natural">Natural</option>
                 <option value="narrative">Narrative</option>
                 <option value="conversational">Conversational</option>
@@ -154,50 +141,49 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                 }}
                 className={`group relative p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-3 text-left ${
                   isSelected
-                    ? 'bg-indigo-950/40 border-indigo-500/80 ring-1 ring-indigo-500/40 shadow-lg shadow-indigo-950/40'
-                    : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/80'
+                    ? 'bg-[#FEF7D6]/85 dark:bg-[#FACC15]/10 border-[#CA8A04] ring-1 ring-[#FACC15]/40 shadow-card'
+                    : 'nt-card-interactive'
                 }`}
               >
-                {/* Voice Header */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div className="nt-well w-10 h-10 flex items-center justify-center text-xl shrink-0">
                       {voice.flag}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-white">{voice.name}</span>
+                        <span className="font-extrabold text-sm text-[#141413] dark:text-[#FAF7F0]">
+                          {voice.name}
+                        </span>
                         {voice.grade && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                          <span className="nt-badge-yellow text-[10px] font-bold px-1.5 py-0.5">
                             {voice.grade}
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-slate-400 capitalize">
-                        {voice.country} • {voice.gender}
+                      <span className="font-mono text-[11px] text-[#746D61] dark:text-[#938B7D] capitalize">
+                        {voice.country} · {voice.gender}
                       </span>
                     </div>
                   </div>
 
                   {isSelected && (
-                    <div className="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-md">
+                    <div className="w-6 h-6 rounded-full bg-[#141413] text-[#FACC15] flex items-center justify-center shadow-sm">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   )}
                 </div>
 
-                {/* Voice Description */}
-                <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                <p className="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed line-clamp-2">
                   {voice.description}
                 </p>
 
-                {/* Traits Badges */}
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 capitalize">
+                  <span className="nt-well text-[10px] font-mono font-bold px-2 py-0.5 text-[#454038] dark:text-[#CBC4B6] capitalize">
                     {voice.category}
                   </span>
                   {voice.traits && (
-                    <span className="text-[10px] text-indigo-300/80">
+                    <span className="text-[10px] font-medium text-[#746D61] dark:text-[#938B7D]">
                       {voice.traits}
                     </span>
                   )}
@@ -207,8 +193,8 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
           })}
 
           {filteredVoices.length === 0 && (
-            <div className="col-span-2 py-12 text-center text-slate-500">
-              <p className="text-sm">No voices found matching "{searchQuery}".</p>
+            <div className="col-span-2 py-12 text-center text-[#746D61] dark:text-[#938B7D]">
+              <p className="text-sm font-semibold">No voices found matching &quot;{searchQuery}&quot;.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -217,7 +203,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
                   setAccentFilter('all');
                   setCategoryFilter('all');
                 }}
-                className="mt-3 text-xs text-indigo-400 hover:underline cursor-pointer"
+                className="nt-btn-secondary mt-3 px-3 py-1.5 text-xs font-bold"
               >
                 Clear all filters
               </button>
@@ -226,12 +212,12 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between text-xs text-slate-400">
+        <div className="px-6 py-4 border-t border-[var(--nt-border)] bg-[#EFE9DC]/70 dark:bg-[#191714] flex items-center justify-between text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
           <span>{filteredVoices.length} voices available</span>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all cursor-pointer"
+            className="nt-btn-yellow px-4 py-2 text-xs"
           >
             Done
           </button>

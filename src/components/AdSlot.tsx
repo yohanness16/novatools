@@ -48,11 +48,11 @@ export const AdSlot: React.FC<AdSlotProps> = ({
 
   return (
     <aside
-      className={`relative mx-auto flex flex-col items-center justify-center overflow-hidden rounded border border-[#2A2D33] bg-[#131418] p-2 text-center ${getDimensions()} ${className}`}
+      className={`relative mx-auto flex flex-col items-center justify-center overflow-hidden nt-card p-2 text-center ${getDimensions()} ${className}`}
       aria-label="Advertisement"
       role="complementary"
     >
-      <span className="mb-1 text-[9px] font-mono font-medium tracking-widest text-[#5B606D] uppercase">
+      <span className="mb-1 text-[9px] font-mono font-semibold tracking-widest text-[#746D61] dark:text-[#938B7D] uppercase">
         {label}
       </span>
 
