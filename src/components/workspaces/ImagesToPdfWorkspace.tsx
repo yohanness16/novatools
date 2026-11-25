@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { downloadUint8Array, readFileAsDataURL } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { FilePlus, ArrowUp, ArrowDown, Trash2, Loader2 } from 'lucide-react';
 
 interface ImageItem {
@@ -20,6 +21,10 @@ export const ImagesToPdfWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    handleFiles(files);
+  });
 
   const handleFiles = async (fileList: FileList | File[]) => {
     setError(null);
@@ -94,8 +99,6 @@ export const ImagesToPdfWorkspace: React.FC = () => {
         onFilesDrop={handleFiles}
         icon={<FilePlus className="h-5 w-5" />}
         title="Drop images to convert to PDF, or"
-        subtitle="Combine multiple photos, scans, and graphics into one paginated PDF."
-        badgeText="100% Local Processing"
       >
         <input
           ref={fileInputRef}
@@ -113,7 +116,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
       {images.length > 0 && (
         <div className="nt-card p-5 space-y-5">
           <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
-            <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+            <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
               Queued Images ({images.length})
             </span>
             <button
@@ -126,7 +129,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
 
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Target Page Geometry
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -137,7 +140,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
                     onClick={() => setPageSize(sz)}
                     className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       pageSize === sz
-                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >
@@ -148,7 +151,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Page Margins
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -159,7 +162,7 @@ export const ImagesToPdfWorkspace: React.FC = () => {
                     onClick={() => setMargin(m)}
                     className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       margin === m
-                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >

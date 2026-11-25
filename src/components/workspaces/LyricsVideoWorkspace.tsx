@@ -9,6 +9,7 @@ import {
 import { SubtitleEngine } from '../../engines/subtitleEngine';
 import { formatDuration, formatBytes, downloadBlob } from '../../lib/utils';
 import { WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import {
   Music,
   Video,
@@ -128,6 +129,14 @@ export const LyricsVideoWorkspace: React.FC = () => {
   useEffect(() => {
     loadDemoTrack('tizita-amharic');
   }, []);
+
+  useHandoffFiles((files) => {
+    const f = files[0];
+    if (!f) return;
+    if (f.type.startsWith('audio/') || /\.(mp3|wav|m4a|ogg|aac|flac)$/i.test(f.name)) {
+      handleAudioUpload(f);
+    }
+  });
 
   // Cleanup object URLs on unmount
   useEffect(() => {
@@ -511,22 +520,17 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {/* Screen Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
               <Sparkles className="h-4 w-4" />
             </div>
-            <div>
-              <h2 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
-                Live Animated Lyrics Video Studio
-              </h2>
-              <p className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
-                Extract lyrics from uploaded audio · Amharic (አማርኛ) &amp; Multilingual Support
-              </p>
-            </div>
+            <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+              {audioFile ? audioFile.name : 'Lyrics Studio'}
+            </span>
           </div>
 
           {/* Aspect Ratio Picker */}
           <div className="nt-well flex items-center gap-1 self-start sm:self-auto p-1">
-            <span className="text-[10px] font-mono font-bold text-[#746D61] dark:text-[#938B7D] px-1.5">
+            <span className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#9CA3AF] px-1.5">
               Canvas:
             </span>
             {[
@@ -540,8 +544,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
                 onClick={() => setStyle({ ...style, aspectRatio: ratio.id as any })}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
                   style.aspectRatio === ratio.id
-                    ? 'bg-[#141413] text-[#FACC15] font-bold shadow-sm'
-                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                    ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] font-bold shadow-sm'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
                 }`}
               >
                 {ratio.label}
@@ -598,7 +602,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
               onChange={(e) => handleSeek(Number(e.target.value))}
               className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono font-bold">
+            <div className="flex justify-between text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono font-bold">
               <span>{formatDuration(currentTime)}</span>
               <span>{formatDuration(audioDuration)}</span>
             </div>
@@ -677,20 +681,20 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     if (e.target.files?.[0]) handleAudioUpload(e.target.files[0]);
                   }}
                 />
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] mb-2.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] mb-2.5">
                   <Volume2 className="h-5 w-5" />
                 </div>
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                   {audioFile ? audioFile.name : 'Upload Your Music (MP3, WAV, M4A, FLAC)'}
                 </span>
-                <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono mt-1">
+                <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-1">
                   Click or drag audio file
                 </span>
               </div>
 
               {/* Or Select Built-in Demo Beats */}
               <div className="nt-well p-4 space-y-2.5">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                   Or select sample music track:
                 </span>
                 <div className="grid grid-cols-2 gap-2">
@@ -703,12 +707,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                         onClick={() => loadDemoTrack(demo.id)}
                         className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                           isSelected
-                            ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-sm'
-                            : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
+                            ? 'border-[#2563EB] bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#111214] dark:text-[#F3F4F6] shadow-sm'
+                            : 'nt-subcard text-[#4B5563] dark:text-[#D1D5DB] hover:border-[var(--nt-border-strong)]'
                         }`}
                       >
                         <span className="text-xs font-extrabold block truncate">{demo.name}</span>
-                        <span className="text-[10px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                        <span className="text-[10px] font-mono text-[#6B7280] dark:text-[#9CA3AF]">
                           {demo.duration}s preview
                         </span>
                       </button>
@@ -720,22 +724,17 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
             {/* AI Auto-Transcribe & Lyric Tools */}
             <div className="nt-well flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 p-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <Wand2 className="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
-                  <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
-                    Neural Song Lyrics Extractor (Whisper AI)
-                  </span>
-                </div>
-                <p className="text-[11px] text-[#746D61] dark:text-[#938B7D]">
-                  Transcribe vocal lyrics from your uploaded music in <strong>Amharic (አማርኛ)</strong>, English, and more.
-                </p>
+              <div className="flex items-center gap-2">
+                <Wand2 className="h-4 w-4 text-[#2563EB] dark:text-[#60A5FA]" />
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                  Auto-Transcribe
+                </span>
               </div>
 
               {/* Language Selector + AI Buttons */}
               <div className="flex flex-wrap items-center gap-2">
                 <div className="nt-input flex items-center gap-1.5 px-2.5 py-1.5">
-                  <Globe className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                  <Globe className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                   <select
                     value={selectedLanguage}
                     onChange={(e) => {
@@ -744,10 +743,10 @@ export const LyricsVideoWorkspace: React.FC = () => {
                         setStyle((prev) => ({ ...prev, fontFamily: 'Noto Sans Ethiopic' }));
                       }
                     }}
-                    className="bg-transparent text-xs font-bold text-[#141413] dark:text-[#FAF7F0] outline-none cursor-pointer"
+                    className="bg-transparent text-xs font-bold text-[#111214] dark:text-[#F3F4F6] outline-none cursor-pointer"
                   >
                     {SUPPORTED_LANGUAGES.map((lang) => (
-                      <option key={lang.code} value={lang.code} className="bg-white dark:bg-[#1F1D19] text-[#141413] dark:text-[#FAF7F0]">
+                      <option key={lang.code} value={lang.code} className="bg-white dark:bg-[#13151A] text-[#111214] dark:text-[#F3F4F6]">
                         {lang.name} ({lang.native})
                       </option>
                     ))}
@@ -830,8 +829,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
             {/* Time Nudge Controls */}
             <div className="nt-well flex flex-wrap items-center justify-between gap-3 p-3.5 text-xs">
-              <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+              <span className="font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                 <span>Timeline Synchronization Shift:</span>
               </span>
 
@@ -856,8 +855,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
             {/* Textarea for Pasting Lyrics */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
-                  <FileText className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                   <span>Raw Lyrics Text Editor (Type, Paste, or Edit):</span>
                 </span>
                 <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
@@ -875,8 +874,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
             {/* Line by Line Interactive Editor */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                   <span>Synchronized Lyric Lines</span>
                 </span>
 
@@ -885,15 +884,15 @@ export const LyricsVideoWorkspace: React.FC = () => {
                   onClick={handleAddLine}
                   className="nt-btn-secondary flex items-center gap-1 px-2.5 py-1 text-xs font-bold"
                 >
-                  <Plus className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                  <Plus className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                   <span>Add Line</span>
                 </button>
               </div>
 
               {lyrics.length === 0 ? (
-                <div className="nt-well p-8 text-center text-xs text-[#746D61] dark:text-[#938B7D]">
+                <div className="nt-well p-8 text-center text-xs text-[#6B7280] dark:text-[#9CA3AF]">
                   No lyrics currently loaded. Upload your song and click{' '}
-                  <strong className="text-[#141413] dark:text-[#FAF7F0]">&quot;Extract Lyrics from Audio&quot;</strong> or paste your lyrics above.
+                  <strong className="text-[#111214] dark:text-[#F3F4F6]">&quot;Extract Lyrics from Audio&quot;</strong> or paste your lyrics above.
                 </div>
               ) : (
                 <div className="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
@@ -903,7 +902,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
                       className="nt-subcard flex items-center gap-2 p-2.5 text-xs"
                     >
                       {/* Timestamp Range Inputs */}
-                      <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 text-[#454038] dark:text-[#CBC4B6]">
+                      <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 text-[#4B5563] dark:text-[#D1D5DB]">
                         <input
                           type="number"
                           step={0.1}
@@ -961,7 +960,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'media' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                 Custom Video or Image Background:
               </span>
               <div
@@ -977,20 +976,20 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     if (e.target.files?.[0]) handleBgMediaUpload(e.target.files[0]);
                   }}
                 />
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] mb-2.5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] mb-2.5">
                   <ImageIcon className="h-5 w-5" />
                 </div>
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                   {bgImageFile ? `Image: ${bgImageFile.name}` : bgVideoFile ? `Video: ${bgVideoFile.name}` : 'Upload Custom Image or Video'}
                 </span>
-                <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono mt-1">
+                <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-1">
                   Supports MP4, WebM, PNG, JPG, WebP
                 </span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                 Or select high-resolution procedural background:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -1027,8 +1026,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
             <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold">
-                  <span className="text-[#141413] dark:text-[#FAF7F0]">Background Dimming Overlay</span>
-                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">
+                  <span className="text-[#111214] dark:text-[#F3F4F6]">Background Dimming Overlay</span>
+                  <span className="font-mono text-[#2563EB] dark:text-[#60A5FA]">
                     {Math.round(style.backgroundDim * 100)}%
                   </span>
                 </div>
@@ -1045,8 +1044,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold">
-                  <span className="text-[#141413] dark:text-[#FAF7F0]">Background Blur</span>
-                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">{style.backgroundBlur}px</span>
+                  <span className="text-[#111214] dark:text-[#F3F4F6]">Background Blur</span>
+                  <span className="font-mono text-[#2563EB] dark:text-[#60A5FA]">{style.backgroundBlur}px</span>
                 </div>
                 <input
                   type="range"
@@ -1066,7 +1065,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'style' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                 Lyric Text Placement:
               </span>
               <div className="grid grid-cols-3 gap-3">
@@ -1084,8 +1083,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
                       onClick={() => setStyle({ ...style, placement: pos.id as any })}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border gap-1.5 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-card'
-                          : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
+                          ? 'border-[#2563EB] bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#111214] dark:text-[#F3F4F6] shadow-card'
+                          : 'nt-subcard text-[#4B5563] dark:text-[#D1D5DB] hover:border-[var(--nt-border-strong)]'
                       }`}
                     >
                       <Icon className="h-5 w-5" />
@@ -1098,7 +1097,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
             <div className="nt-well grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">Font Family</span>
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">Font Family</span>
                 <select
                   value={style.fontFamily}
                   onChange={(e) => setStyle({ ...style, fontFamily: e.target.value as any })}
@@ -1116,8 +1115,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold">
-                  <span className="text-[#141413] dark:text-[#FAF7F0]">Font Scale</span>
-                  <span className="font-mono text-[#CA8A04] dark:text-[#FACC15]">{style.fontSize}px</span>
+                  <span className="text-[#111214] dark:text-[#F3F4F6]">Font Scale</span>
+                  <span className="font-mono text-[#2563EB] dark:text-[#60A5FA]">{style.fontSize}px</span>
                 </div>
                 <input
                   type="range"
@@ -1131,7 +1130,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">Font Weight</span>
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">Font Weight</span>
                 <div className="nt-subcard flex items-center p-1 gap-1">
                   {[
                     { label: 'Regular', val: 'normal' },
@@ -1144,8 +1143,8 @@ export const LyricsVideoWorkspace: React.FC = () => {
                       onClick={() => setStyle({ ...style, fontWeight: w.val as any })}
                       className={`flex-1 py-1 text-xs rounded-md font-bold transition-colors cursor-pointer ${
                         style.fontWeight === w.val
-                          ? 'bg-[#141413] text-[#FACC15]'
-                          : 'text-[#746D61] dark:text-[#938B7D] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                          ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
+                          : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
                       }`}
                     >
                       {w.label}
@@ -1157,7 +1156,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
             <div className="nt-well grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Base Text Color</span>
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Base Text Color</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
@@ -1165,12 +1164,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     onChange={(e) => setStyle({ ...style, textColor: e.target.value })}
                     className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-[#454038] dark:text-[#CBC4B6]">{style.textColor}</span>
+                  <span className="text-xs font-mono text-[#4B5563] dark:text-[#D1D5DB]">{style.textColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Active Highlight</span>
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Active Highlight</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
@@ -1178,12 +1177,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     onChange={(e) => setStyle({ ...style, activeColor: e.target.value })}
                     className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-[#141413] dark:text-[#FACC15]">{style.activeColor}</span>
+                  <span className="text-xs font-mono text-[#111214] dark:text-[#60A5FA]">{style.activeColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Glow Color</span>
+                <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Glow Color</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
@@ -1191,17 +1190,17 @@ export const LyricsVideoWorkspace: React.FC = () => {
                     onChange={(e) => setStyle({ ...style, glowColor: e.target.value })}
                     className="h-8 w-8 rounded border border-[var(--nt-border)] bg-transparent cursor-pointer"
                   />
-                  <span className="text-xs font-mono text-[#454038] dark:text-[#CBC4B6]">{style.glowColor}</span>
+                  <span className="text-xs font-mono text-[#4B5563] dark:text-[#D1D5DB]">{style.glowColor}</span>
                 </div>
               </div>
 
               <div className="space-y-1.5 flex flex-col justify-center">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   <input
                     type="checkbox"
                     checked={style.showPillBg}
                     onChange={(e) => setStyle({ ...style, showPillBg: e.target.checked })}
-                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                   />
                   <span>Text Backdrop Pill Box</span>
                 </label>
@@ -1214,7 +1213,7 @@ export const LyricsVideoWorkspace: React.FC = () => {
         {activeTab === 'effects' && (
           <div className="space-y-5">
             <div className="space-y-2">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                 Lyric Entry &amp; Transition Animation:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -1234,12 +1233,12 @@ export const LyricsVideoWorkspace: React.FC = () => {
                       onClick={() => setStyle({ ...style, transitionEffect: fx.id as any })}
                       className={`p-3 rounded-xl border text-left flex flex-col justify-between gap-1 transition-all cursor-pointer ${
                         isSelected
-                          ? 'border-[#CA8A04] bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] shadow-card'
-                          : 'nt-subcard text-[#454038] dark:text-[#CBC4B6] hover:border-[var(--nt-border-strong)]'
+                          ? 'border-[#2563EB] bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#111214] dark:text-[#F3F4F6] shadow-card'
+                          : 'nt-subcard text-[#4B5563] dark:text-[#D1D5DB] hover:border-[var(--nt-border-strong)]'
                       }`}
                     >
                       <span className="text-xs font-extrabold block">{fx.name}</span>
-                      <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] leading-tight">
+                      <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] leading-tight">
                         {fx.desc}
                       </span>
                     </button>
@@ -1250,46 +1249,46 @@ export const LyricsVideoWorkspace: React.FC = () => {
 
             <div className="nt-well grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   <input
                     type="checkbox"
                     checked={style.showMusicalNotes}
                     onChange={(e) => setStyle({ ...style, showMusicalNotes: e.target.checked })}
-                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                   />
                   <span>Musical Notes (♪ ♫ ♩ ♬)</span>
                 </label>
-                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
+                <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] pl-6">
                   Floating musical note icons during singing
                 </p>
               </div>
 
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   <input
                     type="checkbox"
                     checked={style.beatPulse}
                     onChange={(e) => setStyle({ ...style, beatPulse: e.target.checked })}
-                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                   />
                   <span>Audio Beat Pulse Zoom</span>
                 </label>
-                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
+                <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] pl-6">
                   Subtle background zoom on musical beats
                 </p>
               </div>
 
               <div className="space-y-1">
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   <input
                     type="checkbox"
                     checked={style.showWaveform}
                     onChange={(e) => setStyle({ ...style, showWaveform: e.target.checked })}
-                    className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                    className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                   />
                   <span>Bottom Waveform Aura</span>
                 </label>
-                <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] pl-6">
+                <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] pl-6">
                   Glowing sine wave line across the footer
                 </p>
               </div>

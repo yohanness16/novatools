@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, readFileAsArrayBuffer } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { Upload, FileText, ArrowUp, ArrowDown, Trash2, Loader2 } from 'lucide-react';
 
 interface PdfFileItem {
@@ -19,6 +20,10 @@ export const PdfMergeWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    handleFiles(files);
+  });
 
   const handleFiles = async (newFiles: FileList | File[]) => {
     setError(null);
@@ -110,8 +115,6 @@ export const PdfMergeWorkspace: React.FC = () => {
         onFilesDrop={handleFiles}
         icon={<Upload className="h-5 w-5" />}
         title="Drop PDF files here, or"
-        subtitle="Select 2 or more documents to merge into one ordered PDF."
-        badgeText="100% Local Processing"
       >
         <input
           ref={fileInputRef}
@@ -133,7 +136,7 @@ export const PdfMergeWorkspace: React.FC = () => {
         <div className="nt-card p-4 sm:p-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                 Queued Documents ({files.length})
               </span>
               <span className="nt-badge-yellow px-2.5 py-0.5 font-mono text-[10px] font-bold">
@@ -155,13 +158,13 @@ export const PdfMergeWorkspace: React.FC = () => {
                 className="nt-subcard flex items-center justify-between p-3 transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] font-mono text-[11px] font-bold">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] font-mono text-[11px] font-bold">
                     {index + 1}
                   </div>
                   <FileText className="h-4 w-4 shrink-0 text-[#746D61]" />
                   <div className="truncate min-w-0">
-                    <p className="truncate text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{item.name}</p>
-                    <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono">
+                    <p className="truncate text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">{item.name}</p>
+                    <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                       {item.pageCount} {item.pageCount === 1 ? 'page' : 'pages'} · {formatBytes(item.size)}
                     </p>
                   </div>

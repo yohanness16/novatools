@@ -1,83 +1,12 @@
 ---
 ---
 
-<footer class="mt-20 border-t border-[var(--nt-border)] bg-[#EFE9DC] dark:bg-[#0E0D0B] text-[#454038] dark:text-[#CBC4B6]">
-  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
-      {/* Brand & Mission */}
-      <div class="lg:col-span-2 space-y-4">
-        <a href="/" class="inline-flex items-center gap-2.5 group">
-          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] font-mono text-xs font-black shadow-sm">
-            N
-          </span>
-          <span class="text-lg font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0] group-hover:underline">
-            NovaTools
-          </span>
-        </a>
-        <p class="text-xs sm:text-sm leading-relaxed text-[#454038] dark:text-[#938B7D] max-w-sm">
-          Privacy-first desktop utility suite running directly inside your browser. Fast, tactile, and 100% local processing with zero server uploads.
-        </p>
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--nt-border)] bg-white dark:bg-[#1F1D19] text-xs font-mono text-[#141413] dark:text-[#FAF7F0] shadow-sm">
-          <span class="h-2 w-2 rounded-full bg-[#15803D] dark:bg-[#4ADE80]"></span>
-          <span class="font-semibold">100% Local & Private Sandbox</span>
-        </div>
-      </div>
-
-      {/* PDF Suite */}
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">PDF Suite</h3>
-        <ul class="mt-3 space-y-2 text-xs">
-          <li><a href="/pdf/merge" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Merge PDF</a></li>
-          <li><a href="/pdf/split" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Split & Extract</a></li>
-          <li><a href="/pdf/rotate" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Rotate Pages</a></li>
-          <li><a href="/pdf/page-numberer" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Page Numberer</a></li>
-          <li><a href="/pdf/protect" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Password Protect</a></li>
-          <li><a href="/pdf/redact-flatten" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Redact & Flatten</a></li>
-          <li><a href="/pdf/pdf-to-images" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">PDF to Images</a></li>
-          <li><a href="/pdf/images-to-pdf" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Images to PDF</a></li>
-        </ul>
-      </div>
-
-      {/* Image Suite */}
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">Image & Docs</h3>
-        <ul class="mt-3 space-y-2 text-xs">
-          <li><a href="/image/background-remover" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Background Remover</a></li>
-          <li><a href="/image/compressor" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Image Compressor</a></li>
-          <li><a href="/image/converter" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Format Converter</a></li>
-          <li><a href="/image/resizer" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Image Resizer</a></li>
-          <li><a href="/image/exif-scrubber" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">EXIF Scrubber</a></li>
-          <li><a href="/image/svg-optimizer" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">SVG Cleaner</a></li>
-          <li><a href="/document/studio" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Document Studio</a></li>
-          <li><a href="/diagram/studio" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Diagram Studio</a></li>
-        </ul>
-      </div>
-
-      {/* Video & Audio Suite */}
-      <div>
-        <h3 class="text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">Video & Audio</h3>
-        <ul class="mt-3 space-y-2 text-xs">
-          <li><a href="/video/lyrics-video-generator" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Lyrics Video Maker</a></li>
-          <li><a href="/video/subtitle-generator" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Subtitle Generator</a></li>
-          <li><a href="/video/text-to-speech" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Text to Speech (TTS)</a></li>
-          <li><a href="/video/audio-booster" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Audio Booster</a></li>
-          <li><a href="/video/video-to-gif" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Video to GIF</a></li>
-          <li><a href="/video/trimmer" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Video Trimmer</a></li>
-          <li><a href="/video/compressor" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Video Compressor</a></li>
-          <li><a href="/video/audio-extractor" class="hover:text-[#141413] dark:hover:text-[#FACC15] hover:underline transition-colors">Audio Extractor</a></li>
-        </ul>
-      </div>
-    </div>
-
-    {/* Bottom bar */}
-    <div class="mt-12 border-t border-[var(--nt-border)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#746D61] dark:text-[#938B7D]">
-      <p>© {new Date().getFullYear()} NovaTools. All rights reserved. 100% Local & Private Processing.</p>
-      <div class="flex items-center gap-6 font-medium">
-        <a href="/privacy" class="hover:text-[#141413] dark:hover:text-[#FAF7F0] transition-colors">Privacy Policy</a>
-        <a href="/terms" class="hover:text-[#141413] dark:hover:text-[#FAF7F0] transition-colors">Terms of Service</a>
-        <a href="/about" class="hover:text-[#141413] dark:hover:text-[#FAF7F0] transition-colors">Architecture</a>
-        <a href="/contact" class="hover:text-[#141413] dark:hover:text-[#FACC15] transition-colors">Contact</a>
-      </div>
+<footer class="mt-12 border-t border-[var(--nt-border)] bg-white dark:bg-[#0B0C0F]">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs text-[#6B7280] dark:text-[#9CA3AF]">
+    <span class="font-medium">© {new Date().getFullYear()} NovaTools</span>
+    <div class="flex items-center gap-5 font-medium">
+      <a href="/privacy" class="hover:text-[#111214] dark:hover:text-[#F3F4F6] transition-colors">Privacy</a>
+      <a href="/terms" class="hover:text-[#111214] dark:hover:text-[#F3F4F6] transition-colors">Terms</a>
     </div>
   </div>
 </footer>

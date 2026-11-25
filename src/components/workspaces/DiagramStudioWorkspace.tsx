@@ -13,7 +13,6 @@ import {
   RefreshCw,
   Eye,
   FileCode,
-  ShieldCheck,
   ZoomIn,
   ZoomOut,
   RotateCcw,
@@ -24,6 +23,7 @@ import { DiagramEngine } from '../../engines/diagramEngine';
 import { DocEngine } from '../../engines/docEngine';
 import { PdfEngine } from '../../engines/pdfEngine';
 import type { DiagramType, DiagramTheme } from '../../engines/diagramTypes';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 
 const SAMPLE_DOCUMENT = `# E-Commerce Microservices Architecture
 
@@ -117,12 +117,9 @@ export default function DiagramStudioWorkspace() {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     setIsProcessing(true);
-    setStatusMessage(`Ingesting ${file.name}...`);
+    setStatusMessage(`Loading ${file.name}...`);
 
     try {
       if (file.name.endsWith('.pdf')) {
@@ -130,27 +127,37 @@ export default function DiagramStudioWorkspace() {
         const { markdown } = await PdfEngine.extractTextAndStructureFromPdf(buffer);
         setDocText(markdown);
         generateDiagram(markdown, diagramType, diagramTheme);
-        setStatusMessage('PDF ingested and converted to diagram!');
+        setStatusMessage('Loaded');
       } else if (file.name.endsWith('.docx')) {
         const buffer = await file.arrayBuffer();
         const { markdown } = await DocEngine.docxToMarkdown(buffer);
         setDocText(markdown);
         generateDiagram(markdown, diagramType, diagramTheme);
-        setStatusMessage('DOCX ingested and converted to diagram!');
+        setStatusMessage('Loaded');
       } else {
         const text = await file.text();
         setDocText(text);
         generateDiagram(text, diagramType, diagramTheme);
-        setStatusMessage('Document loaded and converted!');
+        setStatusMessage('Loaded');
       }
     } catch (err: any) {
       console.error(err);
-      setStatusMessage(`Error loading document: ${err.message}`);
+      setStatusMessage(`Error: ${err.message}`);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setStatusMessage(''), 3000);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  useHandoffFiles((files) => {
+    if (files[0]) processFile(files[0]);
+  });
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
   };
 
   const handleDownloadSvg = () => {
@@ -205,28 +212,14 @@ export default function DiagramStudioWorkspace() {
   return (
     <div className="w-full space-y-5">
       <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shrink-0">
-            <Workflow className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shrink-0">
+              <Workflow className="w-5 h-5" />
+            </div>
+            <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+              {diagramType.toUpperCase()}
+            </span>
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-2 flex-wrap">
-              <span>AI Document-to-Diagram Studio</span>
-              <span className="nt-badge-yellow text-[10px] px-2.5 py-0.5 font-mono font-bold">
-                Mermaid.js Vector
-              </span>
-            </h2>
-            <p className="text-xs text-[#746D61] dark:text-[#938B7D] flex items-center gap-2 mt-0.5 font-mono flex-wrap">
-              <span>Flowcharts</span>
-              <span>•</span>
-              <span>ER Diagrams</span>
-              <span>•</span>
-              <span>Architecture</span>
-              <span>•</span>
-              <span>100% Client-Side</span>
-            </p>
-          </div>
-        </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <input
@@ -282,7 +275,7 @@ export default function DiagramStudioWorkspace() {
               onClick={() => handleTypeChange(item.type)}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 border transition-all cursor-pointer ${
                 active
-                  ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                  ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                   : 'nt-btn-secondary'
               }`}
             >
@@ -301,8 +294,8 @@ export default function DiagramStudioWorkspace() {
                 onClick={() => setLeftTab('doc')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   leftTab === 'doc'
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
-                    : 'text-[#454038] dark:text-[#CBC4B6]'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -313,8 +306,8 @@ export default function DiagramStudioWorkspace() {
                 onClick={() => setLeftTab('code')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   leftTab === 'code'
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413]'
-                    : 'text-[#454038] dark:text-[#CBC4B6]'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB]'
                 }`}
               >
                 <FileCode className="w-3.5 h-3.5" />
@@ -351,8 +344,8 @@ export default function DiagramStudioWorkspace() {
 
         <div className="lg:col-span-7 nt-card p-4 flex flex-col h-[600px]">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--nt-border)]">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
-              <Eye className="w-3.5 h-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5 font-mono">
+              <Eye className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
               Visual Canvas
             </span>
 
@@ -371,24 +364,24 @@ export default function DiagramStudioWorkspace() {
               <div className="nt-well flex items-center gap-1 p-0.5 rounded-lg">
                 <button
                   onClick={() => setZoomLevel((z) => Math.max(0.5, z - 0.2))}
-                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
+                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
                   title="Zoom Out"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-[10px] font-mono font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
+                <span className="text-[10px] font-mono font-bold text-[#111214] dark:text-[#F3F4F6] px-1">
                   {Math.round(zoomLevel * 100)}%
                 </span>
                 <button
                   onClick={() => setZoomLevel((z) => Math.min(2.5, z + 0.2))}
-                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
+                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
                   title="Zoom In"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setZoomLevel(1)}
-                  className="p-1.5 text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0] rounded cursor-pointer"
+                  className="p-1.5 text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6] rounded cursor-pointer"
                   title="Reset Zoom"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -431,14 +424,7 @@ export default function DiagramStudioWorkspace() {
         </div>
       </div>
 
-      <div className="nt-well p-4 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-[#15803D] dark:text-[#4ADE80]" />
-          <span className="text-xs text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold">
-            100% Client-Side Private • Vector graphics compiled locally
-          </span>
-        </div>
-
+      <div className="nt-well p-4 flex flex-wrap items-center justify-end gap-2.5">
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleDownloadSvg}

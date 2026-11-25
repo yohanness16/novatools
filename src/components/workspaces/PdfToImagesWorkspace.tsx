@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadBlob, readFileAsArrayBuffer } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import JSZip from 'jszip';
 import { FileImage, Loader2, Download } from 'lucide-react';
 
@@ -22,6 +23,10 @@ export const PdfToImagesWorkspace: React.FC = () => {
   const [renderedPages, setRenderedPages] = useState<RenderedPage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     if (selectedFile.type !== 'application/pdf' && !selectedFile.name.toLowerCase().endsWith('.pdf')) {
@@ -106,8 +111,6 @@ export const PdfToImagesWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<FileImage className="h-5 w-5" />}
           title="Drop PDF to convert to images, or"
-          subtitle="Render high-DPI vector pages into crisp PNG or JPEG images."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -124,8 +127,8 @@ export const PdfToImagesWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                 {pageCount} Pages · {formatBytes(file.size)}
               </p>
             </div>
@@ -143,7 +146,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
 
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Target Image Format
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -152,7 +155,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
                   onClick={() => setFormat('png')}
                   className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                     format === 'png'
-                      ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                      ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                       : 'nt-btn-secondary'
                   }`}
                 >
@@ -163,7 +166,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
                   onClick={() => setFormat('jpeg')}
                   className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                     format === 'jpeg'
-                      ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                      ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                       : 'nt-btn-secondary'
                   }`}
                 >
@@ -173,7 +176,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 DPI Resolution Scale
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -184,7 +187,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
                     onClick={() => setScale(s)}
                     className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       scale === s
-                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >
@@ -222,7 +225,7 @@ export const PdfToImagesWorkspace: React.FC = () => {
           {renderedPages.length > 0 && (
             <div className="space-y-3 pt-1">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--nt-border)] pb-3">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                   Rendered Page Images ({renderedPages.length})
                 </span>
                 {renderedPages.length > 1 && (

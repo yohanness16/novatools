@@ -1,68 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { HeroSection } from '../components/HeroSection';
-import AboutSection from '../components/AboutSection.astro';
-import ServicesSection from '../components/ServicesSection.astro';
-import AdSenseAd from '../components/AdSenseAd.astro';
-import { ShieldCheck, Lock, Code, Eye } from 'lucide-react';
+import { ActionHub } from '../components/ActionHub';
 ---
 
 <Layout
-  title="NovaTools - In-Browser Media, Video & PDF Utilities"
-  description="High-performance, privacy-first PDF, image, video, and audio tools running instantly in your browser. Zero cloud uploads, 100% free."
+  title="NovaTools - Fast Client-Side PDF, Image, Video & Document Tools"
+  description="Private, instant client-side PDF, image, video, audio, diagram, and document tools running directly in your browser."
 >
-  <HeroSection client:load />
-
-  <AboutSection />
-
-  <ServicesSection />
-
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <AdSenseAd slotId="5386318888" className="my-8" />
-  </div>
-
-  {/* Security Ledger & Open Architecture Guarantee */}
-  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <section class="nt-window p-6 sm:p-8 space-y-6">
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--nt-border)] pb-4 text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] font-mono">
-        <div class="flex items-center gap-2.5">
-          <ShieldCheck class="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
-          <span>SECURITY_LEDGER // ARCHITECTURE GUARANTEE</span>
-        </div>
-        <span class="nt-badge-yellow px-2.5 py-0.5 text-[10px]">ZERO-KNOWLEDGE</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-        <div class="nt-subcard p-4 space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
-            <Lock class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
-            <span>Stateless by Default</span>
-          </div>
-          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-            Zero databases of user files. The studio executes entirely from static assets loaded into your local browser cache.
-          </p>
-        </div>
-
-        <div class="nt-subcard p-4 space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
-            <Code class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
-            <span>100% Client-Side Runtime</span>
-          </div>
-          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-            Every algorithm, from vector PDF manipulation to neural speech and image masking, executes directly on your CPU and GPU.
-          </p>
-        </div>
-
-        <div class="nt-subcard p-4 space-y-2">
-          <div class="flex items-center gap-2 text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
-            <Eye class="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
-            <span>Open Verification</span>
-          </div>
-          <p class="text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-            Inspect network traffic via Browser DevTools at any time to confirm zero outbound requests transmitting file bytes.
-          </p>
-        </div>
-      </div>
-    </section>
-  </div>
+  <ActionHub client:load />
 </Layout>

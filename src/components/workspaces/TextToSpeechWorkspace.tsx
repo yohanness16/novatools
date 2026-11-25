@@ -15,6 +15,7 @@ import { ScriptEditor } from './tts/ScriptEditor';
 import { AudioPlayerCard } from './tts/AudioPlayerCard';
 import { GenerationHistory } from './tts/GenerationHistory';
 import { WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import {
   Volume2,
   Sparkles,
@@ -43,8 +44,16 @@ export const TextToSpeechWorkspace: React.FC = () => {
   const [activeDevice, setActiveDevice] = useState<string>('wasm');
 
   const [scriptText, setScriptText] = useState<string>(
-    'Welcome to the AI Voice Studio. Generate studio-quality, lifelike voiceovers for videos, audiobooks, podcasts, and presentations — processed locally with crystal-clear acoustic fidelity.'
+    'Welcome to NovaTools Voice Studio.'
   );
+
+  useHandoffFiles((files) => {
+    if (files[0]) {
+      files[0].text().then((t) => {
+        if (t.trim()) setScriptText(t);
+      }).catch(() => {});
+    }
+  });
 
   const [progress, setProgress] = useState<TTSProgress>({
     status: 'idle',
@@ -165,19 +174,14 @@ export const TextToSpeechWorkspace: React.FC = () => {
   return (
     <div className="w-full space-y-6">
       {/* Studio Top Bar */}
-      <div className="nt-card p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start gap-3.5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#141413] text-[#FACC15] shadow-card">
+      <div className="nt-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
             <Volume2 className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-lg sm:text-xl font-extrabold text-[#141413] dark:text-[#FAF7F0] tracking-tight">
-              AI Voice Studio
-            </h2>
-            <p className="text-xs sm:text-sm text-[#746D61] dark:text-[#938B7D] mt-0.5">
-              Synthesize natural cadence speech with multi-chunk support and local neural vocoding.
-            </p>
-          </div>
+          <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+            {selectedVoice.name} · {selectedVoice.country}
+          </span>
         </div>
 
         {/* Voice Picker & Settings Pill Buttons */}
@@ -192,7 +196,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] leading-tight">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] leading-tight">
                   {selectedVoice.name}
                 </span>
                 {selectedVoice.grade && (
@@ -201,7 +205,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
                   </span>
                 )}
               </div>
-              <span className="font-mono text-[10px] text-[#746D61] dark:text-[#938B7D] capitalize">
+              <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF] capitalize">
                 {selectedVoice.country} · {selectedVoice.gender}
               </span>
             </div>
@@ -213,7 +217,7 @@ export const TextToSpeechWorkspace: React.FC = () => {
             onClick={() => setIsVoiceSettingsOpen(true)}
             className="nt-btn-secondary flex items-center gap-2 px-3.5 py-2.5 text-xs font-bold"
           >
-            <Sliders className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
+            <Sliders className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
             <span>Voice settings</span>
           </button>
         </div>

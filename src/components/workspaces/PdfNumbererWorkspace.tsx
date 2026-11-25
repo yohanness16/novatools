@@ -8,6 +8,7 @@ import {
 } from '../../engines/pdfNumbererEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import {
   FileText,
   Download,
@@ -52,6 +53,10 @@ export const PdfNumbererWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     setError(null);
@@ -119,8 +124,6 @@ export const PdfNumbererWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<FileText className="h-5 w-5" />}
           title="Drop PDF to stamp page numbers, or"
-          subtitle="Vector page numbering and Roman numerals across 6 alignment anchors."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -138,7 +141,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
                 <span className="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">
                   {formatBytes(file.size)}
                 </span>
@@ -148,7 +151,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                 {result ? 'PDF stamped · Ready to download' : 'Select stamp alignment and numbering format'}
               </p>
             </div>
@@ -167,7 +170,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* Live Page Mockup */}
             <div className="lg:col-span-5 nt-well flex flex-col items-center justify-center p-5 space-y-3">
-              <span className="text-[11px] font-mono font-bold text-[#746D61] dark:text-[#938B7D]">
+              <span className="text-[11px] font-mono font-bold text-[#6B7280] dark:text-[#9CA3AF]">
                 Page Layout Preview
               </span>
 
@@ -197,13 +200,13 @@ export const PdfNumbererWorkspace: React.FC = () => {
                   }`}
                   style={{ fontSize: `${Math.max(8, fontSize - 3)}px` }}
                 >
-                  <span className="bg-[#FACC15] text-[#141413] px-1.5 py-0.5 rounded shadow-sm">
+                  <span className="bg-[#2563EB] text-[#141413] px-1.5 py-0.5 rounded shadow-sm">
                     {getPreviewSampleText()}
                   </span>
                 </div>
               </div>
 
-              <span className="text-[10px] font-mono font-semibold text-[#746D61] dark:text-[#938B7D]">
+              <span className="text-[10px] font-mono font-semibold text-[#6B7280] dark:text-[#9CA3AF]">
                 {position.replace('-', ' ').toUpperCase()} · {template}
               </span>
             </div>
@@ -211,7 +214,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
             {/* Settings */}
             <div className="lg:col-span-7 space-y-3.5">
               <div className="nt-well p-3.5 space-y-2">
-                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                   Stamp Position on Page
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -225,7 +228,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
                         onClick={() => setPosition(pos.id)}
                         className={`flex items-center justify-center gap-1.5 p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                            ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                             : 'nt-btn-secondary'
                         }`}
                       >
@@ -238,7 +241,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
               </div>
 
               <div className="nt-well p-3.5 space-y-2">
-                <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+                <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
                   Number Format Template
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -251,7 +254,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
                         onClick={() => setTemplate(preset.id)}
                         className={`p-2 rounded-xl border text-xs text-center font-mono font-bold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                            ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                             : 'nt-btn-secondary'
                         }`}
                       >
@@ -264,7 +267,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
 
               <div className="nt-well grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 text-xs">
                 <div className="space-y-1">
-                  <label className="text-[#454038] dark:text-[#CBC4B6] font-bold block">Start Number</label>
+                  <label className="text-[#4B5563] dark:text-[#D1D5DB] font-bold block">Start Number</label>
                   <input
                     type="number"
                     min={1}
@@ -275,7 +278,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[#454038] dark:text-[#CBC4B6] font-bold block">Skip Cover Pages</label>
+                  <label className="text-[#4B5563] dark:text-[#D1D5DB] font-bold block">Skip Cover Pages</label>
                   <input
                     type="number"
                     min={0}
@@ -286,7 +289,7 @@ export const PdfNumbererWorkspace: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[#454038] dark:text-[#CBC4B6] font-bold block">Font Size ({fontSize}pt)</label>
+                  <label className="text-[#4B5563] dark:text-[#D1D5DB] font-bold block">Font Size ({fontSize}pt)</label>
                   <input
                     type="range"
                     min={8}

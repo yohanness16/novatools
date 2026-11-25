@@ -3,6 +3,7 @@ import { VideoEngine, type ExtractedAudioTrack } from '../../engines/videoEngine
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import { AudioVisualizerScreen } from './AudioVisualizerScreen';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import JSZip from 'jszip';
 import { Music, CheckCircle2, Loader2, Download, Layers, Globe, Radio, Play, Pause, Activity } from 'lucide-react';
 
@@ -19,6 +20,10 @@ export const AudioExtractorWorkspace: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -115,8 +120,6 @@ export const AudioExtractorWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<Music className="h-5 w-5" />}
           title="Drop video to extract audio, or"
-          subtitle="Demux multi-language audio streams & dubs into lossless 16-bit WAV files."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -133,8 +136,8 @@ export const AudioExtractorWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                 Video Size: {formatBytes(file.size)}
               </p>
             </div>
@@ -184,11 +187,11 @@ export const AudioExtractorWorkspace: React.FC = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] flex items-center gap-1.5 font-mono">
-                    <Activity className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                  <label className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] flex items-center gap-1.5 font-mono">
+                    <Activity className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                     <span>Live Waveform & Track Monitor</span>
                   </label>
-                  <span className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                  <span className="text-[11px] font-mono text-[#6B7280] dark:text-[#9CA3AF]">
                     Track {selectedTrackIndex + 1} of {tracks.length}
                   </span>
                 </div>
@@ -207,10 +210,10 @@ export const AudioExtractorWorkspace: React.FC = () => {
                     <CheckCircle2 className="h-3.5 w-3.5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                    <h4 className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                       {tracks.length} {tracks.length === 1 ? 'Audio Track' : 'Audio Tracks'} Extracted
                     </h4>
-                    <p className="text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono">
+                    <p className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                       Duration: {formatDuration(tracks[0].duration)} · Lossless 16-bit PCM WAV
                     </p>
                   </div>
@@ -246,7 +249,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                       onClick={() => handleSelectTrack(idx)}
                       className={`nt-card p-3.5 cursor-pointer transition-all ${
                         isSelected
-                          ? '!border-[#141413] dark:!border-[#FACC15] !bg-[#FEF7D6] dark:!bg-[#FACC15]/10'
+                          ? '!border-[#141413] dark:!border-[#FACC15] !bg-[#FEF7D6] dark:!bg-[#2563EB]/10'
                           : ''
                       }`}
                     >
@@ -267,7 +270,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
                             className={`flex h-8 w-8 items-center justify-center rounded-xl transition-all cursor-pointer ${
                               isSelected && isPlaying
                                 ? 'bg-[#15803D] text-white'
-                                : 'bg-[#141413] text-[#FACC15]'
+                                : 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
                             }`}
                             title={isSelected && isPlaying ? 'Pause track' : 'Play & Monitor track'}
                           >
@@ -280,7 +283,7 @@ export const AudioExtractorWorkspace: React.FC = () => {
 
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                                 {track.name}
                               </span>
                               {track.language && (
@@ -290,13 +293,13 @@ export const AudioExtractorWorkspace: React.FC = () => {
                                 </span>
                               )}
                               {track.codec && (
-                                <span className="rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-1.5 py-0.5 text-[10px] font-mono text-[#454038] dark:text-[#CBC4B6] border border-[var(--nt-border)] inline-flex items-center gap-1">
+                                <span className="rounded-md bg-[#F3F4F6] dark:bg-[#1A1D24] px-1.5 py-0.5 text-[10px] font-mono text-[#4B5563] dark:text-[#D1D5DB] border border-[var(--nt-border)] inline-flex items-center gap-1">
                                   <Radio className="h-2.5 w-2.5" />
                                   {track.codec}
                                 </span>
                               )}
                             </div>
-                            <p className="text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+                            <p className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                               {track.description} · {formatBytes(track.blob.size)}
                             </p>
                           </div>

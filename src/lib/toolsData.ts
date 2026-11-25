@@ -4,6 +4,9 @@ export interface ToolMeta {
   id: string;
   slug: string;
   name: string;
+  shortName: string;
+  shortTag: 'PDF' | 'Image' | 'Video' | 'Audio' | 'Docs' | 'Diagram' | 'SVG';
+  accepts: string[];
   category: 'pdf' | 'image' | 'video' | 'svg' | 'document' | 'diagram';
   categoryLabel: string;
   description: string;
@@ -26,7 +29,7 @@ export interface ToolMeta {
   }[];
 }
 
-const RAW_TOOLS: ToolMeta[] = [
+const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
   // PDF SUITE
   {
     id: 'merge-pdf',
@@ -941,24 +944,94 @@ const RAW_TOOLS: ToolMeta[] = [
   }
 ];
 
+const ACTION_META: Record<
+  string,
+  {
+    shortName: string;
+    shortTag: ToolMeta['shortTag'];
+    accepts: string[];
+  }
+> = {
+  'merge-pdf': { shortName: 'Merge', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'split-pdf': { shortName: 'Split', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'rotate-pdf': { shortName: 'Rotate', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'protect-pdf': { shortName: 'Protect', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'redact-flatten-pdf': { shortName: 'Flatten', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'pdf-to-images': { shortName: 'To Images', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'images-to-pdf': { shortName: 'Images → PDF', shortTag: 'PDF', accepts: ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.gif', 'image/*'] },
+  'pdf-page-numberer': { shortName: 'Number', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+  'pdf-to-doc': { shortName: 'To Word', shortTag: 'PDF', accepts: ['.pdf', 'application/pdf'] },
+
+  'background-remover': { shortName: 'Remove BG', shortTag: 'Image', accepts: ['.png', '.jpg', '.jpeg', '.webp', '.avif', 'image/*'] },
+  'image-converter': { shortName: 'Convert', shortTag: 'Image', accepts: ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.bmp', '.ico', '.svg', 'image/*'] },
+  'image-compressor': { shortName: 'Compress', shortTag: 'Image', accepts: ['.png', '.jpg', '.jpeg', '.webp', '.avif', 'image/*'] },
+  'image-resizer': { shortName: 'Resize', shortTag: 'Image', accepts: ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.bmp', 'image/*'] },
+  'exif-scrubber': { shortName: 'Scrub EXIF', shortTag: 'Image', accepts: ['.jpg', '.jpeg', '.png', '.webp', '.tiff', 'image/*'] },
+
+  'svg-optimizer': { shortName: 'Clean SVG', shortTag: 'SVG', accepts: ['.svg', 'image/svg+xml'] },
+
+  'video-compressor': { shortName: 'Compress', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', 'video/*'] },
+  'video-trimmer': { shortName: 'Trim', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', 'video/*'] },
+  'audio-extractor': { shortName: 'Extract Audio', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', 'video/*'] },
+  'video-muter': { shortName: 'Mute', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', 'video/*'] },
+  'subtitle-generator': { shortName: 'Subtitles', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', '.mp3', '.wav', '.m4a', '.srt', '.vtt', 'video/*', 'audio/*'] },
+  'audio-booster': { shortName: 'Boost Audio', shortTag: 'Audio', accepts: ['.mp3', '.wav', '.m4a', '.aac', '.ogg', '.mp4', '.webm', '.mov', 'audio/*', 'video/*'] },
+  'video-to-gif': { shortName: 'To GIF', shortTag: 'Video', accepts: ['.mp4', '.webm', '.mov', '.mkv', 'video/*'] },
+  'lyrics-video-generator': { shortName: 'Lyrics', shortTag: 'Video', accepts: ['.mp3', '.wav', '.m4a', '.aac', '.ogg', 'audio/*', 'video/*'] },
+  'text-to-speech': { shortName: 'Voice AI', shortTag: 'Audio', accepts: ['.txt', '.md'] },
+
+  'doc-studio': { shortName: 'Doc Studio', shortTag: 'Docs', accepts: ['.md', '.markdown', '.docx', '.csv', '.txt'] },
+  'md-to-pdf': { shortName: 'MD → PDF', shortTag: 'Docs', accepts: ['.md', '.markdown', '.txt'] },
+  'md-to-docx': { shortName: 'MD → Word', shortTag: 'Docs', accepts: ['.md', '.markdown', '.docx', '.txt'] },
+  'doc-to-slides': { shortName: 'To Slides', shortTag: 'Docs', accepts: ['.md', '.markdown', '.docx', '.txt'] },
+  'doc-to-excel': { shortName: 'To Excel', shortTag: 'Docs', accepts: ['.md', '.markdown', '.csv', '.txt'] },
+  'doc-to-pdf': { shortName: 'Word → PDF', shortTag: 'Docs', accepts: ['.docx', '.md', '.markdown', '.txt'] },
+
+  'diagram-studio': { shortName: 'Diagrams', shortTag: 'Diagram', accepts: ['.md', '.markdown', '.docx', '.pdf', '.txt', '.sql'] },
+  'doc-to-flowchart': { shortName: 'Flowchart', shortTag: 'Diagram', accepts: ['.md', '.markdown', '.docx', '.txt'] },
+  'doc-to-erd': { shortName: 'ERD', shortTag: 'Diagram', accepts: ['.sql', '.md', '.markdown', '.txt'] },
+  'doc-to-architecture': { shortName: 'Architecture', shortTag: 'Diagram', accepts: ['.md', '.markdown', '.txt'] },
+};
+
 export const TOOLS: ToolMeta[] = RAW_TOOLS.map((tool) => {
   const edu = EDUCATIONAL_CONTENT[tool.id];
-  if (!edu) return tool;
+  const action = ACTION_META[tool.id] || {
+    shortName: tool.name,
+    shortTag: 'PDF' as const,
+    accepts: [],
+  };
   return {
     ...tool,
-    about: edu.about,
-    useCases: edu.useCases,
+    ...action,
+    ...(edu ? { about: edu.about, useCases: edu.useCases } : {}),
   };
 });
 
+export interface SuiteMeta {
+  id: ToolMeta['category'];
+  label: string;
+  href: string;
+  image: string;
+  count: number;
+}
+
+export const SUITES: SuiteMeta[] = [
+  { id: 'pdf', label: 'PDF', href: '/pdf', image: '/images/suite-pdf.png', count: TOOLS.filter((t) => t.category === 'pdf').length },
+  { id: 'image', label: 'Image', href: '/image', image: '/images/suite-image.png', count: TOOLS.filter((t) => t.category === 'image').length },
+  { id: 'video', label: 'Video', href: '/video', image: '/images/suite-video.png', count: TOOLS.filter((t) => t.category === 'video').length },
+  { id: 'document', label: 'Docs', href: '/document', image: '/images/suite-document.png', count: TOOLS.filter((t) => t.category === 'document').length },
+  { id: 'diagram', label: 'Diagrams', href: '/diagram', image: '/images/suite-diagram.png', count: TOOLS.filter((t) => t.category === 'diagram').length },
+  { id: 'svg', label: 'SVG', href: '/svg', image: '/images/suite-svg.png', count: TOOLS.filter((t) => t.category === 'svg').length },
+];
+
 export const CATEGORIES = [
-  { id: 'all', label: 'All Tools', count: TOOLS.length },
-  { id: 'diagram', label: 'Diagram Suite', count: TOOLS.filter(t => t.category === 'diagram').length },
-  { id: 'document', label: 'Document Suite', count: TOOLS.filter(t => t.category === 'document').length },
-  { id: 'pdf', label: 'PDF Suite', count: TOOLS.filter(t => t.category === 'pdf').length },
-  { id: 'image', label: 'Image Suite', count: TOOLS.filter(t => t.category === 'image').length },
-  { id: 'video', label: 'Video & Audio', count: TOOLS.filter(t => t.category === 'video').length },
-  { id: 'svg', label: 'SVG Tools', count: TOOLS.filter(t => t.category === 'svg').length },
+  { id: 'all', label: 'All', count: TOOLS.length },
+  { id: 'pdf', label: 'PDF', count: TOOLS.filter(t => t.category === 'pdf').length },
+  { id: 'image', label: 'Image', count: TOOLS.filter(t => t.category === 'image').length },
+  { id: 'video', label: 'Video', count: TOOLS.filter(t => t.category === 'video').length },
+  { id: 'document', label: 'Docs', count: TOOLS.filter(t => t.category === 'document').length },
+  { id: 'diagram', label: 'Diagrams', count: TOOLS.filter(t => t.category === 'diagram').length },
+  { id: 'svg', label: 'SVG', count: TOOLS.filter(t => t.category === 'svg').length },
 ];
 
 

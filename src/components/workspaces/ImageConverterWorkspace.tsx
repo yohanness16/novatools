@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import JSZip from 'jszip';
 import { Repeat, Loader2, Image as ImageIcon, Download } from 'lucide-react';
 
@@ -22,6 +23,10 @@ export const ImageConverterWorkspace: React.FC = () => {
   const [results, setResults] = useState<ConvertedFileItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    handleFiles(files);
+  });
 
   const handleFiles = (fileList: FileList | File[]) => {
     setError(null);
@@ -108,8 +113,6 @@ export const ImageConverterWorkspace: React.FC = () => {
           onFilesDrop={handleFiles}
           icon={<Repeat className="h-5 w-5" />}
           title="Drop images to convert formats, or"
-          subtitle="Batch convert between WebP, PNG, JPG, AVIF, BMP, and ICO formats."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -126,7 +129,7 @@ export const ImageConverterWorkspace: React.FC = () => {
       ) : (
         <div className="nt-card p-5 space-y-5">
           <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
-            <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+            <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">
               {files.length} {files.length === 1 ? 'Image Selected' : 'Images Selected'}
             </span>
             <button
@@ -142,7 +145,7 @@ export const ImageConverterWorkspace: React.FC = () => {
 
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Target Output Format
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -160,7 +163,7 @@ export const ImageConverterWorkspace: React.FC = () => {
                     onClick={() => setTargetFormat(fmt.val as any)}
                     className={`rounded-xl border py-1.5 text-xs font-bold transition-all cursor-pointer ${
                       targetFormat === fmt.val
-                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >
@@ -172,7 +175,7 @@ export const ImageConverterWorkspace: React.FC = () => {
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   Output Quality
                 </label>
                 <span className="nt-badge-yellow px-2 py-0.5 font-mono text-xs font-bold">
@@ -188,7 +191,7 @@ export const ImageConverterWorkspace: React.FC = () => {
                 onChange={(e) => setQuality(parseFloat(e.target.value))}
                 className="w-full h-1.5 bg-white dark:bg-[#141311] rounded appearance-none cursor-pointer mt-2"
               />
-              <span className="text-[10px] text-[#746D61] dark:text-[#938B7D] block font-mono">
+              <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] block font-mono">
                 Higher quality preserves fidelity with larger filesize.
               </span>
             </div>
@@ -217,7 +220,7 @@ export const ImageConverterWorkspace: React.FC = () => {
           {results.length > 0 && (
             <div className="space-y-3 pt-1">
               <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-2.5">
-                <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                   Converted Files ({results.length})
                 </span>
                 {results.length > 1 && (
@@ -238,10 +241,10 @@ export const ImageConverterWorkspace: React.FC = () => {
                     className="nt-subcard flex items-center justify-between p-3"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <ImageIcon className="h-4 w-4 shrink-0 text-[#CA8A04] dark:text-[#FACC15]" />
+                      <ImageIcon className="h-4 w-4 shrink-0 text-[#2563EB] dark:text-[#60A5FA]" />
                       <div className="truncate">
-                        <span className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{item.originalName}</span>
-                        <p className="text-[10px] text-[#746D61] dark:text-[#938B7D] font-mono">
+                        <span className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">{item.originalName}</span>
+                        <p className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                           {formatBytes(item.originalSize)} → {item.newSize ? formatBytes(item.newSize) : '...'}
                         </p>
                       </div>

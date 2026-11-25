@@ -9,14 +9,14 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
 >
   <div class="mx-auto max-w-2xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
     <div class="nt-window p-6 sm:p-7 space-y-3">
-      <div class="inline-flex items-center gap-1.5 rounded-full border border-[#D9A700]/40 bg-[#FEF7D6] dark:bg-[#FACC15]/15 px-3 py-1 text-xs font-mono font-bold text-[#141413] dark:text-[#FACC15]">
+      <div class="inline-flex items-center gap-1.5 rounded-full border border-[#2563EB]/25 bg-[#EFF6FF] dark:bg-[#3B82F6]/15 px-3 py-1 text-xs font-mono font-bold text-[#111214] dark:text-[#60A5FA]">
         <Mail class="h-3.5 w-3.5" />
         <span>Developer Support Desk</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#111214] dark:text-[#F3F4F6]">
         Contact & System Feedback
       </h1>
-      <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6]">
+      <p class="text-xs sm:text-sm text-[#4B5563] dark:text-[#D1D5DB]">
         Submit bug reports, feature proposals, or codec inquiries directly to the engineering team.
       </p>
     </div>
@@ -25,7 +25,7 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
       <form class="space-y-4" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden'); this.reset();">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Your Name</label>
+            <label class="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Your Name</label>
             <input
               type="text"
               required
@@ -34,7 +34,7 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
             />
           </div>
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Email Address</label>
+            <label class="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Email Address</label>
             <input
               type="email"
               required
@@ -45,7 +45,7 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Category</label>
+          <label class="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Category</label>
           <select class="nt-input w-full px-3.5 py-2.5 text-xs">
             <option>General Feedback / Bug Report</option>
             <option>PDF Suite Runtime Issue</option>
@@ -56,7 +56,7 @@ import { Mail, Send, CheckCircle2 } from 'lucide-react';
         </div>
 
         <div class="space-y-1.5">
-          <label class="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">Message</label>
+          <label class="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">Message</label>
           <textarea
             rows="4"
             required

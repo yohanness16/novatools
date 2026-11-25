@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { Maximize2, Lock, Unlock, Loader2 } from 'lucide-react';
 
 export const ImageResizerWorkspace: React.FC = () => {
@@ -17,6 +18,10 @@ export const ImageResizerWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     if (!selectedFile.type.startsWith('image/')) {
@@ -97,8 +102,6 @@ export const ImageResizerWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<Maximize2 className="h-5 w-5" />}
           title="Drop image to resize, or"
-          subtitle="Pixel-perfect bicubic resampling with aspect ratio lock and social presets."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -123,8 +126,8 @@ export const ImageResizerWorkspace: React.FC = () => {
                 />
               )}
               <div>
-                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                   Original Resolution: {origWidth} × {origHeight} px · {formatBytes(file.size)}
                 </p>
               </div>
@@ -142,7 +145,7 @@ export const ImageResizerWorkspace: React.FC = () => {
 
           <div className="nt-well p-4 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--nt-border)] pb-2.5">
-              <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">Quick Scaling</span>
+              <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">Quick Scaling</span>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {[25, 50, 75, 100, 200].map((pct) => (
                   <button
@@ -158,7 +161,7 @@ export const ImageResizerWorkspace: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-              <span className="text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono font-bold mr-1">Social Presets:</span>
+              <span className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] font-mono font-bold mr-1">Social Presets:</span>
               {[
                 { label: 'Instagram Post (1080×1080)', w: 1080, h: 1080 },
                 { label: 'Instagram Story (1080×1920)', w: 1080, h: 1920 },
@@ -179,7 +182,7 @@ export const ImageResizerWorkspace: React.FC = () => {
 
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-4 items-end">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Target Width (px)
               </label>
               <input
@@ -191,7 +194,7 @@ export const ImageResizerWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block">
+              <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block">
                 Target Height (px)
               </label>
               <input
@@ -208,7 +211,7 @@ export const ImageResizerWorkspace: React.FC = () => {
                 onClick={() => setLockRatio(!lockRatio)}
                 className={`w-full flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 text-xs font-bold transition-all cursor-pointer ${
                   lockRatio
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                     : 'nt-btn-secondary'
                 }`}
               >

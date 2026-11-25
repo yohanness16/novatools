@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { ImageEngine } from '../../engines/imageEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { Minimize2, Loader2, Download } from 'lucide-react';
 
 export const ImageCompressorWorkspace: React.FC = () => {
@@ -17,6 +18,10 @@ export const ImageCompressorWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleFile = async (selectedFile: File) => {
@@ -97,8 +102,6 @@ export const ImageCompressorWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<Minimize2 className="h-5 w-5" />}
           title="Drop image to compress, or"
-          subtitle="Interactive side-by-side comparison slider with quality & max width controls."
-          badgeText="100% In-Browser Processing"
         >
           <input
             ref={fileInputRef}
@@ -115,13 +118,13 @@ export const ImageCompressorWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
+              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
               {compressedBlob && (
                 <div className="flex items-center gap-2">
                   <span className="nt-badge-success px-2.5 py-0.5 font-mono text-[10px] font-bold">
                     -{savingsPercent}% Saved
                   </span>
-                  <span className="font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
+                  <span className="font-mono text-xs text-[#6B7280] dark:text-[#9CA3AF]">
                     {formatBytes(file.size)} → {formatBytes(compressedBlob.size)}
                   </span>
                 </div>
@@ -142,9 +145,9 @@ export const ImageCompressorWorkspace: React.FC = () => {
 
           {originalUrl && (
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[11px] text-[#746D61] dark:text-[#938B7D] font-mono px-1">
+              <div className="flex justify-between items-center text-[11px] text-[#6B7280] dark:text-[#9CA3AF] font-mono px-1">
                 <span>Original ({formatBytes(file.size)})</span>
-                <span className="font-bold text-[#141413] dark:text-[#FACC15]">Drag divider to inspect</span>
+                <span className="font-bold text-[#111214] dark:text-[#60A5FA]">Drag divider to inspect</span>
                 <span>Compressed ({compressedBlob ? formatBytes(compressedBlob.size) : '...'})</span>
               </div>
 
@@ -181,10 +184,10 @@ export const ImageCompressorWorkspace: React.FC = () => {
                 </div>
 
                 <div
-                  className="absolute top-0 bottom-0 w-0.5 bg-[#141413] dark:bg-[#FACC15] pointer-events-none z-20"
+                  className="absolute top-0 bottom-0 w-0.5 bg-[#141413] dark:bg-[#2563EB] pointer-events-none z-20"
                   style={{ left: `${sliderPos}%` }}
                 >
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-[#FACC15] text-[#141413] border-2 border-[#141413] shadow-card font-mono text-[10px] font-bold">
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-[#2563EB] text-[#141413] border-2 border-[#141413] shadow-card font-mono text-[10px] font-bold">
                     ⟷
                   </div>
                 </div>
@@ -195,7 +198,7 @@ export const ImageCompressorWorkspace: React.FC = () => {
           <div className="nt-well grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   Compression Quality
                 </label>
                 <span className="nt-badge-yellow px-2 py-0.5 font-mono text-xs font-bold">
@@ -215,10 +218,10 @@ export const ImageCompressorWorkspace: React.FC = () => {
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   Max Width Limit
                 </label>
-                <span className="font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
+                <span className="font-mono text-xs text-[#6B7280] dark:text-[#9CA3AF]">
                   {maxWidth}px
                 </span>
               </div>

@@ -25,7 +25,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
   return (
     <div
       className={`nt-card p-5 sm:p-6 transition-all ${
-        isEnabled ? 'border-[#CA8A04] bg-[#FEF7D6]/45 dark:bg-[#FACC15]/10' : ''
+        isEnabled ? 'border-[#2563EB] bg-[#EFF6FF]/60 dark:bg-[#3B82F6]/10' : ''
       }`}
     >
       {/* Header with Switch */}
@@ -34,40 +34,30 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
           <div
             className={`p-2.5 rounded-xl flex items-center justify-center transition-colors ${
               isEnabled
-                ? 'bg-[#141413] text-[#FACC15]'
-                : 'nt-well text-[#454038] dark:text-[#CBC4B6]'
+                ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
+                : 'nt-well text-[#4B5563] dark:text-[#D1D5DB]'
             }`}
           >
             <Blend className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm sm:text-base font-extrabold text-[#141413] dark:text-[#FAF7F0]">
-                Dual-Voice Blender
-              </span>
-              <span className="nt-badge-yellow px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider">
-                Custom Timbre
-              </span>
-            </div>
-            <p className="text-xs text-[#746D61] dark:text-[#938B7D] mt-0.5">
-              Interpolate between two distinct neural voice styles to craft unique timbres
-            </p>
-          </div>
+          <span className="text-sm font-bold text-[#111214] dark:text-[#F3F4F6]">
+            Voice Blend
+          </span>
         </div>
 
         <button
           type="button"
           onClick={() => onToggle(!isEnabled)}
           className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border border-[var(--nt-border-strong)] p-0.5 transition-colors duration-200 ease-in-out focus:outline-none ${
-            isEnabled ? 'bg-[#141413] dark:bg-[#FACC15]' : 'bg-[#EAE3D4] dark:bg-[#141311]'
+            isEnabled ? 'bg-[#2563EB]' : 'bg-[#F3F4F6] dark:bg-[#1A1D24]'
           }`}
           aria-pressed={isEnabled}
         >
           <span
             className={`pointer-events-none inline-block h-5.5 w-5.5 transform rounded-full shadow-sm transition duration-200 ease-in-out ${
               isEnabled
-                ? 'translate-x-5 bg-[#FACC15] dark:bg-[#141413]'
-                : 'translate-x-0 bg-white dark:bg-[#454038]'
+                ? 'translate-x-5 bg-white'
+                : 'translate-x-0 bg-white dark:bg-[#6B7280]'
             }`}
           />
         </button>
@@ -78,7 +68,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
           {/* Dual Voice Pickers */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="nt-well p-4 space-y-2">
-              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+              <label className="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                 Primary Voice ({primaryPct}%)
               </label>
               <select
@@ -95,7 +85,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
             </div>
 
             <div className="nt-well p-4 space-y-2">
-              <label className="block text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
+              <label className="block text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                 Secondary Voice ({secondaryPct}%)
               </label>
               <select
@@ -114,7 +104,7 @@ export const VoiceBlender: React.FC<VoiceBlenderProps> = ({
 
           {/* Interpolation Slider */}
           <div className="nt-well p-4 space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#141413] dark:text-[#FAF7F0]">
+            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#111214] dark:text-[#F3F4F6]">
               <span>
                 {primary.name} ({primaryPct}%)
               </span>

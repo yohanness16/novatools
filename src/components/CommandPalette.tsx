@@ -76,9 +76,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     const q = query.toLowerCase().trim();
     if (!q) return true;
     return (
+      tool.shortName.toLowerCase().includes(q) ||
       tool.name.toLowerCase().includes(q) ||
-      tool.description.toLowerCase().includes(q) ||
-      tool.categoryLabel.toLowerCase().includes(q) ||
+      tool.shortTag.toLowerCase().includes(q) ||
       tool.keywords.some((k) => k.toLowerCase().includes(q))
     );
   });
@@ -122,19 +122,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center p-4 pt-16 sm:pt-24">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-[#141413]/55 dark:bg-black/75 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-xs" onClick={onClose} />
 
-      {/* Desktop Spotlight Window (Instant keyboard response) */}
-      <div className="relative w-full max-w-2xl overflow-hidden nt-window shadow-[0_24px_64px_-12px_rgba(20,20,19,0.35)]">
-        {/* Search Bar */}
-        <div className="flex items-center border-b border-[var(--nt-border)] px-4 py-3.5 bg-[#FCFBF8] dark:bg-[#191714]">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] mr-3 shrink-0">
-            <Search className="h-3.5 w-3.5" />
-          </div>
+      <div className="relative w-full max-w-lg overflow-hidden rounded-xl border border-[var(--nt-border)] bg-white dark:bg-[#13151A] shadow-dropdown">
+        <div className="flex items-center border-b border-[var(--nt-border)] px-3.5 py-3">
+          <Search className="h-4 w-4 text-[#6B7280] mr-2.5 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -143,31 +135,28 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder="Jump to any tool or format (e.g. compress, merge, subtitles, docx)..."
-            className="w-full bg-transparent font-sans text-sm font-medium text-[#141413] dark:text-[#FAF7F0] placeholder-[#746D61] dark:placeholder-[#938B7D] focus:outline-none"
+            placeholder="Search"
+            className="w-full bg-transparent text-sm font-medium text-[#111214] dark:text-[#F3F4F6] placeholder-[#6B7280] focus:outline-none"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="rounded-lg p-1 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] cursor-pointer"
-              aria-label="Clear search"
+              className="rounded-md p-1 text-[#6B7280] hover:text-[#111214] dark:hover:text-white cursor-pointer"
+              aria-label="Clear"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
             </button>
           )}
-          <kbd className="ml-2 hidden sm:inline-flex items-center rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-2 py-0.5 font-mono text-[10px] font-bold text-[#141413] dark:text-[#FAF7F0] border border-[var(--nt-border)]">
+          <kbd className="ml-2 rounded bg-[#F3F4F6] dark:bg-[#1A1D24] px-1.5 py-0.5 font-mono text-[10px] text-[#6B7280] border border-[var(--nt-border)]">
             ESC
           </kbd>
         </div>
 
-        {/* Results List */}
-        <div className="max-h-[55vh] overflow-y-auto p-2.5 bg-white dark:bg-[#1F1D19]">
+        <div className="max-h-[52vh] overflow-y-auto p-1.5">
           {filteredTools.length === 0 ? (
-            <div className="py-12 text-center font-mono text-xs text-[#746D61] dark:text-[#938B7D]">
-              No matching tools found for "{query}".
-            </div>
+            <div className="py-10 text-center text-xs text-[#6B7280]">No results</div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {filteredTools.map((tool, index) => {
                 const IconComponent = iconMap[tool.iconName] || Layers;
                 const isSelected = index === selectedIndex;
@@ -178,61 +167,24 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     href={tool.path}
                     onClick={onClose}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors border ${
+                    className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
                       isSelected
-                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 border-[#D9A700]/60 text-[#141413] dark:text-[#FAF7F0] shadow-[0_2px_6px_-2px_rgba(20,20,19,0.10)]'
-                        : 'text-[#141413] dark:text-[#FAF7F0] hover:bg-[#FCFBF8] dark:hover:bg-[#26231E] border-transparent'
+                        ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
+                        : 'text-[#111214] dark:text-[#F3F4F6] hover:bg-[#F3F4F6] dark:hover:bg-[#1A1D24]'
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors ${
-                          isSelected
-                            ? 'bg-[#141413] border-[#141413] text-[#FACC15]'
-                            : 'bg-[#F5F1E8] dark:bg-[#141311] border-[var(--nt-border)] text-[#454038] dark:text-[#CBC4B6]'
-                        }`}
-                      >
-                        <IconComponent className="h-4 w-4" />
-                      </div>
-                      <div className="truncate min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs">{tool.name}</span>
-                          <span className="rounded-md bg-[#EAE3D4] dark:bg-[#141311] px-1.5 py-0.5 font-mono text-[9px] font-semibold text-[#454038] dark:text-[#CBC4B6] border border-[var(--nt-border)]">
-                            {tool.categoryLabel}
-                          </span>
-                        </div>
-                        <p className="truncate text-[11px] text-[#746D61] dark:text-[#938B7D] mt-0.5">
-                          {tool.description}
-                        </p>
-                      </div>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <IconComponent className="h-4 w-4 shrink-0" />
+                      <span className="text-xs font-semibold truncate">{tool.shortName}</span>
                     </div>
-
-                    <div className="flex items-center gap-2 shrink-0 ml-3">
-                      {tool.badge && (
-                        <span className="rounded-full bg-[#FACC15] px-2 py-0.5 font-mono text-[9px] font-bold text-[#141413]">
-                          {tool.badge}
-                        </span>
-                      )}
-                      <span className="font-mono text-[11px] font-bold text-[#746D61] dark:text-[#938B7D]">↵</span>
-                    </div>
+                    <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF] shrink-0">
+                      {tool.shortTag}
+                    </span>
                   </a>
                 );
               })}
             </div>
           )}
-        </div>
-
-        {/* Footer Strip */}
-        <div className="flex items-center justify-between border-t border-[var(--nt-border)] bg-[#EAE3D4]/70 dark:bg-[#141311] px-4 py-2.5 text-[10px] text-[#454038] dark:text-[#938B7D] font-mono">
-          <div className="flex items-center gap-3 font-medium">
-            <span>↑↓ Navigate</span>
-            <span>↵ Launch</span>
-            <span>ESC Dismiss</span>
-          </div>
-          <span className="text-[#15803D] dark:text-[#4ADE80] flex items-center gap-1.5 font-bold">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#15803D] dark:bg-[#4ADE80]" />
-            100% Client Memory
-          </span>
         </div>
       </div>
     </div>

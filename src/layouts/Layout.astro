@@ -16,8 +16,8 @@ export interface Props {
 
 const {
   title,
-  description = 'NovaTools is a high-performance, 100% client-side document, image, video, and PDF manipulation suite. Fast, private, and local.',
-  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'local processing', 'private pdf merger', 'online media tools'],
+  description = 'NovaTools - In-browser document, image, video, and PDF tools.',
+  keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'online media tools'],
   canonicalUrl = Astro.url.href,
   faqs = [],
   breadcrumbs = [],
@@ -34,7 +34,6 @@ const adSenseClientId = 'ca-pub-6768212179657827';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    {/* Inline Theme Detection: Defaults to Warm Studio Light Mode */}
     <script is:inline>
       (() => {
         try {
@@ -52,7 +51,6 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       })();
     </script>
 
-    {/* Primary SEO & Unified Multi-Entity Schema.org Graph */}
     <SEOHead
       title={title}
       description={description}
@@ -62,38 +60,31 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       breadcrumbs={breadcrumbs}
     />
 
-    {/* Cross-Origin Isolation for In-Browser Multi-threaded Web Workers */}
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
 
-    {/* Google Fonts: Plus Jakarta Sans, JetBrains Mono & Multilingual / Ethiopic Display */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
-    {/* Google AdSense Asynchronous Script Tag */}
     <script
       async
       src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClientId}`}
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="selection:bg-[#FACC15]/45 selection:text-[#141413] flex min-h-[100dvh] flex-col font-sans antialiased">
-    {/* Desktop App Top Bar */}
+  <body class="selection:bg-[#2563EB]/20 selection:text-[#111214] dark:selection:text-white flex min-h-[100dvh] flex-col font-sans antialiased">
     <Header client:load />
 
-    {/* Main Content */}
-    <main class="flex-1 pt-[4.5rem]">
+    <main class="flex-1 pt-14">
       <slot />
     </main>
 
-    {/* Footer */}
     <Footer />
 
-    {/* Cookie / Preferences */}
     <CookieConsent client:idle />
   </body>
 </html>

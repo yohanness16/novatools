@@ -25,6 +25,7 @@ import {
 } from '../../lib/languages';
 import { formatBytes, formatDuration, downloadBlob } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import JSZip from 'jszip';
 import {
   Subtitles,
@@ -447,8 +448,6 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           icon={<Subtitles className="h-5 w-5" />}
           title="Drop video or audio to generate subtitles, or"
           highlightText="browse files"
-          subtitle="Supports MP4, WebM, MKV, MOV, MP3, WAV, M4A, or import existing .SRT / .VTT files."
-          badgeText="OpenAI Whisper AI (WASM) · 100+ Languages Supported"
         >
           <input
             ref={fileInputRef}
@@ -466,15 +465,15 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           {/* Header Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-4">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] shadow-card">
                 <Subtitles className="h-5 w-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0] break-all">
+                  <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6] break-all">
                     {file.name}
                   </span>
-                  <span className="nt-well px-2 py-0.5 text-[10px] font-mono font-semibold text-[#454038] dark:text-[#CBC4B6]">
+                  <span className="nt-well px-2 py-0.5 text-[10px] font-mono font-semibold text-[#4B5563] dark:text-[#D1D5DB]">
                     {formatBytes(file.size)}
                   </span>
                   {trackEntries.length > 0 && (
@@ -484,7 +483,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <p className="text-xs font-mono text-[#746D61] dark:text-[#938B7D] mt-0.5">
+                <p className="text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
                   {currentCues.length > 0
                     ? `${currentCues.length} subtitle cues in active track`
                     : 'Ready to transcribe & generate subtitles'}
@@ -512,12 +511,12 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             <div className="space-y-4 pt-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="nt-well p-4 space-y-2">
-                  <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <Globe className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                      <Globe className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                       Spoken Audio Language
                     </span>
-                    <span className="font-mono text-[10px] text-[#746D61] dark:text-[#938B7D]">100+ Languages</span>
+                    <span className="font-mono text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">100+ Languages</span>
                   </label>
 
                   {/* Language Selector Button */}
@@ -533,11 +532,11 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     className="nt-input w-full flex items-center justify-between px-3.5 py-2.5 text-xs hover:border-[#141413] dark:hover:border-[#FACC15] transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
+                      <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">
                         {selectedLanguage === 'auto' ? 'Auto-Detect Language' : selectedLangOption?.name || selectedLanguage}
                       </span>
                       {selectedLangOption?.nativeName && selectedLanguage !== 'auto' && (
-                        <span className="text-[#746D61] dark:text-[#938B7D] font-normal">({selectedLangOption.nativeName})</span>
+                        <span className="text-[#6B7280] dark:text-[#9CA3AF] font-normal">({selectedLangOption.nativeName})</span>
                       )}
                     </div>
                     <ChevronDown className="h-4 w-4 text-[#746D61] shrink-0 ml-2" />
@@ -580,8 +579,8 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               <div className="nt-well flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5">
                 {/* Track Selector Tabs */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs text-[#454038] dark:text-[#CBC4B6] flex items-center gap-1.5 font-bold mr-1">
-                    <Layers className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                  <span className="text-xs text-[#4B5563] dark:text-[#D1D5DB] flex items-center gap-1.5 font-bold mr-1">
+                    <Layers className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                     Track:
                   </span>
                   {trackEntries.map(([langCode, track]) => {
@@ -611,7 +610,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   }}
                   className="nt-btn-primary flex items-center gap-2 px-3.5 py-2 text-xs font-bold self-start md:self-auto shrink-0"
                 >
-                  <Languages className="h-3.5 w-3.5 text-[#FACC15]" />
+                  <Languages className="h-3.5 w-3.5 text-[#2563EB]" />
                   <span>Translate Subtitles (1-Click AI)</span>
                 </button>
               </div>
@@ -633,7 +632,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       />
                     ) : mediaUrl ? (
                       <div className="flex flex-col items-center justify-center p-6 text-center space-y-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1F1D19] border border-white/10 text-[#FACC15]">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1F1D19] border border-white/10 text-[#2563EB]">
                           <Volume2 className="h-6 w-6 animate-pulse" />
                         </div>
                         <audio
@@ -672,7 +671,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                         >
                           {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
                         </button>
-                        <span className="text-xs font-mono font-semibold text-[#141413] dark:text-[#FAF7F0]">
+                        <span className="text-xs font-mono font-semibold text-[#111214] dark:text-[#F3F4F6]">
                           {formatTimeVtt(currentTime)} / {formatTimeVtt(duration)}
                         </span>
                       </div>
@@ -683,7 +682,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                         className={`flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 transition-all cursor-pointer ${
                           showSubtitleOverlay
                             ? 'nt-badge-yellow'
-                            : 'nt-subcard text-[#746D61] dark:text-[#938B7D]'
+                            : 'nt-subcard text-[#6B7280] dark:text-[#9CA3AF]'
                         }`}
                       >
                         <Eye className="h-3 w-3" />
@@ -698,7 +697,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       step={0.05}
                       value={currentTime}
                       onChange={(e) => handleSeek(parseFloat(e.target.value))}
-                      className="w-full h-1.5 bg-white dark:bg-[#1F1D19] rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-1.5 bg-white dark:bg-[#13151A] rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
                 </div>
@@ -723,7 +722,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       onClick={() => addCue(currentCues.length - 1)}
                       className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold shrink-0"
                     >
-                      <Plus className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                      <Plus className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                       <span>Add Cue</span>
                     </button>
                   </div>
@@ -741,7 +740,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                           key={cue.id}
                           className={`rounded-xl border p-3 transition-all space-y-2 shadow-sm ${
                             isActive
-                              ? 'border-[#CA8A04] bg-[#FEF7D6]/75 dark:bg-[#FACC15]/10 ring-1 ring-[#FACC15]/40'
+                              ? 'border-[#2563EB] bg-[#FEF7D6]/75 dark:bg-[#2563EB]/10 ring-1 ring-[#FACC15]/40'
                               : 'nt-subcard hover:border-[var(--nt-border-strong)]'
                           }`}
                         >
@@ -753,15 +752,15 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                                 onClick={() => handleSeek(cue.start)}
                                 className={`flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-extrabold font-mono transition-all cursor-pointer ${
                                   isActive
-                                    ? 'bg-[#141413] text-[#FACC15]'
-                                    : 'bg-[#EAE3D4] dark:bg-[#141311] text-[#454038] dark:text-[#CBC4B6] hover:bg-[#141413] hover:text-[#FACC15]'
+                                    ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]'
+                                    : 'bg-[#F3F4F6] dark:bg-[#1A1D24] text-[#4B5563] dark:text-[#D1D5DB] hover:bg-[#141413] hover:text-[#2563EB]'
                                 }`}
                               >
                                 {idx + 1}
                               </button>
 
                               {/* Timestamp Controls */}
-                              <div className="flex items-center gap-1 font-mono text-[11px] text-[#746D61] dark:text-[#938B7D]">
+                              <div className="flex items-center gap-1 font-mono text-[11px] text-[#6B7280] dark:text-[#9CA3AF]">
                                 <button
                                   type="button"
                                   onClick={() => updateCueTimes(cue.id, -0.1, 0)}
@@ -770,7 +769,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                                 >
                                   -
                                 </button>
-                                <span className="font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
+                                <span className="font-bold text-[#111214] dark:text-[#F3F4F6] px-1">
                                   {formatTimeVtt(cue.start)}
                                 </span>
                                 <button
@@ -792,7 +791,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                                 >
                                   -
                                 </button>
-                                <span className="font-bold text-[#141413] dark:text-[#FAF7F0] px-1">
+                                <span className="font-bold text-[#111214] dark:text-[#F3F4F6] px-1">
                                   {formatTimeVtt(cue.end)}
                                 </span>
                                 <button
@@ -811,7 +810,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => addCue(idx)}
-                                className="p-1.5 rounded-lg text-[#746D61] hover:text-[#141413] dark:hover:text-[#FACC15] hover:bg-[#EAE3D4] dark:hover:bg-[#1F1D19] transition-colors cursor-pointer"
+                                className="p-1.5 rounded-lg text-[#746D61] hover:text-[#2563EB] dark:hover:text-[#60A5FA] hover:bg-[#EAE3D4] dark:hover:bg-[#1F1D19] transition-colors cursor-pointer"
                                 title="Insert cue below"
                               >
                                 <Plus className="h-3.5 w-3.5" />
@@ -839,7 +838,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     })}
 
                     {filteredCues.length === 0 && (
-                      <div className="nt-well text-center py-8 text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+                      <div className="nt-well text-center py-8 text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                         No subtitle cues match &quot;{searchQuery}&quot;
                       </div>
                     )}
@@ -851,12 +850,9 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
               <div className="nt-well p-4 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <h5 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
-                      Export Subtitles ({tracks[activeTrackLang]?.name || 'Current Track'})
+                    <h5 className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                      Export ({tracks[activeTrackLang]?.name || 'Track'})
                     </h5>
-                    <p className="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
-                      Download formatted subtitle files or copy text
-                    </p>
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap">
@@ -865,7 +861,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       onClick={() => handleDownload('srt')}
                       className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                     >
-                      <Download className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                      <Download className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                       <span>Download .SRT</span>
                     </button>
 
@@ -874,7 +870,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                       onClick={() => handleDownload('vtt')}
                       className="nt-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold"
                     >
-                      <Download className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                      <Download className="h-3.5 w-3.5 text-[#2563EB] dark:text-[#60A5FA]" />
                       <span>Download .VTT</span>
                     </button>
 
@@ -898,12 +894,12 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-2.5 border-t border-[var(--nt-border)] text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+                <div className="flex items-center gap-2 pt-2.5 border-t border-[var(--nt-border)] text-[11px] font-mono text-[#6B7280] dark:text-[#9CA3AF]">
                   <span>Quick Copy:</span>
                   <button
                     type="button"
                     onClick={() => handleCopyClipboard('srt')}
-                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="font-bold text-[#111214] dark:text-[#60A5FA] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     {copiedFormat === 'srt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     SRT
@@ -912,7 +908,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleCopyClipboard('vtt')}
-                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="font-bold text-[#111214] dark:text-[#60A5FA] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     {copiedFormat === 'vtt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     WebVTT
@@ -921,7 +917,7 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleCopyClipboard('txt')}
-                    className="font-bold text-[#141413] dark:text-[#FACC15] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="font-bold text-[#111214] dark:text-[#60A5FA] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     {copiedFormat === 'txt' ? <Check className="h-3 w-3 text-[#15803D]" /> : <Copy className="h-3 w-3" />}
                     Plain Text
@@ -941,10 +937,10 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           <div className="nt-window w-full max-w-lg p-5 space-y-3.5">
             <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
                   <Globe className="h-4 w-4" />
                 </div>
-                <h4 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <h4 className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">
                   {langPickerMode === 'transcribe' ? 'Select Audio Spoken Language' : 'Select Target Translation Language'}
                 </h4>
               </div>
@@ -1017,26 +1013,26 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                     }}
                     className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-all cursor-pointer border ${
                       isSelected
-                        ? 'bg-[#FEF7D6] dark:bg-[#FACC15]/15 text-[#141413] dark:text-[#FAF7F0] border-[#CA8A04] font-bold shadow-sm'
-                        : 'bg-white dark:bg-[#1F1D19] hover:bg-[#FCFBF8] dark:hover:bg-[#26231E] text-[#141413] dark:text-[#FAF7F0] border-[var(--nt-border)]'
+                        ? 'bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#111214] dark:text-[#F3F4F6] border-[#2563EB] font-bold shadow-sm'
+                        : 'bg-white dark:bg-[#13151A] hover:bg-[#FCFBF8] dark:hover:bg-[#26231E] text-[#111214] dark:text-[#F3F4F6] border-[var(--nt-border)]'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="font-bold">{lang.name}</span>
-                      <span className="text-[#746D61] dark:text-[#938B7D] font-normal">({lang.nativeName})</span>
+                      <span className="text-[#6B7280] dark:text-[#9CA3AF] font-normal">({lang.nativeName})</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="nt-well font-mono text-[10px] uppercase text-[#454038] dark:text-[#CBC4B6] px-1.5 py-0.5">
+                      <span className="nt-well font-mono text-[10px] uppercase text-[#4B5563] dark:text-[#D1D5DB] px-1.5 py-0.5">
                         {lang.code}
                       </span>
-                      {isSelected && <Check className="h-3.5 w-3.5 text-[#141413] dark:text-[#FACC15] shrink-0" />}
+                      {isSelected && <Check className="h-3.5 w-3.5 text-[#111214] dark:text-[#60A5FA] shrink-0" />}
                     </div>
                   </button>
                 );
               })}
 
               {filteredLanguages.length === 0 && (
-                <div className="py-6 text-center text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+                <div className="py-6 text-center text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                   No languages found matching &quot;{langSearchQuery}&quot;
                 </div>
               )}
@@ -1051,10 +1047,10 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
           <div className="nt-window w-full max-w-md p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
                   <Languages className="h-4 w-4" />
                 </div>
-                <h4 className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">Translate Subtitles</h4>
+                <h4 className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">Translate Subtitles</h4>
               </div>
               {!isTranslating && (
                 <button
@@ -1069,17 +1065,13 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <p className="text-xs text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-                Translate all <span className="font-extrabold text-[#141413] dark:text-[#FAF7F0]">{currentCues.length}</span> subtitle cues from{' '}
-                <span className="nt-badge-yellow px-2 py-0.5 font-bold">
-                  {tracks[activeTrackLang]?.name || 'Current Track'}
-                </span>{' '}
-                while preserving exact millisecond timestamps.
+              <p className="text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF]">
+                {currentCues.length} cues · {tracks[activeTrackLang]?.name || 'Track'}
               </p>
 
               {/* Target Language Selection */}
               <div>
-                <label className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] block mb-1.5">
+                <label className="text-xs font-bold text-[#111214] dark:text-[#F3F4F6] block mb-1.5">
                   Target Language
                 </label>
                 <button
@@ -1094,10 +1086,10 @@ export const SubtitleGeneratorWorkspace: React.FC = () => {
                   className="nt-input w-full flex items-center justify-between px-3.5 py-2.5 text-xs hover:border-[#141413] dark:hover:border-[#FACC15] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <span className="font-bold text-[#141413] dark:text-[#FAF7F0]">
+                    <span className="font-bold text-[#111214] dark:text-[#F3F4F6]">
                       {targetTranslateLangOption?.name || targetTranslateLang}
                     </span>
-                    <span className="text-[#746D61] dark:text-[#938B7D]">
+                    <span className="text-[#6B7280] dark:text-[#9CA3AF]">
                       ({targetTranslateLangOption?.nativeName || targetTranslateLang})
                     </span>
                   </div>

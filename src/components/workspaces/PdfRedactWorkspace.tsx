@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, readFileAsArrayBuffer } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { FileText, EyeOff, Loader2 } from 'lucide-react';
 
 export const PdfRedactWorkspace: React.FC = () => {
@@ -14,6 +15,10 @@ export const PdfRedactWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     if (selectedFile.type !== 'application/pdf' && !selectedFile.name.toLowerCase().endsWith('.pdf')) {
@@ -61,8 +66,6 @@ export const PdfRedactWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<EyeOff className="h-5 w-5" />}
           title="Drop PDF to flatten & lock, or"
-          subtitle="Lock interactive form values and bake annotations permanently."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -79,12 +82,12 @@ export const PdfRedactWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
                 <FileText className="h-4 w-4" />
               </div>
               <div>
-                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                   {pageCount} Pages · {formatBytes(file.size)}
                 </p>
               </div>
@@ -101,27 +104,27 @@ export const PdfRedactWorkspace: React.FC = () => {
           </div>
 
           <div className="nt-well p-4 space-y-2.5">
-            <span className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] block">
+            <span className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] block">
               Flattening Rules
             </span>
 
             <div className="space-y-2 text-xs">
-              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#141413] dark:text-[#FAF7F0]">
+              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#111214] dark:text-[#F3F4F6]">
                 <input
                   type="checkbox"
                   checked={flattenForms}
                   onChange={(e) => setFlattenForms(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                 />
                 <span className="font-medium">Flatten Fillable AcroForm Fields into static text</span>
               </label>
 
-              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#141413] dark:text-[#FAF7F0]">
+              <label className="nt-subcard flex items-center gap-2.5 p-3 cursor-pointer text-[#111214] dark:text-[#F3F4F6]">
                 <input
                   type="checkbox"
                   checked={flattenAnnotations}
                   onChange={(e) => setFlattenAnnotations(e.target.checked)}
-                  className="rounded border-[var(--nt-border-strong)] accent-[#141413] dark:accent-[#FACC15]"
+                  className="rounded border-[var(--nt-border-strong)] accent-[#2563EB]"
                 />
                 <span className="font-medium">Merge Annotations, Highlights, and Vector Markups</span>
               </label>

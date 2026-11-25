@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { PdfEngine } from '../../engines/pdfEngine';
 import { formatBytes, downloadUint8Array, downloadBlob, readFileAsArrayBuffer } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import JSZip from 'jszip';
 import { Upload, Scissors, Archive, Loader2 } from 'lucide-react';
 
@@ -14,6 +15,10 @@ export const PdfSplitWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     if (selectedFile.type !== 'application/pdf' && !selectedFile.name.toLowerCase().endsWith('.pdf')) {
@@ -87,8 +92,6 @@ export const PdfSplitWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<Upload className="h-5 w-5" />}
           title="Drop PDF to split or extract, or"
-          subtitle="Extract custom page ranges or burst all pages into a ZIP archive."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -105,8 +108,8 @@ export const PdfSplitWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                 Total Pages: {pageCount} · {formatBytes(file.size)}
               </p>
             </div>
@@ -126,18 +129,15 @@ export const PdfSplitWorkspace: React.FC = () => {
             {/* Custom Range */}
             <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
-                  <Scissors className="h-4 w-4 text-[#CA8A04] dark:text-[#FACC15]" />
-                  <span>Extract Custom Page Range</span>
+                <div className="flex items-center gap-2 text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
+                  <Scissors className="h-4 w-4 text-[#2563EB]" />
+                  <span>Range</span>
                 </div>
-                <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6]">
-                  Enter comma-separated page ranges (e.g. 1-3, 5, 7-{pageCount || 10})
-                </p>
                 <input
                   type="text"
                   value={rangeStr}
                   onChange={(e) => setRangeStr(e.target.value)}
-                  placeholder="e.g. 1-3, 5"
+                  placeholder={`1-3, 5, 7-${pageCount || 10}`}
                   className="nt-input w-full px-3 py-2 font-mono text-xs"
                 />
               </div>
@@ -164,15 +164,12 @@ export const PdfSplitWorkspace: React.FC = () => {
             {/* Burst All */}
             <div className="nt-well p-4 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#111214] dark:text-[#F3F4F6]">
                   <Archive className="h-4 w-4 text-[#15803D] dark:text-[#4ADE80]" />
-                  <span>Burst All Pages into Individual Files</span>
+                  <span>All Pages (ZIP)</span>
                 </div>
-                <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6]">
-                  Extract every page as a standalone PDF bundled into a ZIP archive.
-                </p>
-                <div className="nt-subcard font-mono text-[11px] text-[#454038] dark:text-[#CBC4B6] px-3 py-2">
-                  Will output {pageCount} single-page PDF files
+                <div className="nt-subcard font-mono text-[11px] text-[#4B5563] dark:text-[#9CA3AF] px-3 py-2">
+                  {pageCount} PDFs
                 </div>
               </div>
 

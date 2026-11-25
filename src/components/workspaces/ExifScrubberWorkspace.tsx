@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ExifEngine, type ExifTag } from '../../engines/exifEngine';
 import { formatBytes, downloadBlob, readFileAsDataURL } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { ShieldCheck, MapPin, Camera, Loader2 } from 'lucide-react';
 
 export const ExifScrubberWorkspace: React.FC = () => {
@@ -14,6 +15,10 @@ export const ExifScrubberWorkspace: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = async (selectedFile: File) => {
     if (!selectedFile.type.startsWith('image/')) {
@@ -63,8 +68,6 @@ export const ExifScrubberWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<ShieldCheck className="h-5 w-5" />}
           title="Drop photo to inspect & scrub EXIF, or"
-          subtitle="Strip GPS coordinates, device identifiers, and timestamps locally."
-          badgeText="100% Local Processing"
         >
           <input
             ref={fileInputRef}
@@ -89,8 +92,8 @@ export const ExifScrubberWorkspace: React.FC = () => {
                 />
               )}
               <div>
-                <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-                <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+                <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                   {formatBytes(file.size)} · {file.type || 'image/jpeg'}
                 </p>
               </div>
@@ -129,14 +132,14 @@ export const ExifScrubberWorkspace: React.FC = () => {
 
           {tags.length > 0 ? (
             <div className="nt-well overflow-hidden">
-              <div className="border-b border-[var(--nt-border)] px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0]">
+              <div className="border-b border-[var(--nt-border)] px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6]">
                 Detected EXIF Headers
               </div>
               <div className="max-h-56 overflow-y-auto divide-y divide-[var(--nt-border)] bg-white/60 dark:bg-[#1F1D19]/60">
                 {tags.map((t, idx) => (
                   <div key={idx} className="flex justify-between px-4 py-2 text-xs font-mono">
-                    <span className="text-[#746D61] dark:text-[#938B7D]">{t.name}</span>
-                    <span className="text-[#141413] dark:text-[#FAF7F0] max-w-[60%] truncate text-right font-semibold">
+                    <span className="text-[#6B7280] dark:text-[#9CA3AF]">{t.name}</span>
+                    <span className="text-[#111214] dark:text-[#F3F4F6] max-w-[60%] truncate text-right font-semibold">
                       {t.value}
                     </span>
                   </div>
@@ -145,7 +148,7 @@ export const ExifScrubberWorkspace: React.FC = () => {
             </div>
           ) : (
             <div className="nt-well p-4 text-center">
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
                 No sensitive EXIF tags detected in this image header.
               </p>
             </div>

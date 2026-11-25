@@ -27,21 +27,20 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
   };
 
   if (!mounted) {
-    return <div className={`h-9 w-9 rounded-xl ${className}`} />;
+    return <div className={`h-8 w-8 rounded-lg ${className}`} />;
   }
 
   return (
     <button
       onClick={toggleTheme}
       type="button"
-      className={`nt-btn-secondary relative flex h-9 w-9 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15] ${className}`}
-      title={theme === 'dark' ? 'Switch to Warm Light Studio' : 'Switch to Dark Studio'}
-      aria-label="Toggle color theme"
+      className={`nt-btn-secondary flex h-8 w-8 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#2563EB] ${className}`}
+      aria-label="Theme"
     >
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 text-[#FACC15]" />
+        <Sun className="h-4 w-4 text-[#F3F4F6]" />
       ) : (
-        <Moon className="h-4 w-4 text-[#141413]" />
+        <Moon className="h-4 w-4 text-[#111214]" />
       )}
     </button>
   );

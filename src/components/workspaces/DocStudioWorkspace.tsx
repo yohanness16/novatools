@@ -14,13 +14,13 @@ import {
   Edit3,
   RefreshCw,
   FileSpreadsheet,
-  ShieldCheck,
 } from 'lucide-react';
 import { DocEngine } from '../../engines/docEngine';
 import { PptxEngine, type AdvancedSlideTheme } from '../../engines/pptxEngine';
 import { ExcelEngine } from '../../engines/excelEngine';
 import { AiDocEngine } from '../../engines/aiDocEngine';
 import type { DocSlide, DocTable } from '../../engines/docTypes';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 
 const SAMPLE_MARKDOWN = `# NovaTools Master Executive Brief
 
@@ -70,15 +70,11 @@ export default function DocStudioWorkspace() {
   const [slideTheme, setSlideTheme] = useState<AdvancedSlideTheme>('onyx-dark');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
-  const [aiTier, setAiTier] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    AiDocEngine.checkAIAvailability().then((info) => {
-      setAiTier(info.statusDescription);
-    });
     updateDecksAndTables(content);
   }, []);
 
@@ -96,35 +92,42 @@ export default function DocStudioWorkspace() {
     updateDecksAndTables(newText);
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     setIsProcessing(true);
-    setStatusMessage(`Ingesting ${file.name}...`);
+    setStatusMessage(`Loading ${file.name}...`);
 
     try {
       if (file.name.endsWith('.docx')) {
         const buffer = await file.arrayBuffer();
         const { markdown } = await DocEngine.docxToMarkdown(buffer);
         handleContentChange(markdown);
-        setStatusMessage('DOCX converted losslessly to Markdown!');
+        setStatusMessage('Loaded');
       } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.csv')) {
         const buffer = await file.arrayBuffer();
         const { markdown } = ExcelEngine.xlsxToMarkdown(buffer);
         handleContentChange(markdown);
-        setStatusMessage('Spreadsheet converted to Markdown!');
+        setStatusMessage('Loaded');
       } else {
         const text = await file.text();
         handleContentChange(text);
-        setStatusMessage('Document loaded successfully!');
+        setStatusMessage('Loaded');
       }
     } catch (err: any) {
-      setStatusMessage(`Ingestion failed: ${err.message}`);
+      setStatusMessage(`Error: ${err.message}`);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setStatusMessage(''), 3000);
     }
+  };
+
+  useHandoffFiles((files) => {
+    if (files[0]) processFile(files[0]);
+  });
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
   };
 
   const downloadBlob = (blob: Blob, filename: string) => {
@@ -272,14 +275,14 @@ export default function DocStudioWorkspace() {
       {/* Toolbar Card */}
       <div className="nt-well p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-[#141413] text-[#FACC15] flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] flex items-center justify-center shrink-0">
             <FileText className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#111214] dark:text-[#F3F4F6]">
               {docTitle || 'Document Studio'}
             </h2>
-            <p className="text-[11px] text-[#746D61] dark:text-[#938B7D] flex items-center gap-2.5 mt-0.5 font-mono">
+            <p className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] flex items-center gap-2.5 mt-0.5 font-mono">
               <span>{metadata.wordCount} words</span>
               <span>•</span>
               <span>{metadata.readingTimeMinutes} min read</span>
@@ -348,8 +351,8 @@ export default function DocStudioWorkspace() {
         <div className="lg:col-span-6 nt-card p-4 flex flex-col h-[620px]">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--nt-border)]">
             <div className="flex items-center gap-2">
-              <Edit3 className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
-              <span className="text-xs font-extrabold uppercase tracking-wider text-[#141413] dark:text-[#FAF7F0] font-mono">
+              <Edit3 className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#111214] dark:text-[#F3F4F6] font-mono">
                 Document Editor
               </span>
             </div>
@@ -378,8 +381,8 @@ export default function DocStudioWorkspace() {
                 onClick={() => setActiveTab('document')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'document'
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
-                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -390,8 +393,8 @@ export default function DocStudioWorkspace() {
                 onClick={() => setActiveTab('slides')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'slides'
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
-                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
                 }`}
               >
                 <Presentation className="w-3.5 h-3.5" />
@@ -402,8 +405,8 @@ export default function DocStudioWorkspace() {
                 onClick={() => setActiveTab('spreadsheet')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'spreadsheet'
-                    ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
-                    : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
+                    ? 'bg-[#111214] dark:bg-[#2563EB] text-white shadow-sm'
+                    : 'text-[#4B5563] dark:text-[#D1D5DB] hover:text-[#111214] dark:hover:text-[#F3F4F6]'
                 }`}
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -435,7 +438,7 @@ export default function DocStudioWorkspace() {
           {activeTab === 'slides' && (
             <div className="flex-1 flex flex-col justify-between overflow-hidden">
               {slides.length === 0 ? (
-                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#746D61] dark:text-[#938B7D] text-xs p-6 text-center">
+                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#6B7280] dark:text-[#9CA3AF] text-xs p-6 text-center">
                   <Presentation className="w-10 h-10 mb-2 opacity-35" />
                   No slides detected. Add headings (# Title, ## Topic) or click "AI to Slides".
                 </div>
@@ -454,7 +457,7 @@ export default function DocStudioWorkspace() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-[#FACC15] text-[#141413]">
+                        <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-[#2563EB] text-[#141413]">
                           {currentSlide?.layout || 'content'}
                         </span>
                         <span className="text-[10px] opacity-65 font-mono">
@@ -477,7 +480,7 @@ export default function DocStudioWorkspace() {
                             : ['99.9% Reliability', '10x Performance']
                           ).map((item, idx) => (
                             <div key={idx} className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
-                              <div className="text-2xl sm:text-3xl font-black text-[#FACC15]">
+                              <div className="text-2xl sm:text-3xl font-black text-[#2563EB]">
                                 {item.split(' - ')[0] || item.split(' ')[0]}
                               </div>
                               <div className="text-xs opacity-80 mt-1">
@@ -495,7 +498,7 @@ export default function DocStudioWorkspace() {
                       )}
 
                       {currentSlide?.layout === 'code' && (
-                        <div className="bg-black/60 rounded-xl p-3 font-mono text-xs text-[#FACC15] border border-white/10 overflow-x-auto max-h-40">
+                        <div className="bg-black/60 rounded-xl p-3 font-mono text-xs text-[#2563EB] border border-white/10 overflow-x-auto max-h-40">
                           <pre>{currentSlide?.codeSnippet?.code || '// Code preview'}</pre>
                         </div>
                       )}
@@ -506,7 +509,7 @@ export default function DocStudioWorkspace() {
                           <ul className="space-y-2 text-xs sm:text-sm">
                             {currentSlide?.bullets?.map((b, bIdx) => (
                               <li key={bIdx} className="flex items-start gap-2">
-                                <span className="text-[#FACC15] font-bold">•</span>
+                                <span className="text-[#2563EB] font-bold">•</span>
                                 <span className="opacity-90">{b}</span>
                               </li>
                             ))}
@@ -536,7 +539,7 @@ export default function DocStudioWorkspace() {
                           key={idx}
                           onClick={() => setCurrentSlideIdx(idx)}
                           className={`h-2 rounded-full transition-all cursor-pointer ${
-                            currentSlideIdx === idx ? 'bg-[#141413] dark:bg-[#FACC15] w-5' : 'bg-[#D6CFC0] dark:bg-[#36322B] w-2'
+                            currentSlideIdx === idx ? 'bg-[#141413] dark:bg-[#2563EB] w-5' : 'bg-[#D6CFC0] dark:bg-[#36322B] w-2'
                           }`}
                         />
                       ))}
@@ -559,7 +562,7 @@ export default function DocStudioWorkspace() {
           {activeTab === 'spreadsheet' && (
             <div className="flex-1 flex flex-col justify-between overflow-hidden">
               {tables.length === 0 ? (
-                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#746D61] dark:text-[#938B7D] text-xs p-6 text-center">
+                <div className="nt-well flex-1 flex flex-col items-center justify-center text-[#6B7280] dark:text-[#9CA3AF] text-xs p-6 text-center">
                   <TableIcon className="w-10 h-10 mb-2 opacity-35" />
                   No markdown tables detected. Add pipe tables or click "AI to Excel".
                 </div>
@@ -568,7 +571,7 @@ export default function DocStudioWorkspace() {
                   <div className="nt-well flex-1 overflow-auto">
                     <table className="w-full text-left text-xs border-collapse">
                       <thead>
-                        <tr className="bg-[#141413] text-[#FACC15] sticky top-0">
+                        <tr className="bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA] sticky top-0">
                           {currentTable?.headers.map((h, hIdx) => (
                             <th key={hIdx} className="p-3 font-bold border-r border-white/10">
                               {h}
@@ -576,11 +579,11 @@ export default function DocStudioWorkspace() {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-[#1F1D19]">
+                      <tbody className="bg-white dark:bg-[#13151A]">
                         {currentTable?.rows.map((row, rIdx) => (
                           <tr key={rIdx} className="border-b border-[var(--nt-border)] hover:bg-[#FEF7D6]/40 dark:hover:bg-[#26231E]">
                             {row.map((cell, cIdx) => (
-                              <td key={cIdx} className="p-3 text-[#141413] dark:text-[#FAF7F0] border-r border-[var(--nt-border)]">
+                              <td key={cIdx} className="p-3 text-[#111214] dark:text-[#F3F4F6] border-r border-[var(--nt-border)]">
                                 {cell}
                               </td>
                             ))}
@@ -590,7 +593,7 @@ export default function DocStudioWorkspace() {
                     </table>
                   </div>
 
-                  <div className="text-[11px] text-[#746D61] dark:text-[#938B7D] mt-2 flex items-center justify-between font-mono">
+                  <div className="text-[11px] text-[#6B7280] dark:text-[#9CA3AF] mt-2 flex items-center justify-between font-mono">
                     <span>
                       {currentTable?.rows.length} row(s) • {currentTable?.headers.length} column(s)
                     </span>
@@ -604,14 +607,7 @@ export default function DocStudioWorkspace() {
       </div>
 
       {/* Master Export Dock */}
-      <div className="nt-well p-4 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-[#15803D] dark:text-[#4ADE80]" />
-          <span className="text-xs text-[#454038] dark:text-[#CBC4B6] font-mono font-semibold">
-            {aiTier || '100% Client-Side Privacy Engine Active'}
-          </span>
-        </div>
-
+      <div className="nt-well p-4 flex flex-wrap items-center justify-end gap-2.5">
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleDownloadPdf}
@@ -636,7 +632,7 @@ export default function DocStudioWorkspace() {
             disabled={isProcessing}
             className="nt-btn-secondary px-3.5 py-2 text-xs font-bold flex items-center gap-2"
           >
-            <Presentation className="w-4 h-4 text-[#CA8A04] dark:text-[#FACC15]" />
+            <Presentation className="w-4 h-4 text-[#2563EB] dark:text-[#60A5FA]" />
             PowerPoint (.pptx)
           </button>
 

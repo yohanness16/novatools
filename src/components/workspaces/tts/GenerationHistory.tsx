@@ -37,10 +37,10 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--nt-border)] pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EFF6FF] dark:bg-[#3B82F6]/15 text-[#2563EB] dark:text-[#60A5FA]">
             <History className="w-3.5 h-3.5" />
           </div>
-          <h4 className="text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider">
+          <h4 className="text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6] uppercase tracking-wider">
             Recent Takes
           </h4>
           <span className="nt-badge-yellow px-2 py-0.5 font-mono text-[10px] font-bold">
@@ -68,7 +68,7 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
               onClick={() => onSelect(item)}
               className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                 isCurrent
-                  ? 'bg-[#FEF7D6]/85 dark:bg-[#FACC15]/10 border-[#CA8A04] ring-1 ring-[#FACC15]/40 shadow-sm'
+                  ? 'bg-[#FEF7D6]/85 dark:bg-[#2563EB]/10 border-[#2563EB] ring-1 ring-[#FACC15]/40 shadow-sm'
                   : 'nt-subcard hover:border-[var(--nt-border-strong)]'
               }`}
             >
@@ -80,17 +80,17 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 font-mono">
-                    <span className="text-xs font-extrabold font-sans text-[#141413] dark:text-[#FAF7F0]">
+                    <span className="text-xs font-extrabold font-sans text-[#111214] dark:text-[#F3F4F6]">
                       {item.voiceName}
                     </span>
-                    <span className="text-[10px] text-[#746D61] dark:text-[#938B7D]">
+                    <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">
                       · {item.duration.toFixed(1)}s
                     </span>
-                    <span className="text-[10px] text-[#746D61] dark:text-[#938B7D]">
+                    <span className="text-[10px] text-[#6B7280] dark:text-[#9CA3AF]">
                       · {formatTimestamp(item.timestamp)}
                     </span>
                   </div>
-                  <p className="text-xs text-[#454038] dark:text-[#CBC4B6] truncate mt-0.5 max-w-[280px] sm:max-w-md">
+                  <p className="text-xs text-[#4B5563] dark:text-[#D1D5DB] truncate mt-0.5 max-w-[280px] sm:max-w-md">
                     &quot;{item.text}&quot;
                   </p>
                 </div>

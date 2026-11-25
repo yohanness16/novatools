@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { VideoEngine } from '../../engines/videoEngine';
 import { formatBytes, downloadBlob } from '../../lib/utils';
 import { WorkspaceDropzone, WorkspaceAlert, WorkspaceProgress } from './WorkspaceUI';
+import { useHandoffFiles } from '../../lib/useHandoffFiles';
 import { Film, Loader2, Download, Zap, MessageSquare, Mail } from 'lucide-react';
 
 export type CompressionPreset = 'discord_8mb' | 'discord_25mb' | 'email_20mb' | '720p' | '480p';
@@ -15,6 +16,10 @@ export const VideoCompressorWorkspace: React.FC = () => {
   const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useHandoffFiles((files) => {
+    if (files[0]) handleFile(files[0]);
+  });
 
   const handleFile = (selectedFile: File) => {
     if (!selectedFile.type.startsWith('video/') && !/\.(mp4|webm|mov|mkv)$/i.test(selectedFile.name)) {
@@ -62,8 +67,6 @@ export const VideoCompressorWorkspace: React.FC = () => {
           onFilesDrop={(files) => files[0] && handleFile(files[0])}
           icon={<Film className="h-5 w-5" />}
           title="Drop video to compress, or"
-          subtitle="Hardware-accelerated in-browser video compression with target size presets."
-          badgeText="Zero Cloud Uploads"
         >
           <input
             ref={fileInputRef}
@@ -80,8 +83,8 @@ export const VideoCompressorWorkspace: React.FC = () => {
         <div className="nt-card p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--nt-border)] pb-3">
             <div>
-              <span className="text-sm font-extrabold text-[#141413] dark:text-[#FAF7F0]">{file.name}</span>
-              <p className="text-xs text-[#746D61] dark:text-[#938B7D] font-mono mt-0.5">
+              <span className="text-sm font-extrabold text-[#111214] dark:text-[#F3F4F6]">{file.name}</span>
+              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono mt-0.5">
                 Original Size: {formatBytes(file.size)}
               </p>
             </div>
@@ -108,7 +111,7 @@ export const VideoCompressorWorkspace: React.FC = () => {
           )}
 
           <div className="nt-well p-4 space-y-2.5">
-            <label className="block text-xs font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+            <label className="block text-xs font-extrabold text-[#111214] dark:text-[#F3F4F6]">
               Target Preset / Output Target
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -127,7 +130,7 @@ export const VideoCompressorWorkspace: React.FC = () => {
                     onClick={() => setSelectedPreset(preset.id as CompressionPreset)}
                     className={`flex items-center gap-2 p-3 rounded-xl border text-left text-xs font-bold transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] border-[#141413] shadow-sm'
+                        ? 'bg-[#111214] dark:bg-[#2563EB] text-white border-[#141413] shadow-sm'
                         : 'nt-btn-secondary'
                     }`}
                   >

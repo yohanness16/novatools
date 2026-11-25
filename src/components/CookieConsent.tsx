@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck } from 'lucide-react';
 
 export const CookieConsent: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,13 +11,8 @@ export const CookieConsent: React.FC = () => {
     }
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem('novatools_cookie_consent', 'granted');
-    setIsVisible(false);
-  };
-
-  const handleDecline = () => {
-    localStorage.setItem('novatools_cookie_consent', 'essential_only');
+  const saveConsent = (value: string) => {
+    localStorage.setItem('novatools_cookie_consent', value);
     setIsVisible(false);
   };
 
@@ -26,34 +20,22 @@ export const CookieConsent: React.FC = () => {
 
   return (
     <aside
-      aria-label="Cookie and Privacy Preferences"
-      className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 nt-window p-4 space-y-3"
+      aria-label="Cookies"
+      className="fixed bottom-4 left-4 z-50 nt-window px-3.5 py-2.5 flex items-center gap-3 shadow-dropdown"
     >
-      <div className="flex items-center gap-2.5">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
-          <ShieldCheck className="h-4 w-4" />
-        </div>
-        <h4 className="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">
-          Privacy & Runtime Preferences
-        </h4>
-      </div>
-
-      <p className="text-[11px] text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-        NovaTools processes 100% of your files locally in browser memory. Cookies are used only to remember theme settings and support open advertising partners.
-      </p>
-
-      <div className="flex items-center gap-2 pt-0.5">
+      <span className="text-xs font-semibold text-[#111214] dark:text-[#F3F4F6]">Cookies</span>
+      <div className="flex items-center gap-1.5">
         <button
-          onClick={handleAccept}
-          className="flex-1 py-2 px-3 nt-btn-yellow text-xs"
+          onClick={() => saveConsent('granted')}
+          className="px-2.5 py-1 nt-btn-primary text-[11px]"
         >
-          Accept All
+          Accept
         </button>
         <button
-          onClick={handleDecline}
-          className="py-2 px-3 nt-btn-secondary text-xs font-semibold"
+          onClick={() => saveConsent('essential_only')}
+          className="px-2.5 py-1 nt-btn-secondary text-[11px] font-medium"
         >
-          Essential Only
+          Essential
         </button>
       </div>
     </aside>
