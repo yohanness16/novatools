@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { ToolMeta } from '../lib/toolsData';
+import { getToolTheme } from '../lib/toolTheme';
 import { ToolHoverPreview } from './ToolHoverPreview';
 import {
   ArrowRight,
@@ -100,6 +101,8 @@ export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = fal
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
         {tools.map((tool) => {
           const Icon = TOOL_ICON_MAP[tool.iconName] || Layers;
+          const theme = getToolTheme(tool);
+          const isPdf = tool.category === 'pdf';
           return (
             <a
               key={tool.id}
@@ -111,8 +114,18 @@ export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = fal
               className="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[106px]"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-sm transition-colors group-hover:bg-[#FACC15] group-hover:text-[#141413]">
+                <div
+                  className={`relative flex h-9 w-9 items-center justify-center rounded-xl shadow-sm transition-transform duration-150 group-hover:scale-105 ${theme.iconBoxClass} ${theme.iconColorClass}`}
+                >
                   <Icon className="h-4 w-4" />
+                  {isPdf && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-1 -right-1 rounded bg-[#FACC15] px-1 py-[1px] font-mono text-[7px] font-black leading-none text-[#141413] shadow-xs"
+                    >
+                      PDF
+                    </span>
+                  )}
                 </div>
                 <ArrowRight className="h-3.5 w-3.5 text-[#746D61] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#141413] dark:group-hover:text-[#FACC15] transition-all" />
               </div>

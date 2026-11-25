@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { TOOLS, SUITES, CATEGORIES, type ToolMeta } from '../lib/toolsData';
 import { matchToolsForFiles, storeHandoffFiles } from '../lib/fileHandoff';
 import { formatBytes } from '../lib/utils';
+import { getToolTheme } from '../lib/toolTheme';
 import { ToolTileGrid, TOOL_ICON_MAP } from './ToolTileGrid';
 import {
   Upload,
@@ -114,7 +115,7 @@ export const ActionHub: React.FC = () => {
               className="nt-dropzone group cursor-pointer px-5 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4"
             >
               <div className="flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#141413] text-[#FACC15] shadow-card transition-transform duration-150 group-hover:-translate-y-0.5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] border border-[#1D4ED8] text-[#FACC15] shadow-card transition-transform duration-150 group-hover:-translate-y-0.5">
                   <Upload className="h-5 w-5" />
                 </div>
                 <span className="text-base sm:text-lg font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
@@ -152,7 +153,7 @@ export const ActionHub: React.FC = () => {
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-[#FACC15]">
                     <File className="h-4 w-4" />
                   </div>
                   <div className="flex items-center gap-2 min-w-0 flex-wrap">
@@ -191,6 +192,7 @@ export const ActionHub: React.FC = () => {
                 {matchedTools.length > 0 ? (
                   matchedTools.map((tool, idx) => {
                     const Icon = TOOL_ICON_MAP[tool.iconName] || Layers;
+                    const theme = getToolTheme(tool);
                     const isLaunching = launchingPath === tool.path;
                     return (
                       <button
@@ -202,7 +204,11 @@ export const ActionHub: React.FC = () => {
                           idx === 0 ? 'nt-btn-yellow' : 'nt-btn-secondary'
                         }`}
                       >
-                        <Icon className="h-3.5 w-3.5" />
+                        <span
+                          className={`flex h-5 w-5 items-center justify-center rounded-md ${theme.iconBoxClass} ${theme.iconColorClass}`}
+                        >
+                          <Icon className="h-3 w-3" />
+                        </span>
                         <span>{isLaunching ? 'Opening...' : tool.shortName}</span>
                       </button>
                     );
