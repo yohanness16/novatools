@@ -1,6 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm install",
+  "redirects": [
+    {
+      "source": "/salary/:path*",
+      "destination": "/410",
+      "statusCode": 410
+    },
+    {
+      "source": "/salary-calculator/:path*",
+      "destination": "/410",
+      "statusCode": 410
+    }
+  ],
   "headers": [
     {
       "source": "/sitemap.xml",
