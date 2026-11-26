@@ -136,19 +136,24 @@ const breadcrumbs = [
 
     {/* Related Action Chips */}
     {relatedTools.length > 0 && (
-      <div class="flex flex-wrap items-center gap-2 pt-1">
-        {relatedTools.map((rel) => {
-          const Icon = iconMap[rel.iconName] || Layers;
-          return (
-            <a
-              href={rel.path}
-              class="nt-card-interactive inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#141413] dark:text-[#FAF7F0]"
-            >
-              <Icon className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
-              <span>{rel.shortName}</span>
-            </a>
-          );
-        })}
+      <div class="space-y-2 pt-1">
+        <p class="text-[11px] font-mono font-bold text-[#746D61] dark:text-[#938B7D]">
+          More in {suite?.label || tool.categoryLabel}:
+        </p>
+        <div class="flex flex-wrap items-center gap-2">
+          {relatedTools.map((rel) => {
+            const Icon = iconMap[rel.iconName] || Layers;
+            return (
+              <a
+                href={rel.path}
+                class="nt-card-interactive inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 min-h-[36px] text-xs font-bold text-[#141413] dark:text-[#FAF7F0]"
+              >
+                <Icon className="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+                <span>{rel.shortName}</span>
+              </a>
+            );
+          })}
+        </div>
       </div>
     )}
 

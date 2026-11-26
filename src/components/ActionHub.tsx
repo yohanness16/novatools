@@ -112,15 +112,20 @@ export const ActionHub: React.FC = () => {
                 }
               }}
               data-active={isDragOver ? 'true' : 'false'}
-              className="nt-dropzone group cursor-pointer px-5 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+              className="nt-dropzone group cursor-pointer px-4 sm:px-5 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left"
             >
-              <div className="flex items-center gap-3.5">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-3.5">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] border border-[#1D4ED8] text-[#FACC15] shadow-card transition-transform duration-150 group-hover:-translate-y-0.5">
                   <Upload className="h-5 w-5" />
                 </div>
-                <span className="text-base sm:text-lg font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
-                  Drop file
-                </span>
+                <div className="space-y-0.5">
+                  <span className="block text-base sm:text-lg font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+                    Drop or choose a file
+                  </span>
+                  <span className="block text-[11px] sm:text-xs text-[#746D61] dark:text-[#938B7D]">
+                    PDF, image, video, audio, or document — processed 100% locally on your device
+                  </span>
+                </div>
               </div>
 
               <button
@@ -129,9 +134,9 @@ export const ActionHub: React.FC = () => {
                   e.stopPropagation();
                   fileInputRef.current?.click();
                 }}
-                className="nt-btn-yellow px-5 py-2.5 text-xs inline-flex items-center gap-2 shrink-0"
+                className="nt-btn-yellow w-full sm:w-auto justify-center px-5 py-2.5 text-xs inline-flex items-center gap-2 shrink-0 min-h-[40px]"
               >
-                <span>Browse</span>
+                <span>Browse Files</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -188,36 +193,41 @@ export const ActionHub: React.FC = () => {
               </div>
 
               {/* Instant Matched Actions */}
-              <div className="flex flex-wrap gap-2">
-                {matchedTools.length > 0 ? (
-                  matchedTools.map((tool, idx) => {
-                    const Icon = TOOL_ICON_MAP[tool.iconName] || Layers;
-                    const theme = getToolTheme(tool);
-                    const isLaunching = launchingPath === tool.path;
-                    return (
-                      <button
-                        key={tool.id}
-                        type="button"
-                        disabled={Boolean(launchingPath)}
-                        onClick={() => handleActionLaunch(tool)}
-                        className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold transition-all cursor-pointer ${
-                          idx === 0 ? 'nt-btn-yellow' : 'nt-btn-secondary'
-                        }`}
-                      >
-                        <span
-                          className={`flex h-5 w-5 items-center justify-center rounded-md ${theme.iconBoxClass} ${theme.iconColorClass}`}
+              <div className="space-y-2">
+                <p className="text-[11px] font-mono font-bold text-[#746D61] dark:text-[#938B7D]">
+                  Open directly with:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {matchedTools.length > 0 ? (
+                    matchedTools.map((tool, idx) => {
+                      const Icon = TOOL_ICON_MAP[tool.iconName] || Layers;
+                      const theme = getToolTheme(tool);
+                      const isLaunching = launchingPath === tool.path;
+                      return (
+                        <button
+                          key={tool.id}
+                          type="button"
+                          disabled={Boolean(launchingPath)}
+                          onClick={() => handleActionLaunch(tool)}
+                          className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold min-h-[40px] transition-all cursor-pointer ${
+                            idx === 0 ? 'nt-btn-yellow' : 'nt-btn-secondary'
+                          }`}
                         >
-                          <Icon className="h-3 w-3" />
-                        </span>
-                        <span>{isLaunching ? 'Opening...' : tool.shortName}</span>
-                      </button>
-                    );
-                  })
-                ) : (
-                  <span className="text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
-                    Select tool
-                  </span>
-                )}
+                          <span
+                            className={`flex h-5 w-5 items-center justify-center rounded-md ${theme.iconBoxClass} ${theme.iconColorClass}`}
+                          >
+                            <Icon className="h-3 w-3" />
+                          </span>
+                          <span>{isLaunching ? 'Opening...' : tool.shortName}</span>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <span className="text-xs font-mono text-[#746D61] dark:text-[#938B7D]">
+                      Pick any tool below to continue
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -265,7 +275,7 @@ export const ActionHub: React.FC = () => {
       {/* 3. Filter Bar + Tactile Desktop Action Grid */}
       <section aria-label="Tools" className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="inline-flex items-center gap-1 rounded-xl bg-[#EAE3D4]/85 dark:bg-[#1F1D19] p-1 border border-[var(--nt-border)] overflow-x-auto">
+          <div className="flex w-full sm:w-auto max-w-full items-center gap-1 rounded-xl bg-[#EAE3D4]/85 dark:bg-[#1F1D19] p-1 border border-[var(--nt-border)] overflow-x-auto">
             {CATEGORIES.map((cat) => {
               const active = activeCategory === cat.id;
               return (
@@ -273,7 +283,7 @@ export const ActionHub: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-3 py-2 sm:py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                     active
                       ? 'bg-[#141413] dark:bg-[#FACC15] text-[#FACC15] dark:text-[#141413] shadow-sm'
                       : 'text-[#454038] dark:text-[#CBC4B6] hover:text-[#141413] dark:hover:text-[#FAF7F0]'
@@ -285,21 +295,21 @@ export const ActionHub: React.FC = () => {
             })}
           </div>
 
-          <div className="relative w-full sm:w-56">
+          <div className="relative w-full sm:w-60">
             <Search className="h-3.5 w-3.5 text-[#746D61] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filter"
+              placeholder="Search tools (e.g. merge, gif)..."
               aria-label="Filter tools"
-              className="nt-input w-full pl-8 pr-7 py-2 text-xs font-medium"
+              className="nt-input w-full pl-8 pr-8 py-2.5 sm:py-2 text-xs font-medium"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] cursor-pointer"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#746D61] hover:text-[#141413] dark:hover:text-[#FAF7F0] cursor-pointer p-1"
                 aria-label="Clear filter"
               >
                 <X className="h-3.5 w-3.5" />
@@ -309,7 +319,25 @@ export const ActionHub: React.FC = () => {
         </div>
 
         {/* 1-2 Word Tactile Action Tiles with Vertical 2-Part Hover Preview */}
-        <ToolTileGrid tools={filteredTools} showTag={activeCategory === 'all'} />
+        {filteredTools.length > 0 ? (
+          <ToolTileGrid tools={filteredTools} showTag={activeCategory === 'all'} />
+        ) : (
+          <div className="nt-card p-8 text-center space-y-3">
+            <p className="text-sm font-bold text-[#141413] dark:text-[#FAF7F0]">
+              No tools matched "{query}"
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setQuery('');
+                setActiveCategory('all');
+              }}
+              className="nt-btn-yellow px-4 py-2 text-xs font-bold inline-flex items-center gap-1.5"
+            >
+              <span>Reset filter</span>
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

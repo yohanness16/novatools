@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => setIsPaletteOpen(true)}
-              className="sm:hidden nt-btn-secondary flex h-8 w-8 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
+              className="sm:hidden nt-btn-secondary flex h-9 w-9 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
               aria-label="Search"
             >
               <Search className="h-4 w-4" />
@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden nt-btn-secondary flex h-8 w-8 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
+              className="md:hidden nt-btn-secondary flex h-9 w-9 items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
               aria-label="Menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -160,34 +160,63 @@ export const Header: React.FC = () => {
 
         {/* Mobile Drawer */}
         {isMobileMenuOpen && (
-          <div
-            ref={mobileMenuRef}
-            className="md:hidden fixed inset-x-0 top-14 border-b border-[var(--nt-border)] bg-[#F5F1E8]/98 dark:bg-[#141311]/98 backdrop-blur-2xl px-4 py-4 shadow-2xl"
-          >
-            <div className="grid grid-cols-2 gap-2.5">
-              {NAV_ITEMS.map((item) => {
-                const Icon = item.icon;
-                const active = isActiveRoute(item.href);
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`nt-card-interactive flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold ${
-                      active
-                        ? 'border-[#141413] dark:border-[#FACC15] bg-[#FEF7D6] dark:bg-[#FACC15]/10 text-[#141413] dark:text-[#FAF7F0]'
-                        : 'text-[#141413] dark:text-[#FAF7F0]'
-                    }`}
-                  >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] shrink-0">
-                      <Icon className="h-3.5 w-3.5" />
-                    </div>
-                    <span>{item.label}</span>
-                  </a>
-                );
-              })}
+          <>
+            <div
+              className="md:hidden fixed inset-0 top-14 bg-[#141413]/35 dark:bg-black/60 backdrop-blur-xs"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <div
+              ref={mobileMenuRef}
+              className="md:hidden relative border-b border-[var(--nt-border)] bg-[#F5F1E8]/98 dark:bg-[#141311]/98 backdrop-blur-2xl px-4 py-4 shadow-2xl space-y-3 max-h-[calc(100dvh-3.5rem)] overflow-y-auto"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsPaletteOpen(true);
+                }}
+                className="w-full flex items-center justify-between rounded-xl bg-white dark:bg-[#1F1D19] border border-[var(--nt-border)] px-3.5 py-2.5 text-xs font-semibold text-[#746D61] dark:text-[#938B7D]"
+              >
+                <span className="flex items-center gap-2">
+                  <Search className="h-3.5 w-3.5 text-[#141413] dark:text-[#FACC15]" />
+                  <span>Search all 34 tools...</span>
+                </span>
+                <span className="font-mono text-[10px] font-bold">Tap</span>
+              </button>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const active = isActiveRoute(item.href);
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`nt-card-interactive flex items-center gap-2.5 px-3 py-3 text-xs font-bold min-h-[44px] ${
+                        active
+                          ? 'border-[#141413] dark:border-[#FACC15] bg-[#FEF7D6] dark:bg-[#FACC15]/10 text-[#141413] dark:text-[#FAF7F0]'
+                          : 'text-[#141413] dark:text-[#FAF7F0]'
+                      }`}
+                    >
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141413] text-[#FACC15] shrink-0">
+                        <Icon className="h-3.5 w-3.5" />
+                      </div>
+                      <span>{item.label}</span>
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center justify-around pt-2 border-t border-[var(--nt-border)] text-xs font-semibold text-[#746D61] dark:text-[#938B7D]">
+                <a href="/about" onClick={() => setIsMobileMenuOpen(false)} className="py-1.5 px-2 hover:text-[#141413] dark:hover:text-[#FACC15]">About</a>
+                <a href="/privacy" onClick={() => setIsMobileMenuOpen(false)} className="py-1.5 px-2 hover:text-[#141413] dark:hover:text-[#FACC15]">Privacy</a>
+                <a href="/terms" onClick={() => setIsMobileMenuOpen(false)} className="py-1.5 px-2 hover:text-[#141413] dark:hover:text-[#FACC15]">Terms</a>
+                <a href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="py-1.5 px-2 hover:text-[#141413] dark:hover:text-[#FACC15]">Contact</a>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </header>
 

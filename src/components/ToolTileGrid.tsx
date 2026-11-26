@@ -71,6 +71,15 @@ interface ToolTileGridProps {
 export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = false }) => {
   const [hoveredTool, setHoveredTool] = useState<ToolMeta | null>(null);
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const update = () => setCanHover(mq.matches);
+    update();
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
 
   useEffect(() => {
     if (!hoveredTool) return;
@@ -87,6 +96,7 @@ export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = fal
   }, [hoveredTool]);
 
   const handleEnter = (tool: ToolMeta, el: HTMLElement) => {
+    if (!canHover) return;
     setHoveredTool(tool);
     setAnchorRect(el.getBoundingClientRect());
   };
@@ -98,7 +108,7 @@ export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = fal
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
         {tools.map((tool) => {
           const Icon = TOOL_ICON_MAP[tool.iconName] || Layers;
           const theme = getToolTheme(tool);
@@ -111,7 +121,7 @@ export const ToolTileGrid: React.FC<ToolTileGridProps> = ({ tools, showTag = fal
               onMouseLeave={handleLeave}
               onFocus={(e) => handleEnter(tool, e.currentTarget)}
               onBlur={handleLeave}
-              className="group nt-card-interactive p-4 flex flex-col justify-between gap-4 min-h-[106px]"
+              className="group nt-card-interactive p-3.5 sm:p-4 flex flex-col justify-between gap-3 sm:gap-4 min-h-[96px] sm:min-h-[106px]"
             >
               <div className="flex items-center justify-between">
                 <div
