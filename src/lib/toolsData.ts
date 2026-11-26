@@ -440,7 +440,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     longDescription: 'Trim unwanted beginnings or endings of video clips with an intuitive visual timeline slider. Preview your exact cut before exporting.',
     iconName: 'Clock',
     path: '/video/trimmer',
-    keywords: ['trim video', 'cut video online', 'video clip cutter', 'video trimmer'],
+    keywords: ['trim video', 'cut video online', 'video clip cutter', 'video trimmer', 'youtube shorts trimmer', 'tiktok video cutter', 'reels video trimmer'],
     features: [
       'Interactive dual-handle range timeline slider',
       'Millisecond timestamp precision',
@@ -466,7 +466,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     longDescription: 'Pull the background music, voiceover, or soundtrack out of MP4, WebM, or MOV video files into a standalone audio file in seconds.',
     iconName: 'Music',
     path: '/video/audio-extractor',
-    keywords: ['extract audio from video', 'mp4 to mp3', 'video to audio converter', 'extract soundtrack'],
+    keywords: ['extract audio from video', 'mp4 to mp3', 'video to audio converter', 'extract soundtrack', 'youtube video to mp3', 'tiktok sound extractor', 'reels audio extractor'],
     features: [
       'Extract audio as WAV (Lossless) or MP3 / AAC',
       'Audio waveform visualizer preview',
@@ -491,7 +491,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     longDescription: 'Silence any video file effortlessly. Strip noisy background chatter, copyrighted music, or wind noise before publishing to social media.',
     iconName: 'VolumeX',
     path: '/video/muter',
-    keywords: ['remove audio from video', 'mute video', 'silence mp4', 'strip sound from video'],
+    keywords: ['remove audio from video', 'mute video', 'silence mp4', 'strip sound from video', 'mute tiktok video', 'remove background music from video'],
     features: [
       'Completely strips all audio channels',
       'Lightning-fast 1-second processing',
@@ -517,7 +517,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     iconName: 'Subtitles',
     badge: 'AI Powered',
     path: '/video/subtitle-generator',
-    keywords: ['generate subtitles from video', 'auto subtitle generator', 'video to srt', 'audio to vtt', 'ai transcription', 'caption generator'],
+    keywords: ['generate subtitles from video', 'auto subtitle generator', 'video to srt', 'audio to vtt', 'ai transcription', 'caption generator', 'youtube subtitle generator', 'tiktok auto captions', 'reels captions generator', 'whisper browser transcription'],
     features: [
       '100% Client-Side AI: Whisper speech-to-text with zero server uploads',
       'Multi-format export: .SRT, .VTT (WebVTT), .TXT, and .JSON',
@@ -545,7 +545,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     iconName: 'Volume2',
     badge: 'Pro Audio',
     path: '/video/audio-booster',
-    keywords: ['volume booster', 'audio booster', 'amplify mp3', 'boost audio online', 'audio normalizer', 'increase sound volume'],
+    keywords: ['volume booster', 'audio booster', 'amplify mp3', 'boost audio online', 'audio normalizer', 'increase sound volume', 'youtube audio normalizer', 'podcast volume booster', 'tiktok audio louder'],
     features: [
       'Gain amplification from 100% to 300% (+0 dB to +12 dB)',
       'Anti-clipping brickwall dynamics limiter prevents distortion',
@@ -573,7 +573,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     iconName: 'Film',
     badge: 'Creator Tool',
     path: '/video/video-to-gif',
-    keywords: ['video to gif', 'mp4 to gif', 'make animated gif', 'gif converter', 'trim video to gif', 'gif maker online'],
+    keywords: ['video to gif', 'mp4 to gif', 'make animated gif', 'gif converter', 'trim video to gif', 'gif maker online', 'youtube clip to gif', 'tiktok to gif', 'discord gif maker'],
     features: [
       'Interactive range trimmer with real-time video playback',
       'Selectable frame rate (10, 15, 20, 24, 30 FPS)',
@@ -601,7 +601,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     iconName: 'Music',
     badge: 'Creator Studio',
     path: '/video/lyrics-video-generator',
-    keywords: ['lyrics video maker', 'animated lyrics generator', 'karaoke video maker', 'music video with lyrics', 'lyrics video creator', 'lrc to video'],
+    keywords: ['lyrics video maker', 'animated lyrics generator', 'karaoke video maker', 'music video with lyrics', 'lyrics video creator', 'lrc to video', 'tiktok lyrics video maker', 'youtube shorts lyrics video', 'instagram reels lyric video'],
     features: [
       '100% Client-Side Video Rendering: Zero uploads, instant browser export',
       'AI Speech & Lyrics Recognition with timestamp synchronization',
@@ -632,7 +632,7 @@ const RAW_TOOLS: Omit<ToolMeta, 'shortName' | 'shortTag' | 'accepts'>[] = [
     iconName: 'Volume2',
     badge: 'Kokoro-82M AI',
     path: '/video/text-to-speech',
-    keywords: ['text to speech', 'ai voice generator', 'kokoro tts', 'voiceover studio', 'ai narrator', 'humanic tts', 'client-side tts', 'tts with expressions'],
+    keywords: ['text to speech', 'ai voice generator', 'kokoro tts', 'voiceover studio', 'ai narrator', 'humanic tts', 'client-side tts', 'tts with expressions', 'youtube voiceover generator', 'tiktok ai voice', 'reels narrator voice'],
     features: [
       '100% Client-Side Neural Inference via Kokoro-82M ONNX and WebGPU / Local Engine',
       'Humanic Expressions & Interjections: Handles "ugh", "cough", "ay", "sigh", "hmm", "whoa", "phew", etc.',

@@ -22,21 +22,42 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
-# AI Search & RAG Discovery Bots (GEO / LLMO)
+User-agent: Bytespider
+Allow: /
+
+# AI Search, Live Retrieval & Foundation Model Crawlers (GEO / LLMO)
 User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: GPTBot
+Allow: /
+
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
 Allow: /
 
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
 User-agent: Google-Extended
 Allow: /
 
-# XML Sitemap Location
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# XML Sitemap & LLMs Index
 Sitemap: https://toolboxs.tech/sitemap.xml

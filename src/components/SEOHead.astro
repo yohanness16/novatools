@@ -63,15 +63,17 @@ const graphNodes: any[] = [
     },
   },
   {
-    '@type': 'WebApplication',
+    '@type': ['SoftwareApplication', 'WebApplication'],
     '@id': `${resolvedCanonical}#webapp`,
     name: fullTitle,
     url: resolvedCanonical,
     applicationCategory: 'UtilitiesApplication',
-    applicationSubCategory: 'Document and Media Processing',
-    operatingSystem: 'All Modern Web Browsers',
+    applicationSubCategory: 'Document, PDF, Image, Video & AI Media Processing',
+    operatingSystem: 'Any (Windows, macOS, Linux, iOS, Android)',
     browserRequirements: 'Requires JavaScript and WebAssembly support',
     softwareVersion: '2026.1',
+    isAccessibleForFree: true,
+    screenshot: resolvedOgImage,
     offers: {
       '@type': 'Offer',
       price: '0.00',
@@ -142,22 +144,25 @@ const unifiedGraphSchema = {
 {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
 <link rel="canonical" href={resolvedCanonical} />
 <link rel="sitemap" type="application/xml" title="Sitemap" href={`${siteUrl}/sitemap.xml`} />
+<link rel="alternate" type="text/plain" title="LLMs.txt AI Index" href={`${siteUrl}/llms.txt`} />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph / Facebook / WhatsApp / Discord / Telegram -->
 <meta property="og:type" content={ogType} />
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content={resolvedCanonical} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={resolvedOgImage} />
+<meta property="og:image:alt" content={fullTitle} />
 <meta property="og:site_name" content={siteName} />
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={resolvedCanonical} />
-<meta property="twitter:title" content={fullTitle} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={resolvedOgImage} />
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={resolvedCanonical} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={resolvedOgImage} />
+<meta name="twitter:image:alt" content={fullTitle} />
 
 <!-- Google AdSense Account Verification -->
 <meta name="google-adsense-account" content="ca-pub-6768212179657827" />
