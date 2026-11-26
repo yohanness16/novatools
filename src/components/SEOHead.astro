@@ -41,6 +41,7 @@ const {
 const resolvedCanonical = normalizeUrl(canonicalUrl);
 const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+const gscVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 // Unified Multi-Entity Schema.org JSON-LD (Google Search Central Compliant)
 const graphNodes: any[] = [
@@ -136,10 +137,15 @@ const unifiedGraphSchema = {
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords.join(', ')} />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="theme-color" content="#FACC15" />
+{gscVerification && <meta name="google-site-verification" content={gscVerification} />}
 <link rel="canonical" href={resolvedCanonical} />
+<link rel="sitemap" type="application/xml" title="Sitemap" href={`${siteUrl}/sitemap.xml`} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={ogType} />
+<meta property="og:locale" content="en_US" />
 <meta property="og:url" content={resolvedCanonical} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
