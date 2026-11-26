@@ -1,69 +1,183 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Shield } from 'lucide-react';
+import { Shield, Lock, Cookie, Eye, ServerOff, Globe, FileCheck2, Mail } from 'lucide-react';
+
+const lastUpdated = 'November 26, 2026';
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Privacy Policy', url: '/privacy' },
+];
 ---
 
 <Layout
   title="Privacy Policy & Data Governance - NovaTools"
-  description="Comprehensive privacy policy for NovaTools. Learn how your files remain 100% private in local browser memory and how data governance operates."
+  description="Detailed Privacy Policy for NovaTools (toolboxs.tech). Learn how our 100% client-side architecture keeps your files in local browser memory, how cookies and Google AdSense work, and your GDPR/CCPA privacy rights."
+  canonicalUrl="https://toolboxs.tech/privacy"
+  breadcrumbs={breadcrumbs}
 >
   <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
+    {/* Header Window */}
     <div class="nt-window p-6 sm:p-8 space-y-3">
       <div class="nt-badge-success inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono font-bold">
         <Shield class="h-3.5 w-3.5" />
-        <span>Cryptographic Zero-Knowledge Guarantee</span>
+        <span>Zero-Knowledge Client-Side Privacy Guarantee</span>
       </div>
       <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
-        Privacy Policy & Data Governance
+        Privacy Policy &amp; Data Governance
       </h1>
-      <p class="text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
-        Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+      <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+        This Privacy Policy explains how <strong>NovaTools</strong> (<a href="https://toolboxs.tech" class="font-bold text-[#141413] dark:text-[#FACC15] underline">https://toolboxs.tech</a>, "we", "our", or "us") handles information when you visit or use our browser-based PDF, image, video, audio, document, SVG, and diagram utilities.
       </p>
+      <div class="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+        <span>Effective Date: {lastUpdated}</span>
+        <span>•</span>
+        <span>Last Updated: {lastUpdated}</span>
+      </div>
+    </div>
+
+    {/* Quick Summary Box */}
+    <div class="nt-well p-5 sm:p-6 space-y-2.5">
+      <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+        <Lock class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+        <span>Plain-Language Summary</span>
+      </h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#454038] dark:text-[#CBC4B6]">
+        <li class="flex items-start gap-2"><span class="text-[#16A34A] font-bold">✓</span><span>Your files never leave your device or touch our servers.</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#16A34A] font-bold">✓</span><span>No account, login, or email is required to use any tool.</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#16A34A] font-bold">✓</span><span>Browser storage is only used for theme, consent, and local tool handoff.</span></li>
+        <li class="flex items-start gap-2"><span class="text-[#16A34A] font-bold">✓</span><span>We use Google AdSense to keep all utilities 100% free.</span></li>
+      </ul>
     </div>
 
     <div class="space-y-5 text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-      <section class="nt-card p-5 sm:p-6 space-y-2.5">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
-          1. Zero-Upload Architecture
-        </h2>
-        <p>
-          At NovaTools (<a href="https://toolboxs.tech" class="font-bold text-[#141413] dark:text-[#FACC15] underline">toolboxs.tech</a>), our fundamental technical premise is that <strong>we do not transmit, collect, process, or store your documents, photos, audio tracks, or videos on any remote servers.</strong>
-        </p>
-        <p>
-          All operations—including PDF merging, audio volume amplification, neural subtitle generation, image compression, video trimming, and EXIF scrubbing—execute <strong>100% locally within your client browser sandbox</strong> using in-browser processing engines, WebCodecs, and Web Workers.
-        </p>
-      </section>
-
-      <section class="nt-card p-5 sm:p-6 space-y-2.5">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
-          2. Zero Data Collection Spec
-        </h2>
-        <ul class="list-disc pl-5 space-y-1.5 text-xs">
-          <li>Zero collection or retention of document bytes, images, or audio buffers.</li>
-          <li>Zero logging of file names, metadata tags, passwords, or transcription text.</li>
-          <li>Zero requirement for user accounts, credentials, or tracking identifiers to use any tool.</li>
-        </ul>
-      </section>
-
+      {/* Section 1 */}
       <section class="nt-card p-5 sm:p-6 space-y-3">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
-          3. Advertising & Functional Cookies
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <ServerOff class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>1. Zero-Upload Local Processing Architecture</span>
         </h2>
         <p>
-          To maintain free, open-access infrastructure without paywalls, we may serve programmatic advertisements provided by third-party vendors, such as <strong>Google AdSense</strong>.
+          NovaTools is engineered as a <strong>100% client-side web application</strong>. Unlike cloud-based file converters that upload your files to remote servers, every file operation on NovaTools executes directly inside your web browser's sandboxed memory.
         </p>
-        <div class="nt-well p-3.5 space-y-1.5 text-xs font-mono">
-          <p>• Third-Party Vendors: Google uses cookies to serve ads based on prior user visits.</p>
-          <p>• Opting Out: Users may opt out via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" class="font-bold text-[#141413] dark:text-[#FACC15] underline">aboutads.info</a>.</p>
+        <p>
+          Specifically, all processing—including PDF merging, splitting, encryption, redaction, image compression, background removal, EXIF metadata scrubbing, video transcoding, audio boosting, Whisper speech-to-text transcription, Kokoro text-to-speech synthesis, document conversion, and diagram rendering—runs locally using <strong>WebAssembly (WASM), Web Workers, WebCodecs, WebGPU, HTML5 Canvas, and Web Audio APIs</strong>.
+        </p>
+        <p>
+          <strong>We do not upload, transmit, inspect, copy, cache, or store any file contents, filenames, passwords, prompts, or generated outputs on any remote server.</strong>
+        </p>
+      </section>
+
+      {/* Section 2 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Eye class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>2. Information We Collect &amp; Do Not Collect</span>
+        </h2>
+        <div class="space-y-2">
+          <h3 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">2.1 Information We Never Collect</h3>
+          <ul class="list-disc pl-5 space-y-1 text-xs">
+            <li>Document, image, audio, or video file bytes processed inside any tool.</li>
+            <li>File metadata (EXIF, GPS coordinates, author tags), PDF passwords, or extracted text.</li>
+            <li>Account credentials, payment details, or government identifiers (no registration exists).</li>
+          </ul>
+        </div>
+        <div class="space-y-2 pt-1">
+          <h3 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">2.2 Information Processed Automatically by Infrastructure &amp; Third Parties</h3>
+          <ul class="list-disc pl-5 space-y-1 text-xs">
+            <li><strong>Standard Web Server &amp; CDN Logs:</strong> When you request web pages or static assets (HTML, CSS, JS, WASM, or AI model weights), our hosting/CDN provider may process standard HTTP metadata such as IP address, browser User-Agent, referring URL, and timestamp for security, DDoS mitigation, and delivery.</li>
+            <li><strong>Contact Form Submissions:</strong> If you voluntarily submit feedback on our <a href="/contact" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Contact Desk</a>, any name, email address, or message you provide is used solely to review and respond to your inquiry.</li>
+          </ul>
         </div>
       </section>
 
-      <section class="nt-card p-5 sm:p-6 space-y-2">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
-          4. Security & Compliance Contact
+      {/* Section 3 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <FileCheck2 class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>3. Browser Storage (localStorage &amp; Cache)</span>
         </h2>
         <p>
-          For questions regarding local-first execution compliance or audit inquiries, visit our <a href="/contact" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Contact Desk</a>.
+          To provide a fast, stateful workspace experience without requiring user accounts, NovaTools uses your browser's local storage mechanisms strictly on your device:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs">
+          <li><strong>Theme Preference (<code>novatools-theme</code>):</strong> Remembers whether you selected Light or Dark mode.</li>
+          <li><strong>Cookie Consent Preference (<code>novatools_cookie_consent</code>):</strong> Remembers your cookie choice (<code>granted</code> or <code>essential_only</code>) so the banner does not reappear unnecessarily.</li>
+          <li><strong>Cross-Tool File Handoff (IndexedDB / Memory):</strong> Allows you to send a processed output from one tool directly to another tool locally without re-uploading.</li>
+          <li><strong>AI Model Cache (Cache API / IndexedDB):</strong> When using on-device AI tools (such as Whisper subtitles, background removal, or Kokoro TTS), open-source model files downloaded from public CDNs may be cached locally by your browser so you do not need to re-download them on future visits.</li>
+        </ul>
+        <p class="text-xs">
+          You can clear all locally stored data at any time through your browser's site data settings.
+        </p>
+      </section>
+
+      {/* Section 4 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Cookie class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>4. Advertising, Cookies &amp; Third-Party Services</span>
+        </h2>
+        <p>
+          To keep NovaTools completely free without subscriptions, file limits, or watermarks, we display advertisements served by <strong>Google AdSense</strong> and load typography assets via <strong>Google Fonts</strong>.
+        </p>
+        <div class="nt-well p-4 space-y-2 text-xs">
+          <p><strong>Google AdSense &amp; DoubleClick Cookies:</strong></p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Third-party vendors, including Google, use cookies (such as the DoubleClick DART cookie) to serve ads based on your prior visits to this website or other websites on the internet.</li>
+            <li>Google's use of advertising cookies enables it and its partners to serve ads based on your browsing activity.</li>
+            <li>If you choose <strong>"Essential"</strong> in our cookie banner, or use browser privacy controls, personalized advertising cookies can be restricted.</li>
+            <li>You may opt out of personalized advertising at any time via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" class="font-bold text-[#141413] dark:text-[#FACC15] underline">aboutads.info</a>.</li>
+            <li>For more information on how Google uses data when you use partner sites, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" class="font-bold text-[#141413] dark:text-[#FACC15] underline">How Google uses information from sites or apps that use our services</a>.</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Section 5 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Globe class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>5. Your Privacy Rights (GDPR, UK GDPR &amp; CCPA/CPRA)</span>
+        </h2>
+        <p>
+          Depending on your jurisdiction (including the European Economic Area, United Kingdom, and California), you have specific rights regarding personal data:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs">
+          <li><strong>Right of Access, Correction &amp; Deletion:</strong> Because NovaTools does not maintain user accounts or store uploaded files, we hold no personal file data about you. Any local preferences can be deleted immediately via your browser settings.</li>
+          <li><strong>Right to Opt-Out of Personalized Advertising / "Sharing":</strong> Under CCPA/CPRA and GDPR, you may manage or withdraw consent for advertising cookies at any time using our cookie settings, Google Ads Settings, or Global Privacy Control (GPC) browser signals.</li>
+          <li><strong>Right to Lodge a Complaint:</strong> EEA/UK residents have the right to lodge a complaint with their local data protection supervisory authority.</li>
+        </ul>
+      </section>
+
+      {/* Section 6 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+          6. Children's Privacy
+        </h2>
+        <p>
+          NovaTools is a general-audience utility suite and is not directed to children under the age of 13 (or the applicable age of digital consent in your jurisdiction). We do not knowingly collect personal information from children.
+        </p>
+      </section>
+
+      {/* Section 7 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+          7. Data Security &amp; Policy Updates
+        </h2>
+        <p>
+          All connections to NovaTools are encrypted in transit via HTTPS/TLS, and we enforce strict Cross-Origin Isolation headers (COOP/COEP) to protect local SharedArrayBuffer and WebAssembly execution.
+        </p>
+        <p>
+          We may update this Privacy Policy periodically to reflect new tools, regulatory requirements, or third-party integrations. Material changes will be reflected by updating the "Last Updated" date at the top of this page.
+        </p>
+      </section>
+
+      {/* Section 8 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Mail class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>8. Contact &amp; Privacy Inquiries</span>
+        </h2>
+        <p>
+          If you have questions about this Privacy Policy, local-first compliance, or advertising preferences, please reach out through our <a href="/contact" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Contact Support Desk</a>. You may also review our <a href="/terms" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Terms of Service</a>.
         </p>
       </section>
     </div>

@@ -1,11 +1,51 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { ActionHub } from '../components/ActionHub';
+import { SUITES, TOOLS } from '../lib/toolsData';
 ---
 
 <Layout
-  title="NovaTools - Fast Client-Side PDF, Image, Video & Document Tools"
-  description="Private, instant client-side PDF, image, video, audio, diagram, and document tools running directly in your browser."
+  title="NovaTools — Free Client-Side PDF, Image, Video, Audio & Document Tools"
+  description="Private, instant client-side PDF, image, video, audio, diagram, and document tools running 100% in your browser with WebAssembly and WebCodecs. Zero uploads, zero limits."
+  canonicalUrl="https://toolboxs.tech/"
+  keywords={[
+    'free online pdf tools',
+    'client-side pdf merger',
+    'private image compressor',
+    'browser video compressor',
+    'ai subtitle generator',
+    'background remover online',
+    'markdown to pdf',
+    'novatools',
+  ]}
 >
   <ActionHub client:load />
+
+  {/* Crawlable SEO Overview & Suite Directory */}
+  <section aria-label="All Tool Suites" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-6 space-y-4">
+    <div class="nt-card p-5 sm:p-6 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--nt-border)] pb-3">
+        <h2 class="text-sm sm:text-base font-extrabold text-[#141413] dark:text-[#FAF7F0]">
+          30+ Zero-Upload Browser Utilities Across 6 Suites
+        </h2>
+        <span class="text-[11px] font-mono text-[#746D61] dark:text-[#938B7D]">
+          100% Local WebAssembly &amp; WebCodecs Execution
+        </span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {SUITES.map((suite) => {
+          const count = TOOLS.filter((t) => t.category === suite.id).length;
+          return (
+            <a href={suite.href} class="nt-subcard p-3.5 block hover:border-[#FACC15] transition-colors space-y-1">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{suite.label}</h3>
+                <span class="nt-badge-yellow px-2 py-0.5 text-[10px] font-mono font-bold">{count} tools</span>
+              </div>
+              <p class="text-[11px] text-[#454038] dark:text-[#CBC4B6] leading-relaxed">{suite.subtitle}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 </Layout>

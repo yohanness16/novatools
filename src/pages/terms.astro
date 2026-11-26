@@ -1,41 +1,157 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Scale, Cpu, ShieldAlert, FileCode2, AlertTriangle, RefreshCw, Mail } from 'lucide-react';
+
+const lastUpdated = 'November 26, 2026';
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Terms of Service', url: '/terms' },
+];
 ---
 
 <Layout
-  title="Terms of Service - NovaTools"
-  description="Terms of service and usage conditions for NovaTools client-side utility suite."
+  title="Terms of Service & Usage Policy - NovaTools"
+  description="Comprehensive Terms of Service for NovaTools (toolboxs.tech). Covers client-side execution, permitted personal and commercial use, intellectual property, warranties, and liability."
+  canonicalUrl="https://toolboxs.tech/terms"
+  breadcrumbs={breadcrumbs}
 >
   <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
-    <div class="nt-window p-6 sm:p-8 space-y-2">
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">Terms of Service</h1>
-      <p class="text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
-        Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+    {/* Header Window */}
+    <div class="nt-window p-6 sm:p-8 space-y-3">
+      <div class="nt-badge-yellow inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono font-bold">
+        <Scale class="h-3.5 w-3.5" />
+        <span>Legal Terms &amp; Acceptable Use</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+        Terms of Service
+      </h1>
+      <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
+        Please read these Terms of Service ("Terms") carefully before accessing or using <strong>NovaTools</strong> (<a href="https://toolboxs.tech" class="font-bold text-[#141413] dark:text-[#FACC15] underline">https://toolboxs.tech</a>). By using any tool or page on this site, you agree to be bound by these Terms.
       </p>
+      <div class="flex flex-wrap items-center gap-4 pt-1 text-xs text-[#746D61] dark:text-[#938B7D] font-mono">
+        <span>Effective Date: {lastUpdated}</span>
+        <span>•</span>
+        <span>Last Updated: {lastUpdated}</span>
+      </div>
     </div>
 
     <div class="space-y-5 text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6] leading-relaxed">
-      <section class="nt-card p-5 sm:p-6 space-y-2">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">1. Agreement to Terms</h2>
+      {/* Section 1 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+          1. Acceptance of Terms
+        </h2>
         <p>
-          By accessing and using NovaTools (<a href="https://toolboxs.tech" class="font-bold text-[#141413] dark:text-[#FACC15] underline">toolboxs.tech</a>), you agree to be bound by these Terms of Service. If you do not agree, discontinue use immediately.
+          By accessing, browsing, or executing any utility on NovaTools (<a href="https://toolboxs.tech" class="font-bold text-[#141413] dark:text-[#FACC15] underline">toolboxs.tech</a>), you confirm that you are at least 13 years of age (or the age of majority/digital consent in your jurisdiction) and agree to comply with these Terms and our <a href="/privacy" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Privacy Policy</a>. If you do not agree, you must discontinue use of the site immediately.
         </p>
       </section>
 
-      <section class="nt-card p-5 sm:p-6 space-y-2">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">2. License & Client Runtime Execution</h2>
+      {/* Section 2 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Cpu class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>2. License &amp; Client-Side Runtime Execution</span>
+        </h2>
         <p>
-          NovaTools grants you a free, non-exclusive license to use the browser-based utilities for personal and commercial media/document processing.
+          NovaTools grants you a free, worldwide, non-exclusive, non-transferable, revocable license to use our browser-based PDF, image, video, audio, document, SVG, and diagram utilities for <strong>both personal and commercial projects</strong>, subject to these Terms.
         </p>
         <p>
-          Because all computation occurs directly on your client hardware, you are solely responsible for ensuring your machine has sufficient memory and CPU capacity to transcode target media.
+          Because all processing runs locally inside your browser using WebAssembly, WebCodecs, WebGPU, and JavaScript:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs">
+          <li>You are solely responsible for ensuring your device has sufficient RAM, CPU/GPU capacity, and browser compatibility to process large files.</li>
+          <li>You retain 100% ownership and all intellectual property rights over every file you input and every output you generate. NovaTools claims zero rights over your content.</li>
+          <li>Always retain backups of original source files before performing destructive operations such as PDF redaction, flattening, or EXIF metadata stripping.</li>
+        </ul>
+      </section>
+
+      {/* Section 3 */}
+      <section class="nt-card p-5 sm:p-6 space-y-3">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <ShieldAlert class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>3. Acceptable Use &amp; Prohibited Conduct</span>
+        </h2>
+        <p>
+          You agree to use NovaTools only for lawful purposes. You must not:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs">
+          <li>Use the service to process, distribute, or facilitate illegal content, malware, or materials that infringe third-party copyrights, trademarks, or privacy rights.</li>
+          <li>Attempt to disrupt, overload, scrape at abusive rates, or bypass security headers and rate controls of our web hosting or CDN infrastructure.</li>
+          <li>Click on advertisements fraudulently, use automated bots to generate artificial ad impressions, or interfere with Google AdSense scripts.</li>
+          <li>Misrepresent NovaTools outputs or AI-generated speech/subtitles/diagrams in ways that violate applicable laws or regulations.</li>
+        </ul>
+      </section>
+
+      {/* Section 4 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <FileCode2 class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>4. Intellectual Property &amp; Open-Source Components</span>
+        </h2>
+        <p>
+          The NovaTools name, branding, user interface design, layout, and original source code are protected by applicable copyright and intellectual property laws. Certain client-side engines and AI models (such as PDF, SVG, document, and neural inference libraries) incorporate open-source software licensed under their respective MIT, Apache-2.0, or BSD licenses.
         </p>
       </section>
 
-      <section class="nt-card p-5 sm:p-6 space-y-2">
-        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">3. Disclaimer of Warranties</h2>
+      {/* Section 5 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+          5. Third-Party Links, Models &amp; Advertisements
+        </h2>
         <p>
-          NovaTools is provided on an "AS IS" basis without warranties of any kind. While our in-browser processing algorithms are rigorously tested, we advise retaining original backups of all source files.
+          NovaTools may display third-party advertisements (including Google AdSense) and fetch open-source fonts or client-side AI model weights from third-party CDNs. We do not endorse or assume responsibility for the content, privacy practices, or availability of third-party websites or services.
+        </p>
+      </section>
+
+      {/* Section 6 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <AlertTriangle class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>6. Disclaimer of Warranties</span>
+        </h2>
+        <p>
+          NOVATOOLS IS PROVIDED ON AN <strong>"AS IS"</strong> AND <strong>"AS AVAILABLE"</strong> BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, OR NON-INFRINGEMENT.
+        </p>
+        <p>
+          We do not warrant that the tools will be uninterrupted, error-free, compatible with every browser or file codec, or that AI-generated transcriptions, translations, diagrams, or voice outputs will be 100% accurate.
+        </p>
+      </section>
+
+      {/* Section 7 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+          7. Limitation of Liability &amp; Indemnification
+        </h2>
+        <p>
+          To the maximum extent permitted by applicable law, NovaTools and its maintainers shall not be liable for any indirect, incidental, special, consequential, or punitive damages—including loss of data, loss of profits, or business interruption—arising out of or related to your use or inability to use the site, even if advised of the possibility of such damages.
+        </p>
+        <p>
+          You agree to indemnify and hold harmless NovaTools from any claims, damages, or expenses arising from your violation of these Terms or misuse of the utilities.
+        </p>
+      </section>
+
+      {/* Section 8 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <RefreshCw class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>8. Service Modifications, Governing Law &amp; Changes</span>
+        </h2>
+        <p>
+          We reserve the right to modify, suspend, or discontinue any tool or feature at any time without prior notice. We may also update these Terms periodically; continued use of NovaTools after changes are posted constitutes acceptance of the revised Terms.
+        </p>
+        <p>
+          These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict-of-law principles. If any provision is found unenforceable, the remaining provisions remain in full effect.
+        </p>
+      </section>
+
+      {/* Section 9 */}
+      <section class="nt-card p-5 sm:p-6 space-y-2.5">
+        <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono flex items-center gap-2">
+          <Mail class="h-3.5 w-3.5 text-[#CA8A04] dark:text-[#FACC15]" />
+          <span>9. Contact Information</span>
+        </h2>
+        <p>
+          Questions regarding these Terms of Service may be submitted via our <a href="/contact" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Contact Support Desk</a>. See also our <a href="/privacy" class="font-bold text-[#141413] dark:text-[#FACC15] underline">Privacy Policy</a>.
         </p>
       </section>
     </div>

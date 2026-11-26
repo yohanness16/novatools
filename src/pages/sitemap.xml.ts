@@ -6,21 +6,21 @@ export const GET: APIRoute = async () => {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const staticPages = [
-    { path: '', priority: '1.0', changefreq: 'daily' },
-    { path: '/about', priority: '0.8', changefreq: 'monthly' },
-    { path: '/contact', priority: '0.8', changefreq: 'monthly' },
-    { path: '/privacy', priority: '0.7', changefreq: 'monthly' },
-    { path: '/terms', priority: '0.7', changefreq: 'monthly' },
+    { path: '/', priority: '1.0', changefreq: 'daily' },
     { path: '/pdf', priority: '0.9', changefreq: 'weekly' },
     { path: '/image', priority: '0.9', changefreq: 'weekly' },
     { path: '/video', priority: '0.9', changefreq: 'weekly' },
     { path: '/document', priority: '0.9', changefreq: 'weekly' },
     { path: '/diagram', priority: '0.9', changefreq: 'weekly' },
     { path: '/svg', priority: '0.9', changefreq: 'weekly' },
+    { path: '/about', priority: '0.8', changefreq: 'monthly' },
+    { path: '/contact', priority: '0.8', changefreq: 'monthly' },
+    { path: '/privacy', priority: '0.7', changefreq: 'monthly' },
+    { path: '/terms', priority: '0.7', changefreq: 'monthly' },
   ];
 
   const toolPages = TOOLS.map((tool) => ({
-    path: tool.path,
+    path: tool.path.replace(/\/+$/, ''),
     priority: tool.badge ? '0.95' : '0.85',
     changefreq: 'weekly',
   }));
@@ -36,7 +36,6 @@ export const GET: APIRoute = async () => {
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 ${allPages
   .map(

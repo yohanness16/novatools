@@ -4,9 +4,26 @@ export interface Props {
   description: string;
   canonicalUrl?: string;
   ogType?: string;
+  ogImage?: string;
   keywords?: string[];
   faqs?: { question: string; answer: string }[];
+  howToSteps?: { step: number; title: string; desc: string }[];
   breadcrumbs?: { name: string; url: string }[];
+}
+
+const siteName = 'NovaTools';
+const siteUrl = 'https://toolboxs.tech';
+
+function normalizeUrl(rawUrl: string): string {
+  try {
+    const parsed = new URL(rawUrl, siteUrl);
+    if (parsed.pathname === '/' || parsed.pathname === '') {
+      return `${siteUrl}/`;
+    }
+    return `${siteUrl}${parsed.pathname.replace(/\/+$/, '')}`;
+  } catch {
+    return `${siteUrl}/`;
+  }
 }
 
 const {
@@ -14,39 +31,41 @@ const {
   description,
   canonicalUrl = Astro.url.href,
   ogType = 'website',
+  ogImage = `${siteUrl}/images/suite-pdf.png`,
   keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'wasm', 'private pdf merger', 'online media tools'],
   faqs = [],
+  howToSteps = [],
   breadcrumbs = [],
 } = Astro.props;
 
-const siteName = 'NovaTools';
-const siteUrl = 'https://toolboxs.tech';
-const defaultOgImage = `${siteUrl}/favicon.svg`;
+const resolvedCanonical = normalizeUrl(canonicalUrl);
+const resolvedOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
 // Unified Multi-Entity Schema.org JSON-LD (Google Search Central Compliant)
 const graphNodes: any[] = [
   {
     '@type': 'WebSite',
     '@id': `${siteUrl}/#website`,
-    url: siteUrl,
+    url: `${siteUrl}/`,
     name: siteName,
     description: '100% Client-Side Privacy-First Document, Image, Video & PDF Utilities Suite',
     publisher: {
       '@type': 'Organization',
       '@id': `${siteUrl}/#organization`,
       name: siteName,
-      url: siteUrl,
+      url: `${siteUrl}/`,
       logo: {
         '@type': 'ImageObject',
-        url: defaultOgImage,
+        url: `${siteUrl}/images/suite-pdf.png`,
       },
     },
   },
   {
     '@type': 'WebApplication',
-    '@id': `${canonicalUrl}#webapp`,
-    name: title,
-    url: canonicalUrl,
+    '@id': `${resolvedCanonical}#webapp`,
+    name: fullTitle,
+    url: resolvedCanonical,
     applicationCategory: 'UtilitiesApplication',
     applicationSubCategory: 'Document and Media Processing',
     operatingSystem: 'All Modern Web Browsers',
@@ -65,7 +84,7 @@ const graphNodes: any[] = [
 if (faqs.length > 0) {
   graphNodes.push({
     '@type': 'FAQPage',
-    '@id': `${canonicalUrl}#faq`,
+    '@id': `${resolvedCanonical}#faq`,
     mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
@@ -77,15 +96,30 @@ if (faqs.length > 0) {
   });
 }
 
+if (howToSteps.length > 0) {
+  graphNodes.push({
+    '@type': 'HowTo',
+    '@id': `${resolvedCanonical}#howto`,
+    name: `How to use ${title.replace(` | ${siteName}`, '')}`,
+    description: description,
+    step: howToSteps.map((s) => ({
+      '@type': 'HowToStep',
+      position: s.step,
+      name: s.title,
+      text: s.desc,
+    })),
+  });
+}
+
 if (breadcrumbs.length > 0) {
   graphNodes.push({
     '@type': 'BreadcrumbList',
-    '@id': `${canonicalUrl}#breadcrumbs`,
+    '@id': `${resolvedCanonical}#breadcrumbs`,
     itemListElement: breadcrumbs.map((b, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: b.name,
-      item: b.url.startsWith('http') ? b.url : `${siteUrl}${b.url}`,
+      item: normalizeUrl(b.url),
     })),
   });
 }
@@ -97,26 +131,27 @@ const unifiedGraphSchema = {
 ---
 
 <!-- Primary Meta Tags -->
-<title>{title.includes(siteName) ? title : `${title} | ${siteName}`}</title>
-<meta name="title" content={title.includes(siteName) ? title : `${title} | ${siteName}`} />
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords.join(', ')} />
-<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href={resolvedCanonical} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={ogType} />
-<meta property="og:url" content={canonicalUrl} />
-<meta property="og:title" content={title} />
+<meta property="og:url" content={resolvedCanonical} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={defaultOgImage} />
+<meta property="og:image" content={resolvedOgImage} />
 <meta property="og:site_name" content={siteName} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={canonicalUrl} />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:url" content={resolvedCanonical} />
+<meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={defaultOgImage} />
+<meta property="twitter:image" content={resolvedOgImage} />
 
 <!-- Google AdSense Account Verification -->
 <meta name="google-adsense-account" content="ca-pub-6768212179657827" />

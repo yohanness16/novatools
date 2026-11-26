@@ -10,7 +10,9 @@ export interface Props {
   description?: string;
   keywords?: string[];
   canonicalUrl?: string;
+  ogImage?: string;
   faqs?: { question: string; answer: string }[];
+  howToSteps?: { step: number; title: string; desc: string }[];
   breadcrumbs?: { name: string; url: string }[];
 }
 
@@ -19,7 +21,9 @@ const {
   description = 'NovaTools - In-browser document, image, video, and PDF tools.',
   keywords = ['pdf tools', 'image converter', 'video compressor', 'client-side tools', 'online media tools'],
   canonicalUrl = Astro.url.href,
+  ogImage,
   faqs = [],
+  howToSteps = [],
   breadcrumbs = [],
 } = Astro.props;
 
@@ -56,7 +60,9 @@ const adSenseClientId = 'ca-pub-6768212179657827';
       description={description}
       keywords={keywords}
       canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
       faqs={faqs}
+      howToSteps={howToSteps}
       breadcrumbs={breadcrumbs}
     />
 

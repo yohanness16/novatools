@@ -14,9 +14,19 @@ const { category, title, description } = Astro.props;
 
 const suite = SUITES.find((s) => s.id === category)!;
 const suiteTools = TOOLS.filter((t) => t.category === category);
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: suite.label, url: `/${category}` },
+];
 ---
 
-<Layout title={title} description={description}>
+<Layout
+  title={title}
+  description={description}
+  canonicalUrl={`https://toolboxs.tech/${category}`}
+  ogImage={suite.image}
+  breadcrumbs={breadcrumbs}
+>
   <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
     {/* Desktop App Suite Header Window */}
     <div class="nt-window overflow-hidden">
@@ -43,18 +53,38 @@ const suiteTools = TOOLS.filter((t) => t.category === category);
         <div class="h-14 w-14 sm:h-16 sm:w-16 rounded-xl overflow-hidden border border-[var(--nt-border)] bg-[#F5F1E8] dark:bg-[#191714] shrink-0">
           <img src={suite.image} alt={suite.label} class="h-full w-full object-cover" />
         </div>
-        <div class="flex items-baseline gap-2.5">
-          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
-            {suite.label}
-          </h1>
-          <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-xs font-bold">
-            {suiteTools.length}
-          </span>
+        <div class="space-y-1">
+          <div class="flex items-baseline gap-2.5">
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#141413] dark:text-[#FAF7F0]">
+              {suite.label}
+            </h1>
+            <span class="nt-badge-yellow px-2.5 py-0.5 font-mono text-xs font-bold">
+              {suiteTools.length}
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-[#454038] dark:text-[#CBC4B6]">
+            {description}
+          </p>
         </div>
       </div>
     </div>
 
     {/* Action Grid with Vertical 2-Part Hover Preview */}
     <ToolTileGrid client:load tools={suiteTools} />
+
+    {/* Crawlable Tool Directory for Search Engines */}
+    <section aria-label={`${suite.label} Directory`} class="nt-card p-5 sm:p-6 space-y-3">
+      <h2 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0] uppercase tracking-wider font-mono">
+        Included {suite.label} Utilities (100% Client-Side)
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {suiteTools.map((tool) => (
+          <a href={tool.path} class="nt-subcard p-3.5 block hover:border-[#FACC15] transition-colors space-y-1">
+            <h3 class="text-xs font-bold text-[#141413] dark:text-[#FAF7F0]">{tool.name}</h3>
+            <p class="text-[11px] text-[#454038] dark:text-[#CBC4B6] leading-relaxed">{tool.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
   </div>
 </Layout>
